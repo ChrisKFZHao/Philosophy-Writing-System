@@ -1,0 +1,107 @@
+{
+  "$id": "phil:premise-audit-schema:1.0.0",
+  "title": "Implicit Premise Detection Schema",
+  "description": "Structured results of implicit premise detection in a philosophical argument.",
+  "type": "object",
+  "required": ["detection_id", "source_argument", "implicit_premises"],
+  "properties": {
+    "detection_id": {
+      "type": "string",
+      "description": "Detection run identifier"
+    },
+    "source_argument": {
+      "type": "object",
+      "required": ["argument_id", "argument_type"],
+      "properties": {
+        "argument_id": { "type": "string", "description": "ID of the source argument" },
+        "argument_type": { "type": "string", "description": "Type of the source argument" }
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "description": "Detected logical gaps in the argument",
+      "items": {
+        "type": "object",
+        "properties": {
+          "from": { "type": "string", "description": "Starting point (e.g., P1, P2)" },
+          "to": { "type": "string", "description": "End point (e.g., C or P4)" },
+          "description": { "type": "string", "description": "Description of the gap" }
+        }
+      }
+    },
+    "implicit_premises": {
+      "type": "array",
+      "description": "Detected implicit premises",
+      "items": {
+        "type": "object",
+        "required": ["id", "text", "type", "fills", "certainty"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^IP\\d+$",
+            "description": "Implicit premise identifier (IP1, IP2, ...)"
+          },
+          "text": {
+            "type": "string",
+            "description": "Full statement of the implicit premise"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "missing_universal",
+              "conceptual_bridge",
+              "category_jump",
+              "existential_presupposition",
+              "exclusivity_assumption",
+              "background_framework",
+              "hidden_quantification_shift"
+            ],
+            "description": "Type of implicit premise (missing universal / conceptual bridge / category jump / existential presupposition / exclusivity assumption / background framework / hidden quantification shift)"
+          },
+          "fills": {
+            "type": "string",
+            "description": "The inferential gap this premise fills (e.g., 'P1+P2 → C')"
+          },
+          "certainty": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Confidence that the author is committed to this implicit premise"
+          },
+          "independently_testable": {
+            "type": "boolean",
+            "description": "Whether the implicit premise can be tested independently of the argument"
+          },
+          "textual_clue": {
+            "type": "string",
+            "description": "Textual hint suggesting the author's commitment to this premise"
+          },
+          "rejection_impact": {
+            "type": "string",
+            "enum": ["fatal", "severe", "mild", "none"],
+            "description": "Impact on the argument if this implicit premise is rejected"
+          }
+        }
+      }
+    },
+    "overall_assessment": {
+      "type": "object",
+      "description": "Overall assessment of the argument's implicitness profile",
+      "properties": {
+        "implicitness_level": {
+          "type": "string",
+          "enum": ["low", "medium", "high"],
+          "description": "Overall degree to which the argument relies on unstated premises"
+        },
+        "critical_vulnerability": {
+          "type": "string",
+          "description": "Description of the most critical vulnerability among implicit premises"
+        },
+        "recommended_inspection_order": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Ordered list of implicit premise IDs recommended for priority scrutiny"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "$id": "phil:argument-schema:1.0.0",
+  "title": "Argument Reconstruction Schema",
+  "description": "Data contract for universal argument reconstruction. Uniformly represents all argument types (deductive, inductive, reductio, abductive, analogical, etc.)",
+  "type": "object",
+  "required": ["argument_id", "argument_type", "premises", "conclusion"],
+  "properties": {
+    "argument_id": {
+      "type": "string",
+      "description": "Unique identifier for the argument"
+    },
+    "argument_type": {
+      "type": "object",
+      "required": ["primary", "basis"],
+      "properties": {
+        "primary": {
+          "type": "string",
+          "enum": [
+            "deductive", "inductive", "reductio", "abductive", "ibe",
+            "analogy", "transcendental", "definitional", "dilemma",
+            "practical", "mixed", "unclear"
+          ],
+          "description": "Primary argument type"
+        },
+        "subtypes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Subtypes or variants, e.g. ['modus-ponens', 'hypothetical-syllogism']"
+        },
+        "basis": {
+          "type": "string",
+          "description": "Textual evidence for the type determination"
+        }
+      }
+    },
+    "logical_form": {
+      "type": "string",
+      "description": "Logical form annotation, e.g. 'P → Q, P ∴ Q' or '∀x(Mx → Px), ∀x(Sx → Mx) ∴ ∀x(Sx → Px)'"
+    },
+    "premises": {
+      "type": "array",
+      "description": "Numbered list of premises (including both explicit and implicit premises)",
+      "items": {
+        "type": "object",
+        "required": ["id", "text", "status"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^P\\d+$|^IP\\d+$",
+            "description": "Premise ID: P1, P2, ... for explicit; IP1, IP2, ... for implicit"
+          },
+          "text": {
+            "type": "string",
+            "description": "Full statement of the premise"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["explicit", "implicit", "sub-conclusion"],
+            "description": "Premise type: explicit, implicit, or sub-conclusion"
+          },
+          "source": {
+            "type": "string",
+            "description": "Textual source (optional)"
+          },
+          "certainty": {
+            "type": "string",
+            "enum": ["high", "medium", "low"],
+            "description": "Certainty assessment for implicit premises (valid only for status: implicit)"
+          },
+          "gap_fill": {
+            "type": "string",
+            "description": "Which inferential gap this implicit premise fills (e.g., 'P1+P2 → C')"
+          }
+        }
+      }
+    },
+    "conclusion": {
+      "type": "object",
+      "required": ["text"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Conclusion statement"
+        },
+        "source": {
+          "type": "string",
+          "description": "Textual source"
+        },
+        "is_implied": {
+          "type": "boolean",
+          "description": "Whether the conclusion is explicit or inferred from context"
+        }
+      }
+    },
+    "sub_arguments": {
+      "type": "array",
+      "description": "List of sub-arguments (nested structure — recursive self-reference to express multi-level nesting)",
+      "items": { "$ref": "#" }
+    },
+    "assessment": {
+      "type": "object",
+      "description": "Structural assessment of the argument",
+      "properties": {
+        "validity": {
+          "type": "string",
+          "enum": ["valid", "invalid", "strong", "weak", "cogent", "uncogent", "sound", "unsound", "fallacious", "unassessable"],
+          "description": "Structural verdict"
+        },
+        "rationale": {
+          "type": "string",
+          "description": "Rationale for the verdict"
+        }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Reconstruction notes"
+    }
+  }
+}

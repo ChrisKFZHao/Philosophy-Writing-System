@@ -1,0 +1,19 @@
+# Claude Code local settings (contains session-specific config)
+.claude/settings.local.json
+
+# Temporary files
+*.tmp
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Compiled LaTeX artifacts (keep source .txt only)
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.pdf
+paper/*.synctex.gz

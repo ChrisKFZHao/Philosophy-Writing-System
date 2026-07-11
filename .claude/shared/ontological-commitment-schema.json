@@ -1,0 +1,117 @@
+{
+  "$id": "phil:ontological-commitment-schema:1.0.0",
+  "title": "Ontological Commitment Detection Schema",
+  "description": "Structured results of ontological commitment detection in philosophical arguments. Identifies the entities a theory or argument is committed to, categorized by entity type and explicitness.",
+  "type": "object",
+  "required": ["analysis_id", "source_argument_id", "commitments"],
+  "properties": {
+    "analysis_id": {
+      "type": "string",
+      "description": "Unique identifier for this ontological commitment analysis run"
+    },
+    "source_argument_id": {
+      "type": "string",
+      "description": "Identifier of the source argument or text under analysis"
+    },
+    "commitments": {
+      "type": "array",
+      "description": "Detected ontological commitments",
+      "items": {
+        "type": "object",
+        "required": ["id", "entity_type", "category", "explicitness", "source_location"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^OC\\d+$",
+            "description": "Ontological commitment identifier (OC1, OC2, ...)"
+          },
+          "entity_type": {
+            "type": "string",
+            "description": "The kind of entity the argument commits to (e.g., 'electron', 'moral property', 'possible world')"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "concrete_particular",
+              "abstract_object",
+              "property",
+              "fact",
+              "event",
+              "process",
+              "possible_world",
+              "set",
+              "kind",
+              "trope",
+              "universal",
+              "other"
+            ],
+            "description": "Ontological category of the committed entity"
+          },
+          "explicitness": {
+            "type": "string",
+            "enum": ["explicit", "quantificational", "presuppositional", "truthmaker", "implicit"],
+            "description": "How explicitly the commitment appears in the text"
+          },
+          "source_location": {
+            "type": "string",
+            "description": "Textual location or quotation indicating the commitment"
+          },
+          "quinean_test": {
+            "type": "string",
+            "description": "Result of applying Quine's criterion of ontological commitment (bound variable analysis)"
+          },
+          "controversiality": {
+            "type": "string",
+            "enum": ["uncontroversial", "domain_controversial", "highly_controversial"],
+            "description": "Degree of controversy surrounding this ontological commitment"
+          },
+          "alternative_paraphrase": {
+            "type": "string",
+            "description": "Potential paraphrase that avoids or reduces this commitment"
+          },
+          "rejection_impact": {
+            "type": "string",
+            "enum": ["fatal", "severe", "mild", "none"],
+            "description": "Impact on the argument if this commitment is rejected"
+          }
+        }
+      }
+    },
+    "ontological_profile": {
+      "type": "object",
+      "description": "Aggregate profile of the argument's ontological commitments",
+      "properties": {
+        "quinean_ontology": {
+          "type": "string",
+          "description": "Overall ontological verdict based on Quinean criterion — what the argument says there is"
+        },
+        "most_contentious_commitment": {
+          "type": "string",
+          "description": "The single most controversial ontological commitment identified"
+        },
+        "parsimony_assessment": {
+          "type": "string",
+          "description": "Assessment of ontological parsimony (e.g., 'minimal', 'moderate', 'profligate')"
+        },
+        "category_summary": {
+          "type": "object",
+          "description": "Count of commitments per ontological category",
+          "properties": {
+            "concrete_particular": { "type": "integer", "description": "Count of concrete particular commitments" },
+            "abstract_object": { "type": "integer", "description": "Count of abstract object commitments" },
+            "property": { "type": "integer", "description": "Count of property commitments" },
+            "fact": { "type": "integer", "description": "Count of fact commitments" },
+            "event": { "type": "integer", "description": "Count of event commitments" },
+            "process": { "type": "integer", "description": "Count of process commitments" },
+            "possible_world": { "type": "integer", "description": "Count of possible world commitments" },
+            "set": { "type": "integer", "description": "Count of set commitments" },
+            "kind": { "type": "integer", "description": "Count of kind commitments" },
+            "trope": { "type": "integer", "description": "Count of trope commitments" },
+            "universal": { "type": "integer", "description": "Count of universal commitments" },
+            "other": { "type": "integer", "description": "Count of other category commitments" }
+          }
+        }
+      }
+    }
+  }
+}

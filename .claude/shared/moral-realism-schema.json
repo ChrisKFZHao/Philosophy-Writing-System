@@ -1,0 +1,135 @@
+{
+  "$id": "phil:moral-realism-schema:1.0.0",
+  "title": "Moral Realism Stance Analysis Schema",
+  "description": "Structured analysis of a philosopher's stance on moral realism. Classifies the metaethical position, maps key commitments across core dimensions, and evaluates supporting arguments, vulnerabilities, and dialectical status.",
+  "type": "object",
+  "required": ["analysis_id", "position_classification", "key_commitments"],
+  "properties": {
+    "analysis_id": {
+      "type": "string",
+      "description": "Unique identifier for this moral realism analysis run"
+    },
+    "position_classification": {
+      "type": "string",
+      "enum": [
+        "robust_non_naturalist",
+        "quietist_realist",
+        "cornell_realist",
+        "analytic_functionalist",
+        "reductive_naturalist",
+        "response_dependent",
+        "constructivist",
+        "error_theorist",
+        "expressivist_quasi_realist",
+        "expressivist_non_cognitivist",
+        "fictionalist_revolutionary",
+        "fictionalist_hermeneutic",
+        "relativist",
+        "other"
+      ],
+      "description": "Classification of the metaethical position regarding moral realism"
+    },
+    "key_commitments": {
+      "type": "object",
+      "description": "Core metaethical commitments mapped across five key dimensions",
+      "required": ["cognitivism", "truth_aptness", "mind_independence", "moral_facts_exist", "naturalism"],
+      "properties": {
+        "cognitivism": {
+          "type": "string",
+          "enum": ["cognitivist", "non_cognitivist", "hybrid"],
+          "description": "Whether moral judgments express beliefs (cognitivist), non-cognitive attitudes (non_cognitivist), or a mix"
+        },
+        "truth_aptness": {
+          "type": "string",
+          "enum": ["yes", "no", "qualified"],
+          "description": "Whether moral claims are capable of being true or false"
+        },
+        "mind_independence": {
+          "type": "string",
+          "enum": ["robust", "moderate", "minimal", "none"],
+          "description": "Degree of mind-independence attributed to moral facts or properties"
+        },
+        "moral_facts_exist": {
+          "type": "string",
+          "enum": ["yes", "no", "fictional", "useful_fiction"],
+          "description": "Whether moral facts exist in any sense"
+        },
+        "naturalism": {
+          "type": "string",
+          "enum": ["naturalist", "non_naturalist", "supernaturalist"],
+          "description": "Whether moral properties are natural, non-natural, or supernatural"
+        }
+      }
+    },
+    "supporting_arguments": {
+      "type": "array",
+      "description": "Arguments offered in support of this metaethical position",
+      "items": {
+        "type": "object",
+        "properties": {
+          "argument_name": {
+            "type": "string",
+            "description": "Name or brief label for the supporting argument"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of the argument's reasoning"
+          },
+          "strength": {
+            "type": "string",
+            "enum": ["strong", "moderate", "weak"],
+            "description": "Estimated argumentative strength"
+          }
+        }
+      }
+    },
+    "vulnerabilities": {
+      "type": "array",
+      "description": "Known vulnerabilities or objections to this position",
+      "items": {
+        "type": "object",
+        "properties": {
+          "objection": {
+            "type": "string",
+            "description": "Name or label of the objection"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["fatal", "severe", "moderate", "mild"],
+            "description": "Severity of the vulnerability"
+          },
+          "standard_response": {
+            "type": "string",
+            "description": "Standard reply or defense available to the position"
+          }
+        }
+      }
+    },
+    "dialectical_status": {
+      "type": "object",
+      "description": "Current dialectical standing of the position in the literature",
+      "properties": {
+        "dominance": {
+          "type": "string",
+          "enum": ["majority", "significant_minority", "fringe", "historical", "emerging"],
+          "description": "Prevalence of this position in the contemporary literature"
+        },
+        "trend": {
+          "type": "string",
+          "enum": ["gaining", "stable", "declining", "unclear"],
+          "description": "Direction of change in popularity or support"
+        },
+        "key_proponents": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Key philosophers associated with this position"
+        },
+        "key_opponents": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Key philosophers arguing against this position"
+        }
+      }
+    }
+  }
+}

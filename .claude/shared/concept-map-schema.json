@@ -1,0 +1,166 @@
+{
+  "$id": "phil:concept-map-schema:1.0.0",
+  "title": "Conceptual Analysis Schema",
+  "description": "Structured representation of conceptual analysis. Uniformly records concept definitions, conditions, cases, distinctions, and dimensions.",
+  "type": "object",
+  "required": ["concept_name", "domain", "analysis_type"],
+  "properties": {
+    "concept_name": {
+      "type": "string",
+      "description": "Name of the concept under analysis"
+    },
+    "aliases": {
+      "type": "array",
+      "description": "Aliases or translation variants",
+      "items": { "type": "string" }
+    },
+    "domain": {
+      "type": "string",
+      "description": "Philosophical domain",
+      "enum": ["metaphysics", "epistemology", "ethics", "metaethics", "political", "philosophy-of-mind", "philosophy-of-language", "philosophy-of-science", "aesthetics", "logic", "general", "other"]
+    },
+    "analysis_type": {
+      "type": "string",
+      "enum": ["initial", "supplementary", "engineering"],
+      "description": "Analysis type: initial mapping / supplementary refinement / concept engineering"
+    },
+    "candidate_definitions": {
+      "type": "array",
+      "description": "List of candidate definitions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "description": "Definition identifier" },
+          "text": { "type": "string", "description": "Definition text" },
+          "source": { "type": "string", "description": "Source of the definition" },
+          "status": {
+            "type": "string",
+            "enum": ["proposed", "challenged", "rejected", "refined", "accepted"],
+            "description": "Current status of this candidate definition"
+          }
+        }
+      }
+    },
+    "necessary_conditions": {
+      "type": "array",
+      "description": "List of proposed necessary conditions",
+      "items": {
+        "type": "object",
+        "required": ["condition", "test_status"],
+        "properties": {
+          "condition": { "type": "string", "description": "The proposed necessary condition" },
+          "test_status": {
+            "type": "string",
+            "enum": ["passed", "disputed", "failed"],
+            "description": "Status after counterexample testing"
+          },
+          "test_note": { "type": "string", "description": "Notes on the test" }
+        }
+      }
+    },
+    "sufficiency_tests": {
+      "type": "array",
+      "description": "Tests for joint sufficiency of condition sets",
+      "items": {
+        "type": "object",
+        "properties": {
+          "condition_set": { "type": "string", "description": "The set of conditions tested jointly" },
+          "test_status": { "type": "string", "enum": ["passed", "failed"] },
+          "counterexample": { "type": "string", "description": "Gettier-style counterexample if failed" }
+        }
+      }
+    },
+    "cases": {
+      "type": "object",
+      "description": "Cases used for testing the concept",
+      "properties": {
+        "positive": {
+          "type": "array",
+          "description": "Clear positive cases",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": { "type": "string" },
+              "source": { "type": "string" },
+              "implication": { "type": "string" }
+            }
+          }
+        },
+        "borderline": {
+          "type": "array",
+          "description": "Borderline / vague cases",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": { "type": "string" },
+              "source": { "type": "string" },
+              "ambiguity": { "type": "string", "description": "What makes this case borderline" }
+            }
+          }
+        },
+        "counterexamples": {
+          "type": "array",
+          "description": "Counterexample cases",
+          "items": {
+            "type": "object",
+            "properties": {
+              "description": { "type": "string" },
+              "source": { "type": "string" },
+              "target": { "type": "string", "description": "Which condition or definition is targeted" },
+              "impact": { "type": "string", "description": "Impact of the counterexample" }
+            }
+          }
+        }
+      }
+    },
+    "distinction_map": {
+      "type": "array",
+      "description": "Map of adjacent concepts and how they differ from the target concept",
+      "items": {
+        "type": "object",
+        "properties": {
+          "adjacent_concept": { "type": "string", "description": "Name of the adjacent concept" },
+          "shared_features": { "type": "array", "items": { "type": "string" }, "description": "Features shared with the target concept" },
+          "key_difference": { "type": "string", "description": "The critical distinguishing feature" },
+          "boundary_type": { "type": "string", "enum": ["gradual", "sharp", "unclear"], "description": "Nature of the conceptual boundary" }
+        }
+      }
+    },
+    "concept_structure": {
+      "type": "object",
+      "description": "Diagnosis of the concept's structural type",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["classical", "cluster", "prototype", "decompositional", "essentialist", "stipulative", "unclear"],
+          "description": "Structural type of the concept"
+        },
+        "rationale": { "type": "string", "description": "Rationale for the type diagnosis" }
+      }
+    },
+    "dimensions": {
+      "type": "array",
+      "description": "Analytic dimensions (especially relevant for thick concepts and cluster concepts)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "dimension": { "type": "string", "description": "Name of the dimension" },
+          "role": { "type": "string", "description": "Role this dimension plays in the concept" },
+          "changes_application": { "type": "boolean", "description": "Whether variation along this dimension changes whether the concept applies" }
+        }
+      }
+    },
+    "engineering_proposals": {
+      "type": "array",
+      "description": "Concept engineering proposals (present only for analysis_type: engineering)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "proposal": { "type": "string", "description": "The proposed revision" },
+          "rationale": { "type": "string", "description": "Rationale for the revision" },
+          "expected_gain": { "type": "string", "description": "Expected philosophical gain" }
+        }
+      }
+    }
+  }
+}

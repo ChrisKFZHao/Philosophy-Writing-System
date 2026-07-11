@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dialectical-tree-schema",
+  "title": "Dialectical Tree Schema",
+  "description": "Structured data contract for dialectical mapping output — thesis-objection-response trees in philosophical argument analysis",
+  "type": "object",
+  "required": ["analysis_id", "source_text", "tree"],
+  "properties": {
+    "analysis_id": {
+      "type": "string",
+      "description": "Unique identifier for this dialectical analysis"
+    },
+    "source_text": {
+      "type": "string",
+      "description": "Reference to the source text or argument being analyzed"
+    },
+    "tree": {
+      "type": "object",
+      "description": "The dialectical tree structure",
+      "required": ["root_node"],
+      "properties": {
+        "root_node": {
+          "$ref": "#/$defs/dialectical_node",
+          "description": "The root thesis node of the dialectical tree"
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Tree-level metadata",
+          "properties": {
+            "total_nodes": {"type": "integer"},
+            "max_depth": {"type": "integer"},
+            "thesis_count": {"type": "integer"},
+            "objection_count": {"type": "integer"},
+            "response_count": {"type": "integer"},
+            "unresolved_count": {"type": "integer"},
+            "bedrock_disagreements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {"type": "string", "description": "Node path to the bedrock disagreement"},
+                  "nature": {"type": "string", "description": "What kind of fundamental disagreement (premise, method, standard)"},
+                  "description": {"type": "string"}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "dialectical_node": {
+      "type": "object",
+      "description": "A node in the dialectical tree",
+      "required": ["id", "type", "content"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique node identifier (e.g., T1, O1a, R1a1)"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["thesis", "objection", "response", "concession", "modification", "bedrock"],
+          "description": "The dialectical role of this node"
+        },
+        "content": {
+          "type": "string",
+          "description": "The claim or argument made at this node"
+        },
+        "objection_type": {
+          "type": "string",
+          "enum": ["undermining", "rebutting", "undercutting", "outflanking"],
+          "description": "Type of objection (required if type is 'objection')"
+        },
+        "state": {
+          "type": "string",
+          "enum": ["established", "contested_defensible", "vulnerable", "refuted", "unresolved"],
+          "description": "Dialectical state after all children have been processed"
+        },
+        "severity": {
+          "type": "string",
+          "enum": ["fatal", "severe", "moderate", "minor"],
+          "description": "Severity of the objection or strength of the response"
+        },
+        "source": {
+          "type": "string",
+          "description": "Which philosopher or position this objection/response is associated with"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dialectical_node"
+          },
+          "description": "Child nodes — objections to this claim, or responses to those objections"
+        }
+      }
+    }
+  }
+}

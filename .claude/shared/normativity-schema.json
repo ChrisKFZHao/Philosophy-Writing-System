@@ -1,0 +1,114 @@
+{
+  "$id": "phil:normativity-schema:1.0.0",
+  "title": "Normativity Structure Analysis Schema",
+  "description": "Structured analysis of normative claims in philosophical texts. Maps the structure, type, source, and bindingness of normative prescriptions, and diagnoses the overall normative architecture.",
+  "type": "object",
+  "required": ["analysis_id", "normative_claims"],
+  "properties": {
+    "analysis_id": {
+      "type": "string",
+      "description": "Unique identifier for this normativity analysis run"
+    },
+    "normative_claims": {
+      "type": "array",
+      "description": "Identified normative claims in the text",
+      "items": {
+        "type": "object",
+        "required": ["id", "claim_text", "ought_type", "categorical_or_hypothetical", "source_of_normativity"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^NC\\d+$",
+            "description": "Normative claim identifier (NC1, NC2, ...)"
+          },
+          "claim_text": {
+            "type": "string",
+            "description": "Full text of the normative claim"
+          },
+          "ought_type": {
+            "type": "string",
+            "enum": [
+              "moral",
+              "prudential",
+              "epistemic",
+              "instrumental",
+              "aesthetic",
+              "legal",
+              "social",
+              "other"
+            ],
+            "description": "Type of normativity expressed by the claim"
+          },
+          "categorical_or_hypothetical": {
+            "type": "string",
+            "enum": ["categorical", "hypothetical", "hybrid"],
+            "description": "Whether the claim is categorical (binding regardless of desires), hypothetical (conditional on desires or goals), or both"
+          },
+          "source_of_normativity": {
+            "type": "string",
+            "enum": [
+              "constitutivist",
+              "reasons_fundamentalist",
+              "rationalist",
+              "humean",
+              "expressivist",
+              "realist",
+              "contractualist",
+              "second_personal",
+              "evolutionary",
+              "other"
+            ],
+            "description": "Account of where the normativity originates"
+          },
+          "reasons_internalism": {
+            "type": "string",
+            "enum": ["internal", "external", "mixed"],
+            "description": "Whether reasons for this claim are internal to the agent's motivational set, external, or mixed"
+          },
+          "bindingness_mechanism": {
+            "type": "string",
+            "description": "Account of how or why this normative claim binds agents"
+          },
+          "motivation_justification_distinction": {
+            "type": "object",
+            "description": "Distinction between motivating and justifying reasons for this claim",
+            "properties": {
+              "motivating_reason": {
+                "type": "string",
+                "description": "The motivating reason — what actually moves the agent"
+              },
+              "justifying_reason": {
+                "type": "string",
+                "description": "The justifying reason — what rationally supports the claim"
+              },
+              "gap": {
+                "type": "string",
+                "description": "Whether a gap exists between motivating and justifying reasons, and its nature"
+              }
+            }
+          }
+        }
+      }
+    },
+    "normative_architecture": {
+      "type": "object",
+      "description": "Overall architecture of the normative system in the text",
+      "required": ["structure_type", "foundational_principle", "regress_assessment"],
+      "properties": {
+        "structure_type": {
+          "type": "string",
+          "enum": ["foundational", "coherentist", "hierarchical", "network"],
+          "description": "Type of normative structure"
+        },
+        "foundational_principle": {
+          "type": "string",
+          "description": "The foundational normative principle or principles identified"
+        },
+        "regress_assessment": {
+          "type": "string",
+          "description": "Assessment of how the system handles normative regress (e.g., 'stops at fundamental principle', 'coherentist holism avoids regress', 'infinite regress unresolved')"
+        }
+      }
+    }
+  }
+}

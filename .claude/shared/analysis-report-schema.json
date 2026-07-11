@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "analysis-report-schema",
+  "title": "Integrated Analysis Report Schema",
+  "description": "Structured data contract for the Phase 5 Integrated Report — the comprehensive output of the phil-analyze orchestration pipeline",
+  "type": "object",
+  "required": ["report_id", "source_text", "generated_at", "domain_classification", "sections"],
+  "properties": {
+    "report_id": {
+      "type": "string",
+      "description": "Unique identifier for this analysis report"
+    },
+    "source_text": {
+      "type": "string",
+      "description": "Reference to the source text analyzed"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of report generation"
+    },
+    "pipeline_version": {
+      "type": "string",
+      "description": "Version of the phil-analyze pipeline used"
+    },
+    "domain_classification": {
+      "type": "object",
+      "description": "Automatic domain feature detection results",
+      "required": ["primary_domain", "detected_features"],
+      "properties": {
+        "primary_domain": {
+          "type": "string",
+          "enum": ["general_analytic", "metaphysics", "metaethics", "epistemology", "philosophy_of_language", "philosophy_of_mind", "political_philosophy"]
+        },
+        "secondary_domains": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "detected_features": {
+          "type": "object",
+          "properties": {
+            "ontological_language": {"type": "boolean"},
+            "modal_operators": {"type": "boolean"},
+            "identity_statements": {"type": "boolean"},
+            "causal_language": {"type": "boolean"},
+            "grounding_language": {"type": "boolean"},
+            "moral_language": {"type": "boolean"},
+            "normative_statements": {"type": "boolean"},
+            "realism_claims": {"type": "boolean"},
+            "motivational_language": {"type": "boolean"}
+          }
+        },
+        "activated_skills": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "List of phil-* skills activated based on detected features"
+        }
+      }
+    },
+    "sections": {
+      "type": "object",
+      "description": "The report sections",
+      "properties": {
+        "executive_summary": {
+          "type": "object",
+          "required": ["summary_text", "key_findings"],
+          "properties": {
+            "summary_text": {"type": "string"},
+            "key_findings": {
+              "type": "array",
+              "items": {"type": "string"},
+              "minItems": 3,
+              "maxItems": 10
+            }
+          }
+        },
+        "argument_reconstructions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["argument_id", "argument_type", "premises", "conclusion"],
+            "properties": {
+              "argument_id": {"type": "string"},
+              "argument_type": {"type": "string"},
+              "premises": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "string"},
+                    "text": {"type": "string"},
+                    "type": {"type": "string", "enum": ["explicit", "implicit", "sub_conclusion"]},
+                    "certainty": {"type": "string", "enum": ["high", "medium", "low"]}
+                  }
+                }
+              },
+              "conclusion": {"type": "string"},
+              "validity_assessment": {"type": "string"},
+              "relationships": {
+                "type": "object",
+                "properties": {
+                  "depends_on": {"type": "array", "items": {"type": "string"}},
+                  "supports": {"type": "array", "items": {"type": "string"}},
+                  "opposes": {"type": "array", "items": {"type": "string"}}
+                }
+              }
+            }
+          }
+        },
+        "conceptual_analysis": {
+          "type": "object",
+          "properties": {
+            "key_concepts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "concept": {"type": "string"},
+                  "definition": {"type": "string"},
+                  "structure_type": {"type": "string"},
+                  "distinctions": {"type": "array", "items": {"type": "string"}}
+                }
+              }
+            },
+            "distinction_network": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "distinction": {"type": "string"},
+                  "terms": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 2},
+                  "function": {"type": "string"},
+                  "consistency": {"type": "string"}
+                }
+              }
+            }
+          }
+        },
+        "ontological_audit": {
+          "type": "object",
+          "description": "Ontological commitment audit — present if metaphysics features detected",
+          "properties": {
+            "entities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "entity_type": {"type": "string"},
+                  "category": {"type": "string"},
+                  "source_premise": {"type": "string"},
+                  "modal_status": {"type": "string"},
+                  "explicit": {"type": "boolean"}
+                }
+              }
+            },
+            "parsimony_assessment": {"type": "string"}
+          }
+        },
+        "metaethical_audit": {
+          "type": "object",
+          "description": "Metaethical stance audit — present if metaethics features detected",
+          "properties": {
+            "realism_spectrum_position": {"type": "string"},
+            "semantic_commitment": {"type": "string"},
+            "normative_structure": {"type": "string"},
+            "motivational_architecture": {"type": "string"},
+            "key_commitments": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "dialectical_structure": {
+          "type": "object",
+          "properties": {
+            "visualization_ascii": {"type": "string"},
+            "summary": {"type": "string"}
+          }
+        },
+        "critical_evaluation": {
+          "type": "object",
+          "properties": {
+            "counterexamples": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "target": {"type": "string"},
+                  "counterexample": {"type": "string"},
+                  "severity": {"type": "string"},
+                  "response_available": {"type": "boolean"}
+                }
+              }
+            },
+            "parity_findings": {"type": "array"},
+            "methodological_assessment": {"type": "string"}
+          }
+        },
+        "open_questions": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    }
+  }
+}

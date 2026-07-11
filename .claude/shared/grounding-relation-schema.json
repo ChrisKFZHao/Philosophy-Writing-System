@@ -1,0 +1,111 @@
+{
+  "$id": "phil:grounding-relation-schema:1.0.0",
+  "title": "Grounding Relation Analysis Schema",
+  "description": "Structured analysis of grounding relations in philosophical arguments. Captures what grounds what, the type and formal properties of grounding relations, and the overall dependence topology.",
+  "type": "object",
+  "required": ["analysis_id", "relations"],
+  "properties": {
+    "analysis_id": {
+      "type": "string",
+      "description": "Unique identifier for this grounding analysis run"
+    },
+    "relations": {
+      "type": "array",
+      "description": "Identified grounding relations",
+      "items": {
+        "type": "object",
+        "required": ["id", "ground", "grounded", "relation_type", "direction", "level_change"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^GR\\d+$",
+            "description": "Grounding relation identifier (GR1, GR2, ...)"
+          },
+          "ground": {
+            "type": "string",
+            "description": "Description of the grounding entity (what does the grounding)"
+          },
+          "grounded": {
+            "type": "string",
+            "description": "Description of the grounded entity (what is grounded)"
+          },
+          "relation_type": {
+            "type": "string",
+            "enum": [
+              "full_grounding",
+              "partial_grounding",
+              "supervenience",
+              "realization",
+              "constitution",
+              "identity",
+              "causation",
+              "other"
+            ],
+            "description": "Type of grounding relation between ground and grounded"
+          },
+          "direction": {
+            "type": "string",
+            "description": "Direction of the grounding relation (e.g., 'mental → physical', 'normative → natural')"
+          },
+          "level_change": {
+            "type": "string",
+            "enum": ["fundamental_to_derivative", "derivative_to_derivative", "same_level"],
+            "description": "Whether the grounding relation crosses levels of fundamentality"
+          },
+          "formal_properties": {
+            "type": "object",
+            "description": "Formal logical properties of the grounding relation",
+            "properties": {
+              "irreflexive": {
+                "type": "boolean",
+                "description": "Whether the relation is irreflexive (nothing grounds itself)"
+              },
+              "asymmetric": {
+                "type": "boolean",
+                "description": "Whether the relation is asymmetric (if A grounds B, B does not ground A)"
+              },
+              "transitive": {
+                "type": "boolean",
+                "description": "Whether the relation is transitive (if A grounds B and B grounds C, then A grounds C)"
+              }
+            }
+          },
+          "explanatory_power": {
+            "type": "string",
+            "description": "Assessment of how much explanatory work this grounding relation performs"
+          },
+          "chain_position": {
+            "type": "string",
+            "description": "Position of this relation in a grounding chain (e.g., 'terminal', 'intermediate', 'initial')"
+          }
+        }
+      }
+    },
+    "dependence_topology": {
+      "type": "object",
+      "description": "Overall topological structure of dependence relations in the argument",
+      "required": ["fundamental_level", "derivative_levels", "chain_structure", "well_foundedness"],
+      "properties": {
+        "fundamental_level": {
+          "type": "array",
+          "description": "Entities identified as fundamental (ungrounded grounders)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "derivative_levels": {
+          "type": "string",
+          "description": "Description of derivative levels and their layering structure"
+        },
+        "chain_structure": {
+          "type": "string",
+          "description": "Overall structure of grounding chains (e.g., 'linear', 'branching', 'diamond', 'cyclic')"
+        },
+        "well_foundedness": {
+          "type": "string",
+          "description": "Assessment of whether the grounding structure is well-founded (e.g., 'well_founded', 'infinitely_descending', 'circular', 'undetermined')"
+        }
+      }
+    }
+  }
+}
