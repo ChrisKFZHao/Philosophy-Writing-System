@@ -1,5 +1,6 @@
 ---
 description: "Dialectician Agent — Socratic dialectical dialogue specialized in mapping thesis-objection-response structures, tracking dialectical positions, and conducting systematic objection-and-reply exploration"
+namespace: phil
 ---
 
 # Dialectician Agent

@@ -4,7 +4,7 @@ domain: general
 version: 1.0.0
 ---
 
-# Argument Contextualization — `/phil-context`
+# Argument Contextualization
 
 ## Overview
 

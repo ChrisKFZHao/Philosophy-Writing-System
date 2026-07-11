@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.1-alpha &emsp; **Status**: Alpha
+> **Version**: 0.2-alpha &emsp; **Status**: Alpha
 >
 > **Built atop `academic-research-skills` (v3.15.0)**
 > This system does not re-implement ARS's existing capabilities (literature search, paper writing, peer review, citation verification). Instead, it layers on top of ARS an **analytic-philosophy-specific methodological layer**.
@@ -202,33 +202,13 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │       └── metaethics/               # Metaethics (17 philosophers)
 │
 ├── commands/
-│   ├── phil-analyze.md               # /phil-analyze — Full analysis pipeline
-│   ├── phil-reconstruct.md           # /phil-reconstruct — Argument reconstruction
-│   ├── phil-charity.md               # /phil-charity — Principle of charity check
-│   ├── phil-premises.md              # /phil-premises — Implicit premise detection
-│   ├── phil-counterexample.md        # /phil-counterexample — Counterexample generation
-│   ├── phil-concepts.md              # /phil-concepts — Conceptual analysis
-│   ├── phil-dialectic.md             # /phil-dialectic — Dialectical mapping
-│   ├── phil-thought.md               # /phil-thought — Thought experiment analysis
-│   ├── phil-distinctions.md          # /phil-distinctions — Distinction tracking
-│   ├── phil-ontology.md              # [New] /phil-ontology — Ontological commitment detection
-│   ├── phil-identity.md              # [New] /phil-identity — Identity analysis
-│   ├── phil-grounding.md             # [New] /phil-grounding — Grounding relation analysis
-│   ├── phil-conceivability.md        # [New] /phil-conceivability — Conceivability argument
-│   ├── phil-causation.md             # [New] /phil-causation — Causal analysis
-│   ├── phil-essence.md               # [New] /phil-essence — Essentialism detection
-│   ├── phil-natural-kind.md          # [New] /phil-natural-kind — Natural kind analysis
-│   ├── phil-moral-realism.md         # [New] /phil-moral-realism — Moral realism analysis
-│   ├── phil-normativity.md           # [New] /phil-normativity — Normativity analysis
-│   ├── phil-moral-semantics.md       # [New] /phil-moral-semantics — Moral semantics analysis
-│   ├── phil-moral-psychology.md      # [New] /phil-moral-psychology — Moral psychology analysis
-│   ├── phil-moral-disagreement.md    # [New] /phil-moral-disagreement — Moral disagreement analysis
-│   ├── phil-moral-epistemology.md    # [New] /phil-moral-epistemology — Moral epistemology
-│   └── phil-moral-supervenience.md   # [New] /phil-moral-supervenience — Moral supervenience analysis
-│   ├── phil-write.md                 # [Phase 6] /phil-write — Philosophy writer agent entry
-│   ├── phil-review.md                # [Phase 6] /phil-review — Philosophy reviewer agent entry
-│   ├── phil-comment.md               # [Phase 6] /phil-comment — Philosophy commentator agent entry
-│   └── phil-pipeline.md              # [Phase 6] /phil-pipeline — Pipeline orchestrator entry
+│   ├── reconstruct.md                 # phil:reconstruct — Full-dimension text understanding (9-20 skills)
+│   ├── evaluate.md                    # phil:evaluate — Multi-angle parallel critique (7 skills)
+│   ├── review.md                      # phil:review — Peer review agent (8 dimensions)
+│   ├── write.md                       # phil:write — Philosophy writer agent (outline/draft/revision)
+│   ├── comment.md                     # phil:comment — Deep commentary agent (argument details)
+│   └── pipeline.md                    # phil:pipeline — Full pipeline orchestrator (5 stages)
+│
 │
 ├── shared/
 │   ├── argument-schema.json          # Argument formalization contract
@@ -388,10 +368,10 @@ Metaethics Knowledge Cluster:
 ### Layer 2: Orchestration Layer
 **Rationale**: A single analytical method is often insufficient — the user needs a complete analysis pipeline. The orchestration layer composes Layer 1 analytic skills into end-to-end workflows.
 
-**When Used**: When the user invokes `/phil-analyze` or when an Agent auto-schedules.
+**When Used**: When the user invokes `phil:reconstruct（分析）+ phil:evaluate（评价）` or when an Agent auto-schedules.
 
 **Contents**:
-- `commands/phil-analyze.md` — Orchestration entry point, invokes the following workflow:
+- `commandsphil:reconstruct（分析）+ phil:evaluate（评价）.md` — Orchestration entry point, invokes the following workflow:
 
 **Metaphysics-Enhanced Orchestration**: When `phil-analyze` detects metaphysical features in the text (ontological language, modal operators, identity statements, causal assertions), it automatically incorporates the relevant metaphysical skills into the pipeline.
 
@@ -408,9 +388,9 @@ Metaethics Knowledge Cluster:
 - `agents/concept-mapper.md` — Concept mapper (conceptual relation exploration)
 - **`agents/metaphysician.md`** — **Metaphysical analyst: Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, and other meta-metaphysical questions**
 - **`agents/metaethicist.md`** — **Metaethical analyst: Socratic dialogue specialized in moral realism, normative reasons, moral semantics, and other metaethical questions**
-- **`agents/phil-writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards**
-- **`agents/phil-reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews**
-- **`agents/phil-commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots**
+- **`agentsphil:writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards**
+- **`agentsphil:reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews**
+- **`agentsphil:commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots**
 - **`agents/phil-orchestrator.md`** — **[Phase 6] Pipeline orchestrator: coordinates the 5-stage writing pipeline (question → literature → outline → draft → final) with quality gates**
 
 ### Layer 4: Cross-Layer Interface (ARS Bridge)
@@ -432,14 +412,14 @@ Metaethics Knowledge Cluster:
 **When Used**: When transitioning from analysis to production — generating outlines, drafting manuscripts, reviewing for philosophical rigor, and managing the full writing pipeline.
 
 **Contents**:
-- `agents/phil-writer.md` — Philosophy writer agent with three modes:
+- `agentsphil:writer.md` — Philosophy writer agent with three modes:
   - **Outline mode**: Transforms analysis outputs (argument reconstructions, concept maps, dialectical trees) into structured paper outlines with thesis, section plan, distinction inventory, and objection mapping.
   - **Draft mode**: Section-by-section manuscript drafting with 7 philosophy-aware prose standards (argument transparency, conceptual precision, modal accuracy, dialectical positioning, distinction preservation, counterexample resilience, ontological explicitness).
   - **Revision mode**: Prioritized revision based on reviewer findings (structural → conceptual → dialectical → modal → stylistic) with change tracking.
-- `agents/phil-reviewer.md` — Philosophy reviewer agent with two modes:
+- `agentsphil:reviewer.md` — Philosophy reviewer agent with two modes:
   - **Standard review**: 8-dimension evaluation (argument validity, charity, conceptual clarity, modal rigor, counterexample resilience, dialectical completeness, ontological commitment transparency, methodological consistency) with severity grading and revision priority matrix.
   - **Perspective review**: Review from a specified philosophical stance (Quinean, Lewisian, Kripkean, Finean, Mackiean, Expressivist, etc.), distinguishing perspective-dependent from perspective-neutral findings.
-- `agents/phil-commentator.md` — Philosophy commentator agent with three modes:
+- `agentsphil:commentator.md` — Philosophy commentator agent with three modes:
   - **Critical commentary**: Identifies unexamined assumptions, alternative interpretations, missing distinctions, undefended inferences, hidden commitments, and dialectical blind spots.
   - **Response paper**: Writes a response from a specified philosophical position.
   - **Dialectical positioning**: Situates work within the broader debate landscape and intellectual lineage.
@@ -946,35 +926,35 @@ Fast Normativity Analysis:
 
 | User Need | Triggering Command | Skill Used |
 |---------|---------|-----------|
-| "Reconstruct this argument" | `/phil-reconstruct` | `phil-argument-reconstruct` |
-| "Check the principle of charity" | `/phil-charity` | `phil-charity-check` |
-| "Find hidden premises" | `/phil-premises` | `phil-premise-detect` |
-| "Generate counterexamples" | `/phil-counterexample` | `phil-counterexample` |
-| "Analyze this concept" | `/phil-concepts` | `phil-conceptual-analysis` |
-| "Analyze this thought experiment" | `/phil-thought` | `phil-thought-experiment` |
-| "Draw a dialectical tree" | `/phil-dialectic` | `phil-dialectical-map` |
-| "Track key distinctions" | `/phil-distinctions` | `phil-distinction-track` |
-| "Perform a full analysis of this text" | `/phil-analyze` | Orchestration of all Layer 1 Skills |
-| **"Check ontological commitments"** | **`/phil-ontology`** | **`phil-ontological-commitment`** |
-| **"Analyze identity conditions"** | **`/phil-identity`** | **`phil-identity-persistence`** |
-| **"Analyze grounding relations"** | **`/phil-grounding`** | **`phil-grounding-check`** |
-| **"Evaluate a conceivability argument"** | **`/phil-conceivability`** | **`phil-conceivability-arg`** |
-| **"Analyze causal claims"** | **`/phil-causation`** | **`phil-causation-analyze`** |
-| **"Detect essentialism"** | **`/phil-essence`** | **`phil-essence-detect`** |
-| **"Analyze natural kind arguments"** | **`/phil-natural-kind`** | **`phil-natural-kind-analyze`** |
-| **"Analyze moral realist stance"** | **`/phil-moral-realism`** | **`phil-moral-realism`** |
-| **"Analyze normative claims"** | **`/phil-normativity`** | **`phil-normativity`** |
-| **"Analyze moral language"** | **`/phil-moral-semantics`** | **`phil-moral-semantics`** |
-| **"Analyze moral motivation"** | **`/phil-moral-psychology`** | **`phil-moral-psychology`** |
-| **"Analyze moral disagreement"** | **`/phil-moral-disagreement`** | **`phil-moral-disagreement`** |
-| **"Analyze moral knowledge"** | **`/phil-moral-epistemology`** | **`phil-moral-epistemology`** |
-| **"Analyze moral supervenience"** | **`/phil-moral-supervenience`** | **`phil-moral-supervenience`** |
-| **"Write an outline for this analysis"** | **`/phil-write outline`** | **`phil-writer`** |
-| **"Draft this paper"** | **`/phil-write draft`** | **`phil-writer`** |
-| **"Revise based on reviewer feedback"** | **`/phil-write revision`** | **`phil-writer`** |
-| **"Review this manuscript"** | **`/phil-review`** | **`phil-reviewer`** |
-| **"Comment on this argument"** | **`/phil-comment`** | **`phil-commentator`** |
-| **"Run the full writing pipeline"** | **`/phil-pipeline`** | **`phil-orchestrator`** |
+| "Reconstruct this argument" | `phil:reconstruct` | `phil-argument-reconstruct` |
+| "Check the principle of charity" | `phil:reconstruct` | `phil-charity-check` |
+| "Find hidden premises" | `phil:reconstruct` | `phil-premise-detect` |
+| "Generate counterexamples" | `phil:evaluate` | `phil-counterexample` |
+| "Analyze this concept" | `phil:reconstruct` | `phil-conceptual-analysis` |
+| "Analyze this thought experiment" | `phil:reconstruct` | `phil-thought-experiment` |
+| "Draw a dialectical tree" | `phil:evaluate` | `phil-dialectical-map` |
+| "Track key distinctions" | `phil:reconstruct` | `phil-distinction-track` |
+| "Perform a full analysis of this text" | `phil:reconstruct（分析）+ phil:evaluate（评价）` | Orchestration of all Layer 1 Skills |
+| **"Check ontological commitments"** | **`phil:reconstruct`** | **`phil-ontological-commitment`** |
+| **"Analyze identity conditions"** | **`phil:reconstruct`** | **`phil-identity-persistence`** |
+| **"Analyze grounding relations"** | **`phil:reconstruct`** | **`phil-grounding-check`** |
+| **"Evaluate a conceivability argument"** | **`phil:reconstruct`** | **`phil-conceivability-arg`** |
+| **"Analyze causal claims"** | **`phil:reconstruct`** | **`phil-causation-analyze`** |
+| **"Detect essentialism"** | **`phil:reconstruct`** | **`phil-essence-detect`** |
+| **"Analyze natural kind arguments"** | **`phil:reconstruct`** | **`phil-natural-kind-analyze`** |
+| **"Analyze moral realist stance"** | **`phil:reconstruct`** | **`phil-moral-realism`** |
+| **"Analyze normative claims"** | **`phil:reconstruct`** | **`phil-normativity`** |
+| **"Analyze moral language"** | **`phil:reconstruct`** | **`phil-moral-semantics`** |
+| **"Analyze moral motivation"** | **`phil:reconstruct`** | **`phil-moral-psychology`** |
+| **"Analyze moral disagreement"** | **`phil:reconstruct`** | **`phil-moral-disagreement`** |
+| **"Analyze moral knowledge"** | **`phil:reconstruct`** | **`phil-moral-epistemology`** |
+| **"Analyze moral supervenience"** | **`phil:reconstruct`** | **`phil-moral-supervenience`** |
+| **"Write an outline for this analysis"** | **`phil:write outline`** | **`phil-writer`** |
+| **"Draft this paper"** | **`phil:write draft`** | **`phil-writer`** |
+| **"Revise based on reviewer feedback"** | **`phil:write revision`** | **`phil-writer`** |
+| **"Review this manuscript"** | **`phil:review`** | **`phil-reviewer`** |
+| **"Comment on this argument"** | **`phil:comment`** | **`phil-commentator`** |
+| **"Run the full writing pipeline"** | **`phil:pipeline`** | **`phil-orchestrator`** |
 
 ---
 
@@ -1106,35 +1086,18 @@ Primer references:     <domain>-primer.md
 ### 8.4 Command Naming
 
 ```
-Format: phil-<domain>
+Format: phil:<action>  (namespace: phil)
 
-Examples:
-  /phil-analyze             Full analysis pipeline
-  /phil-reconstruct         Argument reconstruction
-  /phil-charity             Principle of charity check
-  /phil-premises            Implicit premise detection
-  /phil-counterexample      Counterexample generation
-  /phil-concepts            Conceptual analysis
-  /phil-dialectic           Dialectical mapping
-  /phil-thought             Thought experiment analysis
-  /phil-distinctions        Distinction tracking
-  /phil-ontology            Ontological commitment detection        [New]
-  /phil-identity            Identity analysis                       [New]
-  /phil-grounding           Grounding relation analysis             [New]
-  /phil-conceivability      Conceivability argument                 [New]
-  /phil-causation           Causal analysis                         [New]
-  /phil-essence             Essentialism detection                  [New]
-  /phil-natural-kind        Natural kind analysis                   [New]
-  /phil-moral-realism       Moral realism analysis                  [New]
-  /phil-normativity         Normativity analysis                    [New]
-  /phil-moral-semantics     Moral semantics analysis                [New]
-  /phil-moral-psychology    Moral psychology analysis               [New]
-  /phil-moral-disagreement  Moral disagreement analysis             [New]
-  /phil-moral-epistemology  Moral epistemology analysis             [New]
-  /phil-moral-supervenience Moral supervenience analysis            [New]
+Commands (6 composite commands):
+  phil:reconstruct    Full-dimension text understanding (9-20 skills, mixed serial/parallel)
+  phil:evaluate       Multi-angle parallel critique (7 skills, fully parallel)
+  phil:review         Peer review (phil-reviewer agent, 8 dimensions)
+  phil:write          Philosophy writing (phil-writer agent, outline/draft/revision)
+  phil:comment        Deep commentary (phil-commentator agent, 6 critical dimensions)
+  phil:pipeline       Full pipeline (phil-orchestrator agent, 5 stages)
 
+Underlying 28 skills remain invocable via the Skill tool.
 Rules:
-  - Match or shorten the corresponding Skill's <domain>
   - Keep short (ease of user input)
   - Do not conflict with ARS's ars-* commands
 ```
@@ -1239,7 +1202,7 @@ Step 4: Registration
       - §5 Dependency Graph
       - §6 Research Flow
       - §7 Taxonomy tables (analytic dimension + methodological depth + domain)
-  → Create commands/phil-<domain>.md (if user triggering is needed)
+  → Create commands/<domain>.md under one of the 6 composite commands or as a new command in the phil: namespace
   → Update the Skills overview in CLAUDE.md
 
 Step 5: Dependency check
@@ -1541,10 +1504,10 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.1-alpha · Last updated 2026-07-11 · Phase 6 complete + All gap closure*
+*Document version 0.2-alpha · Last updated 2026-07-12 · Restructured (33→6 commands, rules/ extraction, phil:* namespace)*
 *Built on academic-research-skills v3.15.0*
 *Phase 4 additions: Metaphysics + Metaethics knowledge dependency layers*
 *Phase 5 additions: 5 general Skills + 28 examples.md + 28 checklist.md + philosophers-db*
 *Phase 6 additions: 4 production agents + 4 commands + 5-stage writing pipeline*
-*Gap closure: 3 dialogic agents + 2 schemas + 5 templates + philosophers-db/ directory + /phil-analyze*
+*Gap closure: 3 dialogic agents + 2 schemas + 5 templates + philosophers-db/ directory + phil:reconstruct（分析）+ phil:evaluate（评价）*
 

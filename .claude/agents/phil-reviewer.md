@@ -1,5 +1,6 @@
 ---
 description: "Philosophy Reviewer — Domain-specific peer review assessing argument validity, conceptual clarity, modal rigor, dialectical charity, and counterexample resilience from configurable philosophical perspectives"
+namespace: phil
 ---
 
 # Philosophy Reviewer Agent

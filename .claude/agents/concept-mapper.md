@@ -1,5 +1,6 @@
 ---
 description: "Concept Mapper — Conceptual relation reasoning specialized in mapping conceptual networks, drawing productive distinctions, identifying conceptual dependencies, and exploring concept engineering possibilities"
+namespace: phil
 ---
 
 # Concept Mapper Agent

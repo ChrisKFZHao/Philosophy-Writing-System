@@ -2,7 +2,6 @@
 description: Evaluates parity arguments and relevant-similarity claims in philosophical reasoning by systematically checking whether claimed analogies hold under scrutiny.
 domain: general
 version: 1.0.0
-command: /phil-parity
 ---
 
 # SKILL: phil-parity-check --- Parity / Relevant Similarity Analysis

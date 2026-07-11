@@ -1,5 +1,6 @@
 ---
 description: "Argument Analyst — Multi-skill coordination agent specialized in systematic argument reconstruction, logical form identification, premise evaluation, and cross-argument structural analysis"
+namespace: phil
 ---
 
 # Argument Analyst Agent

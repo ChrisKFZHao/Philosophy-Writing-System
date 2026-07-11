@@ -1,5 +1,6 @@
 ---
 description: "Philosophy Commentator — Critical engagement with philosophical works: uncovering unexamined assumptions, identifying alternative interpretations, mapping missing distinctions, and positioning work within the broader dialectical landscape"
+namespace: phil
 ---
 
 # Philosophy Commentator Agent

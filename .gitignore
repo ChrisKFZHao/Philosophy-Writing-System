@@ -1,5 +1,4 @@
-# Claude Code local settings (contains session-specific config)
-.claude/settings.local.json
+# Claude Code settings (committed to git)
 
 # Temporary files
 *.tmp

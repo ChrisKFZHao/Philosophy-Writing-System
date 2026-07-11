@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/c/Users/zhaok/AppData/Local/Microsoft/WindowsApps/python.exe *)",
+      "Bash(where pdftoppm *)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"=== $(date +%Y-%m-%d) Session ===\" >> \"C:/Projects/Philosophical Writing/history.txt\""
+          }
+        ]
+      }
+    ]
+  }
+}

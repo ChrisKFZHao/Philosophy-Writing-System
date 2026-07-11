@@ -6,8 +6,6 @@ version: 1.0.0
 
 # phil-intuition-pump — Intuition Pump Analysis
 
-Command: `/phil-intuition`
-
 ---
 
 ## 1. Overview

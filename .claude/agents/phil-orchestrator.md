@@ -1,5 +1,6 @@
 ---
 description: "Philosophy Writing Pipeline Orchestrator — End-to-end workflow coordinator: philosophical questioning, literature review, outline refinement, draft generation, and final manuscript through review-revision cycles"
+namespace: phil
 ---
 
 # Philosophy Pipeline Orchestrator
