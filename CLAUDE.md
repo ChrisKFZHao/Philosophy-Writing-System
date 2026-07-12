@@ -37,12 +37,12 @@ style/         Personal writing samples & formatting templates
   └── format/  Formatting resources (templates, LaTeX, PDFs)
 .claude/       Claude Code project configuration
   ├── settings.json   Permissions + hooks (committed)
-  ├── commands/       6 composite commands (phil:* namespace)
+  ├── commands/       7 composite commands (phil:* namespace)
   ├── rules/          3 behavioral rule modules
-  ├── skills/         28 domain analysis skills (engine)
-  ├── agents/         9 philosophy-specialized agents
+  ├── skills/         29 domain analysis skills (engine)
+  ├── agents/         10 philosophy-specialized agents
   ├── references/     Knowledge base (glossaries, argument forms, philosophers-db)
-  └── shared/         Data contracts (9 JSON schemas + 5 report templates)
+  └── shared/         Data contracts (10 JSON schemas + 5 report templates)
 
 Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory\
   Session-persistent knowledge (user preferences, project feedback, references)
@@ -58,6 +58,7 @@ Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory
 | `phil:write` | 哲学写作 | phil-writer agent (outline / draft / revision) |
 | `phil:comment` | 论证细节和概念澄清 | phil-commentator agent (6 critical dimensions) |
 | `phil:pipeline` | 一键全流程 | phil-orchestrator agent (5 stages with quality gates) |
+| `phil:tutor` | 导师式文献对话 — 询问思路、追问理解、推荐文献 | phil-tutor agent (Socratic dialogue + 4-phase arc) |
 
 Each command file in `.claude/commands/` defines its skill composition, execution order, and output format.
 
@@ -149,7 +150,7 @@ Write memories for: user preferences, project goals, substantive feedback, exter
 
 ## Architecture
 
-The complete system architecture is defined in `ARCHITECTURE.md` at the project root (0.2.1-alpha), built atop `academic-research-skills` v3.15.0, covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
+The complete system architecture is defined in `ARCHITECTURE.md` at the project root (0.2.2-alpha), built atop `academic-research-skills` v3.15.0, covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
 
 - **28 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
 - **6 Commands** — Composite orchestration in `.claude/commands/`

@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.2.1-alpha &emsp; **Status**: Alpha
+> **Version**: 0.2.2-alpha &emsp; **Status**: Alpha
 >
 > **Built atop `academic-research-skills` (v3.15.0)**
 > This system does not re-implement ARS's existing capabilities (literature search, paper writing, peer review, citation verification). Instead, it layers on top of ARS an **analytic-philosophy-specific methodological layer**.
@@ -134,6 +134,7 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   ├── phil-intuition-pump/          # Intuition pump detection
 │   ├── phil-methodology/             # Philosophical methodology reflection
 │   ├── phil-contextualize/           # Intellectual history contextualization
+│   ├── phil-citation-extract/        # [New] Citation extraction and role classification
 │   │
 │   ├── phil-ontological-commitment/  # [New] Ontological commitment detection
 │   ├── phil-identity-persistence/    # [New] Identity and persistence analysis
@@ -160,7 +161,8 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   ├── phil-writer.md                # [Phase 6] Philosophy writer (outline/draft/revision)
 │   ├── phil-reviewer.md              # [Phase 6] Philosophy reviewer (8-dimension + perspective)
 │   ├── phil-commentator.md           # [Phase 6] Philosophy commentator (critical/response/position)
-│   └── phil-orchestrator.md          # [Phase 6] Pipeline orchestrator (5-stage workflow)
+│   ├── phil-orchestrator.md          # [Phase 6] Pipeline orchestrator (5-stage workflow)
+│   └── phil-tutor.md                 # [New] Tutor agent — dialogic reading mentor (Socratic + recommendations)
 │
 ├── references/
 │   ├── glossary-metaethics.md        # Metaethics terminology glossary
@@ -207,7 +209,8 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   ├── review.md                      # phil:review — Peer review agent (8 dimensions)
 │   ├── write.md                       # phil:write — Philosophy writer agent (outline/draft/revision)
 │   ├── comment.md                     # phil:comment — Deep commentary agent (argument details)
-│   └── pipeline.md                    # phil:pipeline — Full pipeline orchestrator (5 stages)
+│   ├── pipeline.md                    # phil:pipeline — Full pipeline orchestrator (5 stages)
+│   └── tutor.md                       # [New] phil:tutor — Dialogic reading mentor (Socratic + recommendations)
 │
 │
 ├── shared/
@@ -220,6 +223,7 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   ├── grounding-relation-schema.json      # [New] Grounding relation contract
 │   ├── moral-realism-schema.json            # [New] Moral realism stance contract
 │   ├── normativity-schema.json              # [New] Normative structure contract
+│   ├── citation-extract-schema.json         # [New] Citation extract data contract
 │   └── templates/
 │       ├── argument-reconstruction.md # Argument reconstruction report template
 │       ├── premise-audit.md           # Premise audit template
@@ -336,6 +340,7 @@ Metaethics Knowledge Cluster:
 | `phil-premise-detect` | Discover hidden assumptions, implicit premises, unstated presuppositions | `fallacy-catalog`, all argument-forms |
 | `phil-counterexample` | Construct counterexamples targeting premises or the entire reasoning | All argument-forms |
 | `phil-conceptual-analysis` | Necessary/sufficient condition analysis, dimension extraction | `glossary-*`, `metaphysical-distinctions` |
+| `phil-citation-extract` | Extract and classify citations from a text by argumentative role, cross-reference with bibliography | `bibliography/INDEX.md` |
 
 **Contents** (P1 — Extended, including metaphysics- and metaethics-specific):
 
@@ -392,6 +397,7 @@ Metaethics Knowledge Cluster:
 - **`agentsphil:reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews**
 - **`agentsphil:commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots**
 - **`agents/phil-orchestrator.md`** — **[Phase 6] Pipeline orchestrator: coordinates the 5-stage writing pipeline (question → literature → outline → draft → final) with quality gates**
+- **`agents/phil-tutor.md`** — **[New] Tutor agent: dialogic reading mentor — asks about the user's reading, probes understanding Socratically, identifies gaps, and recommends literature with individualized rationale**
 
 ### Layer 4: Cross-Layer Interface (ARS Bridge)
 **Rationale**: The analysis outputs of this system must flow into ARS's writing pipeline to produce papers.
@@ -747,6 +753,18 @@ Phase 1: Reading and Comprehension
 │  (optional)                                               │
 └──────────────────────────────────────────────────────────┘
           ↓
+Phase 1b: Tutoring and Reading Guidance (optional, invoked via phil:tutor)
+┌──────────────────────────────────────────────────────────┐
+│  [phil:tutor]           Socratic dialogue about the text  │
+│    → Ask what user is reading and thinking                │
+│    → Probe understanding, identify blind spots            │
+│    → Recommend literature tailored to gaps                │
+│    → Plan next steps (read more? run phil:reconstruct?)   │
+│    ↕                                                     │
+│  (Internal: may invoke phil-citation-extract to mine      │
+│   citation candidates from the user's current text)       │
+└──────────────────────────────────────────────────────────┘
+          ↓
 Phase 2: Argument Analysis
 ┌──────────────────────────────────────────────────────────┐
 │  [phil-argument-reconstruct]    Argument reconstruction   │
@@ -955,6 +973,7 @@ Fast Normativity Analysis:
 | **"Review this manuscript"** | **`phil:review`** | **`phil-reviewer`** |
 | **"Comment on this argument"** | **`phil:comment`** | **`phil-commentator`** |
 | **"Run the full writing pipeline"** | **`phil:pipeline`** | **`phil-orchestrator`** |
+| **"Discuss my reading and get recommendations"** | **`phil:tutor`** | **`phil-tutor`** (agent) + `phil-citation-extract` (skill) |
 
 ---
 
@@ -964,7 +983,7 @@ Fast Normativity Analysis:
 
 | Category | Rationale | Skills Included |
 |------|---------|------------|
-| **Reading** | Transform text into analyzable structured input | `phil-argument-reconstruct`, `phil-contextualize` |
+| **Reading** | Transform text into analyzable structured input | `phil-argument-reconstruct`, `phil-contextualize`, `phil-citation-extract` |
 | **Reasoning Analysis** | Check the quality, completeness, and fairness of reasoning | `phil-charity-check`, `phil-premise-detect`, `phil-parity-check`, `phil-modal-arg`, `phil-analogy-check` |
 | **Conceptual Analysis** | Clarify and distinguish core philosophical concepts | `phil-conceptual-analysis`, `phil-distinction-track`, `phil-intuition-pump` |
 | **Critical Evaluation** | Generate and assess objections | `phil-counterexample`, `phil-thought-experiment`, `phil-dialectical-map` |
@@ -983,7 +1002,7 @@ Fast Normativity Analysis:
 
 | Level | Description | Skills |
 |------|------|--------|
-| **Descriptive** | Describe what arguments, concepts, and commitments are present in the text | `phil-argument-reconstruct`, `phil-contextualize`, `phil-distinction-track`, `phil-ontological-commitment`, `phil-essence-detect`, `phil-moral-realism`, `phil-moral-semantics` |
+| **Descriptive** | Describe what arguments, concepts, and commitments are present in the text | `phil-argument-reconstruct`, `phil-contextualize`, `phil-distinction-track`, `phil-ontological-commitment`, `phil-essence-detect`, `phil-moral-realism`, `phil-moral-semantics`, `phil-citation-extract` |
 | **Normative** | Evaluate whether an argument succeeds | `phil-charity-check`, `phil-premise-detect`, `phil-modal-arg`, `phil-parity-check`, `phil-analogy-check`, `phil-intuition-pump`, `phil-counterexample`, `phil-thought-experiment`, `phil-conceivability-arg`, `phil-grounding-check`, `phil-identity-persistence`, `phil-causation-analyze`, `phil-natural-kind-analyze`, `phil-normativity`, `phil-moral-psychology`, `phil-moral-disagreement`, `phil-moral-epistemology`, `phil-moral-supervenience` |
 | **Generative** | Generate new arguments or new objections | `phil-counterexample`, `phil-dialectical-map` |
 | **Meta-level** | Reflect on methodology itself | `phil-methodology` |
@@ -992,7 +1011,7 @@ Fast Normativity Analysis:
 
 | Domain Coverage | Skills |
 |---------|--------|
-| **General** (cross-subdomain) | `phil-argument-reconstruct`, `phil-charity-check`, `phil-premise-detect`, `phil-counterexample`, `phil-conceptual-analysis`, `phil-dialectical-map`, `phil-thought-experiment`, `phil-distinction-track`, `phil-analogy-check`, `phil-parity-check`, `phil-intuition-pump`, `phil-methodology`, `phil-contextualize` |
+| **General** (cross-subdomain) | `phil-argument-reconstruct`, `phil-charity-check`, `phil-premise-detect`, `phil-counterexample`, `phil-conceptual-analysis`, `phil-dialectical-map`, `phil-thought-experiment`, `phil-distinction-track`, `phil-analogy-check`, `phil-parity-check`, `phil-intuition-pump`, `phil-methodology`, `phil-contextualize`, `phil-citation-extract` |
 | **Metaphysics** (including modality) | `phil-modal-arg`, `phil-ontological-commitment`, `phil-identity-persistence`, `phil-grounding-check`, `phil-conceivability-arg`, `phil-causation-analyze`, `phil-essence-detect`, `phil-natural-kind-analyze` |
 | **Metaethics** | `phil-moral-realism`, `phil-normativity`, `phil-moral-semantics`, `phil-moral-psychology`, `phil-moral-disagreement`, `phil-moral-epistemology`, `phil-moral-supervenience` |
 | **Reserved** (architecturally accommodable) | `phil-ethics-ai`, `phil-political-arg`, `phil-phenomenology`, `phil-existential`, `phil-action-theory`, `phil-epistemology` |
@@ -1504,7 +1523,7 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.2.1-alpha · Last updated 2026-07-12 · Added style/ directory for personalized writing calibration and formatting templates*
+*Document version 0.2.2-alpha · Last updated 2026-07-12 · Added phil:tutor agent for dialogic reading mentorship + phil-citation-extract skill for citation extraction*
 *Built on academic-research-skills v3.15.0*
 *Phase 4 additions: Metaphysics + Metaethics knowledge dependency layers*
 *Phase 5 additions: 5 general Skills + 28 examples.md + 28 checklist.md + philosophers-db*

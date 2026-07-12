@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "phil:citation-extract-schema:1.0.0",
+  "title": "Citation Extract Schema",
+  "description": "Structured inventory of citations extracted from a philosophical text, with role classification and bibliography cross-reference status.",
+  "type": "object",
+  "required": ["extract_id", "source_metadata", "citations", "generated_at"],
+  "properties": {
+    "extract_id": { "type": "string", "description": "Unique identifier for this extraction instance" },
+    "source_metadata": {
+      "type": "object",
+      "required": ["title", "author", "source_type"],
+      "properties": {
+        "title": { "type": "string" },
+        "author": { "type": "string" },
+        "year": { "type": "string" },
+        "source_type": { "type": "string", "enum": ["paper", "monograph", "chapter", "preprint", "other"] },
+        "source_location": { "type": "string" }
+      }
+    },
+    "citations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["citation_id", "cited_author", "cited_title", "role_in_text"],
+        "properties": {
+          "citation_id": { "type": "string" },
+          "cited_author": { "type": "string" },
+          "cited_title": { "type": "string" },
+          "cited_year": { "type": "string" },
+          "venue": { "type": "string" },
+          "role_in_text": { "type": "string", "enum": ["core-target", "supporting", "opposition", "background", "passing-mention"] },
+          "role_justification": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "mention_context": { "type": "string" },
+          "in_bibliography": { "type": "boolean" },
+          "bibliography_detail": {
+            "type": "object",
+            "properties": {
+              "bib_id": { "type": "string" },
+              "analysis_level": { "type": "integer", "minimum": 0, "maximum": 3 },
+              "has_pdf": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    },
+    "core_works": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "citation_id": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "extraction_version": { "type": "string" }
+  }
+}
