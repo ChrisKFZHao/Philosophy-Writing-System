@@ -154,7 +154,7 @@ The complete system architecture is defined in `ARCHITECTURE.md` at the project 
 
 - **29 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
 - **7 Commands** — Composite orchestration in `.claude/commands/`
-- **7 Agents** — 2 dialogic (metaphysician, metaethicist) + 4 production (writer, reviewer, commentator, orchestrator). All in `.claude/agents/`
-- **11 JSON Schemas + 5 Report Templates** — Data contracts in `.claude/shared/`
+- **7 Agents** — 3 dialogic (metaphysician, metaethicist, phil-tutor) + 4 production (writer, reviewer, commentator, orchestrator). All in `.claude/agents/`
+- **12 JSON Schemas + 5 Report Templates** — Data contracts in `.claude/shared/`
 - **26 Argument Forms** — Canonical definitions in `.claude/references/argument-forms/`
 - For complete skill inventory, build roadmap, and detailed architecture — see `ARCHITECTURE.md`
