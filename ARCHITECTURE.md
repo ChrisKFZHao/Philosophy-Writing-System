@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.2.1-alpha &emsp; **Status**: Alpha
+> **Version**: 0.3-alpha &emsp; **Status**: Alpha
 >
 > **Built atop `academic-research-skills` (v3.15.0)**
 > This system does not re-implement ARS's existing capabilities (literature search, paper writing, peer review, citation verification). Instead, it layers on top of ARS an **analytic-philosophy-specific methodological layer**.

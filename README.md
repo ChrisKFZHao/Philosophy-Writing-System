@@ -81,8 +81,9 @@ Demo/
 | `phil:write` | 哲学写作 | phil-writer agent（outline / draft / revision） |
 | `phil:comment` | 论证细节和概念澄清 | phil-commentator agent（6 批判维度） |
 | `phil:pipeline` | 一键全流程 | phil-orchestrator agent（5 阶段 + 质量门） |
+| `phil:tutor` | 导师式文献对话 | phil-tutor agent（引导理解、发现盲点、推荐文献） |
 
-每个命令在 `.claude/commands/` 中定义了完整的技能编排、执行顺序和输出格式。底层 28 个分析技能可通过 Skill tool 单独调用。
+每个命令在 `.claude/commands/` 中定义了完整的技能编排、执行顺序和输出格式。底层 29 个分析技能可通过 Skill tool 单独调用。
 
 ---
 

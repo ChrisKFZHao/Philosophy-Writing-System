@@ -37,12 +37,12 @@ style/         Personal writing samples & formatting templates
   └── format/  Formatting resources (templates, LaTeX, PDFs)
 .claude/       Claude Code project configuration
   ├── settings.json   Permissions + hooks (committed)
-  ├── commands/       6 composite commands (phil:* namespace)
+  ├── commands/       7 composite commands (phil:* namespace)
   ├── rules/          3 behavioral rule modules
-  ├── skills/         28 domain analysis skills (engine)
-  ├── agents/         9 philosophy-specialized agents
+  ├── skills/         29 domain analysis skills (engine)
+  ├── agents/         7 philosophy-specialized agents (3 dialogic + 4 production)
   ├── references/     Knowledge base (glossaries, argument forms, philosophers-db)
-  └── shared/         Data contracts (9 JSON schemas + 5 report templates)
+  └── shared/         Data contracts (12 JSON schemas + 5 report templates)
 
 Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory\
   Session-persistent knowledge (user preferences, project feedback, references)
@@ -149,11 +149,11 @@ Write memories for: user preferences, project goals, substantive feedback, exter
 
 ## Architecture
 
-The complete system architecture is defined in `ARCHITECTURE.md` at the project root (0.2.1-alpha), built atop `academic-research-skills` v3.15.0, covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
+The complete system architecture is defined in `ARCHITECTURE.md` at the project root (0.3-alpha), built atop `academic-research-skills` v3.15.0 (external plugin — all `ars-*` capabilities require this plugin to be installed), covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
 
-- **28 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
-- **6 Commands** — Composite orchestration in `.claude/commands/`
-- **9 Agents** — 5 dialogic + 4 production. All in `.claude/agents/`
-- **9 JSON Schemas + 5 Report Templates** — Data contracts in `.claude/shared/`
+- **29 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
+- **7 Commands** — Composite orchestration in `.claude/commands/`
+- **7 Agents** — 3 dialogic (metaphysician, metaethicist, phil-tutor) + 4 production (writer, reviewer, commentator, orchestrator). All in `.claude/agents/`
+- **12 JSON Schemas + 5 Report Templates** — Data contracts in `.claude/shared/`
 - **26 Argument Forms** — Canonical definitions in `.claude/references/argument-forms/`
 - For complete skill inventory, build roadmap, and detailed architecture — see `ARCHITECTURE.md`
