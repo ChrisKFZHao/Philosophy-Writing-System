@@ -1,5 +1,6 @@
 ---
 description: Implicit premise detection — systematically detecting unstated assumptions, hidden conditions, and framework presuppositions in philosophical arguments; classifying and evaluating all gaps that constitute implicit obstacles to an argument's validity
+name: phil-premise-detect
 domain: general
 version: 1.0.0
 ---
@@ -22,7 +23,7 @@ This Skill does not detect whether an argument succeeds (that is the work of str
 
 ## Output
 
-A structured **implicit premise detection report** containing:
+A structured **implicit premise detection report** conforming to the `premise-audit-schema.json` specification, containing:
 - Each detected implicit premise: [IP1], [IP2]...
 - Type classification for each implicit premise
 - Fill location (between which premise and conclusion / other premise)
@@ -249,7 +250,7 @@ Output the complete detection report in standard format:
 4. **Nested implicit premises**: If one implicit premise requires another implicit premise to support it (IP1 depends on IP2), annotate the hierarchy.
 5. **Linguistic/textual ambiguity**: If the source text is too ambiguous to determine where the gap lies, annotate the uncertainty and offer possible dual analyses.
 
-## Interface with ARS
+## ARS Interface
 
 - Detection reports can be directly passed to ARS `academic-paper` for the "methodological limitations" or "implicit assumptions" section of a paper.
 - Detection findings can serve as critical grounds for ARS `academic-paper-reviewer`.

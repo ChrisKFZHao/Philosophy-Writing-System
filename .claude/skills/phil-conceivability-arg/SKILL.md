@@ -1,5 +1,6 @@
 ---
 description: "Conceivability Argument Analysis — evaluate the conceivability-to-possibility chain; analyze zombie arguments and modal epistemology in philosophical reasoning"
+name: phil-conceivability-arg
 domain: metaphysics
 version: 1.0.0
 ---
@@ -303,7 +304,7 @@ Assemble the final Conceivability Argument Analysis Report:
 
 9. **Type-B Physicalism Awareness:** For zombie arguments and related anti-physicalist conceivability arguments, the analysis addresses whether the argument challenges only Type-A physicalism (a priori) or also Type-B physicalism (a posteriori). The distinction between these two forms of physicalism is essential for evaluating the argument's force correctly.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 ### Dependencies (Required Inputs)
 - **`phil-modal-arg`** (strong dependency): The modal argument analysis provides the formal modal framework — operators, accessibility relations, possible-worlds semantics, axiomatic commitments. Without this, the conceivability analysis cannot evaluate whether the modal moves are formally valid. The conceivability-to-possibility inference is a bridge from the epistemic to the modal; the modal side of the bridge requires the modal framework.

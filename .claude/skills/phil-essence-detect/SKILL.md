@@ -1,5 +1,6 @@
 ---
 description: Essentialist Claim Detection — detect and evaluate use of the essence/accident distinction; analyze modal profiles of essential properties using Finean and Kripkean frameworks
+name: phil-essence-detect
 domain: metaphysics
 version: 1.0.0
 ---
@@ -338,7 +339,7 @@ Synthesize all findings into the structured Essentialist Claim Analysis Report.
 
 6. **Aristotelian Lineage Awareness**: The report acknowledges the historical depth of the essentialism debate. Essentialist claims are situated within the tradition from Aristotle (essence as captured by real definition) through Kripke (essence via possible worlds and rigid designation) to Fine (essence as prior to modality). The report flags anachronistic framework attributions — e.g., diagnosing a pre-Kripkean text as "modal essentialist" without noting that the modal framework was not available to the author.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on:**
 - `phil-argument-reconstruct`: The essentialist claims cannot be reliably cataloged without the standard-form reconstruction. The reconstruction identifies where essentialist language appears in the argument's premises and conclusions, and what inferential role essentialist claims play.

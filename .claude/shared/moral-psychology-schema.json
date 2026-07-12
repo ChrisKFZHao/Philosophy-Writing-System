@@ -1,0 +1,132 @@
+{
+  "$id": "phil:moral-psychology-schema:1.0.0",
+  "title": "Moral Psychology Analysis Schema",
+  "description": "Structured analysis of moral psychology in philosophical arguments. Maps the relation between moral judgment and motivation, classifies internalist/externalist and Humean/anti-Humean positions, tests against canonical counterexamples (amoralist, akrasia), and traces metaethical implications.",
+  "type": "object",
+  "required": ["analysis_id", "internalism_classification", "humean_diagnosis", "amoralist_assessment", "akrasia_analysis", "metaethical_implications"],
+  "properties": {
+    "analysis_id": {
+      "type": "string",
+      "description": "Unique identifier for this moral psychology analysis run"
+    },
+    "internalism_classification": {
+      "type": "object",
+      "description": "Classification of the argument's position on the moral judgment–motivation relation",
+      "required": ["position", "evidence", "strength"],
+      "properties": {
+        "position": {
+          "type": "string",
+          "enum": ["strong_motivational_internalism", "weak_motivational_internalism", "rational_internalism", "motivational_externalism"],
+          "description": "The classified position"
+        },
+        "evidence": {
+          "type": "array",
+          "description": "Textual evidence supporting the classification",
+          "items": { "type": "string" }
+        },
+        "strength": {
+          "type": "string",
+          "enum": ["explicit", "implicit", "ambiguous"],
+          "description": "Whether the position is explicitly stated, implicitly presupposed, or ambiguous"
+        }
+      }
+    },
+    "humean_diagnosis": {
+      "type": "object",
+      "description": "Classification of the argument's theory of motivation",
+      "required": ["position"],
+      "properties": {
+        "position": {
+          "type": "string",
+          "enum": ["humean", "anti_humean", "hybrid", "not_specified"],
+          "description": "Whether the argument adopts the Humean belief-desire model, an anti-Humean alternative, a hybrid view, or does not specify"
+        },
+        "evidence": {
+          "type": "array",
+          "description": "Textual evidence",
+          "items": { "type": "string" }
+        },
+        "belief_desire_role": {
+          "type": "string",
+          "description": "How belief and desire function in the argument's motivational picture"
+        }
+      }
+    },
+    "amoralist_assessment": {
+      "type": "object",
+      "description": "Evaluation of how the argument handles the amoralist counterexample",
+      "required": ["verdict", "explanation"],
+      "properties": {
+        "verdict": {
+          "type": "string",
+          "enum": ["conceptually_impossible", "possible_but_irrational", "fully_possible", "not_addressed"],
+          "description": "How the position treats the amoralist"
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Explanation of the verdict"
+        },
+        "empirical_adequacy": {
+          "type": "string",
+          "description": "Whether the view's treatment of the amoralist is empirically adequate"
+        }
+      }
+    },
+    "akrasia_analysis": {
+      "type": "object",
+      "description": "Evaluation of how the argument handles akrasia (weakness of will)",
+      "required": ["verdict", "explanation"],
+      "properties": {
+        "verdict": {
+          "type": "string",
+          "enum": ["precluded", "possible", "empirically_inadequate", "not_addressed"],
+          "description": "How the position treats akrasia"
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Explanation of the verdict"
+        }
+      }
+    },
+    "motivational_architecture": {
+      "type": "object",
+      "description": "Structural map of how moral judgment, desire, belief, intention, and action are related",
+      "properties": {
+        "direction_of_fit": {
+          "type": "object",
+          "description": "Direction of fit assignments for each psychological state",
+          "properties": {
+            "moral_judgment": { "type": "string", "enum": ["mind_to_world", "world_to_mind", "both", "neither"] },
+            "desire": { "type": "string", "enum": ["mind_to_world", "world_to_mind", "both", "neither"] },
+            "belief": { "type": "string", "enum": ["mind_to_world", "world_to_mind", "both", "neither"] }
+          }
+        },
+        "causal_chain": {
+          "type": "string",
+          "description": "The 'because' chain from judgment to action in the argument's picture"
+        }
+      }
+    },
+    "metaethical_implications": {
+      "type": "object",
+      "description": "Mapping of the argument's moral psychology to compatible and incompatible metaethical positions",
+      "required": ["compatible_positions", "incompatible_positions"],
+      "properties": {
+        "compatible_positions": {
+          "type": "array",
+          "description": "Metaethical positions compatible with the argument's moral psychology",
+          "items": { "type": "string", "enum": ["cognitivist_realism", "non_cognitivism", "error_theory", "constructivism", "constitutivism", "response_dependent", "rationalist"] }
+        },
+        "incompatible_positions": {
+          "type": "array",
+          "description": "Metaethical positions ruled out by the argument's moral psychology",
+          "items": { "type": "string", "enum": ["cognitivist_realism", "non_cognitivism", "error_theory", "constructivism", "constitutivism", "response_dependent", "rationalist"] }
+        },
+        "moral_problem_trilemma": {
+          "type": "string",
+          "description": "How the argument resolves (or fails to resolve) Smith's moral problem trilemma of cognitivism, internalism, and Humeanism"
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 ---
 description: Situates a philosophical argument within its broader intellectual landscape — the debate tradition, opposing positions, historical context, and dialectical stakes — producing a structured contextualization report that maps the argument's position among rival positions, identifies its targets and ancestors, reconstructs the historical development of the debate, and assesses what turns on the argument's success or failure.
+name: phil-contextualize
 domain: general
 version: 1.0.0
 ---
@@ -192,7 +193,7 @@ Another useful heuristic is the **anxiety-of-influence test**: does the contextu
 
 8. **Counterfactual Sensitivity.** A good contextualization makes clear what would count as evidence against it. If the contextualization claims that argument A is responding to position P, what would show that it is not? If the contextualization claims that the stakes of A's success include consequence C, what would show that C does not in fact depend on A? Counterfactual sensitivity distinguishes a genuinely testable contextual hypothesis from a narrative that merely fits the available evidence but could fit any evidence equally well.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 ### Depends On
 

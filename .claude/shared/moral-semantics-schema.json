@@ -1,0 +1,149 @@
+{
+  "$id": "phil:moral-semantics-schema:1.0.0",
+  "title": "Moral Semantics Analysis Schema",
+  "description": "Structured analysis of moral semantics in philosophical arguments. Classifies cognitivist/expressivist/prescriptivist positions, evaluates Frege-Geach problem responses, assesses truth-aptness and theoretical parsimony.",
+  "type": "object",
+  "required": ["analysis_id", "semantic_position", "truth_aptness", "frege_geach_evaluation"],
+  "properties": {
+    "analysis_id": {
+      "type": "string",
+      "description": "Unique identifier for this moral semantics analysis run"
+    },
+    "semantic_position": {
+      "type": "object",
+      "description": "Precise classification of the argument's semantic theory",
+      "required": ["category", "specific_version", "evidence"],
+      "properties": {
+        "category": {
+          "type": "string",
+          "enum": ["cognitivist", "non_cognitivist", "hybrid", "fictionalist", "other"],
+          "description": "Broad semantic category"
+        },
+        "specific_version": {
+          "type": "string",
+          "description": "Exact version (e.g., 'Blackburn-style quasi-realist expressivism', 'Cornell-style synthetic naturalism')"
+        },
+        "subtype": {
+          "type": "string",
+          "enum": [
+            "non_naturalist",
+            "synthetic_naturalist_cornell",
+            "analytic_naturalist",
+            "reductive_naturalist",
+            "emotivist",
+            "prescriptivist",
+            "expressivist_quasi_realist",
+            "norm_expressivist",
+            "relational_expressivist",
+            "hybrid_expressivist",
+            "fictionalist",
+            "other"
+          ],
+          "description": "Standardized subtype for cross-analysis comparison"
+        },
+        "evidence": {
+          "type": "array",
+          "description": "Textual evidence supporting the classification",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "truth_aptness": {
+      "type": "object",
+      "description": "Assessment of the argument's stance on moral truth",
+      "required": ["truth_theory", "moral_sentences_truth_apt"],
+      "properties": {
+        "moral_sentences_truth_apt": {
+          "type": "boolean",
+          "description": "Whether moral sentences are truth-apt under the argument's view"
+        },
+        "truth_theory": {
+          "type": "string",
+          "enum": ["robust_correspondence", "deflationary_minimalist", "epistemic", "coherence", "not_specified"],
+          "description": "Theory of truth presupposed"
+        },
+        "collapse_risk": {
+          "type": "string",
+          "description": "Whether deflationary truth collapses the cognitivism/non-cognitivism distinction, and the argument's handling of this"
+        }
+      }
+    },
+    "frege_geach_evaluation": {
+      "type": "object",
+      "description": "Systematic testing against the five canonical embedding contexts",
+      "required": ["tests"],
+      "properties": {
+        "tests": {
+          "type": "array",
+          "description": "Results for each of the five canonical Frege-Geach embedding contexts",
+          "items": {
+            "type": "object",
+            "required": ["context", "verdict", "explanation"],
+            "properties": {
+              "context": {
+                "type": "string",
+                "enum": [
+                  "conditional_antecedent",
+                  "negation",
+                  "interrogative",
+                  "attitude_report",
+                  "moral_modus_ponens"
+                ]
+              },
+              "verdict": {
+                "type": "string",
+                "enum": ["pass", "fail", "ambiguous"],
+                "description": "Whether the semantic theory passes this Frege-Geach test"
+              },
+              "explanation": {
+                "type": "string",
+                "description": "Detailed explanation of the verdict"
+              }
+            }
+          }
+        },
+        "overall_assessment": {
+          "type": "string",
+          "enum": ["fully_adequate", "partially_adequate", "inadequate", "not_addressed"],
+          "description": "Overall adequacy of the semantic theory for Frege-Geach contexts"
+        }
+      }
+    },
+    "thick_thin_concept_analysis": {
+      "type": "object",
+      "description": "Analysis of thick and thin moral concept distribution and its semantic implications",
+      "properties": {
+        "thick_concepts_identified": {
+          "type": "array",
+          "description": "Thick concepts deployed in the argument (e.g., courageous, cruel, generous)",
+          "items": { "type": "string" }
+        },
+        "thin_concepts_identified": {
+          "type": "array",
+          "description": "Thin concepts deployed in the argument (e.g., good, bad, right, wrong, ought)",
+          "items": { "type": "string" }
+        },
+        "semantic_implications": {
+          "type": "string",
+          "description": "How the thick/thin distribution bears on semantic theory choice"
+        }
+      }
+    },
+    "semantic_parsimony": {
+      "type": "object",
+      "description": "Assessment of theoretical parsimony relative to explanatory goals",
+      "required": ["verdict", "explanation"],
+      "properties": {
+        "verdict": {
+          "type": "string",
+          "enum": ["parsimonious", "overly_sparse", "excessively_complex", "not_evaluable"],
+          "description": "Parsimony assessment"
+        },
+        "explanation": {
+          "type": "string",
+          "description": "Justification of the parsimony verdict"
+        }
+      }
+    }
+  }
+}

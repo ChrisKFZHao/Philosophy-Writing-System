@@ -2,7 +2,7 @@
 
 基于 Claude Code 的分析哲学研究与写作系统。提供从 PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.2.1-alpha  
+**版本**: 0.3-alpha  
 **语言**: Chinese（写作输出）/ English（技能定义与架构文档）  
 **构建于**: `academic-research-skills` v3.15.0
 
@@ -46,7 +46,7 @@ phil:write revision    # 修订
 ## 项目结构
 
 ```
-Demo/
+Philosophical Writing/
 ├── README.md                         # 本文件
 ├── ARCHITECTURE.md                   # 系统架构文档 0.2.1-alpha
 ├── bibliography/                     # 参考文献
@@ -64,9 +64,9 @@ Demo/
     ├── commands/                     #   6 个综合命令（phil:* 命名空间）
     ├── rules/                        #   3 个行为规则模块
     ├── skills/                       #   28 个哲学分析技能
-    ├── agents/                       #   9 个领域特化 agent
+    ├── agents/                       #   6 个领域特化 agent
     ├── references/                   #   知识库（术语表、论证形式、哲学家数据库）
-    └── shared/                       #   数据契约（JSON Schema + 模板）
+    └── shared/                       #   数据契约（11 JSON Schema + 模板）
 ```
 
 ---
@@ -104,8 +104,8 @@ Demo/
 |------|------|------|
 | 分析技能（28 个） | Alpha | 全部完成，已内部测试 |
 | 命令（6 个） | Alpha | 全部完成 |
-| 知识库（~50 个参考文件） | Alpha | 术语表、论证形式、哲学家数据库均已填充 |
-| 对话 agent（5 个） | Alpha | 已完成，待更多交互验证 |
+| 知识库（87 个参考文件） | Alpha | 术语表、论证形式、哲学家数据库均已填充 |
+| 对话 agent（2 个） | Alpha | 已完成，待更多交互验证 |
 | 写作生产（4 个 agent + 6 个命令） | Alpha | 已完成，仅 Srinivasan 一篇测试 |
 | 行为规则（3 条） | Alpha | 已部署，待长期使用校准 |
 | 文献管理 | Alpha | Citation Gate 框架就位，1 篇分析文件 |
@@ -126,4 +126,4 @@ Demo/
 
 ---
 
-*最后更新: 2026-07-11*
+*最后更新: 2026-07-12*

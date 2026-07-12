@@ -1,5 +1,6 @@
 ---
 description: "Normativity Analysis — analyze the source and structure of normativity; classify categorical/hypothetical imperatives, internal/external reasons, and constitutive vs substantive normativity"
+name: phil-normativity
 domain: metaethics
 version: 1.0.0
 ---
@@ -319,7 +320,7 @@ Assemble the findings from Steps 1-6 into a structured report conforming to `nor
 
 7. **Structural clarity**: The normative architecture description must be precise enough that another analyst could reproduce the map from the description alone. The diagram must use consistent notation and explicitly show all documented support relations.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on (upstream):**
 - `phil-argument-reconstruct`: The normativity analysis requires a structured argument map as input. Without a clear view of the argument's premises, conclusions, and inferential structure, normative source diagnosis is unreliable. The reconstruction must flag implicit premises, because an argument's deepest normative commitments are often implicit.

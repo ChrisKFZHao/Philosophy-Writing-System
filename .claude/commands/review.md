@@ -35,3 +35,5 @@ description: 哲学论文同行评审 — 调用 phil-reviewer agent，8 维度�
 
 - 与 `/phil:evaluate` 的区别：review 针对自己的手稿，提供建设性修改建议；evaluate 针对他人文献，提供批判性分析
 - 与 `/phil:comment` 的区别：review 是整体论文审稿，comment 聚焦论证细节和概念澄清
+- 所有输出使用中文（项目约定）
+- 输出格式遵循 `shared/templates/` 中的审稿报告模板

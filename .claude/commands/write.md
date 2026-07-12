@@ -47,4 +47,4 @@ description: 哲学写作 — 调用 phil-writer agent，三种模式：outline�
 
 - 写作输出使用中文
 - 建议先运行分析技能（`/phil:reconstruct` + `/phil:evaluate`）再写作
-- 可选择性调用 ARS 功能（citation-check、format-convert、disclosure）做最后打磨
+- 可选择性调用 ARS 功能（citation-check、format-convert，需外部 ARS 插件）做最后打磨

@@ -8,9 +8,11 @@ Canonical lookup for philosophical figures cited across 28 philosophical analysi
 philosophers-db/
 ├── INDEX.md              # This file — alphabetical index and cross-references
 ├── general/              # General Philosophy / Methodology (17 philosophers)
-├── metaphysics/          # Metaphysics (15 philosophers)
-└── metaethics/           # Metaethics (17 philosophers)
+├── metaphysics/          # Metaphysics (14 philosophers)
+└── metaethics/           # Metaethics (18 philosophers)
 ```
+
+> **Naming Convention**: general/ and metaethics/ use surname-only filenames (`hume.md`, `mackie.md`, `moore.md`), with disambiguation when needed (`skinner-bf.md`). metaphysics/ uses firstname-surname for all files (`david-lewis.md`, `saul-kripke.md`). Total: 49 philosophers.
 
 ---
 
@@ -42,21 +44,20 @@ philosophers-db/
 
 | Philosopher | Life | File |
 |---|---|---|
-| Armstrong, David | 1926--2014 | `metaphysics/armstrong.md` |
-| Bird, Alexander | contemporary | `metaphysics/bird.md` |
-| Boyd, Richard | 1942--2021 | `metaphysics/boyd.md` |
-| Chalmers, David | b. 1966 | `metaphysics/chalmers.md` |
-| Fine, Kit | b. 1946 | `metaphysics/fine.md` |
-| Hirsch, Eli | b. 1938 | `metaphysics/hirsch.md` |
-| Jackson, Frank | b. 1943 | `metaphysics/jackson.md` |
-| Kim, Jaegwon | 1934--2019 | `metaphysics/kim.md` |
-| Kripke, Saul | 1940--2022 | `metaphysics/kripke.md` |
-| Lewis, David | 1941--2001 | `metaphysics/lewis.md` |
-| Putnam, Hilary | 1926--2016 | `metaphysics/putnam.md` |
-| Schaffer, Jonathan | contemporary | `metaphysics/schaffer.md` |
-| Sider, Theodore | b. 1967 | `metaphysics/sider.md` |
-| van Inwagen, Peter | b. 1942 | `metaphysics/van-inwagen.md` |
-| Wiggins, David | 1933-- | `metaphysics/wiggins.md` |
+| Armstrong, David | 1926--2014 | `metaphysics/david-armstrong.md` |
+| Bird, Alexander | contemporary | `metaphysics/alexander-bird.md` |
+| Boyd, Richard | 1942--2021 | `metaphysics/richard-boyd.md` |
+| Chalmers, David | b. 1966 | `metaphysics/david-chalmers.md` |
+| Fine, Kit | b. 1946 | `metaphysics/kit-fine.md` |
+| Hirsch, Eli | b. 1938 | `metaphysics/eli-hirsch.md` |
+| Kim, Jaegwon | 1934--2019 | `metaphysics/jaegwon-kim.md` |
+| Kripke, Saul | 1940--2022 | `metaphysics/saul-kripke.md` |
+| Lewis, David | 1941--2001 | `metaphysics/david-lewis.md` |
+| Putnam, Hilary | 1926--2016 | `metaphysics/hilary-putnam.md` |
+| Schaffer, Jonathan | contemporary | `metaphysics/jonathan-schaffer.md` |
+| Sider, Theodore | b. 1967 | `metaphysics/theodore-sider.md` |
+| van Inwagen, Peter | b. 1942 | `metaphysics/peter-van-inwagen.md` |
+| Wiggins, David | 1933-- | `metaphysics/david-wiggins.md` |
 
 ### Metaethics
 
@@ -67,6 +68,7 @@ philosophers-db/
 | Enoch, David | b. 1971 | `metaethics/enoch.md` |
 | Gibbard, Allan | b. 1942 | `metaethics/gibbard.md` |
 | Hare, R.M. | 1919--2002 | `metaethics/hare.md` |
+| Jackson, Frank | b. 1943 | `metaethics/jackson.md` |
 | Korsgaard, Christine | b. 1952 | `metaethics/korsgaard.md` |
 | Mackie, J.L. | 1917--1981 | `metaethics/mackie.md` |
 | Moore, G.E. | 1873--1958 | `metaethics/moore.md` |
@@ -74,11 +76,11 @@ philosophers-db/
 | Railton, Peter | b. 1950 | `metaethics/railton.md` |
 | Shafer-Landau, Russ | b. 1963 | `metaethics/shafer-landau.md` |
 | Singer, Peter | b. 1946 | `metaethics/singer.md` |
-| Smith, Michael | b. 1954 | `metaethics/smith-michael.md` |
+| Smith, Michael | b. 1954 | `metaethics/smith.md` |
 | Stevenson, C.L. | 1908--1979 | `metaethics/stevenson.md` |
 | Street, Sharon | b. 1973 | `metaethics/street.md` |
 | Thomson, J.J. | 1929--2020 | `metaethics/thomson.md` |
-| Williams, Bernard | 1929--2003 | `metaethics/williams-bernard.md` |
+| Williams, Bernard | 1929--2003 | `metaethics/williams.md` |
 
 ---
 
@@ -88,7 +90,7 @@ philosophers-db/
 
 **Argument Reconstruction & Analysis**: Plato, Aristotle, Gettier, Quine, Kripke, Lewis, Fine, Williamson
 
-**Conceptual Analysis & Distinctions**: Wittgenstein, Carnap, Rorty, Williamson, Lewis, Fine, Moore
+**Conceptual Analysis & Distinctions**: Wittgenstein, Carnap, Rorty [not in db], Williamson, Lewis, Fine, Moore
 
 **Modal Arguments & Metaphysics**: Kripke, Lewis, Fine, Chalmers, van Inwagen, Sider, Schaffer, Armstrong, Kim, Putnam, Bird, Boyd, Hirsch, Wiggins
 
@@ -114,7 +116,7 @@ philosophers-db/
 
 **Constitutivist Tradition**: Kant → Korsgaard
 
-**Ordinary Language Tradition**: Wittgenstein → Ryle → Austin → Williamson
+**Ordinary Language Tradition**: Wittgenstein → Ryle [not in db] → Austin [not in db] → Williamson
 
 ---
 

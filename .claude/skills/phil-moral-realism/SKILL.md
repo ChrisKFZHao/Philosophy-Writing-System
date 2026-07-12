@@ -1,5 +1,6 @@
 ---
 description: Moral Realism Argument Analysis — analyze arguments for/against moral realism, anti-realism, error theory, and non-cognitivism; map positions on the realism spectrum
+name: phil-moral-realism
 domain: metaethics
 version: 1.0.0
 ---
@@ -27,7 +28,7 @@ Because metaethics arguments often operate at multiple levels — first-order (a
 
 ## Output
 
-A **Moral Realism Position Analysis Report** structured as follows:
+A **Moral Realism Position Analysis Report** conforming to the `moral-realism-schema.json` specification, structured as follows:
 
 1. **Position Classification**: Precise classification on the realism spectrum (see taxonomy in Step 2), with textual evidence for the classification. Includes the exact position name, a brief definition of that position, and the specific textual markers that support the classification.
 
@@ -275,7 +276,7 @@ Produce the complete Moral Realism Position Analysis Report in the Output format
 
 7. **Cross-Commitment Consistency**: Check whether the argument's semantic, metaphysical, and psychological commitments are mutually consistent. Flag any inconsistencies — e.g., cognitivist semantics combined with strong motivational internalism and Humean psychology generates Smith's "moral problem."
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on (upstream)**:
 - `phil-argument-reconstruct`: Takes the reconstructed standard form as input for position classification, commitment mapping, and argument structure analysis. Without a reconstruction, stance markers cannot be reliably mapped to inferential roles.

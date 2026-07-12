@@ -1,5 +1,6 @@
 ---
 description: Thought experiment analysis — deconstructing the structure, intuition mechanisms, and argumentative force of philosophical thought experiments
+name: phil-thought-experiment
 domain: general
 version: 1.0.0
 ---
@@ -158,7 +159,7 @@ Construct an equivalent case that removes a key presupposition, and test whether
 2. **Presupposition transparency principle**: All scenario presuppositions must be explicitly listed
 3. **Do not default to universality**: That an intuition holds in a specific case does not entail that it holds in all similar cases
 
-## Relationship to Other Skills
+## Relations to Other Skills
 
 **Dependencies** (optional):
 - `phil-argument-reconstruct`: Can provide a standardized reconstruction of the argument
@@ -171,7 +172,7 @@ Construct an equivalent case that removes a key presupposition, and test whether
 1. **Non-thought-experiment cases**: If the case in the text is a real case (rather than a thought experiment), redirect to `phil-counterexample` or `phil-conceptual-analysis`
 2. **Multiple thought experiments**: A single text may contain multiple thought experiments; analyze each separately
 
-## Interface with ARS
+## ARS Interface
 
 - Thought experiment analysis reports may be passed to ARS `academic-paper` as methodological supplement
 - Presupposition analysis of thought experiments may serve as citation-verification material for ARS `citation-check`

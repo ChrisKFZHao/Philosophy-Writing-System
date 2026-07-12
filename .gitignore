@@ -9,6 +9,12 @@
 Thumbs.db
 Desktop.ini
 
+# Claude Code worktrees (transient workspace copies)
+.claude/worktrees/
+
+# Session log (mutated every session by hook — treat as local log)
+history.txt
+
 # Compiled LaTeX artifacts (keep source .txt only)
 paper/*.aux
 paper/*.log

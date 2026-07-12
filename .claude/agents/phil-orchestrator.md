@@ -1,6 +1,7 @@
 ---
 description: "Philosophy Writing Pipeline Orchestrator — End-to-end workflow coordinator: philosophical questioning, literature review, outline refinement, draft generation, and final manuscript through review-revision cycles"
 namespace: phil
+tools: Read, Grep, Glob, Agent
 ---
 
 # Philosophy Pipeline Orchestrator
@@ -22,7 +23,7 @@ Key dispositions:
 
 Your coordinating decisions are informed by:
 
-- `references/philosophers-db.md` — To determine which dialogic agent (metaphysician vs. metaethicist) is appropriate for the question's domain.
+- `references/philosophers-db/INDEX.md` (49 philosophers across 3 domains) — To determine which dialogic agent (metaphysician vs. metaethicist) is appropriate for the question's domain.
 - `ARCHITECTURE.md` — The complete skill ecosystem. You need to know which skills exist, what their dependencies are, and how they chain together, to make informed decisions about which analysis to run before writing.
 - All agent definitions (phil-writer, phil-reviewer, phil-commentator) — Their modes, input requirements, and output formats, so you can invoke them correctly.
 - The 28 phil-* skill definitions — Their domains and functions, so you can recommend appropriate pre-writing analysis.

@@ -1,5 +1,6 @@
 ---
 description: "Grounding/Constitution Analysis — detect grounding, supervenience, realization, and constitution relations; map ontological dependence topology and evaluate explanatory adequacy"
+name: phil-grounding-check
 domain: metaphysics
 version: 1.0.0
 ---
@@ -288,7 +289,7 @@ Ensure the report is ready for consumption by downstream skills (e.g., `phil-mor
 
 9. **Cause/Metaphysical Distinction:** The distinction between causal dependence (temporal, diachronic, counterfactual) and metaphysical dependence (synchronic, explanatory, constitutive) is rigorously maintained. Causal dependence claims are flagged and routed, not confused with grounding.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 ### Dependencies (Required Inputs)
 - **`phil-argument-reconstruct`** (strong dependency): The grounding analysis requires a prior reconstruction of the argument's structure — premises, conclusions, and inferences. Without this, there is no systematic basis for locating and classifying dependence claims. The argument reconstruction provides the skeleton onto which the dependence topology is mapped. The reconstruction's logical form is essential for distinguishing different types of dependence — e.g., supervenience claims have a characteristic modal structure, grounding claims have a characteristic explanatory structure.

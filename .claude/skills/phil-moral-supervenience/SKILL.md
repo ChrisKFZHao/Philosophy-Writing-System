@@ -1,5 +1,6 @@
 ---
 description: "Moral Supervenience Analysis — analyze the supervenience of moral properties on natural properties; evaluate Blackburn's supervenience challenge and realist/expressivist responses"
+name: phil-moral-supervenience
 domain: metaethics
 version: 1.0.0
 ---
@@ -255,7 +256,7 @@ The report should conclude with a summary of the key dialectical moves and ident
 
 5. **Triviality Concern Awareness:** The report must engage with Dreier's triviality challenge. It should assess whether the supervenience claim at issue is non-trivial (i.e., involves a restricted supervenience base) and whether the triviality concern undermines the dialectical significance of the supervenience debate. Ignoring triviality is a significant omission.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Dependencies (skills this skill requires as input):**
 - `phil-moral-realism` — Optional but highly recommended. The force of the supervenience challenge depends on the specific form of realism at issue. Non-naturalist realism faces the heaviest explanatory burden; naturalist reductionism faces none. The moral-realism analysis report provides essential context.

@@ -1,5 +1,6 @@
 ---
 description: "Moral Psychology Analysis — analyze the moral judgment–motivation relation; evaluate internalism/externalism, the Humean theory of motivation, and amoralist/akrasia challenges"
+name: phil-moral-psychology
 domain: metaethics
 version: 1.0.0
 ---
@@ -306,7 +307,7 @@ Assemble the findings from Steps 1-6 into a structured report conforming to `mor
 
 6. **Smith's moral problem awareness**: If the argument's moral psychology fits the Smithian trilemma structure (cognitivism + internalism + Humeanism), explicitly analyze it in those terms. If the argument does not acknowledge the trilemma, note this as a dialectical gap.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on (upstream):**
 - `phil-argument-reconstruct`: Takes the reconstructed standard form as input. The motivational claim extraction in Step 1 depends on the reconstruction accurately capturing the argument's psychological premises.

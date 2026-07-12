@@ -1,5 +1,6 @@
 ---
 description: Counterexample generation and evaluation — using the output of argument reconstruction as a blueprint to systematically construct and assess counterexamples targeting premises, inferential chains, or conclusions
+name: phil-counterexample
 domain: general
 version: 1.0.0
 ---
@@ -149,7 +150,7 @@ For each anticipated response, provide a preliminary assessment:
 3. **Dialectical Principle**: Every counterexample must have anticipated rebuttals and responses — do not assume the opponent will automatically concede
 4. **Logical Consistency Principle**: The logical structure of the counterexample itself must be consistent
 
-## Relationship to Other Skills
+## Relations to Other Skills
 
 **Dependencies**:
 - `phil-argument-reconstruct`: Provides standard-form argument (required)
@@ -160,7 +161,7 @@ For each anticipated response, provide a preliminary assessment:
 1. **Unconstructable counterexample**: If the argument is entirely sound, do not forcibly fabricate a counterexample — output "No valid counterexample found"
 2. **Disputed counterexample**: If the validity of the counterexample depends heavily on specific philosophical intuitions, flag its disputed status
 
-## Interface with ARS
+## ARS Interface
 
 - Counterexample reports may be passed to ARS `academic-paper-reviewer` as critical material
 - Dialectical analysis of anticipated rebuttals may serve as input to the ARS `revision` stage

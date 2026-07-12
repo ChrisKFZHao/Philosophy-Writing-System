@@ -1,5 +1,6 @@
 ---
 description: Dialectical mapping — constructing a structured dialectical tree of theses, objections, and responses within a philosophical debate, tracking the offensive and defensive evolution of arguments
+name: phil-dialectical-map
 domain: general
 version: 1.0.0
 ---
@@ -22,7 +23,7 @@ Unlike `phil-argument-reconstruct` (which maps the static structure of a single 
 
 ## Output
 
-A structured **Dialectical Tree Report**, containing:
+A structured **Dialectical Tree Report** conforming to the `dialectical-tree-schema.json` specification, containing:
 - Thesis node (root node T)
 - Objection nodes (O1, O2, ...)
 - Response nodes (R1, R2, ...)
@@ -164,7 +165,7 @@ T (survived)
 2. **Dialectical fairness**: Each party's argument should be presented in its strongest version (the dialectical version of the principle of charity)
 3. **No oversimplification**: Do not compress complex multi-round attack-response sequences into a single layer — preserve the integrity of the dialectical tree
 
-## Relationship to Other Skills
+## Relations to Other Skills
 
 **Dependencies**:
 - `phil-argument-reconstruct`: Provides standard-form arguments for each node
@@ -178,7 +179,7 @@ T (survived)
 2. **Cross-text dialectic**: If the dialectic spans multiple texts, annotate the textual source of each node
 3. **Incomplete dialectic**: If the debate is still ongoing, annotate with "pending" status
 
-## Interface with ARS
+## ARS Interface
 
 - The dialectical tree can be directly converted into the "Literature Review and Critique" section of ARS `academic-paper`
 - Unresolved debate nodes can serve as retrieval directions for ARS `deep-research`

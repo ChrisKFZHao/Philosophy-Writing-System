@@ -1,5 +1,6 @@
 ---
 description: Charity Check — verify that argument reconstruction has built the strongest version of the original text, detecting oversimplification, distortion, and uncharitable interpretation
+name: phil-charity-check
 domain: general
 version: 1.0.0
 ---
@@ -152,7 +153,7 @@ Output in standard format:
 3. **Alternative Measurability Principle**: Every alternative interpretation must be more reasonable than the current version — do not construct a "super-strong version" that no text supports
 4. **Distance Transparency Principle**: If an alternative version requires "stretching" the original text, annotate the distance and provide justification
 
-## Relationship to Other Skills
+## Relations to Other Skills
 
 **Dependencies (input sources for this Skill)**:
 - `phil-argument-reconstruct`: provides the standard-form argument (required)

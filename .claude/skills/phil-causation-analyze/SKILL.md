@@ -1,5 +1,6 @@
 ---
 description: Causal Claim Analysis — identify theoretical affiliations of causal claims; evaluate Humean vs anti-Humean readings; detect causal exclusion and overdetermination problems
+name: phil-causation-analyze
 domain: metaphysics
 version: 1.0.0
 ---
@@ -383,7 +384,7 @@ Synthesize all findings from Steps 1-5 into the structured Causal Claim Analysis
 
 6. **Humean/Anti-Humean Transparency**: The report makes explicit whether the argument's causal commitments fall on the Humean or anti-Humean side of the fundamental divide in the metaphysics of causation. This classification is crucial because many downstream metaphysical commitments (about laws, modality, ontology) depend on it.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on:**
 - `phil-argument-reconstruct`: The causal claim catalog cannot be reliably built without the standard-form reconstruction. The reconstruction identifies where causal claims appear in the argument's inferential structure and what logical role they play. The quality of the causal claim analysis is bounded by the quality of the reconstruction.

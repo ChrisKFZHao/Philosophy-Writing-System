@@ -40,9 +40,9 @@ style/         Personal writing samples & formatting templates
   ├── commands/       6 composite commands (phil:* namespace)
   ├── rules/          3 behavioral rule modules
   ├── skills/         28 domain analysis skills (engine)
-  ├── agents/         9 philosophy-specialized agents
+  ├── agents/         6 philosophy-specialized agents (2 dialogic + 4 production)
   ├── references/     Knowledge base (glossaries, argument forms, philosophers-db)
-  └── shared/         Data contracts (9 JSON schemas + 5 report templates)
+  └── shared/         Data contracts (11 JSON schemas + 5 report templates)
 
 Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory\
   Session-persistent knowledge (user preferences, project feedback, references)
@@ -95,7 +95,7 @@ bibliography/
 - Level 3: + Dialectical mapping, ontological commitment, modal analysis, domain-specific skills — *trigger: source becomes core target/dependency*
 
 ### Citation Gate (Rule 2 enforcement)
-If a manuscript claim depends on analysis at Level N, but the source's `.analysis.txt` is only at Level N-1 or below → **BLOCK** and require analysis completion. No citation passes without a verified analysis backing it.
+This is a model-executed behavioral rule. If a manuscript claim depends on analysis at Level N, but the source's `.analysis.txt` is only at Level N-1 or below → **BLOCK** and require analysis completion. No citation passes without a verified analysis backing it.
 
 ## Common Operations
 
@@ -129,17 +129,17 @@ wc -m manuscript/{topic}.txt
 ```
 
 ### Session Logging
-Sessions are automatically logged to `history.txt` via Stop hook (`.claude/settings.json`).
+Session summaries are written to `history.txt` by the model at the end of each conversation, per the memory convention `session-summary-to-history`. The file is gitignored as a local log.
 
 ## Knowledge Base
 
-**Argument Forms**: 26 canonical forms in `.claude/references/argument-forms/` (11 general + 9 metaphysics + 6 metaethics). See the directory for individual form definitions.
+**Argument Forms**: 26 canonical forms in `.claude/references/argument-forms/` (see `argument-forms/INDEX.md` for the general/metaphysics/metaethics breakdown).
 
 **Glossaries & Taxonomies**: `.claude/references/` contains domain-specific reference files (glossary-metaphysics.md, glossary-metaethics.md, ontological-categories.md, causation-taxonomy.md, moral-realism-taxonomy.md, normativity-taxonomy.md, fallacy-catalog.md, modal-logic-primer.md, thought-experiment-templates.md).
 
 **Philosopher Database**: `.claude/references/philosophers-db/` — 49 philosophers across 3 domains (general/metaphysics/metaethics). Curated — may be cited.
 
-**Data Contracts**: `.claude/shared/` — 9 JSON schemas for cross-skill composability + 5 report templates in `.claude/shared/templates/`.
+**Data Contracts**: `.claude/shared/` — 11 JSON schemas for cross-skill composability + 5 report templates in `.claude/shared/templates/`.
 
 ## Cross-Session Memory
 
@@ -149,11 +149,11 @@ Write memories for: user preferences, project goals, substantive feedback, exter
 
 ## Architecture
 
-The complete system architecture is defined in `ARCHITECTURE.md` at the project root (0.2.1-alpha), built atop `academic-research-skills` v3.15.0, covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
+The complete system architecture is defined in `ARCHITECTURE.md` at the project root (0.3-alpha), built atop `academic-research-skills` v3.15.0 (external plugin — all `ars-*` capabilities require this plugin to be installed), covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
 
 - **28 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
 - **6 Commands** — Composite orchestration in `.claude/commands/`
-- **9 Agents** — 5 dialogic + 4 production. All in `.claude/agents/`
-- **9 JSON Schemas + 5 Report Templates** — Data contracts in `.claude/shared/`
+- **6 Agents** — 2 dialogic (metaphysician, metaethicist) + 4 production (writer, reviewer, commentator, orchestrator). All in `.claude/agents/`
+- **11 JSON Schemas + 5 Report Templates** — Data contracts in `.claude/shared/`
 - **26 Argument Forms** — Canonical definitions in `.claude/references/argument-forms/`
 - For complete skill inventory, build roadmap, and detailed architecture — see `ARCHITECTURE.md`

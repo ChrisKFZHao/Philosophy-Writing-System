@@ -1,5 +1,6 @@
 ---
 description: "Moral Semantics Analysis — analyze moral language; map cognitivism/expressivism/prescriptivism positions; evaluate Frege-Geach problem responses and truth-aptness"
+name: phil-moral-semantics
 domain: metaethics
 version: 1.0.0
 ---
@@ -296,7 +297,7 @@ Assemble the findings from Steps 1-5 into a structured report conforming to `mor
 
 6. **Practice-theory consistency**: Check whether the argument's actual semantic practice (how it uses moral language in its own reasoning) is consistent with its explicit or implicit semantic theory. Flag performative inconsistencies.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on (upstream):**
 - `phil-argument-reconstruct`: Takes the reconstructed standard form as input. The Frege-Geach tests require explicit premise-conclusion structures — if the reconstruction does not capture the argument's logical form, the tests cannot be applied reliably.

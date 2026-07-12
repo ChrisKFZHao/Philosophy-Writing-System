@@ -1,5 +1,6 @@
 ---
 description: Ontological Commitment Detection — identify entity types and existence categories presupposed by arguments using Quinean criterion and category taxonomy
+name: phil-ontological-commitment
 domain: metaphysics
 version: 1.0.0
 ---
@@ -231,7 +232,7 @@ Synthesize all findings into the structured Ontological Commitment Report.
 
 6. **Implicit Commitment Sensitivity**: Beyond explicit and quantificational commitments, the report identifies presuppositional, truthmaker-based, and implicit commitments where they are genuinely required by the argument. False positives (detecting commitments that are not genuinely required) are as much an error as false negatives (missing genuine commitments). Implicit commitments are flagged as more contestable.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on:**
 - `phil-argument-reconstruct`: Provides the argument in standard form with quantified structure. Without a reconstruction, the Quinean test cannot be reliably applied. The quality of the ontological commitment report is bounded by the quality of the reconstruction.
