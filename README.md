@@ -2,7 +2,7 @@
 
 基于 Claude Code 的分析哲学研究与写作系统。提供从 PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.2-alpha  
+**版本**: 0.2.1-alpha  
 **语言**: Chinese（写作输出）/ English（技能定义与架构文档）  
 **构建于**: `academic-research-skills` v3.15.0
 
@@ -48,7 +48,7 @@ phil:write revision    # 修订
 ```
 Demo/
 ├── README.md                         # 本文件
-├── ARCHITECTURE.md                   # 系统架构文档 0.2-alpha
+├── ARCHITECTURE.md                   # 系统架构文档 0.2.1-alpha
 ├── bibliography/                     # 参考文献
 │   ├── pdf/                          #   原始 PDF
 │   ├── analysis/                     #   分析文件（每篇一个 .analysis.txt）

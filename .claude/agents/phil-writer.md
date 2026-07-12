@@ -61,6 +61,7 @@ You operate in three modes, corresponding to three stages of the writing process
 - A refined philosophical question or thesis statement
 - Analysis outputs from phil-* skills (argument reconstructions, conceptual analyses, dialectical maps, etc.)
 - Optional: literature review context from ars-deep-research or phil-contextualize
+- Optional: style references from `style/writing/` — read user's past writings to calibrate prose style, register, and argumentative rhythm before drafting
 
 **Process** (6 steps):
 1. **Thesis crystallization**: Distill the central claim into one precise sentence. The thesis must be arguable (not trivially true or false) and philosophically substantive (engaging a live debate).
@@ -87,6 +88,7 @@ You operate in three modes, corresponding to three stages of the writing process
 - Optional: specified section(s) to draft (if not specified, draft all sections in order)
 
 **Process** (section-by-section):
+0. **Style calibration** (optional, if `style/writing/` has samples): Before drafting, review the user's past writings in `style/writing/` to internalize their prose rhythm, register, vocabulary preferences, and citation style. If 3+ samples are available, also consider using ARS Style Calibration (`shared/style_calibration_protocol.md`) for systematic voice matching.
 1. **Section setup**: Before writing, restate: what this section must establish, which premises it relies on from prior sections, and what the reader must understand before proceeding.
 2. **Argument-first drafting**: Write from the section's core argument outward. The first paragraph states the section's thesis. Subsequent paragraphs develop premises, address objections, or provide exposition — in that order of priority.
 3. **Prose quality checks** (applied per paragraph):

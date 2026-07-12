@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.2-alpha &emsp; **Status**: Alpha
+> **Version**: 0.2.1-alpha &emsp; **Status**: Alpha
 >
 > **Built atop `academic-research-skills` (v3.15.0)**
 > This system does not re-implement ARS's existing capabilities (literature search, paper writing, peer review, citation verification). Instead, it layers on top of ARS an **analytic-philosophy-specific methodological layer**.
@@ -1504,7 +1504,7 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.2-alpha · Last updated 2026-07-12 · Restructured (33→6 commands, rules/ extraction, phil:* namespace)*
+*Document version 0.2.1-alpha · Last updated 2026-07-12 · Added style/ directory for personalized writing calibration and formatting templates*
 *Built on academic-research-skills v3.15.0*
 *Phase 4 additions: Metaphysics + Metaethics knowledge dependency layers*
 *Phase 5 additions: 5 general Skills + 28 examples.md + 28 checklist.md + philosophers-db*

@@ -130,7 +130,7 @@ Your coordinating decisions are informed by:
    - All fatal findings are resolved
    - All severe findings are resolved or explicitly deferred with reasons
    - The user is satisfied
-5. Final polish: optional `ars-citation-check`, `ars-format-convert` (for LaTeX output), `ars-disclosure`.
+5. Final polish: optional `ars-citation-check`, `ars-format-convert` (for LaTeX output), `ars-disclosure`. When formatting, check `style/format/` for user's personal templates (LaTeX `.cls`/`.sty`, Word `.dotx`, or sample PDFs for reference layout).
 
 **Output**: Final deliverables:
 - Final manuscript (.txt in manuscript/ or .txt LaTeX in paper/)

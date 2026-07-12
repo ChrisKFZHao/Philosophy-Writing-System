@@ -32,6 +32,9 @@ Version cuts are NOT automatic. Three triggers: (1) post-review revision, (2) ne
 bibliography/  Reference storage (PDF, BibTeX, etc.)
 manuscript/    Draft manuscripts in plain text (.txt)
 paper/         Final papers as LaTeX source (.txt)
+style/         Personal writing samples & formatting templates
+  ├── writing/ Sample texts demonstrating your writing style
+  └── format/  Formatting resources (templates, LaTeX, PDFs)
 .claude/       Claude Code project configuration
   ├── settings.json   Permissions + hooks (committed)
   ├── commands/       6 composite commands (phil:* namespace)
@@ -146,7 +149,7 @@ Write memories for: user preferences, project goals, substantive feedback, exter
 
 ## Architecture
 
-The complete system architecture is defined in `ARCHITECTURE.md` at the project root (0.2-alpha), built atop `academic-research-skills` v3.15.0, covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
+The complete system architecture is defined in `ARCHITECTURE.md` at the project root (0.2.1-alpha), built atop `academic-research-skills` v3.15.0, covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
 
 - **28 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
 - **6 Commands** — Composite orchestration in `.claude/commands/`
