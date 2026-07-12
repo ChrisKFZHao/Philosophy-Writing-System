@@ -60,6 +60,9 @@ Demo/
 │   ├── {topic}-review.txt            #   审稿报告
 │   └── VERSIONS.md                   #   版本历史
 ├── paper/                            # 最终论文（LaTeX .txt）
+├── style/                            # 个人文风与格式定制
+│   ├── writing/                      #   写作样文（用于文风校准）
+│   └── format/                       #   格式模板（LaTeX/Word/PDF）
 └── .claude/                          # Claude Code 配置
     ├── settings.json                 #   权限 + hooks（提交 git）
     ├── commands/                     #   7 个综合命令（phil:* 命名空间）
