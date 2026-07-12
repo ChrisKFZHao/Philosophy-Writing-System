@@ -1,5 +1,6 @@
 ---
 description: "Analyze analogical arguments by mapping source–target correspondences, evaluating the relevance of shared properties, detecting disanalogies, and assessing the argumentative force of analogical inference."
+name: phil-analogy-check
 domain: general
 version: 1.0.0
 ---
@@ -229,7 +230,7 @@ A high-quality Analogy Analysis Report satisfies the following criteria. These c
 
 8. **Fallacious Reasoning Identification.** The report correctly determines whether the argument crosses the line from weak analogical reasoning into genuine fallacious reasoning, applying the diagnostic criteria from `fallacy-catalog.md` for false analogy and its subcategories. The fallacy determination is not a mechanical consequence of a low strength grade — a weak analogy is not automatically a fallacy — but reflects an independent assessment of whether the argument exhibits the specific structural flaws (single similar instance, suppressed disanalogy, faulty comparison) that characterize fallacious analogical reasoning.
 
-## 7. Relationships to Other Skills
+## 7. Relations to Other Skills
 
 The phil-analogy-check skill is embedded within the broader suite of philosophical analysis skills and entertains dependency, feed-forward, and coordination relationships with other skills. Understanding these relationships is essential for integrating analogy analysis into multi-stage analytical workflows.
 

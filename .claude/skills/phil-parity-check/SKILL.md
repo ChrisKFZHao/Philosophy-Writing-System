@@ -1,5 +1,6 @@
 ---
 description: Evaluates parity arguments and relevant-similarity claims in philosophical reasoning by systematically checking whether claimed analogies hold under scrutiny.
+name: phil-parity-check
 domain: general
 version: 1.0.0
 ---
@@ -213,7 +214,7 @@ Apply the following criteria to evaluate the quality of the parity analysis:
 
 7. **Constructive Diagnosis**: A parity analysis is not merely critical; it is diagnostic. When parity fails, the analysis should indicate what revisions would make a parity argument succeed: what respect of comparison would need to be specified, what differences would need to be shown irrelevant, what principles would need to be conceded, what additional premises would need to be established. The analysis should distinguish between failures that are repairable (the arguer can narrow the respect of comparison, qualify the conclusion, or supply a missing premise) and failures that are fatal (the parity claim is structurally defective or relies on premises incompatible with the arguer's broader position). When parity holds, the analysis should indicate the shape of the opponent's options: what they must concede, what they must reject, what prior commitments they must revise, or whether they must accept an unwelcome expansion of their position. The analysis should enable the arguer (or the opponent) to see what needs to happen next in the dialectic, not merely to register that the current move succeeded or failed. A good parity analysis is a roadmap for the next stage of the argument, not merely a verdict on the current stage.
 
-## 7. Relationships to Other Skills
+## 7. Relations to Other Skills
 
 - **Depends on `phil-argument-reconstruct`**: The parity check presupposes a properly reconstructed argument. The input parity claim must be embedded in a premise-conclusion structure that makes explicit:
   - What is being asserted about case A (the source case).

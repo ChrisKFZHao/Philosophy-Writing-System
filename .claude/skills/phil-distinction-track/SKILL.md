@@ -1,5 +1,6 @@
 ---
 description: Distinction Tracking — identify, index, and trace all key conceptual distinctions in philosophical texts; test distinctions for consistency, exhaustiveness, and argumentative function
+name: phil-distinction-track
 domain: general
 version: 1.0.0
 ---
@@ -172,7 +173,7 @@ D3 (P/Q) ──── parallel ──── D1 (X/Y)
 2. **Drift cannot be ignored**: Even small conceptual drift at key argumentative steps can be amplified into argumentative error
 3. **Distinctions are not the more the better**: Invalid or ad hoc distinctions weaken an argument — note cases of excessive or unsupported distinction-drawing
 
-## Relationship to Other Skills
+## Relations to Other Skills
 
 **Dependencies**:
 - `phil-conceptual-analysis`: provides deep analysis of individual concepts (optional input)

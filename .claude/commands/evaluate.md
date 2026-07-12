@@ -48,5 +48,5 @@ description: 多角度同时批判哲学文献 — 并行运行反例生成、�
 
 - 所有输出使用中文
 - 7 个技能并行运行，每个独立产出后再合并
-- 如果已有 `/phil:reconstruct` 的输出，直接将其作为输入——不需要重新分析
+- 如果已有 `/phil:reconstruct` 的输出，直接将其作为输入——不需要重新分析。此时 `phil-intuition-pump` 不重跑，以 reconstruct 阶段 2 的直觉泵分析结果作为输入
 - 与 `/phil:review` 的区别：evaluate 针对他人文献的论证质量，review 针对自己写作的论文评审

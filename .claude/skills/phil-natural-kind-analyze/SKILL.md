@@ -1,5 +1,6 @@
 ---
 description: Natural Kind Analysis — analyze arguments concerning natural kind classification; evaluate kind essentialism, HPC theory, and conventionalist approaches
+name: phil-natural-kind-analyze
 domain: metaphysics
 version: 1.0.0
 ---
@@ -272,7 +273,7 @@ Synthesize all findings from Steps 1-5 into the structured Natural Kind Analysis
 
 6. **Biological Species Sensitivity**: Biological species classification is one of the most philosophically complex domains for natural kind theory, and special care is required. The report does not simply apply a general theory of kinds to biological species without considering the species problem. Species essentialism is flagged as a minority position in contemporary philosophy of biology; the report notes this and assesses whether the argument's species claims can be reinterpreted under HPC, historical, or individual-based theories.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on:**
 - `phil-argument-reconstruct`: The kind claims cannot be reliably cataloged without the standard-form reconstruction. The reconstruction identifies where kind terms appear and what inferential role kind claims play.

@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.2.2-alpha &emsp; **Status**: Alpha
+> **Version**: 0.3-alpha &emsp; **Status**: Alpha
 >
 > **Built atop `academic-research-skills` (v3.15.0)**
 > This system does not re-implement ARS's existing capabilities (literature search, paper writing, peer review, citation verification). Instead, it layers on top of ARS an **analytic-philosophy-specific methodological layer**.
@@ -153,9 +153,6 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   └── phil-moral-supervenience/      # [New] Moral supervenience analysis
 │
 ├── agents/
-│   ├── argument-analyzer.md          # Analyst agent (multi-skill coordination)
-│   ├── dialectician.md               # Dialectician agent (dialectical dialogue)
-│   ├── concept-mapper.md             # Concept mapping agent (conceptual relation reasoning)
 │   ├── metaphysician.md              # [New] Metaphysical analyst (ontology-focused)
 │   ├── metaethicist.md               # [New] Metaethical analyst (moral language / norm analysis)
 │   ├── phil-writer.md                # [Phase 6] Philosophy writer (outline/draft/revision)
@@ -388,12 +385,9 @@ Metaethics Knowledge Cluster:
 **When Used**: When the user needs interactive exploration of philosophical questions.
 
 **Contents**:
-- `agents/argument-analyzer.md` — Argument analyst (coordinates multiple analysis Skills)
-- `agents/dialectician.md` — Dialectician (Socratic dialectical dialogue)
-- `agents/concept-mapper.md` — Concept mapper (conceptual relation exploration)
 - **`agents/metaphysician.md`** — **Metaphysical analyst: Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, and other meta-metaphysical questions**
 - **`agents/metaethicist.md`** — **Metaethical analyst: Socratic dialogue specialized in moral realism, normative reasons, moral semantics, and other metaethical questions**
-- **`agentsphil:writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards**
+- **`agents/phil-writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards**
 - **`agentsphil:reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews**
 - **`agentsphil:commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots**
 - **`agents/phil-orchestrator.md`** — **[Phase 6] Pipeline orchestrator: coordinates the 5-stage writing pipeline (question → literature → outline → draft → final) with quality gates**
@@ -449,7 +443,6 @@ Metaethics Knowledge Cluster:
 │  Layer 4: ARS Bridge  ──  analysis → ARS pipeline  │
 ├─────────────────────────────────────────────────────┤
 │  Layer 3: Dialogic Agents                           │
-│   argument-analyzer  dialectician  concept-mapper    │
 │   metaphysician (metaphysical dialogue)             │
 │   metaethicist (metaethical dialogue)                │
 ├─────────────────────────────────────────────────────┤
@@ -1523,10 +1516,11 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.2.2-alpha · Last updated 2026-07-12 · Added phil:tutor agent for dialogic reading mentorship + phil-citation-extract skill for citation extraction*
+*Document version 0.3-alpha · Last updated 2026-07-12 · Merge: phil:tutor tutor agent + citation-extract skill; audit fix: schema wiring, dead link repair, agent pruning, hook removal*
 *Built on academic-research-skills v3.15.0*
 *Phase 4 additions: Metaphysics + Metaethics knowledge dependency layers*
 *Phase 5 additions: 5 general Skills + 28 examples.md + 28 checklist.md + philosophers-db*
 *Phase 6 additions: 4 production agents + 4 commands + 5-stage writing pipeline*
-*Gap closure: 3 dialogic agents + 2 schemas + 5 templates + philosophers-db/ directory + phil:reconstruct（分析）+ phil:evaluate（评价）*
+*Gap closure (historical): 3 dialogic agents + 2 schemas + 5 templates + philosophers-db/ directory + phil:reconstruct（分析）+ phil:evaluate（评价）*
+*Phase 7 (v0.3-alpha): Schema full wiring (11 schemas), agent pruning (9→6), INDEX link repair, hook removal, convention unification*
 

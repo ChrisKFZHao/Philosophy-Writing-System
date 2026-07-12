@@ -1,5 +1,6 @@
 ---
 description: Conceptual analysis — extracting, clarifying, and testing the structure of philosophical concepts through necessary/sufficient condition analysis, case testing, and dimensional mapping to chart the logical geography of concepts
+name: phil-conceptual-analysis
 domain: general
 version: 1.0.0
 ---
@@ -28,7 +29,7 @@ This Skill handles questions including:
 
 ## Output
 
-A structured **conceptual analysis report** containing:
+A structured **conceptual analysis report** conforming to the `concept-map-schema.json` specification, containing:
 - Concept positioning (domain, level, adjacent concepts)
 - List of candidate definitions (if any)
 - Necessary condition / sufficient condition matrix
@@ -264,7 +265,7 @@ CC1: <description> — Source: <classic / constructed> — Impact on candidate d
 4. **Polysemy**: If a word has multiple completely unrelated meanings (e.g., "bank"), perform independent analyses for each rather than attempting to unify them.
 5. **Political / contested concepts**: The definition of certain concepts is itself politically contested (e.g., "race," "gender"). When analyzing, annotate the political presuppositions of different definitions.
 
-## Interface with ARS
+## ARS Interface
 
 - Conceptual analysis reports can be passed to ARS `academic-paper` during the writing phase for the concept clarification section of a paper.
 - Cases used in conceptual analysis can be passed to ARS `citation-check` to verify citation accuracy.

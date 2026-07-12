@@ -1,5 +1,6 @@
 ---
 description: Universal argument reconstruction framework — converting everyday language arguments into standard premise-conclusion form, supporting all argument types: deductive, inductive, reductio, abductive, inference to the best explanation, and more
+name: phil-argument-reconstruct
 domain: general
 version: 1.0.0
 ---
@@ -19,7 +20,7 @@ This Skill does not presuppose a specific argument type. **Deductive, inductive,
 
 ## Output
 
-A structured **argument reconstruction report** containing:
+A structured **argument reconstruction report** conforming to the `analysis-report-schema.json` specification, containing:
 - Argument type classification
 - Numbered premise-conclusion chain
 - Implicit premises (if any)
@@ -196,7 +197,7 @@ Output the complete reconstruction in standard format:
 4. **Elliptical Arguments**: If the author relies on well-known suspended premises (e.g., "Humean causal skepticism" without restating the argument), annotate in [IP] and cite the corresponding argument-forms knowledge file.
 5. **Multiple Conclusions**: If a text has multiple parallel conclusions, reconstruct each as an independent argument.
 
-## Interface with ARS
+## ARS Interface
 
 - Reconstruction reports can be directly passed to ARS `academic-paper` in the writing workflow, serving as appendices to argument analysis.
 - Citation formats in the report are compatible with ARS `citation-check`.

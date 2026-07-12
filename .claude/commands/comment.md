@@ -41,3 +41,4 @@ description: 深度哲学评论 — 调用 phil-commentator agent，聚焦论证
 
 - 与 `/phil:review` 的区别：comment 聚焦论证细节和概念澄清，review 是整体论文审稿
 - 与 `/phil:evaluate` 的区别：comment 是深度 qualitative 分析，evaluate 是多维度 parallel 定量评估
+- 所有输出使用中文（项目约定）

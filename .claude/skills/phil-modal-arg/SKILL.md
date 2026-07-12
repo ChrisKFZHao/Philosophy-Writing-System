@@ -1,5 +1,6 @@
 ---
 description: Modal Argument Analysis — evaluate the logical structure of possibility, necessity, and contingency claims; detect modal fallacies; identify hidden modal assumptions; locate possible-worlds reasoning positions
+name: phil-modal-arg
 domain: general
 version: 1.0.0
 ---
@@ -171,7 +172,7 @@ For evaluating "conceivable → possible" reasoning:
 2. **No Leaping Principle**: Do not jump directly from "conceivable" to "necessary/impossible" — each step must be independently tested
 3. **Framework Transparency Principle**: The argument's implicit modal system must be made explicit — annotate the axiomatic assumptions
 
-## Relationship to Other Skills
+## Relations to Other Skills
 
 **Dependencies**:
 - `phil-argument-reconstruct`: provides the standard-form argument (required)

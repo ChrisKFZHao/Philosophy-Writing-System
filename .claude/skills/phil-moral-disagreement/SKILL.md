@@ -1,5 +1,6 @@
 ---
 description: "Moral Disagreement Analysis — evaluate arguments from moral disagreement and their implications for moral realism; assess conciliationist challenges and convergence responses"
+name: phil-moral-disagreement
 domain: metaethics
 version: 1.0.0
 ---
@@ -252,7 +253,7 @@ The following criteria should be used to evaluate the quality of a Moral Disagre
 
 5. **Self-Defeat Awareness:** The report must consider whether the disagreement argument is vulnerable to a reflexive self-defeat problem. It should assess whether the argument's own premises are subject to the kind of disagreement that the argument treats as undermining, and whether this reflexive problem can be avoided through careful formulation.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Dependencies (skills this skill requires as input):**
 - `phil-argument-reconstruct` — The disagreement analysis cannot proceed without a clear reconstruction of the argument's structure, premises, and conclusions. The argument-reconstruction report is the primary input.

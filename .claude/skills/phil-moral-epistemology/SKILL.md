@@ -1,5 +1,6 @@
 ---
 description: "Moral Epistemology Analysis — evaluate the possibility of moral knowledge; analyze intuitionist, coherentist, and reliabilist justification pathways; assess evolutionary debunking challenges"
+name: phil-moral-epistemology
 domain: metaethics
 version: 1.0.0
 ---
@@ -293,7 +294,7 @@ The report should identify the strongest and weakest elements of the argument's 
 
 5. **Intuitionist/Coherentist Distinction Clarity:** Because the boundary between intuitionism and coherentism is contested (both appeal to intuitions; both allow for revision), the report must be especially careful in drawing this distinction. The key difference is the epistemic role assigned to intuitions: are they non-inferentially justified foundations, or are they merely revisable inputs to a coherence-generating process? The report should make this distinction explicit and defend the classification.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Dependencies (skills this skill requires as input):**
 - `phil-moral-realism` — Optional but highly recommended. The epistemological analysis is more powerful when the argument's metaphysical commitments are clearly identified, as different metaphysical positions carry different epistemological burdens.

@@ -35,4 +35,5 @@ description: 一键全流程 — 调用 phil-orchestrator agent，5 阶段：哲
 ## Notes
 
 - 各阶段内部自动调用 `/phil:reconstruct`、`/phil:evaluate`、`/phil:review`、`/phil:write`
-- 可选择性调用 ARS 功能（deep-research、citation-check、format-convert）
+- 可选择性调用 ARS 功能（deep-research、citation-check、format-convert，需外部 ARS 插件）
+- 所有输出使用中文（项目约定）

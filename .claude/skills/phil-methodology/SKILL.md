@@ -1,5 +1,6 @@
 ---
 description: Detect, classify, and evaluate the methodological commitments of philosophical arguments — the meta-philosophical choices about how philosophy should be done that shape and constrain reasoning
+name: phil-methodology
 domain: general
 version: 1.0.0
 ---
@@ -260,7 +261,7 @@ A high-quality philosophical methodology analysis meets the following standards:
 
 These criteria are not merely a checklist to be mechanically applied; they represent the virtues of good methodological analysis. The analysis that satisfies all of them will not only correctly identify the argument's methods but will make a genuine contribution to understanding how the argument works and what its methodological choices commit it to. Conversely, an analysis that satisfies some criteria brilliantly while neglecting others — providing comprehensive method detection without evidence-grounded support, or precise classification without actionable insight into why it matters — is incomplete. The criteria should inform every stage of the analysis, from initial method detection through final report construction.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on:**
 - **phil-argument-reconstruct** — Methodology analysis requires a clear, structured understanding of the argument's components: its premises, conclusions, inferential moves, assumptions, and the relationships among its parts. When the argument to be analyzed is not already reconstructed in premise-conclusion form, run phil-argument-reconstruct first to establish the argument's structure. The methodology analysis then examines how these structural elements are generated and justified — whether the premises are delivered by conceptual analysis, reflective equilibrium, empirical investigation, phenomenological description, or some other method — and whether the method consistently supports the argument's moves throughout.

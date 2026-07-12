@@ -1,5 +1,6 @@
 ---
 description: Identity and Persistence Analysis — analyze identity conditions across time and possible worlds; evaluate endurance vs perdurance frameworks and detect identity problems
+name: phil-identity-persistence
 domain: metaphysics
 version: 1.0.0
 ---
@@ -257,7 +258,7 @@ Synthesize into the structured Identity/Persistence Analysis Report:
 
 5. **Sortal Awareness**: Identity is always analyzed as identity under a sortal (following Wiggins). The report explicitly identifies the relevant sortal for each identity claim. When the sortal is ambiguous or underdescribed, this is noted as a potential source of confusion.
 
-## Relationships to Other Skills
+## Relations to Other Skills
 
 **Depends on:**
 - `phil-argument-reconstruct`: Provides the argument in standard form, from which identity claims are extracted and logical form is derived. The reconstruction's handling of identity predicates (=) and temporal/modal operators is essential for all subsequent analysis.
