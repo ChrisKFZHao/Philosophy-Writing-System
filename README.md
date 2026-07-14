@@ -2,9 +2,51 @@
 
 基于 Claude Code 的分析哲学研究与写作系统。提供从文献管理、PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.4.2-alpha  
-**语言**: Chinese（写作输出）/ English（技能定义与架构文档）  
-**构建于**: `academic-research-skills` v3.15.0
+**版本**: 0.4.5-alpha
+**语言**: Chinese（写作输出）/ English（技能定义与架构文档）
+
+---
+
+## 依赖关系
+
+本仓库只是框架层——不含任何论文或文献内容。依赖按"缺失时损失什么"分层：
+
+### 必需
+
+| 依赖 | 角色 |
+|------|------|
+| **Claude Code** (claude.ai/code) | 运行时宿主——commands / skills / agents / hooks 的执行环境 |
+| **pdf skill**（Claude Code 内置） | PDF 文本与元数据提取。框架规则明确禁止直接调用 `pdftotext` 等 CLI |
+
+### 可选 — 学术基础设施
+
+| 依赖 | 角色 | 缺失时 |
+|------|------|--------|
+| **academic-research-skills** v3.15.0（ARS 插件） | 文献检索、格式转换、引用验证等 `ars-*` 能力 | 30 个哲学分析技能不受影响；仅 ARS 相关能力不可用 |
+
+### 可选 — Zotero 集成
+
+| 依赖 | 角色 | 缺失时 |
+|------|------|--------|
+| **Zotero desktop** | 阅读与标注端；其 Linked Attachment Base Directory 指向文献 PDF 仓库 | `/phil:ingest` 的 Zotero 注册步骤自动跳过，其余步骤不受影响 |
+| **zotero MCP server** | 混合模式：读走本地 SQLite（`ZOTERO_LOCAL=true`），写走 Web API（API key 配置于 `~/.claude.json`，绝不进入仓库） | 同上 |
+| **Python 3** | 运行 `.claude/scripts/zotero-attach-linked.py`（zotero MCP 没有 linked-file 创建工具，此脚本填补空缺；认证运行时读配置，不含任何密钥） | linked 附件需在 Zotero 中手动 "Attach Link to File" |
+
+### 用户自备
+
+- **`Private/` 内层 git 仓库**——论文、文献库、个人样文的内容层。被本仓库 gitignore，由使用者自建独立私有仓库。框架所有命令按 `Private/` 的目录契约（见下）读写内容。
+
+依赖流向概览：
+
+```
+phil:* 命令（8）──→ 技能（30）+ agents（7）──→ JSON schemas（13，数据契约）
+      │                    │
+      │                    ├──→ pdf skill（必需，Claude Code 内置）
+      │                    └──→ ars-*（可选，ARS 插件）
+      │
+      └─ phil:ingest 注册步骤 ──→ zotero MCP（读本地 / 写云端）
+                               └──→ zotero-attach-linked.py（Python 3）──→ Zotero Web API
+```
 
 ---
 
@@ -18,7 +60,7 @@
 phil:ingest
 ```
 
-系统会扫描文献库，对新 PDF 完成"刮削"：提取元数据、重命名为规范文件名（`{Author}_{Year}_{Title}.pdf`，下划线分段）、登记 INDEX、生成 Level 0.5 摘要，并向主题匹配的写作项目推荐。需要深入分析时再运行 `phil:reconstruct`（论证重构 → `Private/Bibliography/Analysis/`）。分析分级递进：
+系统会扫描文献库，对新 PDF 完成"刮削"：提取元数据、重命名为规范文件名（`{Author}_{Year}_{Title}.pdf`，下划线分段）、登记 INDEX、生成 Level 0.5 摘要，并向主题匹配的写作项目推荐。支持三类文档——**论文**、**专著**（摘要带章节段）、**编者文集**（卷条目 + 每篇成员论文独立登记、独立摘要，共享同一份卷 PDF）。需要深入分析时再运行 `phil:reconstruct`（论证重构 → `Private/Bibliography/Analysis/`）。分析分级递进：
 
 | Level | 内容 | 触发条件 |
 |-------|------|----------|
@@ -44,16 +86,17 @@ phil:write revision    # 修订
 
 ---
 
-## Zotero 集成（v0.4.2 新增）
+## Zotero 集成
 
 `Private/Bibliography/PDF/` 同时是 Zotero 的 Linked Attachment Base Directory——一份物理 PDF 仓库，Zotero 与本框架各自以自己的方式引用同一批文件：Zotero 通过 linked 附件阅读/标注，框架通过 INDEX 的规范词干读取。核心约定：
 
-- **命名权归框架**：新 PDF 先 `phil:ingest` 改规范词干，再在 Zotero "Attach Link to File" 链接；链接后文件名冻结，Zotero 不得再改名
+- **命名权归框架**：新 PDF 先 `phil:ingest` 改规范词干，再链接进 Zotero；链接后文件名冻结，Zotero 不得再改名
+- **自动注册**（v0.4.3+）：`/phil:ingest` 在标识符闸门下自动完成 Zotero 侧登记——论文走 DOI；书籍走级联 **DOI 优先 → ISBN → bibtex**（学术出版社的 ISBN 常在开放书目库查无，而 CrossRef 注册了逐章 DOI）；编者文集的成员论文优先走章级 DOI（返回规范 `bookSection`），卷 PDF 批量链接到卷条目和全部成员条目。任何解析器返回的元数据都须对照 PDF 扉页/目录核对（Rule 2 覆盖入库通道）。无标识符且无元数据来源时回退为手动待办，不强行自动化
 - **INDEX.md 的 `Zotero` 列**：`KEY ↔ Zotero item key ↔ 文件词干` 三方映射
 - **懒迁移**：Zotero 分类只在升格为写作项目时才把其存量条目迁入统一仓库，不做批量搬迁
-- **混合读写**：MCP 读走本地 Zotero 数据库，写走 Web API（key 配置于 `~/.claude.json`），云端写入需桌面端同步一次落地
+- **混合读写**：MCP 读走本地 Zotero 数据库，写走 Web API，云端写入需桌面端同步一次落地
 
-完整迁移方法（含注释保全的 API 步骤、已知坑）见 [`Framework/Lessons/zotero-integration.md`](Framework/Lessons/zotero-integration.md)。
+完整方法（含注释保全的 stored→linked 迁移步骤、已知坑）见 [`Framework/Lessons/zotero-integration.md`](Framework/Lessons/zotero-integration.md)。
 
 ---
 
@@ -71,7 +114,8 @@ Philosophical Writing/
 │   ├── skills/                       #   30 个哲学分析技能
 │   ├── agents/                       #   7 个领域特化 agent
 │   ├── references/                   #   方法论知识（术语表、论证形式、分类学）
-│   └── shared/                       #   数据契约（13 JSON Schema + 模板）
+│   ├── shared/                       #   数据契约（13 JSON Schema + 模板）
+│   └── scripts/                      #   可复用辅助脚本（填补工具空缺，密钥运行时读配置）
 ├── Framework/                        # Framework 非执行层（外层仓库）
 │   ├── ARCHITECTURE.md               #   系统架构文档
 │   ├── changelog.md                  #   框架版本历史
@@ -82,12 +126,12 @@ Philosophical Writing/
 └── Private/                          # 私有内容层（gitignore；独立内层仓库）
     ├── Projects/{topic}/             #   每个写作项目一个目录：手稿 + refs.md +
     │                                 #   VERSIONS.md + feedback-to-framework.md
-    ├── Bibliography/                 #   文献总库（PDF/ 不进 git、Analysis/、INDEX.md）
+    ├── Bibliography/                 #   文献总库（PDF/ 不进 git、Analysis/、Summaries/、INDEX.md）
     ├── Concepts/                     #   跨项目概念笔记
     └── Style/                        #   个人写作样文（文风校准）
 ```
 
-**命名规范**：`.claude/` 之外的目录全部大写开头（连字符逐段大写，缩写全大写，如 `Philosophers-DB`）；写作项目条目目录用小写 kebab-case（如 `srinivasan-critique/`，与文件名前缀一致）；文件名小写 kebab-case（惯例大写文件除外：`CLAUDE.md`、`INDEX.md`、`VERSIONS.md` 等）。文献库文件用规范词干 `{Author}_{Year}_{Title}`（下划线分段、段内连字符，完整标题，如 `Austin_1956_A-Plea-for-Excuses.pdf`），`.pdf`/`.analysis.txt`/`.summary.txt` 三类同词干；引用 KEY 保持 `AUTHOR-TITLE` 不带年份。
+**命名规范**：`.claude/` 之外的目录全部大写开头（连字符逐段大写，缩写全大写，如 `Philosophers-DB`）；写作项目条目目录用小写 kebab-case（与文件名前缀一致）；文件名小写 kebab-case（惯例大写文件除外：`CLAUDE.md`、`INDEX.md`、`VERSIONS.md` 等）。文献库文件用规范词干 `{Author}_{Year}_{Title}`（下划线分段、段内连字符，完整标题，如 `Austin_1956_A-Plea-for-Excuses.pdf`），`.pdf`/`.analysis.txt`/`.summary.txt` 三类同词干；引用 KEY 保持 `AUTHOR-TITLE` 不带年份。
 
 **语言规范**：定义层（rules/commands/agents/skills/schemas/CLAUDE.md/ARCHITECTURE/changelog）为英文；写作输出（手稿、分析报告、评审报告）为中文；两个 README 与 `.claude/shared/templates/` 的 5 个报告模板为刻意保留的中文（面向使用者的文档 / 输出物骨架）。
 
@@ -104,7 +148,7 @@ Philosophical Writing/
 | `phil:comment` | 论证细节和概念澄清 | phil-commentator agent（6 批判维度） |
 | `phil:pipeline` | 一键全流程 | phil-orchestrator agent（5 阶段 + 质量门） |
 | `phil:tutor` | 导师式文献对话 | phil-tutor agent（Socratic 追问 + 引文推荐 + 阅读规划） |
-| `phil:ingest` | 文献入库刮削 | shell 扫描 + pdf skill + phil-summarize（重命名、登记 INDEX、0.5 级摘要、入库推荐） |
+| `phil:ingest` | 文献入库刮削 | shell 扫描 + pdf skill + phil-summarize + Zotero 自动注册（重命名、登记 INDEX、0.5 级摘要、入库推荐） |
 
 每个命令在 `.claude/commands/` 中定义了完整的技能编排、执行顺序和输出格式。底层 30 个分析技能可通过 Skill tool 单独调用。
 
@@ -130,25 +174,16 @@ Philosophical Writing/
 | 命令（8 个） | Alpha | 全部完成 |
 | 知识库（87 个参考文件） | Alpha | 术语表、论证形式、哲学家数据库均已填充 |
 | 对话 agent（3 个） | Alpha | 已完成，待更多交互验证 |
-| 写作生产（4 个 agent + 7 个命令） | Alpha | 已完成，仅 Srinivasan 一篇测试 |
+| 写作生产（4 个 agent） | Alpha | 已完成，端到端流水线仅一次完整测试 |
 | 行为规则（3 条） | Alpha | 已部署，待长期使用校准 |
-| 文献管理 | Alpha | Citation Gate 框架就位，10 个 KEY 入库（1 篇 Level 3，9 篇 Level 0.5） |
-| Zotero 集成 | Alpha | 试点完成（instantaneous-velocity，6 条迁移+注释保全验证），56 条存量待懒迁移 |
+| 文献管理 | Alpha | Citation Gate 框架就位；ingest 已实战运行论文/专著/文集三类文档 |
+| Zotero 集成 | Alpha | 注释保全迁移与自动注册均经实战验证；存量按懒迁移原则逐步转换 |
 
 **已知限制**：
-- 分析文件基于阅读笔记重建（Srinivasan），PDF 原文对照验证待完成
-- 写作流水线仅完成一次完整测试（srinivasan-critique）
+- 写作流水线仅完成一次完整端到端测试
 - 哲学家数据库覆盖不均衡（分析传统为主，大陆哲学较弱）
 - 无自动化测试套件
 
 ---
 
-## 依赖
-
-- **Claude Code** (claude.ai/code)
-- **academic-research-skills** v3.15.0（ARS 插件——可选，提供文献检索、格式转换、引用验证等学术基础设施）
-- **pdftotext**（PDF 文本提取）
-
----
-
-*最后更新: 2026-07-14（v0.4.2 Zotero 集成：统一 PDF 仓库 + INDEX Zotero 列 + 注释保全迁移）*
+*最后更新: 2026-07-14（v0.4.5：ingest 支持专著/文集 + Zotero 自动注册级联闸门；README 重写为依赖分层说明）*
