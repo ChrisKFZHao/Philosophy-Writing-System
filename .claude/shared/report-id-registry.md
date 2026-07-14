@@ -1,6 +1,6 @@
 # Report ID Prefix Registry
 
-Central registry of report ID prefixes used across the 28 analysis skills. Each skill generates reports with unique identifiers for cross-reference traceability.
+Central registry of report ID prefixes used across the 30 analysis skills. Each skill generates reports with unique identifiers for cross-reference traceability.
 
 | Prefix | Skill | Domain |
 |---|---|---|
@@ -14,6 +14,7 @@ Central registry of report ID prefixes used across the 28 analysis skills. Each 
 | `IP-` | `phil-intuition-pump` | General |
 | `CTX-` | `phil-contextualize` | General |
 | `CE-` | `phil-counterexample` | General |
+| `SUM-` | `phil-summarize` | General |
 | `DMAP-` | `phil-dialectical-map` | General |
 | `ANLG-` | `phil-analogy-check` | General |
 | `METH-` | `phil-methodology` | General |

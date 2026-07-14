@@ -2,7 +2,7 @@
 
 基于 Claude Code 的分析哲学研究与写作系统。提供从 PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.4-alpha  
+**版本**: 0.4.1-alpha  
 **语言**: Chinese（写作输出）/ English（技能定义与架构文档）  
 **构建于**: `academic-research-skills` v3.15.0
 
@@ -15,14 +15,14 @@
 将 PDF 放入 `Private/Bibliography/PDF/`，然后运行：
 
 ```
-phil:reconstruct
+phil:ingest
 ```
 
-系统会提取文本、重构论证，生成分析文件到 `Private/Bibliography/Analysis/`。分析分级递进：
+系统会扫描文献库，对新 PDF 完成"刮削"：提取元数据、重命名为规范文件名（`{Author}_{Year}_{Title}.pdf`，下划线分段）、登记 INDEX、生成 Level 0.5 摘要，并向主题匹配的写作项目推荐。需要深入分析时再运行 `phil:reconstruct`（论证重构 → `Private/Bibliography/Analysis/`）。分析分级递进：
 
 | Level | 内容 | 触发条件 |
 |-------|------|----------|
-| 0.5 | 轻量摘要（论题+路线+概念+论敌+topics） | PDF 添加时（v0.5 落地） |
+| 0.5 | 轻量摘要（论题+路线+概念+论敌+topics） | PDF 入库时（phil:ingest） |
 | 1 | 论证重构 | 选定为论文依赖时 |
 | 2 | + 隐含前提、慈善审查、概念分析、区分追踪 | 首次在手稿中引用 |
 | 3 | + 辩证映射、本体论承诺、模态分析 | 成为核心论敌或关键依赖 |
@@ -53,12 +53,12 @@ Philosophical Writing/
 ├── README.md                         # 本文件（外层仓库）
 ├── .claude/                          # Framework 可执行层（外层仓库）
 │   ├── settings.json                 #   权限 + hooks（提交 git）
-│   ├── commands/                     #   7 个综合命令（phil:* 命名空间）
+│   ├── commands/                     #   8 个综合命令（phil:* 命名空间）
 │   ├── rules/                        #   3 个行为规则模块
-│   ├── skills/                       #   29 个哲学分析技能
+│   ├── skills/                       #   30 个哲学分析技能
 │   ├── agents/                       #   7 个领域特化 agent
 │   ├── references/                   #   方法论知识（术语表、论证形式、分类学）
-│   └── shared/                       #   数据契约（12 JSON Schema + 模板）
+│   └── shared/                       #   数据契约（13 JSON Schema + 模板）
 ├── Framework/                        # Framework 非执行层（外层仓库）
 │   ├── ARCHITECTURE.md               #   系统架构文档
 │   ├── changelog.md                  #   框架版本历史
@@ -74,7 +74,7 @@ Philosophical Writing/
     └── Style/                        #   个人写作样文（文风校准）
 ```
 
-**命名规范**：`.claude/` 之外的目录全部大写开头（连字符逐段大写，缩写全大写，如 `Philosophers-DB`）；写作项目条目目录用小写 kebab-case（如 `srinivasan-critique/`，与文件名前缀一致）；文件名小写 kebab-case（惯例大写文件除外：`CLAUDE.md`、`INDEX.md`、`VERSIONS.md` 等）。
+**命名规范**：`.claude/` 之外的目录全部大写开头（连字符逐段大写，缩写全大写，如 `Philosophers-DB`）；写作项目条目目录用小写 kebab-case（如 `srinivasan-critique/`，与文件名前缀一致）；文件名小写 kebab-case（惯例大写文件除外：`CLAUDE.md`、`INDEX.md`、`VERSIONS.md` 等）。文献库文件用规范词干 `{Author}_{Year}_{Title}`（下划线分段、段内连字符，完整标题，如 `Austin_1956_A-Plea-for-Excuses.pdf`），`.pdf`/`.analysis.txt`/`.summary.txt` 三类同词干；引用 KEY 保持 `AUTHOR-TITLE` 不带年份。
 
 **语言规范**：定义层（rules/commands/agents/skills/schemas/CLAUDE.md/ARCHITECTURE/changelog）为英文；写作输出（手稿、分析报告、评审报告）为中文；两个 README 与 `.claude/shared/templates/` 的 5 个报告模板为刻意保留的中文（面向使用者的文档 / 输出物骨架）。
 
@@ -91,8 +91,9 @@ Philosophical Writing/
 | `phil:comment` | 论证细节和概念澄清 | phil-commentator agent（6 批判维度） |
 | `phil:pipeline` | 一键全流程 | phil-orchestrator agent（5 阶段 + 质量门） |
 | `phil:tutor` | 导师式文献对话 | phil-tutor agent（Socratic 追问 + 引文推荐 + 阅读规划） |
+| `phil:ingest` | 文献入库刮削 | shell 扫描 + pdf skill + phil-summarize（重命名、登记 INDEX、0.5 级摘要、入库推荐） |
 
-每个命令在 `.claude/commands/` 中定义了完整的技能编排、执行顺序和输出格式。底层 29 个分析技能可通过 Skill tool 单独调用。
+每个命令在 `.claude/commands/` 中定义了完整的技能编排、执行顺序和输出格式。底层 30 个分析技能可通过 Skill tool 单独调用。
 
 ---
 
@@ -112,8 +113,8 @@ Philosophical Writing/
 
 | 模块 | 状态 | 说明 |
 |------|------|------|
-| 分析技能（29 个） | Alpha | 全部完成，已内部测试 |
-| 命令（7 个） | Alpha | 全部完成 |
+| 分析技能（30 个） | Alpha | 全部完成，已内部测试 |
+| 命令（8 个） | Alpha | 全部完成 |
 | 知识库（87 个参考文件） | Alpha | 术语表、论证形式、哲学家数据库均已填充 |
 | 对话 agent（3 个） | Alpha | 已完成，待更多交互验证 |
 | 写作生产（4 个 agent + 7 个命令） | Alpha | 已完成，仅 Srinivasan 一篇测试 |
@@ -136,4 +137,4 @@ Philosophical Writing/
 
 ---
 
-*最后更新: 2026-07-14（v0.4 双仓库重构 + 命名/语言规范统一）*
+*最后更新: 2026-07-14（v0.4.1 文献入库刮削：phil:ingest + phil-summarize）*

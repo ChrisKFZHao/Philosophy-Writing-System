@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.4-alpha &emsp; **Status**: Alpha
+> **Version**: 0.4.1-alpha &emsp; **Status**: Alpha
 >
 > **Built atop `academic-research-skills` (v3.15.0)**
 > This system does not re-implement ARS's existing capabilities (literature search, paper writing, peer review, citation verification). Instead, it layers on top of ARS an **analytic-philosophy-specific methodological layer**.
@@ -135,6 +135,7 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   ├── phil-methodology/             # Philosophical methodology reflection
 │   ├── phil-contextualize/           # Intellectual history contextualization
 │   ├── phil-citation-extract/        # [New] Citation extraction and role classification
+│   ├── phil-summarize/               # [v0.4.1] Level 0.5 source summary (ingestion substrate)
 │   │
 │   ├── phil-ontological-commitment/  # [New] Ontological commitment detection
 │   ├── phil-identity-persistence/    # [New] Identity and persistence analysis
@@ -204,7 +205,8 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   ├── write.md                       # phil:write — Philosophy writer agent (outline/draft/revision)
 │   ├── comment.md                     # phil:comment — Deep commentary agent (argument details)
 │   ├── pipeline.md                    # phil:pipeline — Full pipeline orchestrator (5 stages)
-│   └── tutor.md                       # [New] phil:tutor — Dialogic reading mentor (Socratic + recommendations)
+│   ├── tutor.md                       # [New] phil:tutor — Dialogic reading mentor (Socratic + recommendations)
+│   └── ingest.md                      # [v0.4.1] phil:ingest — Literature ingestion (scan/rename/register/summarize/recommend)
 │
 │
 ├── shared/
@@ -218,6 +220,7 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   ├── moral-realism-schema.json            # [New] Moral realism stance contract
 │   ├── normativity-schema.json              # [New] Normative structure contract
 │   ├── citation-extract-schema.json         # [New] Citation extract data contract
+│   ├── summary-schema.json                  # [v0.4.1] Level 0.5 summary contract
 │   └── templates/
 │       ├── argument-reconstruction.md # Argument reconstruction report template
 │       ├── premise-audit.md           # Premise audit template
@@ -335,6 +338,7 @@ Metaethics Knowledge Cluster:
 | `phil-counterexample` | Construct counterexamples targeting premises or the entire reasoning | All argument-forms |
 | `phil-conceptual-analysis` | Necessary/sufficient condition analysis, dimension extraction | `glossary-*`, `metaphysical-distinctions` |
 | `phil-citation-extract` | Extract and classify citations from a text by argumentative role, cross-reference with bibliography | `Private/Bibliography/INDEX.md` |
+| `phil-summarize` | Generate the Level 0.5 summary of a single source (thesis, route, concepts, interlocutors, topics) — pure function, called by `/phil:ingest` | `Private/Bibliography/INDEX.md` (topics vocabulary) |
 
 **Contents** (P1 — Extended, including metaphysics- and metaethics-specific):
 
@@ -1097,15 +1101,17 @@ Primer references:     <domain>-primer.md
 ```
 Format: phil:<action>  (namespace: phil)
 
-Commands (6 composite commands):
+Commands (8 composite commands):
   phil:reconstruct    Full-dimension text understanding (9-20 skills, mixed serial/parallel)
   phil:evaluate       Multi-angle parallel critique (7 skills, fully parallel)
   phil:review         Peer review (phil-reviewer agent, 8 dimensions)
   phil:write          Philosophy writing (phil-writer agent, outline/draft/revision)
   phil:comment        Deep commentary (phil-commentator agent, 6 critical dimensions)
   phil:pipeline       Full pipeline (phil-orchestrator agent, 5 stages)
+  phil:tutor          Tutor-style literature dialogue (phil-tutor agent, 4-phase arc)
+  phil:ingest         Literature ingestion (shell scan + pdf skill + phil-summarize)
 
-Underlying 28 skills remain invocable via the Skill tool.
+Underlying 30 skills remain invocable via the Skill tool.
 Rules:
   - Keep short (ease of user input)
   - Do not conflict with ARS's ars-* commands
@@ -1211,7 +1217,7 @@ Step 4: Registration
       - §5 Dependency Graph
       - §6 Research Flow
       - §7 Taxonomy tables (analytic dimension + methodological depth + domain)
-  → Create commands/<domain>.md under one of the 6 composite commands or as a new command in the phil: namespace
+  → Create commands/<domain>.md under one of the 8 composite commands or as a new command in the phil: namespace
   → Update the Skills overview in CLAUDE.md
 
 Step 5: Dependency check
@@ -1513,7 +1519,8 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.4-alpha · Last updated 2026-07-14 · v0.4: dual-repo restructure (privacy boundary = repo boundary) — Philosophers-DB → Shared/, papers & bibliography → Private/ (inner private repo, PDFs untracked), per-paper refs.md + two-hop Citation Gate + literature recommendation trigger points*
+*Document version 0.4.1-alpha · Last updated 2026-07-14 · v0.4.1: literature ingestion — /phil:ingest command + phil-summarize skill + summary-schema.json; canonical bibliography stem {Author}_{Year}_{Title}; Summaries/ (Level 0.5) activated*
+*Previous: 0.4-alpha · 2026-07-14 · dual-repo restructure (privacy boundary = repo boundary) — Philosophers-DB → Shared/, papers & bibliography → Private/ (inner private repo, PDFs untracked), per-paper refs.md + two-hop Citation Gate + literature recommendation trigger points*
 *Previous: 0.3-alpha · 2026-07-12 · Merge: phil:tutor tutor agent + citation-extract skill; audit fix: schema wiring, dead link repair, agent pruning, hook removal*
 *Built on academic-research-skills v3.15.0*
 *Phase 4 additions: Metaphysics + Metaethics knowledge dependency layers*

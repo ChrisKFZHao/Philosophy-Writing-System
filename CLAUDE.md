@@ -33,6 +33,7 @@ Version cuts are NOT automatic. Three triggers: (1) post-review revision, (2) ne
 - Exception 1: the `.claude/` tree stays lowercase — its paths (`skills/`, `agents/`, `commands/`, …) are fixed by Claude Code's discovery mechanism.
 - Exception 2: content-item directories (individual project topics, e.g. `Private/Projects/srinivasan-critique/`) use lowercase English kebab-case, matching their filename prefix (`srinivasan-critique-draft.txt`).
 - Filenames use lowercase kebab-case, except conventional uppercase files (`CLAUDE.md`, `README.md`, `INDEX.md`, `VERSIONS.md`, `ARCHITECTURE.md`, `MEMORY.md`).
+- Exception 3 — bibliography stems: files in `Private/Bibliography/` share the canonical stem `{Author}_{Year}_{Title}` across `.pdf` / `.analysis.txt` / `.summary.txt`. Segments are separated by **underscores**; words within a segment are hyphen-joined (underscores mark segment boundaries, so hyphens stay free for hyphenated surnames and the title itself). Author = first author's surname, capitalized, ASCII. Year = 4 digits, or `nd` when unverifiable from the PDF (then marked `[year unverified]` in INDEX). Title = the complete title from the title page (articles kept, subtitle included, punctuation stripped, TitleCase). Examples: `Austin_1956_A-Plea-for-Excuses.pdf`, `Shafer-Landau_2003_Moral-Realism-A-Defence.pdf`. Safety valve: stems over 100 characters truncate at the subtitle boundary (INDEX keeps the full title). KEYs stay `AUTHOR-TITLE` without year — the KEY is the stable identifier consumed by refs.md and the Citation Gate; the file stem is the locator. On an AUTHOR-TITLE collision, the newer entry's KEY appends the year.
 
 **Language:**
 - Definition layer (rules, commands, agents, skills, schemas, ARCHITECTURE, changelog, this file) — **English**.
@@ -46,12 +47,12 @@ Version cuts are NOT automatic. Three triggers: (1) post-review revision, (2) ne
 ```
 .claude/       Framework executable layer (tracked by outer repo; lowercase — tool constraint)
   ├── settings.json   Permissions + hooks (committed)
-  ├── commands/       7 composite commands (phil:* namespace)
+  ├── commands/       8 composite commands (phil:* namespace)
   ├── rules/          3 behavioral rule modules
-  ├── skills/         29 domain analysis skills (engine)
+  ├── skills/         30 domain analysis skills (engine)
   ├── agents/         7 philosophy-specialized agents (3 dialogic + 4 production)
   ├── references/     Methodological knowledge (glossaries, argument forms, taxonomies)
-  └── shared/         Data contracts (12 JSON schemas + 5 report templates)
+  └── shared/         Data contracts (13 JSON schemas + 5 report templates)
 Framework/     Framework non-executable layer (tracked by outer repo)
   ├── ARCHITECTURE.md System architecture document
   ├── changelog.md    Framework version history
@@ -81,6 +82,7 @@ Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory
 | `phil:comment` | Argument detail and conceptual clarification | phil-commentator agent (6 critical dimensions) |
 | `phil:pipeline` | One-command full pipeline | phil-orchestrator agent (5 stages with quality gates) |
 | `phil:tutor` | Tutor-style literature dialogue — probe ideas, test understanding, recommend sources | phil-tutor agent (Socratic dialogue + 4-phase arc) |
+| `phil:ingest` | Literature ingestion ("scraping") — scan library, rename to canonical stem, register in INDEX, Level 0.5 summary, recommendation trigger 1 | shell scan + pdf skill + phil-summarize |
 
 Each command file in `.claude/commands/` defines its skill composition, execution order, and output format.
 
@@ -107,18 +109,18 @@ Each command file in `.claude/commands/` defines its skill composition, executio
 ```
 Private/Bibliography/
 ├── PDF/                              Original PDFs (in NO git — immutable, re-obtainable)
-├── Analysis/                         Paired analysis files ({Author-Title}.analysis.txt)
-├── Summaries/                        Level 0.5 summaries (lands in v0.5)
+├── Analysis/                         Paired analysis files ({Author}_{Year}_{Title}.analysis.txt)
+├── Summaries/                        Level 0.5 summaries ({Author}_{Year}_{Title}.summary.txt)
 └── INDEX.md                          Master inventory (KEY, analysis level, topics tags)
 ```
 
 **Analysis levels (progressive, append-only):**
-- Level 0.5: Summary — core thesis + argument route + key concepts + interlocutors + topics — *trigger: PDF added (v0.5, phil-summarize)*
+- Level 0.5: Summary — core thesis + argument route + key concepts + interlocutors + topics — *trigger: PDF ingestion (`/phil:ingest` → phil-summarize)*
 - Level 1: Argument reconstruction — *trigger: selected as a paper dependency*
 - Level 2: + Implicit premises, charity audit, conceptual analysis, distinction tracking — *trigger: first citation in a manuscript*
 - Level 3: + Dialectical mapping, ontological commitment, modal analysis, domain-specific skills — *trigger: source becomes core target/dependency*
 
-**Three recommendation trigger points** (model-executed): (1) on ingestion — new source's topics matched against each project CLAUDE.md's topic keywords; (2) during in-project work — phil:tutor scans INDEX for entries whose topics match but which are absent from this project's refs.md (skipping `rejected`); (3) on citation extraction — phil-citation-extract outputs acquisition_candidates.
+**Three recommendation trigger points** (model-executed): (1) on ingestion — new source's topics matched against each project CLAUDE.md's topic keywords (executed by `/phil:ingest`); (2) during in-project work — phil:tutor scans INDEX for entries whose topics match but which are absent from this project's refs.md (skipping `rejected`); (3) on citation extraction — phil-citation-extract outputs acquisition_candidates.
 
 ### Citation Gate (Rule 2 enforcement, two-hop)
 This is a model-executed behavioral rule:
@@ -130,14 +132,14 @@ This is a model-executed behavioral rule:
 ### Interactive shell commands
 Prefix with `!` to run in-session:
 ```
-!pdftotext "Private/Bibliography/PDF/xxx.pdf" -
+!ls "Private/Bibliography/PDF/"
 !wc -m "Private/Projects/srinivasan-critique/srinivasan-critique-draft.txt"
 ```
 
 ### PDF Processing Workflow
 1. Place PDF in `Private/Bibliography/PDF/`
-2. Use the `pdf` skill to extract text (**not** direct `pdftotext` CLI)
-3. Run `phil:reconstruct` → `Private/Bibliography/Analysis/{Author-Title}.analysis.txt` (Level 1)
+2. Run `/phil:ingest` — extracts text via the `pdf` skill (**not** direct `pdftotext` CLI), renames to the canonical stem, registers in INDEX.md, generates the Level 0.5 summary, and runs recommendation trigger 1
+3. When the source becomes a paper dependency, run `phil:reconstruct` → `Private/Bibliography/Analysis/{Author}_{Year}_{Title}.analysis.txt` (Level 1)
 4. Escalate analysis level as needed per Citation Gate rules
 
 ### Manuscript Work Cycle
@@ -170,7 +172,7 @@ Session summaries are written to `history.txt` by the model at the end of each c
 
 **Philosopher Database**: `Shared/Philosophers-DB/` — 49 philosophers across 3 domains (General/Metaphysics/Metaethics). Curated — may be cited.
 
-**Data Contracts**: `.claude/shared/` — 12 JSON schemas for cross-skill composability + 5 report templates in `.claude/shared/templates/` (templates deliberately in Chinese — output skeletons).
+**Data Contracts**: `.claude/shared/` — 13 JSON schemas for cross-skill composability + 5 report templates in `.claude/shared/templates/` (templates deliberately in Chinese — output skeletons).
 
 ## Cross-Session Memory
 
@@ -182,9 +184,9 @@ Write memories for: user preferences, project goals, substantive feedback, exter
 
 The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.4-alpha), built atop `academic-research-skills` v3.15.0 (external plugin — all `ars-*` capabilities require this plugin to be installed), covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
 
-- **29 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
-- **7 Commands** — Composite orchestration in `.claude/commands/`
+- **30 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
+- **8 Commands** — Composite orchestration in `.claude/commands/`
 - **7 Agents** — 3 dialogic (metaphysician, metaethicist, phil-tutor) + 4 production (writer, reviewer, commentator, orchestrator). All in `.claude/agents/`
-- **12 JSON Schemas + 5 Report Templates** — Data contracts in `.claude/shared/`
+- **13 JSON Schemas + 5 Report Templates** — Data contracts in `.claude/shared/`
 - **26 Argument Forms** — Canonical definitions in `.claude/references/argument-forms/`
 - For complete skill inventory, build roadmap, and detailed architecture — see `ARCHITECTURE.md`

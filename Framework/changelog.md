@@ -1,5 +1,15 @@
 # Framework Changelog
 
+## v0.4.1-alpha — 2026-07-14
+
+**Literature ingestion ("scraping"): `/phil:ingest` command + `phil-summarize` skill** (A1 pulled forward from v0.5)
+
+- `/phil:ingest` (8th command): scans `Private/Bibliography/PDF/` for unprocessed PDFs via programmatic shell set-comparison (token economy — the model never reads the directory/INDEX to judge), then per PDF: extract (pdf skill) → dedupe → rename → INDEX registration → Level 0.5 summary → recommendation trigger point 1
+- Canonical bibliography stem `{Author}_{Year}_{Title}` (underscore-separated segments, hyphen-joined words, complete title from the title page) shared across `.pdf` / `.analysis.txt` / `.summary.txt`; KEY format unchanged (`AUTHOR-TITLE`, year-suffix only on collision); 100-char safety valve against Windows path limits
+- `phil-summarize` (30th skill): pure-function Level 0.5 summary (core thesis + argument route + key concepts + interlocutors + topics, Chinese, 300-500 chars); `summary-schema.json` (13th schema) + `SUM-` report prefix
+- `Summaries/` directory activated (Level 0.5 live); year/title metadata must be read from the PDF itself (Rule 2), fallback `nd` + `[year unverified]`
+- B3 (Philosophers-DB master-library rework) moves to v0.4.2
+
 ## v0.4-alpha — 2026-07-14
 
 **Repo restructure: Framework/Private dual-repo separation + bibliography linking**

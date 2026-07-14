@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "phil:summary-schema:1.0.0",
+  "title": "Level 0.5 Summary Schema",
+  "description": "Structured Level 0.5 summary of a single philosophical source: core thesis, argument route, key concepts, interlocutors, and topic tags. Produced by phil-summarize; written to Private/Bibliography/Summaries/ by /phil:ingest.",
+  "type": "object",
+  "required": ["summary_id", "bib_key", "source_metadata", "core_thesis", "argument_route", "key_concepts", "interlocutors", "topics", "generated_at"],
+  "properties": {
+    "summary_id": { "type": "string", "description": "Unique identifier with SUM- prefix (see report-id-registry.md)" },
+    "bib_key": { "type": "string", "description": "The INDEX.md KEY this summary belongs to (AUTHOR-TITLE format)" },
+    "source_metadata": {
+      "type": "object",
+      "required": ["title", "author", "source_type"],
+      "properties": {
+        "title": { "type": "string", "description": "Complete title as read from the title page" },
+        "author": { "type": "string" },
+        "year": { "type": "string", "description": "4-digit year read from the PDF, or \"nd\" if unverifiable" },
+        "source_type": { "type": "string", "enum": ["paper", "monograph", "chapter", "preprint", "other"] },
+        "source_location": { "type": "string", "description": "Canonical PDF path relative to Private/Bibliography/ (e.g. PDF/Austin_1956_A-Plea-for-Excuses.pdf)" }
+      }
+    },
+    "core_thesis": { "type": "string", "description": "The core claim the text commits itself to, stated charitably" },
+    "argument_route": { "type": "string", "description": "Ordered sketch of the major argumentative moves (route map, not full reconstruction)" },
+    "key_concepts": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 6,
+      "items": { "type": "string" }
+    },
+    "interlocutors": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Named positions or authors the text substantively engages with"
+    },
+    "topics": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 8,
+      "items": { "type": "string" },
+      "description": "English lowercase topic tags aligned with the INDEX Topics column vocabulary"
+    },
+    "summary_text": { "type": "string", "description": "Rendered Chinese summary, ~300-500 characters, covering all five elements" },
+    "length_chars": { "type": "integer", "description": "Character count of summary_text" },
+    "year_verified": { "type": "boolean", "description": "True only if the year was read from the PDF itself (Rule 2 provenance)" },
+    "summary_version": { "type": "string" },
+    "generated_at": { "type": "string", "format": "date-time" }
+  }
+}
