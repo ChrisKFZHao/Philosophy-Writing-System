@@ -28,21 +28,30 @@ Version cuts are NOT automatic. Three triggers: (1) post-review revision, (2) ne
 
 ## Directory Structure
 
+**双仓库结构（v0.4）：隐私边界 = 仓库边界。** 外层仓库只含框架（可分享）；全部论文、文献、个人风格样本在 `Private/`（外层 gitignore，独立内层 git 仓库 + 私有 remote）。
+
 ```
-bibliography/  Reference storage (PDF, BibTeX, etc.)
-manuscript/    Draft manuscripts in plain text (.txt)
-paper/         Final papers as LaTeX source (.txt)
-style/         Personal writing samples & formatting templates
-  ├── writing/ Sample texts demonstrating your writing style
-  └── format/  Formatting resources (templates, LaTeX, PDFs)
-.claude/       Claude Code project configuration
+.claude/       Framework 可执行层（外层仓库追踪）
   ├── settings.json   Permissions + hooks (committed)
   ├── commands/       7 composite commands (phil:* namespace)
   ├── rules/          3 behavioral rule modules
   ├── skills/         29 domain analysis skills (engine)
   ├── agents/         7 philosophy-specialized agents (3 dialogic + 4 production)
-  ├── references/     Knowledge base (glossaries, argument forms, philosophers-db)
+  ├── references/     方法论知识（glossaries, argument forms, taxonomies）
   └── shared/         Data contracts (12 JSON schemas + 5 report templates)
+Framework/     Framework 非执行层（外层仓库追踪）
+  ├── ARCHITECTURE.md 系统架构文档
+  ├── changelog.md    框架版本历史
+  └── lessons/        各论文 feedback-to-framework 的蒸馏
+Shared/        可分享的策展知识（外层仓库追踪）
+  └── philosophers-db/  49 位哲学家档案
+Private/       私有内容层（外层 gitignore；内层独立仓库，PDF 除外）
+  ├── Papers/{topic}/   每篇论文一个目录（手稿、refs.md、VERSIONS.md、
+  │                     feedback-to-framework.md、论文级 CLAUDE.md）
+  ├── bibliography/     文献总库（pdf/ 不进任何 git、analysis/、INDEX.md）
+  ├── concepts/         跨论文概念笔记
+  └── style/            个人写作样本（文风校准用）
+style/format/  格式模板（LaTeX/Word 模板，可分享，外层追踪）
 
 Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory\
   Session-persistent knowledge (user preferences, project feedback, references)
@@ -64,70 +73,78 @@ Each command file in `.claude/commands/` defines its skill composition, executio
 
 ## Workflow Conventions
 
-### Manuscripts (manuscript/)
-- Plain text writing; no markup languages
+### Papers (Private/Papers/{topic}/)
+- Plain text writing; no markup languages（终稿 LaTeX 以 .txt 存于同目录；编译时临时复制 .txt → .tex）
 - Writing in Chinese
-- Filenames use English kebab-case of paper topic
+- Directory & filenames use English kebab-case of paper topic
 
-**File conventions:**
+**Per-paper files:**
+- `CLAUDE.md` — 论文级约定 + 主题关键词（文献推荐匹配用）
+- `refs.md` — 论文级文献清单：`KEY | 角色(core-target/support/background) | 状态(cited/candidate/rejected) | 备注`，通过 KEY 指向文献总库 INDEX，零文件复制
 - `{topic}-draft.txt` — Working draft. Freely overwritten. Never versioned.
 - `{topic}-v{N}.txt` — Cut version. Created from draft when a trigger fires.
 - `{topic}-review.txt` — Review report.
-- `manuscript/VERSIONS.md` — Centralized version history. Every cut version MUST be documented here with date, triggers, and description.
+- `VERSIONS.md` — 本论文版本历史。Every cut version MUST be documented here with date, triggers, and description.
+- `feedback-to-framework.md` — 写作中发现的框架缺陷记录，定期蒸馏进 `Framework/lessons/`
 
 **Version cut process:** Copy `{topic}-draft.txt` → `{topic}-v{N}.txt` → document in `VERSIONS.md`. The draft persists as the working copy for the next round.
 
-### Papers (paper/)
-- Store complete LaTeX source with `.txt` extension
-- When compiling PDF, temporarily copy `.txt` → `.tex` then compile
-
-### Bibliography (bibliography/)
+### Bibliography (Private/bibliography/) — 文献总库，唯一真源
 
 ```
-bibliography/
-├── pdf/                              Original PDFs
+Private/bibliography/
+├── pdf/                              Original PDFs（不进任何 git——不可变二进制，可重新下载）
 ├── analysis/                         Paired analysis files ({Author-Title}.analysis.txt)
-└── INDEX.md                          Reference inventory with analysis levels
+├── summaries/                        Level 0.5 摘要（v0.5 落地）
+└── INDEX.md                          主清单（KEY、分析级别、topics 标签）
 ```
 
 **Analysis levels (progressive, append-only):**
-- Level 1: Argument reconstruction — *trigger: PDF added*
+- Level 0.5: Summary — 核心论题+论证路线+关键概念+论敌+topics — *trigger: PDF added (v0.5, phil-summarize)*
+- Level 1: Argument reconstruction — *trigger: selected as a paper dependency*
 - Level 2: + Implicit premises, charity audit, conceptual analysis, distinction tracking — *trigger: first citation in a manuscript*
 - Level 3: + Dialectical mapping, ontological commitment, modal analysis, domain-specific skills — *trigger: source becomes core target/dependency*
 
-### Citation Gate (Rule 2 enforcement)
-This is a model-executed behavioral rule. If a manuscript claim depends on analysis at Level N, but the source's `.analysis.txt` is only at Level N-1 or below → **BLOCK** and require analysis completion. No citation passes without a verified analysis backing it.
+**文献推荐三触发点**（模型执行）：(1) 入库时——新文献 topics ↔ 各论文 CLAUDE.md 主题关键词匹配；(2) 论文内工作时——phil:tutor 扫描 INDEX 中 topics 匹配但不在本论文 refs.md 的条目（跳过 rejected）；(3) 引文提取时——phil-citation-extract 输出 acquisition_candidates。
+
+### Citation Gate (Rule 2 enforcement, two-hop)
+This is a model-executed behavioral rule:
+1. **Hop 1**: 引用的 KEY 必须在本论文 `refs.md` 中登记
+2. **Hop 2**: If a manuscript claim depends on analysis at Level N, but the source's `.analysis.txt` is only at Level N-1 or below → **BLOCK** and require analysis completion. No citation passes without a verified analysis backing it.
 
 ## Common Operations
 
 ### Interactive shell commands
 Prefix with `!` to run in-session:
 ```
-!pdftotext "bibliography/xxx.pdf" -
-!wc -m manuscript/srinivasan-critique-draft.txt
+!pdftotext "Private/bibliography/pdf/xxx.pdf" -
+!wc -m "Private/Papers/srinivasan-critique/srinivasan-critique-draft.txt"
 ```
 
 ### PDF Processing Workflow
-1. Place PDF in `bibliography/pdf/`
+1. Place PDF in `Private/bibliography/pdf/`
 2. Use the `pdf` skill to extract text (**not** direct `pdftotext` CLI)
-3. Run `phil:reconstruct` → `bibliography/analysis/{Author-Title}.analysis.txt` (Level 1)
+3. Run `phil:reconstruct` → `Private/bibliography/analysis/{Author-Title}.analysis.txt` (Level 1)
 4. Escalate analysis level as needed per Citation Gate rules
 
 ### Manuscript Work Cycle
-1. **Draft** in `manuscript/{topic}-draft.txt`
+1. **Draft** in `Private/Papers/{topic}/{topic}-draft.txt`
 2. **Review** with `phil:review` → review report
 3. **Revise** draft → cut version when trigger fires
 4. **Version cut**: `cp draft.txt v{N}.txt` + update `VERSIONS.md`
 
 ### LaTeX Compilation
 ```bash
-cp paper/topic.txt paper/topic.tex && cd paper && pdflatex topic.tex && cd ..
+cd "Private/Papers/{topic}" && cp topic.txt topic.tex && pdflatex topic.tex
 ```
 
 ### Character count
 ```bash
-wc -m manuscript/{topic}.txt
+wc -m "Private/Papers/{topic}/{topic}-draft.txt"
 ```
+
+### Private 仓库提交
+论文内容的 git 操作在 `Private/` 内进行（独立仓库，私有 remote）。外层仓库永不追踪 Private/ 内容。
 
 ### Session Logging
 Session summaries are written to `history.txt` by the model at the end of each conversation, per the memory convention `session-summary-to-history`. The file is gitignored as a local log.
@@ -138,7 +155,7 @@ Session summaries are written to `history.txt` by the model at the end of each c
 
 **Glossaries & Taxonomies**: `.claude/references/` contains domain-specific reference files (glossary-metaphysics.md, glossary-metaethics.md, ontological-categories.md, causation-taxonomy.md, moral-realism-taxonomy.md, normativity-taxonomy.md, fallacy-catalog.md, modal-logic-primer.md, thought-experiment-templates.md).
 
-**Philosopher Database**: `.claude/references/philosophers-db/` — 49 philosophers across 3 domains (general/metaphysics/metaethics). Curated — may be cited.
+**Philosopher Database**: `Shared/philosophers-db/` — 49 philosophers across 3 domains (general/metaphysics/metaethics). Curated — may be cited.
 
 **Data Contracts**: `.claude/shared/` — 11 JSON schemas for cross-skill composability + 5 report templates in `.claude/shared/templates/`.
 
@@ -150,7 +167,7 @@ Write memories for: user preferences, project goals, substantive feedback, exter
 
 ## Architecture
 
-The complete system architecture is defined in `ARCHITECTURE.md` at the project root (0.3-alpha), built atop `academic-research-skills` v3.15.0 (external plugin — all `ars-*` capabilities require this plugin to be installed), covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
+The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.4-alpha), built atop `academic-research-skills` v3.15.0 (external plugin — all `ars-*` capabilities require this plugin to be installed), covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
 
 - **29 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
 - **7 Commands** — Composite orchestration in `.claude/commands/`

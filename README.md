@@ -2,7 +2,7 @@
 
 基于 Claude Code 的分析哲学研究与写作系统。提供从 PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.3-alpha  
+**版本**: 0.4-alpha  
 **语言**: Chinese（写作输出）/ English（技能定义与架构文档）  
 **构建于**: `academic-research-skills` v3.15.0
 
@@ -12,17 +12,18 @@
 
 ### 1. 放入参考文献
 
-将 PDF 放入 `bibliography/pdf/`，然后运行：
+将 PDF 放入 `Private/bibliography/pdf/`，然后运行：
 
 ```
 phil:reconstruct
 ```
 
-系统会提取文本、重构论证，生成分析文件到 `bibliography/analysis/`。分析分三级递进：
+系统会提取文本、重构论证，生成分析文件到 `Private/bibliography/analysis/`。分析分级递进：
 
 | Level | 内容 | 触发条件 |
 |-------|------|----------|
-| 1 | 论证重构 | PDF 添加时 |
+| 0.5 | 轻量摘要（论题+路线+概念+论敌+topics） | PDF 添加时（v0.5 落地） |
+| 1 | 论证重构 | 选定为论文依赖时 |
 | 2 | + 隐含前提、慈善审查、概念分析、区分追踪 | 首次在手稿中引用 |
 | 3 | + 辩证映射、本体论承诺、模态分析 | 成为核心论敌或关键依赖 |
 
@@ -45,32 +46,32 @@ phil:write revision    # 修订
 
 ## 项目结构
 
+**双仓库结构（v0.4）：隐私边界 = 仓库边界。** 本仓库只含可分享的框架；论文与文献在 `Private/`（gitignore，独立私有仓库）。
+
 ```
 Philosophical Writing/
-├── README.md                         # 本文件
-├── ARCHITECTURE.md                   # 系统架构文档 0.2.2-alpha
-├── bibliography/                     # 参考文献
-│   ├── pdf/                          #   原始 PDF
-│   ├── analysis/                     #   分析文件（每篇一个 .analysis.txt）
-│   ├── trails/                       #   引文追踪文件
-│   └── INDEX.md                      #   文献索引（含分析级别）
-├── manuscript/                       # 手稿
-│   ├── {topic}-draft.txt             #   工作草稿（自由覆写）
-│   ├── {topic}-v{N}.txt              #   切分版本（触发式）
-│   ├── {topic}-review.txt            #   审稿报告
-│   └── VERSIONS.md                   #   版本历史
-├── paper/                            # 最终论文（LaTeX .txt）
-├── style/                            # 个人文风与格式定制
-│   ├── writing/                      #   写作样文（用于文风校准）
-│   └── format/                       #   格式模板（LaTeX/Word/PDF）
-└── .claude/                          # Claude Code 配置
-    ├── settings.json                 #   权限 + hooks（提交 git）
-    ├── commands/                     #   7 个综合命令（phil:* 命名空间）
-    ├── rules/                        #   3 个行为规则模块
-    ├── skills/                       #   29 个哲学分析技能
-    ├── agents/                       #   7 个领域特化 agent
-    ├── references/                   #   知识库（术语表、论证形式、哲学家数据库）
-    └── shared/                       #   数据契约（11 JSON Schema + 模板）
+├── README.md                         # 本文件（外层仓库）
+├── .claude/                          # Framework 可执行层（外层仓库）
+│   ├── settings.json                 #   权限 + hooks（提交 git）
+│   ├── commands/                     #   7 个综合命令（phil:* 命名空间）
+│   ├── rules/                        #   3 个行为规则模块
+│   ├── skills/                       #   29 个哲学分析技能
+│   ├── agents/                       #   7 个领域特化 agent
+│   ├── references/                   #   方法论知识（术语表、论证形式、分类学）
+│   └── shared/                       #   数据契约（12 JSON Schema + 模板）
+├── Framework/                        # Framework 非执行层（外层仓库）
+│   ├── ARCHITECTURE.md               #   系统架构文档
+│   ├── changelog.md                  #   框架版本历史
+│   └── lessons/                      #   论文反馈蒸馏
+├── Shared/                           # 可分享策展知识（外层仓库）
+│   └── philosophers-db/              #   49 位哲学家档案
+├── style/format/                     # 格式模板（可分享，外层仓库）
+└── Private/                          # 私有内容层（gitignore；独立内层仓库）
+    ├── Papers/{topic}/               #   每篇论文一个目录：手稿 + refs.md +
+    │                                 #   VERSIONS.md + feedback-to-framework.md
+    ├── bibliography/                 #   文献总库（pdf/ 不进 git、analysis/、INDEX.md）
+    ├── concepts/                     #   跨论文概念笔记
+    └── style/                        #   个人写作样文（文风校准）
 ```
 
 ---
@@ -131,4 +132,4 @@ Philosophical Writing/
 
 ---
 
-*最后更新: 2026-07-12*
+*最后更新: 2026-07-14（v0.4 双仓库重构）*

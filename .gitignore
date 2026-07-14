@@ -15,10 +15,6 @@ Desktop.ini
 # Session log (mutated every session by hook — treat as local log)
 history.txt
 
-# Compiled LaTeX artifacts (keep source .txt only)
-paper/*.aux
-paper/*.log
-paper/*.out
-paper/*.toc
-paper/*.pdf
-paper/*.synctex.gz
+# Private content layer — papers, bibliography, personal style samples.
+# Versioned by its own inner git repo (Private/.git), never tracked here.
+Private/

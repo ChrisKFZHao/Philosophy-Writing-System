@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.3-alpha &emsp; **Status**: Alpha
+> **Version**: 0.4-alpha &emsp; **Status**: Alpha
 >
 > **Built atop `academic-research-skills` (v3.15.0)**
 > This system does not re-implement ARS's existing capabilities (literature search, paper writing, peer review, citation verification). Instead, it layers on top of ARS an **analytic-philosophy-specific methodological layer**.
@@ -194,11 +194,8 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   │   ├── disagreement-argument.md  # [New] Disagreement argument
 │   │   ├── regress-argument.md       # [New] Normative regress (Korsgaard)
 │   │   └── moral-supervenience.md    # [New] Moral supervenience argument
-│   └── philosophers-db/             # Philosopher archives (directory)
-│       ├── INDEX.md                  # Alphabetical index + cross-references
-│       ├── general/                  # General Philosophy (17 philosophers)
-│       ├── metaphysics/              # Metaphysics (14 philosophers)
-│       └── metaethics/               # Metaethics (17 philosophers)
+│   └── (philosophers-db moved to Shared/philosophers-db/ in v0.4 —
+│        curated, shareable knowledge lives outside .claude/)
 │
 ├── commands/
 │   ├── reconstruct.md                 # phil:reconstruct — Full-dimension text understanding (9-20 skills)
@@ -257,7 +254,7 @@ General Knowledge Cluster:
   ├── references/fallacy-catalog.md
   ├── references/argument-forms/ (general subset)
   ├── references/thought-experiment-templates.md (general subset)
-  └── references/philosophers-db/ (general subset)
+  └── Shared/philosophers-db/ (general subset)
 
 Metaphysics Knowledge Cluster:
   ├── references/glossary-metaphysics.md          # Core terminology
@@ -267,7 +264,7 @@ Metaphysics Knowledge Cluster:
   ├── references/causation-taxonomy.md            # Causal theories
   ├── references/argument-forms/ (metaphysics subset)
   ├── references/thought-experiment-templates.md (metaphysics subset)
-  └── references/philosophers-db/ (metaphysician subset)
+  └── Shared/philosophers-db/ (metaphysician subset)
 
 Metaethics Knowledge Cluster:
   ├── references/glossary-metaethics.md           # Core terminology
@@ -276,7 +273,7 @@ Metaethics Knowledge Cluster:
   ├── references/normativity-taxonomy.md          # Normativity theories
   ├── references/argument-forms/ (metaethics subset)
   ├── references/thought-experiment-templates.md (metaethics subset)
-  └── references/philosophers-db/ (metaethicist subset)
+  └── Shared/philosophers-db/ (metaethicist subset)
 ```
 
 #### Metaphysics Knowledge Dependency Details
@@ -337,7 +334,7 @@ Metaethics Knowledge Cluster:
 | `phil-premise-detect` | Discover hidden assumptions, implicit premises, unstated presuppositions | `fallacy-catalog`, all argument-forms |
 | `phil-counterexample` | Construct counterexamples targeting premises or the entire reasoning | All argument-forms |
 | `phil-conceptual-analysis` | Necessary/sufficient condition analysis, dimension extraction | `glossary-*`, `metaphysical-distinctions` |
-| `phil-citation-extract` | Extract and classify citations from a text by argumentative role, cross-reference with bibliography | `bibliography/INDEX.md` |
+| `phil-citation-extract` | Extract and classify citations from a text by argumentative role, cross-reference with bibliography | `Private/bibliography/INDEX.md` |
 
 **Contents** (P1 — Extended, including metaphysics- and metaethics-specific):
 
@@ -554,7 +551,7 @@ phil-intuition-pump
 
 phil-methodology
     ↑ depends on [phil-argument-reconstruct] (needs to know argument type to assess method)
-    ↑ references [references/philosophers-db/]
+    ↑ references [Shared/philosophers-db/]
 
 phil-contextualize
     ↑ independent (externally knowledge-intensive)
@@ -1241,7 +1238,7 @@ Files to create:
   references/glossary-<X>.md          # Glossary (mandatory)
   references/<X>-distinctions.md      # Core distinctions (recommended)
   references/argument-forms/<X-forms> # New argument forms (recommended)
-  references/philosophers-db/<X>.md   # Representative philosophers (recommended)
+  Shared/philosophers-db/<X>.md   # Representative philosophers (recommended)
 ```
 
 ### 10.3 Versioning Strategy
@@ -1516,7 +1513,8 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.3-alpha · Last updated 2026-07-12 · Merge: phil:tutor tutor agent + citation-extract skill; audit fix: schema wiring, dead link repair, agent pruning, hook removal*
+*Document version 0.4-alpha · Last updated 2026-07-14 · v0.4: dual-repo restructure (privacy boundary = repo boundary) — philosophers-db → Shared/, papers & bibliography → Private/ (inner private repo, PDFs untracked), per-paper refs.md + two-hop Citation Gate + literature recommendation trigger points*
+*Previous: 0.3-alpha · 2026-07-12 · Merge: phil:tutor tutor agent + citation-extract skill; audit fix: schema wiring, dead link repair, agent pruning, hook removal*
 *Built on academic-research-skills v3.15.0*
 *Phase 4 additions: Metaphysics + Metaethics knowledge dependency layers*
 *Phase 5 additions: 5 general Skills + 28 examples.md + 28 checklist.md + philosophers-db*
