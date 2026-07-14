@@ -1,5 +1,5 @@
 ---
-description: 哲学写作 — 调用 phil-writer agent，三种模式：outline（结构化大纲）、draft（逐节撰写）、revision（基于审稿修订）
+description: Philosophical writing — invokes the phil-writer agent with three modes: outline (structured outline), draft (section-by-section composition), revision (review-driven revision)
 ---
 
 # /phil:write
@@ -10,41 +10,41 @@ description: 哲学写作 — 调用 phil-writer agent，三种模式：outline�
 /phil:write <mode: outline|draft|revision> [context]
 ```
 
-## 定位
+## Role
 
-哲学论文写作。调用 `phil-writer` agent。
+Philosophical paper writing. Invokes the `phil-writer` agent.
 
-## 编排
+## Orchestration
 
-| 组件 | 说明 |
+| Component | Description |
 |------|------|
 | Agent | `phil-writer` |
-| 模式 | outline（结构化大纲） / draft（逐节撰写） / revision（基于审稿修订） |
+| Modes | outline (structured outline) / draft (section-by-section composition) / revision (review-driven revision) |
 
-### Outline 模式
-- 输入：论题或研究问题 + 分析上下文
-- 输出：结构化大纲（论题、章节规划、区分清单、预期反驳）
+### Outline mode
+- Input: thesis or research question + analysis context
+- Output: structured outline (thesis, section plan, distinction inventory, anticipated objections)
 
-### Draft 模式
-- 输入：已批准的大纲 + 分析输出
-- 输出：完整手稿章节，论证优先的散文，中文学术规范
+### Draft mode
+- Input: approved outline + analysis outputs
+- Output: complete manuscript sections, argument-first prose, Chinese academic conventions
 
-### Revision 模式
-- 输入：手稿 + 审稿人反馈
-- 输出：修订稿 + 修改日志，按类型优先级排序（结构 → 概念 → 辩证 → 模态 → 风格）
+### Revision mode
+- Input: manuscript + reviewer feedback
+- Output: revised draft + change log, prioritized by type (structure → concepts → dialectic → modality → style)
 
-## 7 个哲学散文标准
+## 7 Standards of Philosophical Prose
 
-1. 论证透明度
-2. 概念精确性
-3. 模态准确性
-4. 辩证定位
-5. 区分保存
-6. 反例抵御
-7. 本体论明晰性
+1. Argumentative transparency
+2. Conceptual precision
+3. Modal accuracy
+4. Dialectical positioning
+5. Distinction preservation
+6. Counterexample resilience
+7. Ontological clarity
 
 ## Notes
 
-- 写作输出使用中文
-- 建议先运行分析技能（`/phil:reconstruct` + `/phil:evaluate`）再写作
-- 可选择性调用 ARS 功能（citation-check、format-convert，需外部 ARS 插件）做最后打磨
+- Write the writing output in Chinese
+- Recommended: run the analysis skills (`/phil:reconstruct` + `/phil:evaluate`) before writing
+- Optionally invoke ARS capabilities (citation-check, format-convert; requires the external ARS plugin) for final polishing

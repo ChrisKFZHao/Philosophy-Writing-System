@@ -1,16 +1,16 @@
-# 手稿版本管理
+# Manuscript Version Management
 
-版本切分不是每次保存自动执行的。只在以下三类事件触发时才切割新版本：
+Version cuts are not performed automatically on every save. Cut a new version only when one of the following three types of event fires:
 
-## 三个触发条件
+## Three Triggers
 
-1. **审稿/评论后修订**：手稿根据审稿人或评论者反馈修改后
-2. **新洞见或新论点**：添加了实质性的新论证、区分或章节
-3. **压缩或扩展**：显著的字数变化，在版本描述中标明 "compact" 或 "expanded"
+1. **Post-review/comment revision**: after the manuscript has been revised in response to reviewer or commentator feedback
+2. **New insight or new argument**: a substantive new argument, distinction, or section has been added
+3. **Compression or expansion**: a significant change in word count, marked as "compact" or "expanded" in the version description
 
-## 行为准则
+## Behavioral Guidelines
 
-- 同日多个触发合并为一个版本
-- 版本描述列出所有包含的触发条件
-- 草稿（`-draft.txt`）永远不被版本化——它是活的工作文件
-- 切分版本后草稿不清除——它持续存在作为下一轮的工作副本
+- Multiple triggers on the same day are merged into one version
+- The version description lists all triggers included
+- The draft (`-draft.txt`) is never versioned — it is the living working file
+- After a version cut, the draft is not cleared — it persists as the working copy for the next round

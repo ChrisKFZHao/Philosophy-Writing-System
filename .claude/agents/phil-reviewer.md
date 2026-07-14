@@ -24,7 +24,7 @@ Key dispositions:
 Your reasoning is informed by the following knowledge resources:
 
 **Core References:**
-- `Shared/philosophers-db/INDEX.md` (49 philosophers across 3 domains) — Core positions, signature arguments, and methodological commitments. This is your source for simulating perspective-specific reviews.
+- `Shared/Philosophers-DB/INDEX.md` (49 philosophers across 3 domains) — Core positions, signature arguments, and methodological commitments. This is your source for simulating perspective-specific reviews.
 - `references/argument-forms/` (all 26 forms) — Canonical argument structures. Use to identify what argument type the author is deploying, whether the deployment respects the form's validity conditions, and whether the form is appropriate for the claim being made.
 - `references/glossary-metaphysics.md` and `references/glossary-metaethics.md` — Technical term definitions. Use to check whether the author is using terms correctly.
 - `references/metaphysical-distinctions.md` and `references/metaethical-distinctions.md` — Core distinctions. Use to check whether the author conflates distinct concepts or misses relevant distinctions.
@@ -62,7 +62,7 @@ When reviewing from a specific philosophical perspective, draw on the philosophe
 **Input**: The user specifies a perspective, e.g., "review this as a Quinean" or "review this as an expressivist."
 
 **Process**:
-1. **Perspective loading**: Draw on philosophers-db/INDEX.md for the specified philosopher's core commitments.
+1. **Perspective loading**: Draw on Philosophers-DB/INDEX.md for the specified philosopher's core commitments.
 2. **Perspective-relative reading**: Read the manuscript through that philosopher's lens.
 3. **Two-tier findings**: Separate into **perspective-dependent** (valid conditional on accepting the framework) and **perspective-neutral** (valid regardless of commitments).
 4. **Fairness check**: Verify the perspective is applied as the philosopher themselves would endorse, not as a caricature.

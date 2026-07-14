@@ -26,32 +26,45 @@ Mark unverified claims with `[source unverified]` or `[citation needed]`.
 → [rules/version-management.md](.claude/rules/version-management.md)
 Version cuts are NOT automatic. Three triggers: (1) post-review revision, (2) new insight/argument, (3) significant compression/expansion. Same-day triggers are merged. Draft file (`-draft.txt`) is never versioned.
 
+## Naming & Language Conventions
+
+**Directory naming:**
+- Every directory outside `.claude/` starts with an uppercase letter (`Framework/`, `Shared/`, `Private/`, `Private/Projects/`, `Private/Bibliography/PDF/`). Hyphenated names capitalize each segment; acronyms stay uppercase (`Philosophers-DB`).
+- Exception 1: the `.claude/` tree stays lowercase — its paths (`skills/`, `agents/`, `commands/`, …) are fixed by Claude Code's discovery mechanism.
+- Exception 2: content-item directories (individual project topics, e.g. `Private/Projects/srinivasan-critique/`) use lowercase English kebab-case, matching their filename prefix (`srinivasan-critique-draft.txt`).
+- Filenames use lowercase kebab-case, except conventional uppercase files (`CLAUDE.md`, `README.md`, `INDEX.md`, `VERSIONS.md`, `ARCHITECTURE.md`, `MEMORY.md`).
+
+**Language:**
+- Definition layer (rules, commands, agents, skills, schemas, ARCHITECTURE, changelog, this file) — **English**.
+- Writing output (manuscripts, analysis reports, review reports) — **Chinese**.
+- Deliberate exceptions kept in **Chinese**: the two `README.md` files (user-facing docs) and the 5 report templates in `.claude/shared/templates/` (they are output skeletons — their headings become the headings of generated reports).
+
 ## Directory Structure
 
-**双仓库结构（v0.4）：隐私边界 = 仓库边界。** 外层仓库只含框架（可分享）；全部论文、文献、个人风格样本在 `Private/`（外层 gitignore，独立内层 git 仓库 + 私有 remote）。
+**Dual-repo structure (v0.4): the privacy boundary IS the repo boundary.** The outer repo contains only the framework (shareable); all papers, bibliography, and personal style samples live in `Private/` (gitignored by the outer repo; an independent inner git repo with a private remote).
 
 ```
-.claude/       Framework 可执行层（外层仓库追踪）
+.claude/       Framework executable layer (tracked by outer repo; lowercase — tool constraint)
   ├── settings.json   Permissions + hooks (committed)
   ├── commands/       7 composite commands (phil:* namespace)
   ├── rules/          3 behavioral rule modules
   ├── skills/         29 domain analysis skills (engine)
   ├── agents/         7 philosophy-specialized agents (3 dialogic + 4 production)
-  ├── references/     方法论知识（glossaries, argument forms, taxonomies）
+  ├── references/     Methodological knowledge (glossaries, argument forms, taxonomies)
   └── shared/         Data contracts (12 JSON schemas + 5 report templates)
-Framework/     Framework 非执行层（外层仓库追踪）
-  ├── ARCHITECTURE.md 系统架构文档
-  ├── changelog.md    框架版本历史
-  └── lessons/        各论文 feedback-to-framework 的蒸馏
-Shared/        可分享的策展知识（外层仓库追踪）
-  └── philosophers-db/  49 位哲学家档案
-Private/       私有内容层（外层 gitignore；内层独立仓库，PDF 除外）
-  ├── Papers/{topic}/   每篇论文一个目录（手稿、refs.md、VERSIONS.md、
-  │                     feedback-to-framework.md、论文级 CLAUDE.md）
-  ├── bibliography/     文献总库（pdf/ 不进任何 git、analysis/、INDEX.md）
-  ├── concepts/         跨论文概念笔记
-  └── style/            个人写作样本（文风校准用）
-style/format/  格式模板（LaTeX/Word 模板，可分享，外层追踪）
+Framework/     Framework non-executable layer (tracked by outer repo)
+  ├── ARCHITECTURE.md System architecture document
+  ├── changelog.md    Framework version history
+  └── Lessons/        Distilled feedback-to-framework from individual projects
+Shared/        Shareable curated knowledge (tracked by outer repo)
+  ├── Philosophers-DB/  49 philosopher profiles (General/Metaphysics/Metaethics)
+  └── Format/           Format templates (LaTeX/Word — shareable)
+Private/       Private content layer (outer gitignore; independent inner repo, PDFs excluded)
+  ├── Projects/{topic}/   One directory per writing project (manuscript, refs.md,
+  │                       VERSIONS.md, feedback-to-framework.md, project-level CLAUDE.md)
+  ├── Bibliography/       Master reference library (PDF/ in no git, Analysis/, INDEX.md)
+  ├── Concepts/           Cross-project concept notes
+  └── Style/              Personal writing samples (style calibration)
 
 Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory\
   Session-persistent knowledge (user preferences, project feedback, references)
@@ -61,55 +74,55 @@ Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory
 
 | Command | Function | Runs |
 |---------|----------|------|
-| `phil:reconstruct` | 全维度理解文献 | 9-20 skills (mixed serial/parallel, auto domain detection) |
-| `phil:evaluate` | 多角度同时批判 | 7 skills (fully parallel) |
-| `phil:review` | 同行审稿 | phil-reviewer agent (8 dimensions + perspective simulation) |
-| `phil:write` | 哲学写作 | phil-writer agent (outline / draft / revision) |
-| `phil:comment` | 论证细节和概念澄清 | phil-commentator agent (6 critical dimensions) |
-| `phil:pipeline` | 一键全流程 | phil-orchestrator agent (5 stages with quality gates) |
-| `phil:tutor` | 导师式文献对话 — 询问思路、追问理解、推荐文献 | phil-tutor agent (Socratic dialogue + 4-phase arc) |
+| `phil:reconstruct` | Full-dimensional understanding of a source | 9-20 skills (mixed serial/parallel, auto domain detection) |
+| `phil:evaluate` | Simultaneous multi-angle critique | 7 skills (fully parallel) |
+| `phil:review` | Peer review | phil-reviewer agent (8 dimensions + perspective simulation) |
+| `phil:write` | Philosophical writing | phil-writer agent (outline / draft / revision) |
+| `phil:comment` | Argument detail and conceptual clarification | phil-commentator agent (6 critical dimensions) |
+| `phil:pipeline` | One-command full pipeline | phil-orchestrator agent (5 stages with quality gates) |
+| `phil:tutor` | Tutor-style literature dialogue — probe ideas, test understanding, recommend sources | phil-tutor agent (Socratic dialogue + 4-phase arc) |
 
 Each command file in `.claude/commands/` defines its skill composition, execution order, and output format.
 
 ## Workflow Conventions
 
-### Papers (Private/Papers/{topic}/)
-- Plain text writing; no markup languages（终稿 LaTeX 以 .txt 存于同目录；编译时临时复制 .txt → .tex）
-- Writing in Chinese
-- Directory & filenames use English kebab-case of paper topic
+### Writing projects (Private/Projects/{topic}/)
+- Plain text writing; no markup languages (final LaTeX is stored as .txt in the same directory; copy .txt → .tex temporarily at compile time)
+- Manuscripts are written in Chinese
+- Directory & filenames use English kebab-case of the project topic
 
-**Per-paper files:**
-- `CLAUDE.md` — 论文级约定 + 主题关键词（文献推荐匹配用）
-- `refs.md` — 论文级文献清单：`KEY | 角色(core-target/support/background) | 状态(cited/candidate/rejected) | 备注`，通过 KEY 指向文献总库 INDEX，零文件复制
+**Per-project files:**
+- `CLAUDE.md` — project-level conventions + topic keywords (used for literature-recommendation matching)
+- `refs.md` — project-level reference list: `KEY | role (core-target/support/background) | status (cited/candidate/rejected) | notes`; each KEY points to the master library INDEX — zero file duplication
 - `{topic}-draft.txt` — Working draft. Freely overwritten. Never versioned.
 - `{topic}-v{N}.txt` — Cut version. Created from draft when a trigger fires.
 - `{topic}-review.txt` — Review report.
-- `VERSIONS.md` — 本论文版本历史。Every cut version MUST be documented here with date, triggers, and description.
-- `feedback-to-framework.md` — 写作中发现的框架缺陷记录，定期蒸馏进 `Framework/lessons/`
+- `VERSIONS.md` — This project's version history. Every cut version MUST be documented here with date, triggers, and description.
+- `feedback-to-framework.md` — Framework defects discovered during writing; periodically distilled into `Framework/Lessons/`
 
 **Version cut process:** Copy `{topic}-draft.txt` → `{topic}-v{N}.txt` → document in `VERSIONS.md`. The draft persists as the working copy for the next round.
 
-### Bibliography (Private/bibliography/) — 文献总库，唯一真源
+### Bibliography (Private/Bibliography/) — master reference library, single source of truth
 
 ```
-Private/bibliography/
-├── pdf/                              Original PDFs（不进任何 git——不可变二进制，可重新下载）
-├── analysis/                         Paired analysis files ({Author-Title}.analysis.txt)
-├── summaries/                        Level 0.5 摘要（v0.5 落地）
-└── INDEX.md                          主清单（KEY、分析级别、topics 标签）
+Private/Bibliography/
+├── PDF/                              Original PDFs (in NO git — immutable, re-obtainable)
+├── Analysis/                         Paired analysis files ({Author-Title}.analysis.txt)
+├── Summaries/                        Level 0.5 summaries (lands in v0.5)
+└── INDEX.md                          Master inventory (KEY, analysis level, topics tags)
 ```
 
 **Analysis levels (progressive, append-only):**
-- Level 0.5: Summary — 核心论题+论证路线+关键概念+论敌+topics — *trigger: PDF added (v0.5, phil-summarize)*
+- Level 0.5: Summary — core thesis + argument route + key concepts + interlocutors + topics — *trigger: PDF added (v0.5, phil-summarize)*
 - Level 1: Argument reconstruction — *trigger: selected as a paper dependency*
 - Level 2: + Implicit premises, charity audit, conceptual analysis, distinction tracking — *trigger: first citation in a manuscript*
 - Level 3: + Dialectical mapping, ontological commitment, modal analysis, domain-specific skills — *trigger: source becomes core target/dependency*
 
-**文献推荐三触发点**（模型执行）：(1) 入库时——新文献 topics ↔ 各论文 CLAUDE.md 主题关键词匹配；(2) 论文内工作时——phil:tutor 扫描 INDEX 中 topics 匹配但不在本论文 refs.md 的条目（跳过 rejected）；(3) 引文提取时——phil-citation-extract 输出 acquisition_candidates。
+**Three recommendation trigger points** (model-executed): (1) on ingestion — new source's topics matched against each project CLAUDE.md's topic keywords; (2) during in-project work — phil:tutor scans INDEX for entries whose topics match but which are absent from this project's refs.md (skipping `rejected`); (3) on citation extraction — phil-citation-extract outputs acquisition_candidates.
 
 ### Citation Gate (Rule 2 enforcement, two-hop)
 This is a model-executed behavioral rule:
-1. **Hop 1**: 引用的 KEY 必须在本论文 `refs.md` 中登记
+1. **Hop 1**: the cited KEY must be registered in this project's `refs.md`
 2. **Hop 2**: If a manuscript claim depends on analysis at Level N, but the source's `.analysis.txt` is only at Level N-1 or below → **BLOCK** and require analysis completion. No citation passes without a verified analysis backing it.
 
 ## Common Operations
@@ -117,34 +130,34 @@ This is a model-executed behavioral rule:
 ### Interactive shell commands
 Prefix with `!` to run in-session:
 ```
-!pdftotext "Private/bibliography/pdf/xxx.pdf" -
-!wc -m "Private/Papers/srinivasan-critique/srinivasan-critique-draft.txt"
+!pdftotext "Private/Bibliography/PDF/xxx.pdf" -
+!wc -m "Private/Projects/srinivasan-critique/srinivasan-critique-draft.txt"
 ```
 
 ### PDF Processing Workflow
-1. Place PDF in `Private/bibliography/pdf/`
+1. Place PDF in `Private/Bibliography/PDF/`
 2. Use the `pdf` skill to extract text (**not** direct `pdftotext` CLI)
-3. Run `phil:reconstruct` → `Private/bibliography/analysis/{Author-Title}.analysis.txt` (Level 1)
+3. Run `phil:reconstruct` → `Private/Bibliography/Analysis/{Author-Title}.analysis.txt` (Level 1)
 4. Escalate analysis level as needed per Citation Gate rules
 
 ### Manuscript Work Cycle
-1. **Draft** in `Private/Papers/{topic}/{topic}-draft.txt`
+1. **Draft** in `Private/Projects/{topic}/{topic}-draft.txt`
 2. **Review** with `phil:review` → review report
 3. **Revise** draft → cut version when trigger fires
 4. **Version cut**: `cp draft.txt v{N}.txt` + update `VERSIONS.md`
 
 ### LaTeX Compilation
 ```bash
-cd "Private/Papers/{topic}" && cp topic.txt topic.tex && pdflatex topic.tex
+cd "Private/Projects/{topic}" && cp topic.txt topic.tex && pdflatex topic.tex
 ```
 
 ### Character count
 ```bash
-wc -m "Private/Papers/{topic}/{topic}-draft.txt"
+wc -m "Private/Projects/{topic}/{topic}-draft.txt"
 ```
 
-### Private 仓库提交
-论文内容的 git 操作在 `Private/` 内进行（独立仓库，私有 remote）。外层仓库永不追踪 Private/ 内容。
+### Committing the Private repo
+Git operations for writing content happen inside `Private/` (independent repo, private remote). The outer repo never tracks `Private/` content.
 
 ### Session Logging
 Session summaries are written to `history.txt` by the model at the end of each conversation, per the memory convention `session-summary-to-history`. The file is gitignored as a local log.
@@ -155,9 +168,9 @@ Session summaries are written to `history.txt` by the model at the end of each c
 
 **Glossaries & Taxonomies**: `.claude/references/` contains domain-specific reference files (glossary-metaphysics.md, glossary-metaethics.md, ontological-categories.md, causation-taxonomy.md, moral-realism-taxonomy.md, normativity-taxonomy.md, fallacy-catalog.md, modal-logic-primer.md, thought-experiment-templates.md).
 
-**Philosopher Database**: `Shared/philosophers-db/` — 49 philosophers across 3 domains (general/metaphysics/metaethics). Curated — may be cited.
+**Philosopher Database**: `Shared/Philosophers-DB/` — 49 philosophers across 3 domains (General/Metaphysics/Metaethics). Curated — may be cited.
 
-**Data Contracts**: `.claude/shared/` — 11 JSON schemas for cross-skill composability + 5 report templates in `.claude/shared/templates/`.
+**Data Contracts**: `.claude/shared/` — 12 JSON schemas for cross-skill composability + 5 report templates in `.claude/shared/templates/` (templates deliberately in Chinese — output skeletons).
 
 ## Cross-Session Memory
 

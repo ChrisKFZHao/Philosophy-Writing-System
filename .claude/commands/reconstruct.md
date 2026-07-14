@@ -1,5 +1,5 @@
 ---
-description: 全维度理解哲学文献 — 同时运行论证重构、慈善审查、隐含前提、概念分析、区分追踪、思想实验、模态分析、脉络化，并自动检测领域触发形而上学/元伦理学专项分析
+description: Full-dimensional comprehension of philosophical texts — simultaneously runs argument reconstruction, charity audit, implicit premise detection, conceptual analysis, distinction tracking, thought experiment analysis, modal analysis, and contextualization, with automatic domain detection triggering specialized metaphysics/metaethics analyses
 ---
 
 # /phil:reconstruct
@@ -10,63 +10,63 @@ description: 全维度理解哲学文献 — 同时运行论证重构、慈善�
 /phil:reconstruct <text>
 ```
 
-或先提供文本再触发 `/phil:reconstruct`。
+Or provide the text first, then trigger `/phil:reconstruct`.
 
-## 定位
+## Role
 
-全维度理解他人文献。一次性运行所有"理解"层面的分析技能，输出集成的论证理解报告。
+Full-dimensional comprehension of others' texts. Runs all "understanding"-level analysis skills in a single pass and outputs an integrated argument-comprehension report.
 
-## 编排的技能
+## Orchestrated Skills
 
-按依赖关系分阶段执行，每个阶段内技能可并行：
+Executed in stages according to dependencies; skills within a stage may run in parallel:
 
-### 阶段 1：核心论证分析（串行，有强依赖）
-| 序号 | 技能 | 依赖 |
+### Stage 1: Core Argument Analysis (serial, strong dependencies)
+| # | Skill | Depends on |
 |------|------|------|
-| 1 | `phil-argument-reconstruct` | 无 — 必须先做 |
-| 2 | `phil-charity-check` | 1 的输出（需要重构结果才能审计慈善性） |
-| 3 | `phil-premise-detect` | 2 的输出（慈善版本确定后才能找隐含前提） |
-| 4 | `phil-modal-arg` | 1 的输出（需要重构结果判断模态结构） |
+| 1 | `phil-argument-reconstruct` | None — must run first |
+| 2 | `phil-charity-check` | Output of 1 (the reconstruction is needed to audit charity) |
+| 3 | `phil-premise-detect` | Output of 2 (implicit premises can only be identified once the charitable version is fixed) |
+| 4 | `phil-modal-arg` | Output of 1 (the reconstruction is needed to assess modal structure) |
 
-### 阶段 2：概念与实验分析（并行）
-| 技能 | 依赖 |
+### Stage 2: Conceptual and Experimental Analysis (parallel)
+| Skill | Depends on |
 |------|------|
-| `phil-conceptual-analysis` | 1 的输出（需要重构结果定位关键概念） |
-| `phil-distinction-track` | 1 的输出 |
-| `phil-thought-experiment` | 1 的输出 |
-| `phil-intuition-pump` | 1 的输出 |
+| `phil-conceptual-analysis` | Output of 1 (the reconstruction is needed to locate key concepts) |
+| `phil-distinction-track` | Output of 1 |
+| `phil-thought-experiment` | Output of 1 |
+| `phil-intuition-pump` | Output of 1 |
 
-### 阶段 3：脉络化（串行）
-| 技能 | 依赖 |
+### Stage 3: Contextualization (serial)
+| Skill | Depends on |
 |------|------|
-| `phil-contextualize` | 阶段 1-2 全部完成后，基于完整理解进行脉络定位 |
+| `phil-contextualize` | After Stages 1-2 are complete; contextual positioning based on the full understanding |
 
-### 阶段 4：自动领域检测（按需触发）
-根据文本内容自动检测并触发以下技能：
-- **形而上学触发**（ontological/identity/grounding/conceivability/causation/essence/natural-kind 语言）：运行对应技能
-- **元伦理学触发**（moral/normative/reasons/obligation 语言）：运行对应技能
+### Stage 4: Automatic Domain Detection (triggered as needed)
+Automatically detect and trigger the following skills based on the text's content:
+- **Metaphysics triggers** (ontological/identity/grounding/conceivability/causation/essence/natural-kind vocabulary): run the corresponding skills
+- **Metaethics triggers** (moral/normative/reasons/obligation vocabulary): run the corresponding skills
 
-领域检测逻辑：
-- 扫描文本关键词 → 列出触发的领域 → 报告给用户确认 → 运行对应技能
+Domain detection logic:
+- Scan the text for keywords → list the triggered domains → report to the user for confirmation → run the corresponding skills
 
-## 输出格式
+## Output Format
 
-生成集成的论证理解报告（结构遵循 `analysis-report-schema.json`），包含以下章节：
+Generate an integrated argument-comprehension report (structure follows `analysis-report-schema.json`) containing the following sections:
 
-1. **执行摘要**：文本核心主张、论证类型、逻辑结构概要
-2. **论证重构**：编号前提-结论链、隐含前提标注、逻辑形式
-3. **慈善审查**：重构的慈善性评估、替代解读
-4. **概念地图**：关键概念及其定义、概念间的关系网络
-5. **区分索引**：文本中所有概念区分的清单与分析
-6. **思想实验与直觉泵**：结构解构与论证力评估
-7. **模态评估**：模态主张的逻辑结构分析
-8. **脉络定位**：文本在辩论传统中的位置
-9. **领域专项**（按需）：本体论承诺清单 / 元伦理立场分析
-10. **开放问题**：待澄清的概念、待补全的前提
+1. **Executive summary**: the text's core thesis, argument type, and an overview of its logical structure
+2. **Argument reconstruction**: numbered premise-conclusion chains, implicit premises flagged, logical form
+3. **Charity audit**: assessment of the reconstruction's charitableness, alternative readings
+4. **Concept map**: key concepts and their definitions, the network of relations among concepts
+5. **Distinction index**: inventory and analysis of all conceptual distinctions in the text
+6. **Thought experiments and intuition pumps**: structural deconstruction and assessment of argumentative force
+7. **Modal assessment**: analysis of the logical structure of modal claims
+8. **Contextual positioning**: the text's place within the dialectical tradition
+9. **Domain-specific analysis** (as needed): ontological commitment inventory / metaethical position analysis
+10. **Open questions**: concepts awaiting clarification, premises awaiting completion
 
 ## Notes
 
-- 所有输出使用中文（项目约定）
-- 领域检测是自动的；明确报告触发了哪些领域、激活了哪些技能
-- 此命令的输出是 `/phil:evaluate` 和 `/phil:write draft` 的主要输入
-- 阶段 1 不可并行（有强依赖），阶段 2 内部可并行
+- Write all output in Chinese (project convention)
+- Domain detection is automatic; explicitly report which domains were triggered and which skills were activated
+- This command's output is the primary input to `/phil:evaluate` and `/phil:write draft`
+- Stage 1 cannot be parallelized (strong dependencies); Stage 2 may run in parallel internally

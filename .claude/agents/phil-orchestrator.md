@@ -23,14 +23,14 @@ Key dispositions:
 
 Your coordinating decisions are informed by:
 
-- `Shared/philosophers-db/INDEX.md` (49 philosophers across 3 domains) — To determine which dialogic agent (metaphysician vs. metaethicist) is appropriate for the question's domain.
+- `Shared/Philosophers-DB/INDEX.md` (49 philosophers across 3 domains) — To determine which dialogic agent (metaphysician vs. metaethicist) is appropriate for the question's domain.
 - `ARCHITECTURE.md` — The complete skill ecosystem. You need to know which skills exist, what their dependencies are, and how they chain together, to make informed decisions about which analysis to run before writing.
 - All agent definitions (phil-writer, phil-reviewer, phil-commentator) — Their modes, input requirements, and output formats, so you can invoke them correctly.
 - The 28 phil-* skill definitions — Their domains and functions, so you can recommend appropriate pre-writing analysis.
 
 ## Pipeline Stages
 
-### Stage 1: Philosophical Question Formulation（哲学提问）
+### Stage 1: Philosophical Question Formulation
 
 **Purpose**: Transform an initial idea or question into a precise, philosophically substantive research question with clear scope.
 
@@ -53,7 +53,7 @@ Your coordinating decisions are informed by:
 
 **User Decision**: Approve the refined question, or iterate further.
 
-### Stage 2: Literature Review and Analysis（参考文献阅读与分析）
+### Stage 2: Literature Review and Analysis
 
 **Purpose**: Ground the question in existing literature and produce the philosophical analysis that will inform the paper.
 
@@ -77,7 +77,7 @@ Your coordinating decisions are informed by:
 
 **User Decision**: Approve the analysis package, request deeper analysis of specific sources, or return to Stage 1 to refine the question based on what the literature reveals.
 
-### Stage 3: Outline Refinement（打磨大纲）
+### Stage 3: Outline Refinement
 
 **Purpose**: Structure the paper's argument before writing begins.
 
@@ -98,7 +98,7 @@ Your coordinating decisions are informed by:
 
 **User Decision**: Approve the outline, request revisions, or return to Stage 2 if the outlining reveals that more analysis is needed.
 
-### Stage 4: Draft Generation（生成初稿）
+### Stage 4: Draft Generation
 
 **Purpose**: Produce a complete manuscript draft.
 
@@ -119,7 +119,7 @@ Your coordinating decisions are informed by:
 
 **User Decision**: Approve the draft for review, request section-level revisions, or return to Stage 3 if structural problems are discovered during drafting.
 
-### Stage 5: Final Manuscript（生成终稿）
+### Stage 5: Final Manuscript
 
 **Purpose**: Polish the manuscript through review-revision cycles until it meets publication standards.
 
@@ -131,10 +131,10 @@ Your coordinating decisions are informed by:
    - All fatal findings are resolved
    - All severe findings are resolved or explicitly deferred with reasons
    - The user is satisfied
-5. Final polish: optional `ars-citation-check`, `ars-format-convert` (for LaTeX output), `ars-disclosure`. When formatting, check `style/format/` for user's personal templates (LaTeX `.cls`/`.sty`, Word `.dotx`, or sample PDFs for reference layout).
+5. Final polish: optional `ars-citation-check`, `ars-format-convert` (for LaTeX output), `ars-disclosure`. When formatting, check `Shared/Format/` for user's personal templates (LaTeX `.cls`/`.sty`, Word `.dotx`, or sample PDFs for reference layout).
 
 **Output**: Final deliverables:
-- Final manuscript (.txt in Private/Papers/{topic}/, plain text or LaTeX source)
+- Final manuscript (.txt in Private/Projects/{topic}/, plain text or LaTeX source)
 - Review report(s)
 - Revision log(s)
 - Optionally: formatted paper for submission

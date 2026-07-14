@@ -1,0 +1,17 @@
+# Schaffer, Jonathan (contemporary)
+- **Tradition**: Analytic metaphysics; grounding; monism
+- **Major Works**: "Monism: The Priority of the Whole" (2010), "On What Grounds What" (2009), "The Ground Between the Gaps" (2017), "Spacetime the One Substance" (2009)
+- **Key Positions**:
+  - Priority monism: the whole cosmos is the fundamental concrete object; its proper parts are derivative and dependent on the whole
+  - Grounding as metaphysical priority: grounding is the relation of non-causal metaphysical dependence; it imposes a hierarchical structure on reality with the fundamental at the base
+  - Perdurantism and the B-theory of time: persistence is through temporal parts; time is a dimension analogous to space without objective passage
+  - Metaphysical foundationalism: the grounding hierarchy is well-founded; there is a fundamental level of reality that grounds everything else
+  - Causation is a contrastive relation: causation relates contrasts (c rather than C* causes e rather than E*)
+- **Key Arguments**:
+  - The argument for priority monism from quantum entanglement: quantum mechanics reveals the cosmos is an entangled whole; the properties of the whole are not reducible to the properties of its parts, suggesting the whole is metaphysically prior
+  - The argument for grounding structure: without grounding, we lack a metaphysical model capturing the layered structure of reality; supervenience is too coarse-grained to capture explanatory direction
+  - The tiling argument for monism: every existence pluralism faces the tiling problem -- how do independent basic entities combine to form a unified cosmos? Monism avoids this by treating the cosmos as the sole fundamental entity
+- **Relevance**: `phil-grounding-check` (grounding as the central metaphysical relation and its structural properties), `phil-identity-persistence` (perdurantism and temporal parts), `phil-natural-kind-analyze` (monist approach to natural kinds as derivative structures), `phil-ontological-commitment` (hierarchical ontology and the shift from existence questions to fundamentality questions)
+- **Related**: Lewis (Schaffer rejects Humean supervenience in favor of grounded structure; Schaffer's monism is a rival to Lewis's unrestricted composition); Fine (joint development of grounding theory; Fine provides the logical toolkit for grounding); Spinoza (historical precedent for priority monism in substance metaphysics); Armstrong (rival on fundamental structure -- Schaffer's monism vs. Armstrong's pluralism of states of affairs)
+
+*Source: Philosophers-DB · Domain: Metaphysics*

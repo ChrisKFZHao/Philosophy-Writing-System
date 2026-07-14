@@ -1,5 +1,5 @@
 ---
-description: 深度哲学评论 — 调用 phil-commentator agent，聚焦论证细节：未明示假设、替代解读、缺失区分、隐藏承诺、辩证盲点
+description: In-depth philosophical commentary — invokes the phil-commentator agent, focusing on argumentative detail: unstated assumptions, alternative readings, missing distinctions, hidden commitments, dialectical blind spots
 ---
 
 # /phil:comment
@@ -10,35 +10,35 @@ description: 深度哲学评论 — 调用 phil-commentator agent，聚焦论证
 /phil:comment <argument or text>
 ```
 
-## 定位
+## Positioning
 
-深度批判性参与，聚焦**论证细节和概念澄清**。
+Deep critical engagement, focused on **argumentative detail and conceptual clarification**.
 
-## 编排
+## Orchestration
 
-| 组件 | 说明 |
+| Component | Description |
 |------|------|
 | Agent | `phil-commentator` |
 
-## Agent 关注的维度
+## Dimensions the Agent Attends To
 
-1. **未明示假设**：论证依赖于哪些未陈述的前提？
-2. **替代解读**：是否存在其他同样合理甚至更强的解读？
-3. **缺失的区分**：哪些概念区分能改变论证的效力但没有被作者考虑？
-4. **未辩护的步骤**：哪些推论步骤缺乏足够的支持？
-5. **隐藏的承诺**：论证预设了哪些未声明的哲学承诺（本体论的、语义的、方法论的）？
-6. **辩证盲点**：作者未能预见的关键反驳是什么？
+1. **Unstated assumptions**: Which unstated premises does the argument depend on?
+2. **Alternative readings**: Are there other readings that are equally plausible, or even stronger?
+3. **Missing distinctions**: Which conceptual distinctions would change the force of the argument but were not considered by the author?
+4. **Undefended steps**: Which inferential steps lack adequate support?
+5. **Hidden commitments**: Which undeclared philosophical commitments (ontological, semantic, methodological) does the argument presuppose?
+6. **Dialectical blind spots**: What are the key objections the author failed to anticipate?
 
-## 输出格式
+## Output Format
 
-标准评注报告，包含：
-1. 总体印象
-2. 按维度逐一展开
-3. 建设性建议
-4. 进一步探究方向
+Standard commentary report, containing:
+1. Overall impression
+2. Dimension-by-dimension analysis
+3. Constructive suggestions
+4. Directions for further inquiry
 
 ## Notes
 
-- 与 `/phil:review` 的区别：comment 聚焦论证细节和概念澄清，review 是整体论文审稿
-- 与 `/phil:evaluate` 的区别：comment 是深度 qualitative 分析，evaluate 是多维度 parallel 定量评估
-- 所有输出使用中文（项目约定）
+- Difference from `/phil:review`: comment focuses on argumentative detail and conceptual clarification; review is whole-paper peer review
+- Difference from `/phil:evaluate`: comment is deep qualitative analysis; evaluate is multi-dimensional parallel quantitative assessment
+- Write all output in Chinese (project convention)
