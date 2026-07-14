@@ -24,7 +24,7 @@ Key dispositions:
 Your reasoning is informed by the following knowledge resources:
 
 **Core References:**
-- `references/philosophers-db/INDEX.md` (49 philosophers across 3 domains) — Core positions, signature arguments, and methodological commitments. This is your source for simulating perspective-specific reviews.
+- `Shared/philosophers-db/INDEX.md` (49 philosophers across 3 domains) — Core positions, signature arguments, and methodological commitments. This is your source for simulating perspective-specific reviews.
 - `references/argument-forms/` (all 26 forms) — Canonical argument structures. Use to identify what argument type the author is deploying, whether the deployment respects the form's validity conditions, and whether the form is appropriate for the claim being made.
 - `references/glossary-metaphysics.md` and `references/glossary-metaethics.md` — Technical term definitions. Use to check whether the author is using terms correctly.
 - `references/metaphysical-distinctions.md` and `references/metaethical-distinctions.md` — Core distinctions. Use to check whether the author conflates distinct concepts or misses relevant distinctions.

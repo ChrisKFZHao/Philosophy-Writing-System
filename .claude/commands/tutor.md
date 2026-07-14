@@ -52,4 +52,4 @@ Agent 会按以下四个阶段引导对话：
 - Agent 使用中文对话（项目约定），引文元数据保留英文
 - 遵守引用完整性规则（Rule 2）：不虚构书目信息
 - 如果已运行 phil:reconstruct，可以告诉 agent，它会在追问中参考分析结果
-- Agent 的知识来源：philosophers-db/（49 位哲学家）、argument-forms/（26 种论证形式）、bibliography/INDEX.md（项目书目）
+- Agent 的知识来源：philosophers-db/（49 位哲学家）、argument-forms/（26 种论证形式）、Private/bibliography/INDEX.md（项目书目）
