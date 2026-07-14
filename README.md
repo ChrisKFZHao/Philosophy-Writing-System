@@ -1,8 +1,8 @@
 # Philo — 分析哲学写作工作流
 
-基于 Claude Code 的分析哲学研究与写作系统。提供从 PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
+基于 Claude Code 的分析哲学研究与写作系统。提供从文献管理、PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.4.1-alpha  
+**版本**: 0.4.2-alpha  
 **语言**: Chinese（写作输出）/ English（技能定义与架构文档）  
 **构建于**: `academic-research-skills` v3.15.0
 
@@ -44,6 +44,19 @@ phil:write revision    # 修订
 
 ---
 
+## Zotero 集成（v0.4.2 新增）
+
+`Private/Bibliography/PDF/` 同时是 Zotero 的 Linked Attachment Base Directory——一份物理 PDF 仓库，Zotero 与本框架各自以自己的方式引用同一批文件：Zotero 通过 linked 附件阅读/标注，框架通过 INDEX 的规范词干读取。核心约定：
+
+- **命名权归框架**：新 PDF 先 `phil:ingest` 改规范词干，再在 Zotero "Attach Link to File" 链接；链接后文件名冻结，Zotero 不得再改名
+- **INDEX.md 的 `Zotero` 列**：`KEY ↔ Zotero item key ↔ 文件词干` 三方映射
+- **懒迁移**：Zotero 分类只在升格为写作项目时才把其存量条目迁入统一仓库，不做批量搬迁
+- **混合读写**：MCP 读走本地 Zotero 数据库，写走 Web API（key 配置于 `~/.claude.json`），云端写入需桌面端同步一次落地
+
+完整迁移方法（含注释保全的 API 步骤、已知坑）见 [`Framework/Lessons/zotero-integration.md`](Framework/Lessons/zotero-integration.md)。
+
+---
+
 ## 项目结构
 
 **双仓库结构（v0.4）：隐私边界 = 仓库边界。** 本仓库只含可分享的框架；论文与文献在 `Private/`（gitignore，独立私有仓库）。
@@ -62,7 +75,7 @@ Philosophical Writing/
 ├── Framework/                        # Framework 非执行层（外层仓库）
 │   ├── ARCHITECTURE.md               #   系统架构文档
 │   ├── changelog.md                  #   框架版本历史
-│   └── Lessons/                      #   论文反馈蒸馏
+│   └── Lessons/                      #   论文反馈蒸馏（如 zotero-integration.md）
 ├── Shared/                           # 可分享策展知识（外层仓库）
 │   ├── Philosophers-DB/              #   49 位哲学家档案（General/Metaphysics/Metaethics）
 │   └── Format/                       #   格式模板（LaTeX/Word，可分享）
@@ -119,7 +132,8 @@ Philosophical Writing/
 | 对话 agent（3 个） | Alpha | 已完成，待更多交互验证 |
 | 写作生产（4 个 agent + 7 个命令） | Alpha | 已完成，仅 Srinivasan 一篇测试 |
 | 行为规则（3 条） | Alpha | 已部署，待长期使用校准 |
-| 文献管理 | Alpha | Citation Gate 框架就位，1 篇分析文件 |
+| 文献管理 | Alpha | Citation Gate 框架就位，10 个 KEY 入库（1 篇 Level 3，9 篇 Level 0.5） |
+| Zotero 集成 | Alpha | 试点完成（instantaneous-velocity，6 条迁移+注释保全验证），56 条存量待懒迁移 |
 
 **已知限制**：
 - 分析文件基于阅读笔记重建（Srinivasan），PDF 原文对照验证待完成
@@ -137,4 +151,4 @@ Philosophical Writing/
 
 ---
 
-*最后更新: 2026-07-14（v0.4.1 文献入库刮削：phil:ingest + phil-summarize）*
+*最后更新: 2026-07-14（v0.4.2 Zotero 集成：统一 PDF 仓库 + INDEX Zotero 列 + 注释保全迁移）*
