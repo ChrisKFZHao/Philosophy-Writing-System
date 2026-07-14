@@ -194,7 +194,7 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   │   ├── disagreement-argument.md  # [New] Disagreement argument
 │   │   ├── regress-argument.md       # [New] Normative regress (Korsgaard)
 │   │   └── moral-supervenience.md    # [New] Moral supervenience argument
-│   └── (philosophers-db moved to Shared/philosophers-db/ in v0.4 —
+│   └── (Philosophers-DB moved to Shared/Philosophers-DB/ in v0.4 —
 │        curated, shareable knowledge lives outside .claude/)
 │
 ├── commands/
@@ -254,7 +254,7 @@ General Knowledge Cluster:
   ├── references/fallacy-catalog.md
   ├── references/argument-forms/ (general subset)
   ├── references/thought-experiment-templates.md (general subset)
-  └── Shared/philosophers-db/ (general subset)
+  └── Shared/Philosophers-DB/ (general subset)
 
 Metaphysics Knowledge Cluster:
   ├── references/glossary-metaphysics.md          # Core terminology
@@ -264,7 +264,7 @@ Metaphysics Knowledge Cluster:
   ├── references/causation-taxonomy.md            # Causal theories
   ├── references/argument-forms/ (metaphysics subset)
   ├── references/thought-experiment-templates.md (metaphysics subset)
-  └── Shared/philosophers-db/ (metaphysician subset)
+  └── Shared/Philosophers-DB/ (metaphysician subset)
 
 Metaethics Knowledge Cluster:
   ├── references/glossary-metaethics.md           # Core terminology
@@ -273,7 +273,7 @@ Metaethics Knowledge Cluster:
   ├── references/normativity-taxonomy.md          # Normativity theories
   ├── references/argument-forms/ (metaethics subset)
   ├── references/thought-experiment-templates.md (metaethics subset)
-  └── Shared/philosophers-db/ (metaethicist subset)
+  └── Shared/Philosophers-DB/ (metaethicist subset)
 ```
 
 #### Metaphysics Knowledge Dependency Details
@@ -334,7 +334,7 @@ Metaethics Knowledge Cluster:
 | `phil-premise-detect` | Discover hidden assumptions, implicit premises, unstated presuppositions | `fallacy-catalog`, all argument-forms |
 | `phil-counterexample` | Construct counterexamples targeting premises or the entire reasoning | All argument-forms |
 | `phil-conceptual-analysis` | Necessary/sufficient condition analysis, dimension extraction | `glossary-*`, `metaphysical-distinctions` |
-| `phil-citation-extract` | Extract and classify citations from a text by argumentative role, cross-reference with bibliography | `Private/bibliography/INDEX.md` |
+| `phil-citation-extract` | Extract and classify citations from a text by argumentative role, cross-reference with bibliography | `Private/Bibliography/INDEX.md` |
 
 **Contents** (P1 — Extended, including metaphysics- and metaethics-specific):
 
@@ -361,16 +361,16 @@ Metaethics Knowledge Cluster:
 | **`phil-moral-disagreement`** | **Evaluate arguments from moral disagreement and their implications for realism** | `glossary-metaethics`, `moral-realism-taxonomy` | **Metaethics** (P2) |
 | **`phil-moral-epistemology`** | **The possibility of moral knowledge — intuitionism/coherentism/reliabilism** | `glossary-metaethics`, `metaethical-distinctions` | **Metaethics** (P2) |
 | **`phil-moral-supervenience`** | **Supervenience of moral properties on natural properties and the explanatory burden** | `glossary-metaethics`, `glossary-metaphysics` | **Metaethics** (P2) |
-| `phil-methodology` | Methodological reflection | All references, `philosophers-db` | General (P2) |
-| `phil-contextualize` | Intellectual history contextualization | `philosophers-db`, ARS `deep-research` | General (P2) |
+| `phil-methodology` | Methodological reflection | All references, `Philosophers-DB` | General (P2) |
+| `phil-contextualize` | Intellectual history contextualization | `Philosophers-DB`, ARS `deep-research` | General (P2) |
 
 ### Layer 2: Orchestration Layer
 **Rationale**: A single analytical method is often insufficient — the user needs a complete analysis pipeline. The orchestration layer composes Layer 1 analytic skills into end-to-end workflows.
 
-**When Used**: When the user invokes `phil:reconstruct（分析）+ phil:evaluate（评价）` or when an Agent auto-schedules.
+**When Used**: When the user invokes `phil:reconstruct` (analysis) or `phil:evaluate` (critique), or when an Agent auto-schedules.
 
 **Contents**:
-- `commandsphil:reconstruct（分析）+ phil:evaluate（评价）.md` — Orchestration entry point, invokes the following workflow:
+- `commands/reconstruct.md` + `commands/evaluate.md` — Orchestration entry points, invoking the following workflow:
 
 **Metaphysics-Enhanced Orchestration**: When `phil-analyze` detects metaphysical features in the text (ontological language, modal operators, identity statements, causal assertions), it automatically incorporates the relevant metaphysical skills into the pipeline.
 
@@ -551,7 +551,7 @@ phil-intuition-pump
 
 phil-methodology
     ↑ depends on [phil-argument-reconstruct] (needs to know argument type to assess method)
-    ↑ references [Shared/philosophers-db/]
+    ↑ references [Shared/Philosophers-DB/]
 
 phil-contextualize
     ↑ independent (externally knowledge-intensive)
@@ -865,13 +865,13 @@ Phase 5: Integrated Report
 Phase 6: Writing & Production (5-Stage Pipeline)
 ┌──────────────────────────────────────────────────────────┐
 │                                                          │
-│  Stage 1: 哲学提问 (Question Formulation)                │
+│  Stage 1: Question Formulation                          │
 │  ┌────────────────────────────────────────────────────┐  │
 │  │ metaphysician / metaethicist (Socratic dialogue)   │  │
 │  │ → Refined question + sub-questions + scope        │  │
 │  └────────────────────────────────────────────────────┘  │
 │    ↓                                                     │
-│  Stage 2: 参考文献阅读与分析 (Literature & Analysis)      │
+│  Stage 2: Literature Reading & Analysis                 │
 │  ┌────────────────────────────────────────────────────┐  │
 │  │ ars-deep-research → phil-reconstruct →             │  │
 │  │ phil-charity → phil-premises → phil-dialectic →    │  │
@@ -879,21 +879,21 @@ Phase 6: Writing & Production (5-Stage Pipeline)
 │  │ → Literature package + dialectical map             │  │
 │  └────────────────────────────────────────────────────┘  │
 │    ↓                                                     │
-│  Stage 3: 打磨大纲 (Outline Refinement)                  │
+│  Stage 3: Outline Refinement                            │
 │  ┌────────────────────────────────────────────────────┐  │
 │  │ phil-writer (outline mode) → Detailed outline      │  │
 │  │   with thesis, section plan, distinction inventory │  │
 │  │ Optional: phil-reviewer structural check           │  │
 │  └────────────────────────────────────────────────────┘  │
 │    ↓                                                     │
-│  Stage 4: 生成初稿 (Draft Generation)                     │
+│  Stage 4: Draft Generation                              │
 │  ┌────────────────────────────────────────────────────┐  │
 │  │ phil-writer (draft mode) → Section-by-section      │  │
 │  │   with prose quality checks at each boundary       │  │
 │  │ → Complete manuscript draft + Notes to Self        │  │
 │  └────────────────────────────────────────────────────┘  │
 │    ↓                                                     │
-│  Stage 5: 生成终稿 (Final Manuscript)                     │
+│  Stage 5: Final Manuscript                              │
 │  ┌────────────────────────────────────────────────────┐  │
 │  │ phil-reviewer (standard + optional perspective)    │  │
 │  │   → phil-writer (revision mode) → loop until       │  │
@@ -942,7 +942,7 @@ Fast Normativity Analysis:
 | "Analyze this thought experiment" | `phil:reconstruct` | `phil-thought-experiment` |
 | "Draw a dialectical tree" | `phil:evaluate` | `phil-dialectical-map` |
 | "Track key distinctions" | `phil:reconstruct` | `phil-distinction-track` |
-| "Perform a full analysis of this text" | `phil:reconstruct（分析）+ phil:evaluate（评价）` | Orchestration of all Layer 1 Skills |
+| "Perform a full analysis of this text" | `phil:reconstruct` + `phil:evaluate` | Orchestration of all Layer 1 Skills |
 | **"Check ontological commitments"** | **`phil:reconstruct`** | **`phil-ontological-commitment`** |
 | **"Analyze identity conditions"** | **`phil:reconstruct`** | **`phil-identity-persistence`** |
 | **"Analyze grounding relations"** | **`phil:reconstruct`** | **`phil-grounding-check`** |
@@ -1072,7 +1072,7 @@ shared/            → lowercase, kebab-case
 
 Subdirectories:
   argument-forms/ → plural noun (contains general + metaphysical argument forms)
-  philosophers-db/ → plural noun (contains ethicists + metaphysicians)
+  Philosophers-DB/ → plural noun (contains ethicists + metaphysicians)
   templates/       → plural noun
 ```
 
@@ -1238,7 +1238,7 @@ Files to create:
   references/glossary-<X>.md          # Glossary (mandatory)
   references/<X>-distinctions.md      # Core distinctions (recommended)
   references/argument-forms/<X-forms> # New argument forms (recommended)
-  Shared/philosophers-db/<X>.md   # Representative philosophers (recommended)
+  Shared/Philosophers-DB/<X>.md   # Representative philosophers (recommended)
 ```
 
 ### 10.3 Versioning Strategy
@@ -1513,12 +1513,12 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.4-alpha · Last updated 2026-07-14 · v0.4: dual-repo restructure (privacy boundary = repo boundary) — philosophers-db → Shared/, papers & bibliography → Private/ (inner private repo, PDFs untracked), per-paper refs.md + two-hop Citation Gate + literature recommendation trigger points*
+*Document version 0.4-alpha · Last updated 2026-07-14 · v0.4: dual-repo restructure (privacy boundary = repo boundary) — Philosophers-DB → Shared/, papers & bibliography → Private/ (inner private repo, PDFs untracked), per-paper refs.md + two-hop Citation Gate + literature recommendation trigger points*
 *Previous: 0.3-alpha · 2026-07-12 · Merge: phil:tutor tutor agent + citation-extract skill; audit fix: schema wiring, dead link repair, agent pruning, hook removal*
 *Built on academic-research-skills v3.15.0*
 *Phase 4 additions: Metaphysics + Metaethics knowledge dependency layers*
-*Phase 5 additions: 5 general Skills + 28 examples.md + 28 checklist.md + philosophers-db*
+*Phase 5 additions: 5 general Skills + 28 examples.md + 28 checklist.md + Philosophers-DB*
 *Phase 6 additions: 4 production agents + 4 commands + 5-stage writing pipeline*
-*Gap closure (historical): 3 dialogic agents + 2 schemas + 5 templates + philosophers-db/ directory + phil:reconstruct（分析）+ phil:evaluate（评价）*
+*Gap closure (historical): 3 dialogic agents + 2 schemas + 5 templates + Philosophers-DB/ directory + phil:reconstruct + phil:evaluate*
 *Phase 7 (v0.3-alpha): Schema full wiring (11 schemas), agent pruning (9→6), INDEX link repair, hook removal, convention unification*
 

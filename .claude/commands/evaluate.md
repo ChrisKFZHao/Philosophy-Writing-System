@@ -1,5 +1,5 @@
 ---
-description: 多角度同时批判哲学文献 — 并行运行反例生成、辩证映射、类比评估、一致性检查、直觉泵检测、方法论反思、谬误分析
+description: Simultaneous multi-angle critique of philosophical texts — runs counterexample generation, dialectical mapping, analogy assessment, parity checking, intuition pump detection, methodological reflection, and fallacy analysis in parallel
 ---
 
 # /phil:evaluate
@@ -10,43 +10,43 @@ description: 多角度同时批判哲学文献 — 并行运行反例生成、�
 /phil:evaluate <text or argument>
 ```
 
-或先提供文本再触发 `/phil:evaluate`。接受 `/phil:reconstruct` 的输出作为输入时效果最佳。
+Or provide the text first, then trigger `/phil:evaluate`. Works best when given the output of `/phil:reconstruct` as input.
 
-## 定位
+## Role
 
-多角度同时批判**他人已有文献**。7 个评价维度并行运行，输出集成的批判评价报告。
+Simultaneous multi-angle critique of **others' existing texts**. Seven evaluative dimensions run in parallel, producing an integrated critical evaluation report.
 
-## 编排的技能
+## Orchestrated Skills
 
-全部 7 个技能无依赖关系，**并行运行**：
+All 7 skills have no interdependencies and **run in parallel**:
 
-| 技能 | 功能 |
+| Skill | Function |
 |------|------|
-| `phil-counterexample` | 构造反例：6 种反例类型 + 四维评估 + 辩证预期 |
-| `phil-dialectical-map` | 辩证映射：thesis-objection-response 攻防树 |
-| `phil-analogy-check` | 类比评估：源-目标对应、共享属性相关性、反类比检测 |
-| `phil-parity-check` | 一致性检查：推理对等性、companions-in-guilt、虚假对等 |
-| `phil-intuition-pump` | 直觉泵分析：直觉→判断链、框架效应、debunking 易感性 |
-| `phil-methodology` | 方法论反思：方法归类、一致性检查、替代方法 |
-| 谬误检测 | 基于 `fallacy-catalog.md` 的谬误扫描 |
+| `phil-counterexample` | Counterexample construction: 6 counterexample types + four-dimensional assessment + dialectical anticipation |
+| `phil-dialectical-map` | Dialectical mapping: thesis-objection-response attack-defense tree |
+| `phil-analogy-check` | Analogy assessment: source-target correspondence, relevance of shared properties, disanalogy detection |
+| `phil-parity-check` | Parity checking: inferential parity, companions-in-guilt, false parity |
+| `phil-intuition-pump` | Intuition pump analysis: intuition-to-judgment chains, framing effects, debunking susceptibility |
+| `phil-methodology` | Methodological reflection: method classification, consistency checking, alternative methods |
+| Fallacy detection | Fallacy scan based on `fallacy-catalog.md` |
 
-## 输出格式
+## Output Format
 
-生成集成的批判评价报告，包含以下章节：
+Generate an integrated critical evaluation report containing the following sections:
 
-1. **执行摘要**：最严重的 3-5 个问题、整体论证力评估
-2. **反例清单**：按严重性排序，含类型、目标前提、辩证预期
-3. **辩证结构**：攻击-防御树的 ASCII 可视化
-4. **类比评估**：每个类比论证的映射充分性评分
-5. **一致性检查**：对等性主张的验证结果
-6. **直觉泵分析**：framing 偏差和 debunking 评估
-7. **方法论审计**：方法分类、一致性、替代方案
-8. **谬误清单**：检测到的逻辑跳跃和谬误
-9. **改进建议**：最应该被作者处理的 3-5 个关键问题
+1. **Executive summary**: the 3-5 most serious problems, overall assessment of argumentative force
+2. **Counterexample inventory**: ranked by severity, with type, target premise, and dialectical anticipation
+3. **Dialectical structure**: ASCII visualization of the attack-defense tree
+4. **Analogy assessment**: mapping-adequacy score for each analogical argument
+5. **Parity check**: verification results for parity claims
+6. **Intuition pump analysis**: framing bias and debunking assessment
+7. **Methodological audit**: method classification, consistency, alternatives
+8. **Fallacy inventory**: detected logical leaps and fallacies
+9. **Improvement recommendations**: the 3-5 key problems the author most needs to address
 
 ## Notes
 
-- 所有输出使用中文
-- 7 个技能并行运行，每个独立产出后再合并
-- 如果已有 `/phil:reconstruct` 的输出，直接将其作为输入——不需要重新分析。此时 `phil-intuition-pump` 不重跑，以 reconstruct 阶段 2 的直觉泵分析结果作为输入
-- 与 `/phil:review` 的区别：evaluate 针对他人文献的论证质量，review 针对自己写作的论文评审
+- Write all output in Chinese
+- The 7 skills run in parallel; each produces its output independently before the results are merged
+- If output from `/phil:reconstruct` already exists, use it directly as input — no re-analysis needed. In that case do not re-run `phil-intuition-pump`; use the intuition pump analysis from reconstruct Stage 2 as input
+- Difference from `/phil:review`: evaluate targets the argumentative quality of others' texts; review is peer review of one's own papers

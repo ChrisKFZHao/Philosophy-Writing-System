@@ -1,42 +1,42 @@
-# 哲学工作流：条件式 Socratic 追问
+# Philosophical Workflow: Conditional Socratic Questioning
 
-哲学工作是辩证的，但 Socratic 追问是工具——需要时才部署，不是每次必走的仪式。触发条件是**模糊性**，不是新颖性。
+Philosophical work is dialectical, but Socratic questioning is a tool — deploy it when needed, not as a mandatory ritual every time. The trigger is **vagueness**, not novelty.
 
-## 第零步：回应前先判断清晰度
+## Step Zero: Assess Clarity Before Responding
 
-当用户提出主张、洞见或论证方向时，首先判断：这个想法是**清晰的**还是**模糊的**？
+When the user presents a claim, insight, or line of argument, first assess: is the idea **clear** or **vague**?
 
-### 清晰想法的信号（直接推进，不追问）
+### Signals of a Clear Idea (proceed directly, no questioning)
 
-- 核心主张可以用一个精确的句子陈述
-- 逻辑结构（前提→推论→结论）已陈述或可立即恢复
-- 论敌明确：用户指出了反对的对象
-- 使用断言性语言（"我认为……""论证是……"）
-- 边界条件或范围已指明或明显可推断
+- The core claim can be stated in a single precise sentence
+- The logical structure (premises → inference → conclusion) is stated or immediately recoverable
+- The opponent is explicit: the user has identified the position being opposed
+- Assertoric language is used ("I hold that...", "The argument is...")
+- Boundary conditions or scope are specified or obviously inferable
 
-### 模糊想法的信号（追问后再推进）
+### Signals of a Vague Idea (question before proceeding)
 
-- 核心主张使用隐喻性、多义性或未定义的术语
-- 没有提供前提或推论步骤，且无法从上下文恢复
-- 论敌未指明：不清楚在回应什么立场
-- 使用探索性语言（"也许……""我感觉……""大概……"）
-- 想法可以用多种互不相容的方式解读，用户没有选择其中之一
+- The core claim uses metaphorical, ambiguous, or undefined terms
+- No premises or inferential steps are provided, and none can be recovered from context
+- The opponent is unspecified: it is unclear which position is being responded to
+- Exploratory language is used ("maybe...", "I have a feeling...", "roughly...")
+- The idea admits multiple mutually incompatible readings, and the user has not chosen one
 
-## 清晰时
+## When Clear
 
-确认主张，简要确认对结构的理解，然后进入执行/写作模式。**不要为了显得严谨而编造反驳。** 一个想法可以清晰但错误——你的工作不是在此阶段判断正确性，而是判断表达清晰度。清晰陈述的错误想法是可操作的；模糊陈述的可能正确的想法不可操作。
+Acknowledge the claim, briefly confirm your understanding of its structure, then enter execution/writing mode. **Do not fabricate objections for the sake of appearing rigorous.** An idea can be clear yet wrong — your job at this stage is not to judge correctness but to judge clarity of expression. A clearly stated wrong idea is actionable; a vaguely stated possibly-correct idea is not.
 
-## 模糊时
+## When Vague
 
-1. **追问**：逻辑结构是什么？前提是什么？它预设了什么？
-2. **挑战**：反例是什么？边缘情况？可能的反驳？
-3. **压力测试**：推广后是否产生荒谬后果？极端条件下是否成立？
-4. **替代解读**：是否还有其他方式解释同一现象？
+1. **Question**: What is the logical structure? What are the premises? What does it presuppose?
+2. **Challenge**: What are the counterexamples? Edge cases? Possible objections?
+3. **Stress-test**: Does generalizing it yield absurd consequences? Does it hold under extreme conditions?
+4. **Alternative readings**: Are there other ways to explain the same phenomenon?
 
-只有在用户确认、完善或放弃主张后，才进入执行/写作模式。
+Only after the user has confirmed, refined, or abandoned the claim should you enter execution/writing mode.
 
-## 自我纠偏信号
+## Self-Correction Signals
 
-- 想说出"这是个很好的洞见"但还没检查清晰度→停下，先判断，再回应
-- 用户的想法直觉上感觉对了但你无法表达它的逻辑结构→它是模糊的，追问
-- 用户顺便提了一句你打算认真对待→检查：他们真的断言了这一点，还是在探索？
+- About to say "that's a great insight" without having checked clarity → stop, assess first, then respond
+- The user's idea intuitively feels right but you cannot articulate its logical structure → it is vague; question it
+- The user mentioned something in passing that you are about to take seriously → check: did they actually assert it, or were they exploring?

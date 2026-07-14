@@ -8,14 +8,14 @@ version: 1.0.0
 
 ## 1. Overview
 
-Extracts every explicit citation from a philosophical text, classifies each by its argumentative role in the source, and cross-references against the project's bibliography (Private/bibliography/INDEX.md). This skill serves as a mechanical extraction engine — it does not evaluate importance or generate reading plans (those are handled by the phil:tutor agent or phil:trail command).
+Extracts every explicit citation from a philosophical text, classifies each by its argumentative role in the source, and cross-references against the project's bibliography (Private/Bibliography/INDEX.md). This skill serves as a mechanical extraction engine — it does not evaluate importance or generate reading plans (those are handled by the phil:tutor agent or phil:trail command).
 
 Output conforms to `citation-extract-schema.json` (`.claude/shared/citation-extract-schema.json`).
 
 ## 2. Input
 
 - **Required**: The source philosophical text (paper, monograph chapter, preprint) as plain text.
-- **Optional**: Content of `Private/bibliography/INDEX.md` for cross-referencing. If unavailable, all citations are marked as not-in-bibliography.
+- **Optional**: Content of `Private/Bibliography/INDEX.md` for cross-referencing. If unavailable, all citations are marked as not-in-bibliography.
 - **Optional**: Known author name or topic hints for disambiguation.
 
 ## 3. Output
@@ -35,12 +35,12 @@ This skill adapts standard citation context analysis (Small, 1978 — "Cited Doc
 ## 5. Steps
 
 ### Step 1: Text Scan and Citation Identification
-Parse the text for citation markers: author names with years, footnote/endnote references, parenthetical citations, "cf." and "see" references. Extract each candidate citation with 1-2 sentences of surrounding context. Capture all entries in the bibliography/references section.
+Parse the text for citation markers: author names with years, footnote/endnote references, parenthetical citations, "cf." and "see" references. Extract each candidate citation with 1-2 sentences of surrounding context. Capture all entries in the Bibliography/references section.
 
 ### Step 2: Disambiguation and Normalization
 Resolve ambiguous references (e.g., "Lewis (1986)" — which Lewis? Multiple works in 1986?). Use:
 - Context clues from the surrounding text
-- Known works from the project's philosopher database (Shared/philosophers-db/)
+- Known works from the project's philosopher database (Shared/Philosophers-DB/)
 - Explicit cross-checking with the bibliography
 
 When disambiguation is uncertain, list alternatives with `confidence: low`.
@@ -59,7 +59,7 @@ For each citation, classify its argumentative role using textual evidence:
 Each classification must include a `role_justification` and `confidence` level.
 
 ### Step 4: Bibliography Cross-Reference
-For each citation, look up `Private/bibliography/INDEX.md` by author surname + title keywords. Record:
+For each citation, look up `Private/Bibliography/INDEX.md` by author surname + title keywords. Record:
 - Whether a match was found (`in_bibliography`)
 - Current analysis level (0-3) if matched
 - PDF availability
@@ -73,7 +73,7 @@ Compile the list of works that are the text's main interlocutors:
 - Any `supporting` works that appear across multiple argument sections
 
 ### Step 6: Acquisition Suggestions
-From the citations NOT matched in `Private/bibliography/INDEX.md` (Step 4), compile an `acquisition_candidates` list — works worth adding to the shared library. Rank by:
+From the citations NOT matched in `Private/Bibliography/INDEX.md` (Step 4), compile an `acquisition_candidates` list — works worth adding to the shared library. Rank by:
 1. Argumentative weight in the source (`core-target` > `opposition` > `supporting` > `background` > `passing-mention`)
 2. Recurrence (cited across multiple sections)
 
@@ -93,12 +93,12 @@ Assemble the complete structured output (including `acquisition_candidates`).
 
 - **Upstream**: None (accepts raw text directly)
 - **Downstream**: `phil:tutor` agent uses output for literature recommendations; `phil:trail` command uses output for reading plan generation
-- **References**: `Private/bibliography/INDEX.md` for cross-referencing; `Shared/philosophers-db/` for disambiguation
+- **References**: `Private/Bibliography/INDEX.md` for cross-referencing; `Shared/Philosophers-DB/` for disambiguation
 
 ## 8. Boundary Conditions
 
 - **No citations**: Output empty `citations` array and note this
-- **Chinese text citing Western works**: Scan for both transliterations and original names; use philosophers-db/ for matching
+- **Chinese text citing Western works**: Scan for both transliterations and original names; use Philosophers-DB/ for matching
 - **INDEX.md unavailable**: Set `bibliography_index_available: false`, flag all as unmatched
 - **Generic references** ("the Kripkean picture"): Note as "generic reference" without full citation_id
 

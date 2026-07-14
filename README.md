@@ -12,13 +12,13 @@
 
 ### 1. 放入参考文献
 
-将 PDF 放入 `Private/bibliography/pdf/`，然后运行：
+将 PDF 放入 `Private/Bibliography/PDF/`，然后运行：
 
 ```
 phil:reconstruct
 ```
 
-系统会提取文本、重构论证，生成分析文件到 `Private/bibliography/analysis/`。分析分级递进：
+系统会提取文本、重构论证，生成分析文件到 `Private/Bibliography/Analysis/`。分析分级递进：
 
 | Level | 内容 | 触发条件 |
 |-------|------|----------|
@@ -62,17 +62,21 @@ Philosophical Writing/
 ├── Framework/                        # Framework 非执行层（外层仓库）
 │   ├── ARCHITECTURE.md               #   系统架构文档
 │   ├── changelog.md                  #   框架版本历史
-│   └── lessons/                      #   论文反馈蒸馏
+│   └── Lessons/                      #   论文反馈蒸馏
 ├── Shared/                           # 可分享策展知识（外层仓库）
-│   └── philosophers-db/              #   49 位哲学家档案
-├── style/format/                     # 格式模板（可分享，外层仓库）
+│   ├── Philosophers-DB/              #   49 位哲学家档案（General/Metaphysics/Metaethics）
+│   └── Format/                       #   格式模板（LaTeX/Word，可分享）
 └── Private/                          # 私有内容层（gitignore；独立内层仓库）
-    ├── Papers/{topic}/               #   每篇论文一个目录：手稿 + refs.md +
+    ├── Projects/{topic}/             #   每个写作项目一个目录：手稿 + refs.md +
     │                                 #   VERSIONS.md + feedback-to-framework.md
-    ├── bibliography/                 #   文献总库（pdf/ 不进 git、analysis/、INDEX.md）
-    ├── concepts/                     #   跨论文概念笔记
-    └── style/                        #   个人写作样文（文风校准）
+    ├── Bibliography/                 #   文献总库（PDF/ 不进 git、Analysis/、INDEX.md）
+    ├── Concepts/                     #   跨项目概念笔记
+    └── Style/                        #   个人写作样文（文风校准）
 ```
+
+**命名规范**：`.claude/` 之外的目录全部大写开头（连字符逐段大写，缩写全大写，如 `Philosophers-DB`）；写作项目条目目录用小写 kebab-case（如 `srinivasan-critique/`，与文件名前缀一致）；文件名小写 kebab-case（惯例大写文件除外：`CLAUDE.md`、`INDEX.md`、`VERSIONS.md` 等）。
+
+**语言规范**：定义层（rules/commands/agents/skills/schemas/CLAUDE.md/ARCHITECTURE/changelog）为英文；写作输出（手稿、分析报告、评审报告）为中文；两个 README 与 `.claude/shared/templates/` 的 5 个报告模板为刻意保留的中文（面向使用者的文档 / 输出物骨架）。
 
 ---
 
@@ -132,4 +136,4 @@ Philosophical Writing/
 
 ---
 
-*最后更新: 2026-07-14（v0.4 双仓库重构）*
+*最后更新: 2026-07-14（v0.4 双仓库重构 + 命名/语言规范统一）*

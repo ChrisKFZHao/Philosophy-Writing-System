@@ -1,5 +1,5 @@
 ---
-description: 导师式文献对话 — 询问你的思路、追问理解、发现盲点、推荐阅读文献并规划下一步
+description: Tutor-style dialogue on the literature — asks about your thinking, probes your understanding, surfaces blind spots, recommends readings, and plans next steps
 ---
 
 # /phil:tutor
@@ -10,46 +10,46 @@ description: 导师式文献对话 — 询问你的思路、追问理解、发�
 /phil:tutor
 ```
 
-直接触发即可。Agent 会自动问候并开始对话。
+Just trigger it directly. The agent will greet you and start the conversation on its own.
 
-如果已有具体问题或文献要讨论，可以直接说：
+If you already have a specific question or a text to discuss, you can say it directly:
 
 ```
-/phil:tutor 我在读 Srinivasan 的 "Anger"，但不太确定她 argument 中的 implicit premise 是什么
+/phil:tutor I'm reading Srinivasan's "Anger", but I'm not sure what the implicit premise in her argument is
 ```
 
-## 定位
+## Positioning
 
-阅读文献时的**导师对话**工具。phil:tutor 不是一个分析引擎（那是 phil:reconstruct 的工作），而是一个对话伙伴——帮助你理清思路、发现盲点、决定下一步读什么。
+A **tutor-dialogue** tool for when you are reading the literature. phil:tutor is not an analysis engine (that is phil:reconstruct's job) but a conversation partner — it helps you clarify your thinking, surface blind spots, and decide what to read next.
 
-与 phil:reconstruct 的关系：
-- **reconstruct** 做机械分析 → 把文本拆成论证结构
-- **tutor** 做对话引导 → 帮你理解这个结构意味着什么
-- 建议：先读文本 → 再用 tutor 讨论 → 再用 reconstruct 深入分析
+Relation to phil:reconstruct:
+- **reconstruct** does mechanical analysis → decomposes a text into its argumentative structure
+- **tutor** does dialogic guidance → helps you understand what that structure means
+- Suggested order: read the text first → then discuss with tutor → then analyze in depth with reconstruct
 
-## 使用的 Agent
+## Agent Used
 
-本命令启动 `phil-tutor` agent（定义于 `.claude/agents/phil-tutor.md`）。
+This command launches the `phil-tutor` agent (defined in `.claude/agents/phil-tutor.md`).
 
-该 agent 在需要时可内部调用以下技能：
-- `phil-citation-extract` — 提取当前文献的引文用于推荐
+The agent may internally invoke the following skill when needed:
+- `phil-citation-extract` — extract citations from the current text for recommendation purposes
 
-## 对话流程
+## Dialogue Flow
 
-Agent 会按以下四个阶段引导对话：
+The agent guides the conversation through the following four phases:
 
-| 阶段 | Agent 做什么 | 你做什么 |
+| Phase | What the agent does | What you do |
 |------|-------------|---------|
-| 1: 摸底 | 问你在读什么、处于什么阶段 | 描述你的当前阅读或问题 |
-| 2: 追问 | Socratic 提问，检查理解深度 | 回答、反思、暴露盲点 |
-| 3: 推荐 | 基于对话推荐文献 | 评估推荐是否合适 |
-| 4: 规划 | 给出阅读计划和工具建议 | 确认或调整计划 |
+| 1: Orientation | Asks what you are reading and what stage you are at | Describe your current reading or question |
+| 2: Probing | Socratic questioning to test the depth of your understanding | Answer, reflect, expose blind spots |
+| 3: Recommendation | Recommends literature based on the conversation | Assess whether the recommendations fit |
+| 4: Planning | Proposes a reading plan and tool suggestions | Confirm or adjust the plan |
 
-你也可以随时跳过某个阶段，直接问具体问题。
+You can also skip any phase at any time and ask a specific question directly.
 
 ## Notes
 
-- Agent 使用中文对话（项目约定），引文元数据保留英文
-- 遵守引用完整性规则（Rule 2）：不虚构书目信息
-- 如果已运行 phil:reconstruct，可以告诉 agent，它会在追问中参考分析结果
-- Agent 的知识来源：philosophers-db/（49 位哲学家）、argument-forms/（26 种论证形式）、Private/bibliography/INDEX.md（项目书目）
+- The agent converses in Chinese (project convention); citation metadata remains in English
+- Follows the citation integrity rule (Rule 2): no fabricated bibliographic information
+- If phil:reconstruct has already been run, tell the agent — it will draw on the analysis results in its probing
+- The agent's knowledge sources: Philosophers-DB/ (49 philosophers), argument-forms/ (26 argument forms), Private/Bibliography/INDEX.md (project bibliography)

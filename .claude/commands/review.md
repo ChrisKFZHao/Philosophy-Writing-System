@@ -1,5 +1,5 @@
 ---
-description: 哲学论文同行评审 — 调用 phil-reviewer agent，8 维度审稿 + 立场模拟（Quinean/Lewisian/Kripkean 等视角）
+description: Peer review of philosophical papers — invokes the phil-reviewer agent, 8-dimension review + perspective simulation (Quinean/Lewisian/Kripkean etc.)
 ---
 
 # /phil:review
@@ -10,30 +10,30 @@ description: 哲学论文同行评审 — 调用 phil-reviewer agent，8 维度�
 /phil:review <manuscript>
 ```
 
-## 定位
+## Role
 
-审稿**自己的写作**。调用 `phil-reviewer` agent，提供仿真的同行评审体验。
+Reviewing **one's own writing**. Invokes the `phil-reviewer` agent to provide a simulated peer-review experience.
 
-## 编排
+## Orchestration
 
-| 组件 | 说明 |
+| Component | Description |
 |------|------|
 | Agent | `phil-reviewer` |
-| 审稿维度 | 8 个：论证完整性、概念精确性、辩证意识、模态准确性、区分保存、反例抵御、本体论清晰性、方法论适当性 |
-| 立场模拟 | 可选：以特定哲学家视角审稿（Quinean / Lewisian / Kripkean / Williamsonian / Parfitian） |
+| Review dimensions | 8: argumentative integrity, conceptual precision, dialectical awareness, modal accuracy, distinction preservation, counterexample resilience, ontological clarity, methodological appropriateness |
+| Perspective simulation | Optional: review from a specific philosopher's perspective (Quinean / Lewisian / Kripkean / Williamsonian / Parfitian) |
 
-## 输出格式
+## Output Format
 
-标准审稿报告，包含：
-1. 总体评价
-2. 按维度逐项评分与评论
-3. 主要问题（按严重性排序）
-4. 次要问题
-5. 修改建议（按优先级排列）
+Standard review report containing:
+1. Overall assessment
+2. Dimension-by-dimension scores and comments
+3. Major issues (ranked by severity)
+4. Minor issues
+5. Revision recommendations (ranked by priority)
 
 ## Notes
 
-- 与 `/phil:evaluate` 的区别：review 针对自己的手稿，提供建设性修改建议；evaluate 针对他人文献，提供批判性分析
-- 与 `/phil:comment` 的区别：review 是整体论文审稿，comment 聚焦论证细节和概念澄清
-- 所有输出使用中文（项目约定）
-- 输出格式遵循 `shared/templates/` 中的审稿报告模板
+- Difference from `/phil:evaluate`: review targets one's own manuscript and provides constructive revision suggestions; evaluate targets others' texts and provides critical analysis
+- Difference from `/phil:comment`: review is whole-paper review; comment focuses on argument details and conceptual clarification
+- Write all output in Chinese (project convention)
+- Output format follows the review report template in `shared/templates/`
