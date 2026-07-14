@@ -142,6 +142,17 @@ Prefix with `!` to run in-session:
 3. When the source becomes a paper dependency, run `phil:reconstruct` → `Private/Bibliography/Analysis/{Author}_{Year}_{Title}.analysis.txt` (Level 1)
 4. Escalate analysis level as needed per Citation Gate rules
 
+### Zotero Integration
+→ Full workflow: [Framework/Lessons/zotero-integration.md](Framework/Lessons/zotero-integration.md)
+
+`Private/Bibliography/PDF/` is Zotero's Linked Attachment Base Directory — one physical PDF repository, two consumers (Zotero reads via linked attachments; the framework reads via canonical stems). Core invariants:
+
+- **Naming ownership belongs to the framework**: rename to the canonical stem *before* linking in Zotero; never rename after. Zotero must never auto-rename linked files.
+- **INDEX.md `Zotero` column**: `KEY ↔ Zotero item key ↔ file stem` three-way mapping (`—` = not in Zotero).
+- **Fixed order for new PDFs**: ingest first, then Zotero "Attach Link to File". For existing Zotero items with *stored* attachments: copy out under the canonical stem → ingest → convert stored→linked via the web API (annotation-preserving method in the Lessons doc; `linkMode` is API-immutable, so create-new + reparent annotations + trash old).
+- **Lazy migration**: stored attachments are migrated only when their collection becomes a writing project — no bulk sweeps. Zotero collections are not mirrored as directories.
+- **MCP mode**: hybrid — reads on local SQLite (`ZOTERO_LOCAL=true`), writes via web API key (configured in `~/.claude.json`); cloud writes land locally only after a desktop sync. Zotero-imported metadata (e.g. JSTOR) is unreliable — title-page verification (Rule 2) applies on this inflow path too.
+
 ### Manuscript Work Cycle
 1. **Draft** in `Private/Projects/{topic}/{topic}-draft.txt`
 2. **Review** with `phil:review` → review report

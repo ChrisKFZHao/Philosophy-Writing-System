@@ -4,7 +4,11 @@
       "Bash(/c/Users/zhaok/AppData/Local/Microsoft/WindowsApps/python.exe *)",
       "Bash(where pdftoppm *)",
       "Bash(pdflatex *)",
-      "Bash(wc *)"
+      "Bash(wc *)",
+      "Bash(zotero-cli *)",
+      "Bash(zotero-mcp *)",
+      "Bash(/c/Users/zhaok/AppData/Local/Python/pythoncore-3.14-64/Scripts/zotero-cli.exe *)",
+      "Bash(/c/Users/zhaok/AppData/Local/Python/pythoncore-3.14-64/Scripts/zotero-mcp.exe *)"
     ]
   }
 }

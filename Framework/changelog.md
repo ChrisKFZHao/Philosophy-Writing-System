@@ -1,5 +1,16 @@
 # Framework Changelog
 
+## v0.4.2-alpha — 2026-07-14
+
+**Zotero integration: unified PDF repository + annotation-preserving migration** (pilot: `instantaneous-velocity`, 6 items; first `Framework/Lessons/` entry)
+
+- `Private/Bibliography/PDF/` doubles as Zotero's Linked Attachment Base Directory — one physical repository, two consumers; naming ownership stays with the framework (rename before link, frozen after)
+- INDEX.md gains a `Zotero` column: `KEY ↔ Zotero item key ↔ file stem` three-way mapping
+- Validated stored→linked migration via web API preserving annotations (`linkMode` is API-immutable → create linked attachment + reparent annotations + trash old); Zotmoov UI path retained as no-API fallback
+- Lazy migration policy: Zotero collections are not mirrored; a collection is migrated only when it becomes a writing project
+- MCP hybrid mode: local SQLite reads + web API writes (key in `~/.claude.json`); JSTOR-style metadata pollution confirmed → Rule 2 title-page verification mandatory on the Zotero inflow path
+- Full workflow: `Framework/Lessons/zotero-integration.md`; B3 (Philosophers-DB master-library rework) moves to v0.4.3
+
 ## v0.4.1-alpha — 2026-07-14
 
 **Literature ingestion ("scraping"): `/phil:ingest` command + `phil-summarize` skill** (A1 pulled forward from v0.5)
