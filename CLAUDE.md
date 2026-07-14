@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Nature
 
-This is a philosophical writing workflow project, not a code project. All files are text or PDF.
+This is a philosophical writing workflow project, not a software project — content (manuscripts, analyses, bibliography) is text or PDF. **Reusable helper scripts are permitted** as framework infrastructure: when a command needs a capability no tool provides (e.g. the zotero MCP has no linked-file-creation tool), a small parameterized script may live under `.claude/scripts/` rather than being re-derived each run. Such scripts read secrets from config at run time (never hardcode), print only non-sensitive results, and are documented in the changelog. Content directories stay code-free; scripts belong to the framework layer only.
 
 ## Behavioral Rules
 
@@ -34,6 +34,7 @@ Version cuts are NOT automatic. Three triggers: (1) post-review revision, (2) ne
 - Exception 2: content-item directories (individual project topics, e.g. `Private/Projects/srinivasan-critique/`) use lowercase English kebab-case, matching their filename prefix (`srinivasan-critique-draft.txt`).
 - Filenames use lowercase kebab-case, except conventional uppercase files (`CLAUDE.md`, `README.md`, `INDEX.md`, `VERSIONS.md`, `ARCHITECTURE.md`, `MEMORY.md`).
 - Exception 3 — bibliography stems: files in `Private/Bibliography/` share the canonical stem `{Author}_{Year}_{Title}` across `.pdf` / `.analysis.txt` / `.summary.txt`. Segments are separated by **underscores**; words within a segment are hyphen-joined (underscores mark segment boundaries, so hyphens stay free for hyphenated surnames and the title itself). Author = first author's surname, capitalized, ASCII. Year = 4 digits, or `nd` when unverifiable from the PDF (then marked `[year unverified]` in INDEX). Title = the complete title from the title page (articles kept, subtitle included, punctuation stripped, TitleCase). Examples: `Austin_1956_A-Plea-for-Excuses.pdf`, `Shafer-Landau_2003_Moral-Realism-A-Defence.pdf`. Safety valve: stems over 100 characters truncate at the subtitle boundary (INDEX keeps the full title). KEYs stay `AUTHOR-TITLE` without year — the KEY is the stable identifier consumed by refs.md and the Citation Gate; the file stem is the locator. On an AUTHOR-TITLE collision, the newer entry's KEY appends the year.
+  - **Books (monographs and edited collections)**: Author segment = first author's surname for a monograph, **first editor's surname** for a collection (e.g. `Chalmers_2009_Metametaphysics.pdf`). One physical volume PDF only — never split into per-chapter files. A **monograph** is one INDEX row; its chapters are segments inside the single `.summary.txt`, not separate rows. An **edited collection** (or a single author's self-collection of previously published papers) gets a volume row (KEY `EDITOR-TITLE`) **plus one row per member paper** (KEY `AUTHOR-TITLE` of that paper); the member row's PDF column points at the shared volume file with a page range and container KEY (`PDF/{volume-stem}.pdf, pp. X–Y, in {VOLUME-KEY}`), and its summary is an independent `{chapter-author}_{volume-year}_{chapter-title}.summary.txt`. The type test is whether chapters are independent, separately-citable works — not author count.
 
 **Language:**
 - Definition layer (rules, commands, agents, skills, schemas, ARCHITECTURE, changelog, this file) — **English**.
@@ -52,7 +53,8 @@ Version cuts are NOT automatic. Three triggers: (1) post-review revision, (2) ne
   ├── skills/         30 domain analysis skills (engine)
   ├── agents/         7 philosophy-specialized agents (3 dialogic + 4 production)
   ├── references/     Methodological knowledge (glossaries, argument forms, taxonomies)
-  └── shared/         Data contracts (13 JSON schemas + 5 report templates)
+  ├── shared/         Data contracts (13 JSON schemas + 5 report templates)
+  └── scripts/        Reusable helper scripts (e.g. zotero-attach-linked.py — fills tool gaps)
 Framework/     Framework non-executable layer (tracked by outer repo)
   ├── ARCHITECTURE.md System architecture document
   ├── changelog.md    Framework version history
@@ -115,7 +117,7 @@ Private/Bibliography/
 ```
 
 **Analysis levels (progressive, append-only):**
-- Level 0.5: Summary — core thesis + argument route + key concepts + interlocutors + topics — *trigger: PDF ingestion (`/phil:ingest` → phil-summarize)*
+- Level 0.5: Summary — core thesis + argument route + key concepts + interlocutors + topics — *trigger: PDF ingestion (`/phil:ingest` → phil-summarize)*. A monograph's summary carries per-chapter segments; an edited collection yields a volume summary plus one independent summary per member paper.
 - Level 1: Argument reconstruction — *trigger: selected as a paper dependency*
 - Level 2: + Implicit premises, charity audit, conceptual analysis, distinction tracking — *trigger: first citation in a manuscript*
 - Level 3: + Dialectical mapping, ontological commitment, modal analysis, domain-specific skills — *trigger: source becomes core target/dependency*
@@ -126,6 +128,17 @@ Private/Bibliography/
 This is a model-executed behavioral rule:
 1. **Hop 1**: the cited KEY must be registered in this project's `refs.md`
 2. **Hop 2**: If a manuscript claim depends on analysis at Level N, but the source's `.analysis.txt` is only at Level N-1 or below → **BLOCK** and require analysis completion. No citation passes without a verified analysis backing it.
+
+## Reusability & Token Economy
+
+Distilled from live runs (v0.4.2–v0.4.5). Goal: spend tokens on philosophy, not plumbing — without degrading capability (when a cheap path is insufficient, escalate; never guess).
+
+1. **Capability lookup order**: dedicated tools (pdf skill, file tools) → zotero MCP tools → `.claude/scripts/` → only then write new code. Before writing any helper, check `.claude/scripts/` and `Framework/Lessons/` for a prior solution.
+2. **Solidify on second use**: an inline solution needed twice becomes a parameterized script in `.claude/scripts/` (secrets from `~/.claude.json` at run time; proxy + retries built in; documented in changelog). Precedent: `zotero-attach-linked.py` — its urllib/proxy/retry logic is never rewritten inline.
+3. **Batch over loop**: with 2+ items, use batch variants — `zotero-attach-linked.py --parents` (single POST, auto-split at 50), `zotero_get_items_children`, `zotero_batch_update_tags` — instead of N single calls.
+4. **Read at the cheapest sufficient level**: INDEX row → `.summary.txt` (Level 0.5) → `.analysis.txt` → PDF outline / page range → full text. Never run full-text extraction to answer what a summary already answers. Full-text reads are justified only by the analysis-level escalation triggers (Citation Gate) or an explicit read request.
+5. **Validated methods are settled**: procedures marked verified in `Framework/Lessons/` (e.g. the annotation-preserving stored→linked migration) are executed, not re-tested. Check `history.txt` / changelog / Lessons before re-investigating a known problem.
+6. **Environment facts are read, not re-probed**: proxy `127.0.0.1:6789`, Zotero hybrid MCP mode, API-key location, the 50-item write-batch cap — all recorded in this file, Lessons, and memory.
 
 ## Common Operations
 
@@ -149,7 +162,7 @@ Prefix with `!` to run in-session:
 
 - **Naming ownership belongs to the framework**: rename to the canonical stem *before* linking in Zotero; never rename after. Zotero must never auto-rename linked files.
 - **INDEX.md `Zotero` column**: `KEY ↔ Zotero item key ↔ file stem` three-way mapping (`—` = not in Zotero).
-- **Fixed order for new PDFs**: ingest first, then Zotero "Attach Link to File". For existing Zotero items with *stored* attachments: copy out under the canonical stem → ingest → convert stored→linked via the web API (annotation-preserving method in the Lessons doc; `linkMode` is API-immutable, so create-new + reparent annotations + trash old).
+- **Fixed order for new PDFs**: ingest first, then link in Zotero. As of v0.4.3, `/phil:ingest` Step 8 automates the Zotero side under an identifier gate: papers use **DOI** (`zotero_add_by_doi(attach_mode='none')`); books use a **fallback cascade DOI-first → ISBN → bibtex** (v0.4.5, replacing the earlier ISBN-only rule — scholarly-press ISBNs are often absent from Open Library/Google Books while the publisher registers CrossRef DOIs). For an edited collection the **per-chapter DOIs are the preferred member-creation path** (each resolves as a CrossRef `bookSection`; verify returned titles against the TOC — CrossRef may drop subtitles), falling back to one `@incollection` per member via `zotero_add_by_bibtex`; the `book` volume item comes from the whole-book DOI, else ISBN, else an `@book` bibtex. The one volume PDF is linked to the book item *and* every member item via `.claude/scripts/zotero-attach-linked.py` batch mode; INDEX is backfilled with each item key. Sources where nothing resolves and no metadata is available fall back to a manual "Attach Link to File". For existing Zotero items with *stored* attachments: copy out under the canonical stem → ingest → convert stored→linked via the web API (annotation-preserving method in the Lessons doc; `linkMode` is API-immutable, so create-new + reparent annotations + trash old).
 - **Lazy migration**: stored attachments are migrated only when their collection becomes a writing project — no bulk sweeps. Zotero collections are not mirrored as directories.
 - **MCP mode**: hybrid — reads on local SQLite (`ZOTERO_LOCAL=true`), writes via web API key (configured in `~/.claude.json`); cloud writes land locally only after a desktop sync. Zotero-imported metadata (e.g. JSTOR) is unreliable — title-page verification (Rule 2) applies on this inflow path too.
 

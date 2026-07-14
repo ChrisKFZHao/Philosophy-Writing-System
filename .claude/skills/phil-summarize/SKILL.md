@@ -17,7 +17,9 @@ Output conforms to `summary-schema.json` (`.claude/shared/summary-schema.json`).
 ## 2. Input
 
 - **Required**: Full extracted text of the source (from the `pdf` skill).
-- **Required**: Verified source metadata (author, year, complete title, source type, canonical PDF path). Metadata must have been read from the document itself, not recalled (Rule 2).
+- **Required**: Verified source metadata (author, year, complete title, **source type**, canonical PDF path). Metadata must have been read from the document itself, not recalled (Rule 2). `source_type` (paper / monograph / collection / chapter) selects the summarizing mode in Step 6.
+- **For a monograph**: the table of contents (chapter numbers + titles) so the volume summary can carry per-chapter segments.
+- **For a collection member (chapter)**: that single paper's text, its container metadata (volume KEY, page range), and the volume's own title — each member paper is summarized as its own standard single-paper run, not folded into the volume file.
 - **Optional**: The existing INDEX row for this KEY (topics continuity when regenerating).
 - **Optional**: Existing topic vocabulary (INDEX Topics column, project keyword lists) for tag alignment.
 
@@ -49,15 +51,19 @@ List the named positions or authors the text substantively engages with (targets
 ### Step 5: Assign Topics
 Assign 4–8 English topic tags (lowercase phrases, comma style matching the INDEX Topics column). Reuse existing INDEX/project vocabulary where apt; introduce new tags only for genuinely new subject matter.
 
-### Step 6: Render the Chinese Summary
-Compose the summary in Chinese, 300–500 characters, covering all five elements (thesis, route, concepts, interlocutors, topics). Filenames, KEYs, and topic tags remain in English.
+### Step 6: Render the Chinese Summary (mode by source type)
+Compose the summary in Chinese; filenames, KEYs, and topic tags remain in English. Steps 1–5 run against the appropriate unit for each mode:
+
+- **paper / preprint** — one summary, 300–500 characters, covering all five elements. (Unchanged.)
+- **monograph** — a volume-level summary (300–500 chars, the whole book's thesis + argument arc + concepts + interlocutors + topics) **plus** one segment per chapter (~150–300 chars each), populating `chapters[]`. Steps 1–4 are applied once to the whole book and once per chapter; topics (Step 5) are assigned at the volume level only.
+- **collection member (chapter)** — run the full paper pipeline (Steps 1–5) on that single member paper exactly as for a standalone paper, 300–500 chars, with its own topics; set `container` to the volume KEY + page range. The edited volume itself also gets a summary in `collection` mode: a volume-level summary of the editors' framing question and the structural arc across parts (no per-member fold-in — each member has its own file).
 
 ### Step 7: Assemble JSON
-Assemble the structured output with a `SUM-` prefixed `summary_id`, per `report-id-registry.md`.
+Assemble the structured output with a `SUM-` prefixed `summary_id`, per `report-id-registry.md`. Monograph summaries carry `chapters[]` (in-file per-chapter `summary_text`); a collection **volume** summary carries `members[]` (a pointer manifest — chapter_no, title, author, pages, member_key — whose actual summaries live in separate member files); collection **member** summaries carry `container`.
 
 ## 6. Quality Criteria
 
-- **Length discipline**: Chinese summary within 300–500 characters
+- **Length discipline**: Chinese summary within 300–500 characters (paper, monograph volume-level, and each collection-member paper); monograph chapter segments ~150–300 characters each
 - **Charity**: thesis stated in the author's own commitments
 - **Tag stability**: topics reuse existing library vocabulary where applicable
 - **No hallucination**: every element grounded in the provided text; no claims, works, or positions the text does not contain (Rule 2)
@@ -73,7 +79,8 @@ Assemble the structured output with a `SUM-` prefixed `summary_id`, per `report-
 
 - **Non-philosophy PDF**: flag it and ask the user whether to summarize anyway or skip
 - **Unextractable text** (scanned PDF, encoding failure): report the failure; produce no summary from guesswork
-- **Book-length source**: summarize the whole at coarse grain; chapter-level summaries are out of scope (note this in the output)
+- **Monograph (single-author book)**: produce a volume-level summary plus per-chapter segments (`chapters[]`) in one file — not one coarse-grained whole. The citation unit stays the book (KEY + page number); chapter segments are a reading/recommendation aid and do not become INDEX rows or Zotero sub-items.
+- **Edited collection**: the volume gets a `collection`-mode summary; **each member paper is summarized independently** (its own `chapter`-mode file, INDEX row, and Zotero bookSection). Type test is whether the chapters are independent works — a single-author self-collection of previously published papers is treated as a collection, not a monograph.
 - **Unverified year**: set `year_verified: false` and `year: "nd"`; never substitute a year from model memory
 
 ## 9. Interface with ARS

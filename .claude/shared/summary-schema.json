@@ -15,8 +15,8 @@
         "title": { "type": "string", "description": "Complete title as read from the title page" },
         "author": { "type": "string" },
         "year": { "type": "string", "description": "4-digit year read from the PDF, or \"nd\" if unverifiable" },
-        "source_type": { "type": "string", "enum": ["paper", "monograph", "chapter", "preprint", "other"] },
-        "source_location": { "type": "string", "description": "Canonical PDF path relative to Private/Bibliography/ (e.g. PDF/Austin_1956_A-Plea-for-Excuses.pdf)" }
+        "source_type": { "type": "string", "enum": ["paper", "monograph", "collection", "chapter", "preprint", "other"], "description": "paper = journal article; monograph = single-author book (summarized as one file with chapter segments); collection = edited volume (each member paper gets its own chapter summary); chapter = one member paper of a collection" },
+        "source_location": { "type": "string", "description": "Canonical PDF path relative to Private/Bibliography/ (e.g. PDF/Austin_1956_A-Plea-for-Excuses.pdf). For a chapter, the shared volume PDF plus page range (e.g. PDF/Chalmers_2009_Metametaphysics.pdf, pp. 347-383)" }
       }
     },
     "core_thesis": { "type": "string", "description": "The core claim the text commits itself to, stated charitably" },
@@ -41,6 +41,43 @@
     },
     "summary_text": { "type": "string", "description": "Rendered Chinese summary, ~300-500 characters, covering all five elements" },
     "length_chars": { "type": "integer", "description": "Character count of summary_text" },
+    "chapters": {
+      "type": "array",
+      "description": "Monograph only: per-chapter segments within the single volume summary file. Absent for paper/chapter source types.",
+      "items": {
+        "type": "object",
+        "required": ["title", "summary_text"],
+        "properties": {
+          "chapter_no": { "type": "string", "description": "Chapter number or label as printed (e.g. \"3\", \"II\")" },
+          "title": { "type": "string", "description": "Chapter title from the table of contents" },
+          "summary_text": { "type": "string", "description": "Chapter summary in Chinese, ~150-300 characters" }
+        }
+      }
+    },
+    "members": {
+      "type": "array",
+      "description": "Collection (edited volume) only: manifest of member papers, each registered as its own INDEX row + independent summary file. Absent for paper/monograph/chapter. Distinct from chapters[] (which carries in-file per-chapter summary_text for monographs); members[] is a pointer index, its summaries live in separate files.",
+      "items": {
+        "type": "object",
+        "required": ["title", "member_key"],
+        "properties": {
+          "chapter_no": { "type": "integer", "description": "Chapter/essay number within the volume" },
+          "title": { "type": "string", "description": "Member paper title from the table of contents" },
+          "author": { "type": "string", "description": "Member paper author(s) as printed" },
+          "pages": { "type": "string", "description": "Page range within the volume (e.g. \"75-112\")" },
+          "member_key": { "type": "string", "description": "The member paper's own INDEX KEY (AUTHOR-TITLE)" }
+        }
+      }
+    },
+    "container": {
+      "type": "object",
+      "description": "Chapter (collection member) only: links this member paper's summary back to its edited volume.",
+      "required": ["container_key"],
+      "properties": {
+        "container_key": { "type": "string", "description": "The volume's INDEX KEY (EDITOR-TITLE format)" },
+        "pages": { "type": "string", "description": "Page range of this paper within the volume (e.g. \"347-383\")" }
+      }
+    },
     "year_verified": { "type": "boolean", "description": "True only if the year was read from the PDF itself (Rule 2 provenance)" },
     "summary_version": { "type": "string" },
     "generated_at": { "type": "string", "format": "date-time" }

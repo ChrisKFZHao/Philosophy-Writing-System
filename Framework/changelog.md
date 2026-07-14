@@ -1,5 +1,36 @@
 # Framework Changelog
 
+## v0.4.5-alpha — 2026-07-14
+
+**`/phil:ingest` Step 8 book gate: ISBN-only → fallback cascade DOI-first → ISBN → bibtex** (validated on the first real edited-collection ingestion)
+
+- First edited-collection ingestion end-to-end: *Oxford Studies in Metaphysics, Volume 12* (Bennett & Zimmerman eds., OUP 2020) — 1 volume row (`BENNETT-OSM-12`) + 9 member-paper rows (page ranges + container KEY), volume + 4 PART II "Metaphysics of Science" member summaries (Baker, Dasgupta, Bhogal, Ney) at Level 0.5, 5 other members registered summary-pending; Zotero: 1 `book` + 9 `bookSection` items + one batch linked-file POST to all 10 parents (`zotero-attach-linked.py --parents`, verified)
+- **Live finding that drove the change**: both the copyright-page ISBN (`9780192893314`) and the ebook ISBN (`9780191914584`) returned "not found" on Open Library *and* Google Books, and the whole-book DOI failed on CrossRef — but **every chapter DOI (`…/<book-doi>.003.000N`) resolved cleanly as a CrossRef `bookSection`**. The v0.4.4 ISBN-only book gate would have dead-ended here
+- **Gate revised** (ingest.md §8B, CLAUDE.md, Lessons): books now run a cascade — (1) whole-book DOI + per-chapter DOIs (per-chapter is the *preferred* collection-member path, CrossRef-verified, superior to hand-built `@incollection` bibtex), (2) copyright-page ISBN, (3) resolver-independent `@book`/`@incollection` bibtex from verified metadata. Papers unchanged (DOI). Rule 2 now explicitly covers CrossRef's own output too (it dropped ch. 7's subtitle "Completeness or Maximality?")
+- `zotero_add_by_isbn`'s no-`attach_mode` / no-stored-copy verification is retained for when the ISBN path is actually taken; the OSM item was created via `@book` bibtex (book) + per-chapter DOIs (members), all `attach_mode='none'`, book item children verified empty
+- Batch mode (`--parents`) exercised for real: 10 parents, single POST, script retries absorbed 2 transient CrossRef/proxy SSL failures
+
+## v0.4.4-alpha — 2026-07-14
+
+**`/phil:ingest` supports monographs and edited collections** (finer-grained summaries + per-paper Zotero items)
+
+- **Document-type detection** (Step 2): `paper` / `monograph` / `collection`, decided by whether chapters are independent, separately-citable works — not by author count (a single author's self-collection is a collection). Books also get ISBN + table-of-contents extraction (Rule 2, from the PDF)
+- **Chapter-level summaries** (Step 6): a monograph's `.summary.txt` carries per-chapter segments (`chapters[]`, ~150–300 chars); an edited collection yields a volume summary **plus one independent summary file per member paper** (chapter-level stem, its own topics, a `container` back-link)
+- **Per-paper INDEX rows** (Step 5): a collection registers a volume row (KEY `EDITOR-TITLE`) plus one row per member paper (KEY `AUTHOR-TITLE`); member rows point at the shared volume PDF + page range + `in <volume-KEY>`, so each member is independently citable through the two-hop Citation Gate. One physical PDF per volume — never split or copied
+- **Two-tier Zotero gate** (Step 8): DOI for papers, **ISBN for books** (`zotero_add_by_isbn`). A collection additionally gets one `bookSection` per member paper (`zotero_add_by_bibtex` `@incollection`), and the volume PDF is linked to the book item + every bookSection in one batch POST. `zotero_add_by_isbn` has no `attach_mode` → first book ingestion verifies no stored copy; Open Library / Google Books metadata cross-check is mandatory (less reliable than CrossRef)
+- **`zotero-attach-linked.py` batch mode**: `--parents KEY1,KEY2,…` attaches one stem to many parents in a single POST (auto-splits at Zotero's 50-item cap); single-parent usage unchanged
+- Schema: `summary-schema.json` gains `collection` source type, optional `chapters[]` (monograph) and `container` (collection member)
+
+## v0.4.3-alpha — 2026-07-14
+
+**`/phil:ingest` Step 8: Zotero item auto-registration** (batch-scalable — removes the manual "Attach Link to File" click)
+
+- New Step 8 (DOI-gated, cloud write): for a PDF with a verified DOI, `zotero_add_by_doi(attach_mode='none', if_exists='skip')` creates the parent metadata item (no stored copy), CrossRef metadata is cross-checked against the title-page metadata (Rule 2 on the inflow path), the canonical PDF is attached as a `linked_file` via the reusable helper `.claude/scripts/zotero-attach-linked.py` (auth from `~/.claude.json`, proxy, retries, `--verify`), and INDEX's `Zotero` column is backfilled with the parent key
+- First committed framework script: `.claude/scripts/zotero-attach-linked.py` fills the zotero MCP's linked-file gap and is shared by Step 8 and the Lessons migration path
+- No-DOI sources (SEP entries, working papers) fall back to a reported manual follow-up — automation is never forced on unverifiable metadata
+- Guardrails: `--dry-run` skips Step 8 (it writes to the cloud); collections are never auto-filed (lazy-migration principle); the API key/userID are read from `~/.claude.json` at run time and never hardcoded; item keys are written straight into INDEX, never round-tripped through subagent return values (proxy redaction rewrites `KEY:` lines to `[密钥]`)
+- `Framework/Lessons/zotero-integration.md` "New PDF" flow updated to describe the automated path; validated live on `BUILES-RATES-OF-CHANGE`
+
 ## v0.4.2-alpha — 2026-07-14
 
 **Zotero integration: unified PDF repository + annotation-preserving migration** (pilot: `instantaneous-velocity`, 6 items; first `Framework/Lessons/` entry)
