@@ -1,10 +1,9 @@
 ---
-description: "Moral Psychology Analysis — analyze the moral judgment–motivation relation; evaluate internalism/externalism, the Humean theory of motivation, and amoralist/akrasia challenges"
 name: phil-moral-psychology
-domain: metaethics
-version: 1.0.0
+description: "Moral Psychology Analysis — analyze the moral judgment–motivation relation; evaluate internalism/externalism, the Humean theory of motivation, and amoralist/akrasia challenges"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Psychology Analysis
 
 ## Overview
@@ -314,8 +313,8 @@ Assemble the findings from Steps 1-6 into a structured report conforming to `mor
 - `phil-normativity` (optional but recommended): The reasons internalism/externalism diagnosis from the normativity analysis parallels and constrains the motivational internalism/externalism analysis. An argument that is reasons-internalist (Williams-style) creates pressure toward motivational internalism, and vice versa. The normativity report provides the context for assessing whether the argument's psychology and normativity are consistent.
 
 **Referenced knowledge resources:**
-- `references/glossary-metaethics.md`: Definitions of core moral-psychological concepts (motivational internalism, motivational externalism, Humean theory of motivation, anti-Humeanism, amoralist, akrasia, practicality requirement, direction of fit, fetishism argument).
-- `references/normativity-taxonomy.md`: The taxonomy of normativity source theories — used in Step 6 to cross-reference the motivational analysis with the normative source theory. A Humean about normativity and a Humean about motivation are a natural pair; a constitutivist about normativity and a Humean about motivation may involve tension.
+- `Framework/Workflow/References/glossary-metaethics.md`: Definitions of core moral-psychological concepts (motivational internalism, motivational externalism, Humean theory of motivation, anti-Humeanism, amoralist, akrasia, practicality requirement, direction of fit, fetishism argument).
+- `Framework/Workflow/References/normativity-taxonomy.md`: The taxonomy of normativity source theories — used in Step 6 to cross-reference the motivational analysis with the normative source theory. A Humean about normativity and a Humean about motivation are a natural pair; a constitutivist about normativity and a Humean about motivation may involve tension.
 
 **Feeds into (downstream):**
 - `phil-moral-realism`: Motivational internalism/externalism commitments constrain the viable realism positions. Strong internalism + Humeanism rules out cognitivist realism; externalism is a prerequisite for standard realist views. The moral psychology report should be passed to the realism skill as a constraint document.

@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Natural Kind Analysis Examples
 
 > This document demonstrates the practical application of natural kind analysis across different kind theories and domains. Each example shows the complete input-to-output process.

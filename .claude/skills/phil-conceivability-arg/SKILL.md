@@ -1,10 +1,9 @@
 ---
-description: "Conceivability Argument Analysis — evaluate the conceivability-to-possibility chain; analyze zombie arguments and modal epistemology in philosophical reasoning"
 name: phil-conceivability-arg
-domain: metaphysics
-version: 1.0.0
+description: "Conceivability Argument Analysis — evaluate the conceivability-to-possibility chain; analyze zombie arguments and modal epistemology in philosophical reasoning"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Conceivability Argument Analysis
 
 ## Overview

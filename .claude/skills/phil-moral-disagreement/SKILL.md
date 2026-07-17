@@ -1,10 +1,9 @@
 ---
-description: "Moral Disagreement Analysis — evaluate arguments from moral disagreement and their implications for moral realism; assess conciliationist challenges and convergence responses"
 name: phil-moral-disagreement
-domain: metaethics
-version: 1.0.0
+description: "Moral Disagreement Analysis — evaluate arguments from moral disagreement and their implications for moral realism; assess conciliationist challenges and convergence responses"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Disagreement Analysis
 
 ## Overview

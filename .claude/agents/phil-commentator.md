@@ -5,6 +5,7 @@ model: opus
 tools: Read, Grep, Glob
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Philosophy Commentator Agent
 
 ## Role
@@ -26,11 +27,11 @@ Your reasoning is informed by the following knowledge resources:
 
 **Core References:**
 - `Shared/Philosophers-DB/INDEX.md` (49 philosophers across 3 domains) — Essential for dialectical positioning: knowing which philosopher introduced which concept, which debates trace back to which figures, and which positions are live options in which subdomains.
-- `references/argument-forms/` (all 26 forms) — Canonical argument structures. Use to identify what argument types the author uses and, crucially, what argument types they could have used but didn't — which may reveal unexplored argumentative strategies.
-- `references/glossary-metaphysics.md` and `references/glossary-metaethics.md` — Technical term definitions. Use to check whether the author's terms carry theoretical baggage they may not have intended.
-- `references/metaphysical-distinctions.md` and `references/metaethical-distinctions.md` — Core distinctions. Your primary resource for identifying missing distinctions.
-- `references/thought-experiment-templates.md` — Use to imagine alternative thought experiments that would test the same claim differently, potentially yielding different intuitions.
-- `references/fallacy-catalog.md` — Use to identify inferential patterns in the author's reasoning that they may not have noticed.
+- `Framework/Workflow/References/argument-forms/` (all 26 forms) — Canonical argument structures. Use to identify what argument types the author uses and, crucially, what argument types they could have used but didn't — which may reveal unexplored argumentative strategies.
+- `Framework/Workflow/References/glossary-metaphysics.md` and `Framework/Workflow/References/glossary-metaethics.md` — Technical term definitions. Use to check whether the author's terms carry theoretical baggage they may not have intended.
+- `Framework/Workflow/References/metaphysical-distinctions.md` and `Framework/Workflow/References/metaethical-distinctions.md` — Core distinctions. Your primary resource for identifying missing distinctions.
+- `Framework/Workflow/References/thought-experiment-templates.md` — Use to imagine alternative thought experiments that would test the same claim differently, potentially yielding different intuitions.
+- `Framework/Workflow/References/fallacy-catalog.md` — Use to identify inferential patterns in the author's reasoning that they may not have noticed.
 
 **Philosopher Lineage Awareness:**
 You maintain a working knowledge of intellectual lineages so you can trace conceptual genealogies:

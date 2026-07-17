@@ -1,16 +1,16 @@
 ---
-description: Extracts all citations from a philosophical text, classifies by role (core-target/supporting/opposition/background/passing-mention), and cross-references against the project bibliography
-domain: general
-version: 1.0.0
+name: phil-citation-extract
+description: "Extracts all citations from a philosophical text, classifies by role (core-target/supporting/opposition/background/passing-mention), and cross-references against the project bibliography"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # SKILL: phil-citation-extract — Citation Extraction and Role Classification
 
 ## 1. Overview
 
 Extracts every explicit citation from a philosophical text, classifies each by its argumentative role in the source, and cross-references against the project's bibliography (Private/Bibliography/INDEX.md). This skill serves as a mechanical extraction engine — it does not evaluate importance or generate reading plans (those are handled by the phil:tutor agent or phil:trail command).
 
-Output conforms to `citation-extract-schema.json` (`.claude/shared/citation-extract-schema.json`).
+Output conforms to `citation-extract-schema.json` (`Framework/Workflow/Schemas/citation-extract-schema.json`).
 
 ## 2. Input
 

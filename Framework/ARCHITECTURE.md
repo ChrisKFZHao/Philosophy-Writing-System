@@ -1,9 +1,10 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.5.0-alpha &emsp; **Status**: Alpha
+> **Version**: 0.6.0-alpha &emsp; **Status**: Alpha
 >
-> **Built atop `academic-research-skills` (v3.15.0)**
-> This system does not re-implement ARS's existing capabilities (literature search, paper writing, peer review, citation verification). Instead, it layers on top of ARS an **analytic-philosophy-specific methodological layer**.
+> **Runtime hosts**: Claude Code and Codex
+>
+> The philosophy workflow is self-contained. `academic-research-skills` remains an optional supplement for literature search, format conversion, and citation verification.
 >
 > **Subdomain Coverage**: General Analytic Philosophy · Metaphysics · Metaethics
 
@@ -54,6 +55,11 @@ The system is optimized for **analytic philosophy**, not general academic writin
 - **Counterexample generation**: Construct and evaluate counterexamples
 - **Conceptual clarification**: Distinguish concepts, draw distinctions — not merely summarize
 - **Ontological commitment explicitation**: Reveal the entities and categories presupposed by an argument
+
+### 1.7 Runtime Neutrality
+- `Framework/Workflow/` is the only editable source for skills, workflows, roles, rules, references, schemas, templates, and helper scripts.
+- `.claude/` and `.agents/skills/` are deterministic, committed adapters generated from the manifest.
+- Runtime limitations may change scheduling or Zotero status, but never output contracts, Citation Gate decisions, or writing-language conventions.
 
 ---
 
@@ -117,132 +123,51 @@ The system is optimized for **analytic philosophy**, not general academic writin
 
 ## 3. Directory Tree
 
+`Framework/Workflow/manifest.json` is the inventory and dependency contract. The generator validates every item before writing either adapter.
+
 ```
-.claude/
-├── skills/
-│   ├── phil-argument-reconstruct/    # Argument reconstruction
-│   ├── phil-charity-check/           # Principle of charity check
-│   ├── phil-premise-detect/          # Implicit premise detection
-│   ├── phil-counterexample/          # Counterexample generation and evaluation
-│   ├── phil-conceptual-analysis/     # Conceptual analysis
-│   ├── phil-dialectical-map/         # Dialectical mapping
-│   ├── phil-thought-experiment/      # Thought experiment analysis
-│   ├── phil-distinction-track/       # Distinction tracking
-│   ├── phil-modal-arg/               # Modal argument analysis
-│   ├── phil-analogy-check/           # Analogical argument evaluation
-│   ├── phil-parity-check/            # Reasoning parity check
-│   ├── phil-intuition-pump/          # Intuition pump detection
-│   ├── phil-methodology/             # Philosophical methodology reflection
-│   ├── phil-contextualize/           # Intellectual history contextualization
-│   ├── phil-citation-extract/        # [New] Citation extraction and role classification
-│   ├── phil-summarize/               # [v0.4.1] Level 0.5 source summary (ingestion substrate)
-│   │
-│   ├── phil-ontological-commitment/  # [New] Ontological commitment detection
-│   ├── phil-identity-persistence/    # [New] Identity and persistence analysis
-│   ├── phil-grounding-check/         # [New] Grounding / constitution analysis
-│   ├── phil-conceivability-arg/      # [New] Conceivability argument analysis
-│   ├── phil-causation-analyze/       # [New] Causal claim analysis
-│   ├── phil-essence-detect/          # [New] Essentialist claim detection
-│   ├── phil-natural-kind-analyze/    # [New] Natural kind and property analysis
-│   │
-│   ├── phil-moral-realism/            # [New] Moral realism argument analysis
-│   ├── phil-normativity/              # [New] Normativity analysis
-│   ├── phil-moral-semantics/          # [New] Moral semantics analysis
-│   ├── phil-moral-psychology/         # [New] Moral psychology analysis
-│   ├── phil-moral-disagreement/       # [New] Moral disagreement argument analysis
-│   ├── phil-moral-epistemology/       # [New] Moral epistemology analysis
-│   └── phil-moral-supervenience/      # [New] Moral supervenience analysis
-│
-├── agents/
-│   ├── metaphysician.md              # [New] Metaphysical analyst (ontology-focused)
-│   ├── metaethicist.md               # [New] Metaethical analyst (moral language / norm analysis)
-│   ├── phil-writer.md                # [Phase 6] Philosophy writer (outline/draft/revision)
-│   ├── phil-reviewer.md              # [Phase 6] Philosophy reviewer (8-dimension + perspective)
-│   ├── phil-commentator.md           # [Phase 6] Philosophy commentator (critical/response/position)
-│   ├── phil-orchestrator.md          # [Phase 6] Pipeline orchestrator (6-stage workflow)
-│   └── phil-tutor.md                 # [New] Tutor agent — dialogic mentor (reading + incubating modes)
-│
-├── references/
-│   ├── glossary-metaethics.md        # Metaethics terminology glossary
-│   ├── glossary-metaphysics.md       # [New] Core metaphysics terminology glossary
-│   ├── fallacy-catalog.md            # Formal / informal fallacy catalog
-│   ├── thought-experiment-templates.md # Thought experiment typology
-│   │                                  #   (including metaphysical subtypes)
-│   ├── metaphysical-distinctions.md  # [New] Core metaphysical distinctions catalog
-│   ├── ontological-categories.md     # [New] Ontological category taxonomy
-│   ├── modal-logic-primer.md         # [New] Modal logic foundational reference
-│   ├── causation-taxonomy.md         # [New] Causal theory taxonomy
-│   ├── metaethical-distinctions.md   # [New] Core metaethical distinctions catalog
-│   ├── moral-realism-taxonomy.md     # [New] Moral realism spectrum
-│   ├── normativity-taxonomy.md       # [New] Normativity theory taxonomy
-│   ├── argument-forms/               # Standard argument form library
-│   │   ├── modus-ponens.md
-│   │   ├── modus-tollens.md
-│   │   ├── reductio.md
-│   │   ├── transcendental.md
-│   │   ├── leibniz-law.md            # [New] Leibniz's Law argument
-│   │   ├── conceivability-argument.md # [New] Conceivability argument
-│   │   ├── grounding-argument.md     # [New] Grounding argument
-│   │   ├── supervenience-argument.md # [New] Supervenience argument
-│   │   ├── recombination-argument.md # [New] Recombination argument
-│   │   ├── truthmaker-argument.md    # [New] Truthmaker argument
-│   │   ├── sorites.md                # [New] Sorites paradox
-│   │   ├── four-dimensionalist.md    # [New] Four-dimensionalist argument
-│   │   ├── mereological-argument.md  # [New] Mereological argument
-│   │   ├── open-question-argument.md # [New] Open question argument (Moore)
-│   │   ├── queerness-argument.md     # [New] Argument from queerness (Mackie)
-│   │   ├── companions-in-guilt.md    # [New] Companions in guilt argument
-│   │   ├── disagreement-argument.md  # [New] Disagreement argument
-│   │   ├── regress-argument.md       # [New] Normative regress (Korsgaard)
-│   │   └── moral-supervenience.md    # [New] Moral supervenience argument
-│   └── (Philosophers-DB moved to Shared/Philosophers-DB/ in v0.4 —
-│        curated, shareable knowledge lives outside .claude/)
-│
-├── commands/
-│   ├── reconstruct.md                 # phil:reconstruct — Full-dimension text understanding (9-20 skills)
-│   ├── evaluate.md                    # phil:evaluate — Multi-angle parallel critique (7 skills)
-│   ├── review.md                      # phil:review — Peer review agent (8 dimensions)
-│   ├── write.md                       # phil:write — Philosophy writer agent (outline/draft/revision)
-│   ├── comment.md                     # phil:comment — Deep commentary agent (argument details)
-│   ├── pipeline.md                    # phil:pipeline — Full pipeline orchestrator (6 stages)
-│   ├── tutor.md                       # [New] phil:tutor — Dialogic mentor (reading + incubating modes)
-│   └── ingest.md                      # [v0.4.1] phil:ingest — Literature ingestion (scan/rename/register/summarize/recommend)
-│
-│
-├── shared/
-│   ├── argument-schema.json          # Argument formalization contract
-│   ├── dialectical-tree-schema.json  # Dialectical tree contract
-│   ├── concept-map-schema.json       # Concept mapping contract
-│   ├── premise-audit-schema.json     # Implicit premise audit contract
-│   ├── analysis-report-schema.json   # Integrated analysis report contract
-│   ├── ontological-commitment-schema.json  # [New] Ontological commitment contract
-│   ├── grounding-relation-schema.json      # [New] Grounding relation contract
-│   ├── moral-realism-schema.json            # [New] Moral realism stance contract
-│   ├── normativity-schema.json              # [New] Normative structure contract
-│   ├── citation-extract-schema.json         # [New] Citation extract data contract
-│   ├── summary-schema.json                  # [v0.4.1] Level 0.5 summary contract
-│   └── templates/
-│       ├── argument-reconstruction.md # Argument reconstruction report template
-│       ├── premise-audit.md           # Premise audit template
-│       ├── conceptual-analysis.md     # Conceptual analysis template
-│       ├── dialectical-map.md         # Dialectical mapping template
-│       └── ontological-audit.md       # Ontological audit template
-│
-└── memory/                           # Project memory (Claude persistent memory)
-    ├── project-context.md
-    └── philosopher-notes/             # Long-term accumulated philosophical notes
+Framework/Workflow/                 # Platform-neutral source of truth
+├── manifest.json                   # 30 skills + 8 workflows + 7 roles
+├── Skills/{skill}/                 # SKILL.md plus examples/checklists
+├── Workflows/{workflow}.md         # phil:* orchestration
+├── Roles/{role}.md                 # quality_tier + neutral capabilities
+├── Rules/                          # behavior + runtime compatibility
+├── References/                     # argument forms, glossaries, taxonomies
+├── Schemas/                        # 13 JSON contracts + registry
+├── Templates/                      # reports, generated root guides, project adapters
+├── Scripts/                        # generator, doctor, scanner, policy, Zotero helper
+└── Tests/                          # stdlib regression tests
+
+.claude/                             # Generated and committed Claude Code adapter
+├── commands/                        # 8 /phil:* commands
+├── skills/                          # 30 atomic skills
+├── agents/                          # 7 roles; high tier maps to opus
+├── rules/                           # Generated behavior rules
+└── settings.json                    # Portable tracked permissions only
+
+.agents/skills/                      # Generated and committed Codex adapter
+├── phil-*/                          # 30 atomic skills
+└── source-command-*/                # 8 composite workflows
 ```
 
-### 3.1 Rationale for This Organization
+Generation contract:
 
-- **`skills/`**: Each Skill is an independent callable unit corresponding to one philosophical analysis methodology.
-- **`agents/`**: Cross-Skill orchestration agents (self-contained complex dialogue strategies), separated from individual Skills.
-- **`references/`**: Knowledge dependencies — not embedded in the Skills themselves, to avoid prompt bloat.
-- **`commands/`**: User entry points — thin wrappers that point to a Skill or Agent.
-- **`shared/`**: Cross-Skill shared data contracts (schemas and templates).
+1. Edit only `Framework/Workflow/`.
+2. Run `build-adapters.py` and commit the generated adapters.
+3. Run `build-adapters.py --check` or `workflow-doctor.py`; stale, missing, or unexpected generated files fail validation.
+4. Keep secrets and machine-specific paths in runtime user configuration or `.claude/settings.local.json`, never tracked project configuration.
+
+Runtime mapping:
+
+| Contract | Claude Code | Codex |
+|---|---|---|
+| Composite workflow | `/phil:<name>` | `$source-command-<name>` or natural `phil:<name>` routing |
+| Role quality `high` | `quality_tier: high` | Inherit current session model |
+| Delegation | `Agent` tool | Parallel agents when available; serial dependency-order fallback |
+| Project guidance | `PROJECT.md` → `AGENTS.md` → `CLAUDE.md` | Same order |
+| Zotero | MCP full backend when configured | MCP full backend; local plugin is partial fallback |
 
 ---
-
 ## 4. Layered Architecture
 
 ### Layer 0: Knowledge Base
@@ -386,13 +311,13 @@ Metaethics Knowledge Cluster:
 **When Used**: When the user needs interactive exploration of philosophical questions.
 
 **Contents**:
-- **`agents/metaphysician.md`** — **Metaphysical analyst: Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, and other meta-metaphysical questions** (`model: inherit`)
-- **`agents/metaethicist.md`** — **Metaethical analyst: Socratic dialogue specialized in moral realism, normative reasons, moral semantics, and other metaethical questions** (`model: inherit`)
-- **`agents/phil-writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards; draft mode adds user-led/claude-led collaboration sub-modes** (`model: inherit`)
-- **`agents/phil-reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews** (`model: opus`)
-- **`agents/phil-commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots** (`model: opus`)
-- **`agents/phil-orchestrator.md`** — **[Phase 6] Pipeline orchestrator: coordinates the 6-stage writing pipeline (topic orientation & reading plan → reading & analysis → conception incubation → outline → draft & iterative revision → review & final) with lenient-interrogation quality gates** (`model: opus`)
-- **`agents/phil-tutor.md`** — **[New] Tutor agent: dialogic mentor with two modes — reading (Socratic literature dialogue: probes understanding, identifies gaps, recommends literature) and incubating (构思孵化, conception incubation for pipeline Stage 3)** (`model: inherit`)
+- **`agents/metaphysician.md`** — **Metaphysical analyst: Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, and other meta-metaphysical questions** (`quality_tier: inherit`)
+- **`agents/metaethicist.md`** — **Metaethical analyst: Socratic dialogue specialized in moral realism, normative reasons, moral semantics, and other metaethical questions** (`quality_tier: inherit`)
+- **`Framework/Workflow/Roles/phil-writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards; draft mode adds user-led/assistant-led collaboration sub-modes** (`quality_tier: inherit`)
+- **`Framework/Workflow/Roles/phil-reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews** (`quality_tier: high`)
+- **`Framework/Workflow/Roles/phil-commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots** (`quality_tier: high`)
+- **`Framework/Workflow/Roles/phil-orchestrator.md`** — **[Phase 6] Pipeline orchestrator: coordinates the 6-stage writing pipeline (topic orientation & reading plan → reading & analysis → conception incubation → outline → draft & iterative revision → review & final) with lenient-interrogation quality gates** (`quality_tier: high`)
+- **`Framework/Workflow/Roles/phil-tutor.md`** — **[New] Tutor agent: dialogic mentor with two modes — reading (Socratic literature dialogue: probes understanding, identifies gaps, recommends literature) and incubating (构思孵化, conception incubation for pipeline Stage 3)** (`quality_tier: inherit`)
 
 ### Layer 4: Cross-Layer Interface (ARS Bridge)
 **Rationale**: The analysis outputs of this system must flow into ARS's writing pipeline to produce papers.
@@ -413,18 +338,18 @@ Metaethics Knowledge Cluster:
 **When Used**: When transitioning from analysis to production — generating outlines, drafting manuscripts, reviewing for philosophical rigor, and managing the full writing pipeline.
 
 **Contents**:
-- `agents/phil-writer.md` — Philosophy writer agent (`model: inherit`) with three modes:
+- `Framework/Workflow/Roles/phil-writer.md` — Philosophy writer agent (`quality_tier: inherit`) with three modes:
   - **Outline mode**: Transforms analysis outputs (argument reconstructions, concept maps, dialectical trees) into structured paper outlines with thesis, section plan, distinction inventory, and objection mapping. Preferentially consumes the Stage 3 conception file (`{topic}-conception.txt`) when present, refining — never replacing — the user's own thesis.
-  - **Draft mode**: Section-by-section manuscript drafting with 7 philosophy-aware prose standards (argument transparency, conceptual precision, modal accuracy, dialectical positioning, distinction preservation, counterexample resilience, ontological explicitness) plus an 8th, Disclosure Integrity. Two collaboration sub-modes selected via the project CLAUDE.md's `collaboration:` key: **`user-led`** (严肃学术论文 — the user writes; Claude gives defect-triggered Socratic feedback and disclosed suggestions, applying only user-accepted edits) and **`claude-led`** (课程论文 — Claude drafts section-by-section with default-on boundary interrogation, 1–3 ownership questions per section boundary).
-  - **Revision mode**: Prioritized revision based on reviewer findings (structural → conceptual → dialectical → modal → stylistic) with change tracking; interacts with the active collaboration mode (user-led: suggested edits only; claude-led: interrogates findings tracing to user-approved choices before rewriting).
-- `agents/phil-reviewer.md` — Philosophy reviewer agent (`model: opus`) with two modes:
+  - **Draft mode**: Section-by-section manuscript drafting with 7 philosophy-aware prose standards (argument transparency, conceptual precision, modal accuracy, dialectical positioning, distinction preservation, counterexample resilience, ontological explicitness) plus an 8th, Disclosure Integrity. Two collaboration sub-modes selected via the project guidance file's `collaboration:` key: **`user-led`** (严肃学术论文 — the user writes; the AI assistant gives defect-triggered Socratic feedback and disclosed suggestions, applying only user-accepted edits) and **`assistant-led`** (课程论文 — the AI assistant drafts section-by-section with default-on boundary interrogation, 1–3 ownership questions per section boundary).
+  - **Revision mode**: Prioritized revision based on reviewer findings (structural → conceptual → dialectical → modal → stylistic) with change tracking; interacts with the active collaboration mode (user-led: suggested edits only; assistant-led: interrogates findings tracing to user-approved choices before rewriting).
+- `Framework/Workflow/Roles/phil-reviewer.md` — Philosophy reviewer agent (`quality_tier: high`) with two modes:
   - **Standard review**: 8-dimension evaluation (argument validity, charity, conceptual clarity, modal rigor, counterexample resilience, dialectical completeness, ontological commitment transparency, methodological consistency) with severity grading and revision priority matrix.
   - **Perspective review**: Review from a specified philosophical stance (Quinean, Lewisian, Kripkean, Finean, Mackiean, Expressivist, etc.), distinguishing perspective-dependent from perspective-neutral findings.
-- `agents/phil-commentator.md` — Philosophy commentator agent (`model: opus`) with three modes:
+- `Framework/Workflow/Roles/phil-commentator.md` — Philosophy commentator agent (`quality_tier: high`) with three modes:
   - **Critical commentary**: Identifies unexamined assumptions, alternative interpretations, missing distinctions, undefended inferences, hidden commitments, and dialectical blind spots.
   - **Response paper**: Writes a response from a specified philosophical position.
   - **Dialectical positioning**: Situates work within the broader debate landscape and intellectual lineage.
-- `agents/phil-orchestrator.md` — Pipeline orchestrator (`model: opus`) coordinating the full 6-stage reading-before-thesis workflow:
+- `Framework/Workflow/Roles/phil-orchestrator.md` — Pipeline orchestrator (`quality_tier: high`) coordinating the full 6-stage reading-before-thesis workflow:
   - Stage 0 (prerequisite, outside the pipeline): `/phil:ingest`
   - Stage 1: Topic Orientation & Reading Plan (dialogic agent Socratic scoping of the dispute, not the thesis)
   - Stage 2: Reading & Analysis (phil-tutor reading mode + phil-* analysis chain + ars-deep-research)
@@ -433,7 +358,7 @@ Metaethics Knowledge Cluster:
   - Stage 5: Draft & Iterative Revision (phil-writer draft mode, collaboration-mode dependent)
   - Stage 6: Review & Final (phil-reviewer → phil-writer revision → loop until quality threshold met)
   
-  Each stage has a lenient-interrogation quality gate: a nameable defect triggers a challenge; a gap short of a defect is charitably completed with `[Claude 补全]` disclosure; gates are never hard-blocking. The orchestrator recommends advance/revise/return; the user decides.
+  Each stage has a lenient-interrogation quality gate: a nameable defect triggers a challenge; a gap short of a defect is charitably completed with `[AI 补全]` disclosure; gates are never hard-blocking. The orchestrator recommends advance/revise/return; the user decides.
 
 **Relationship to ARS Bridge (Layer 4)**: Layer 5 handles the core philosophical writing, review, and commentary. The ARS Bridge (Layer 4) remains available for supplementary infrastructure: literature search (`ars-deep-research`), format conversion (`ars-format-convert`), citation verification (`ars-citation-check`). Layer 5 agents are designed to function without ARS but can optionally invoke ARS capabilities for specific tasks.
 
@@ -911,7 +836,7 @@ Phase 6: Writing & Production (6-Stage Pipeline — Reading-Before-Thesis)
 │  Stage 5: Draft & Iterative Revision                       │
 │  ┌────────────────────────────────────────────────────┐    │
 │  │ phil-writer (draft mode) → collaboration mode:     │    │
-│  │ user-led (严肃学术论文) / claude-led (课程论文)              │    │
+│  │ user-led (严肃学术论文) / assistant-led (课程论文)              │    │
 │  │ → Complete manuscript draft + Notes to Self        │    │
 │  └────────────────────────────────────────────────────┘    │
 │    ↓                                                       │
@@ -926,7 +851,7 @@ Phase 6: Writing & Production (6-Stage Pipeline — Reading-Before-Thesis)
 │                                                            │
 │  Quality Gates: Lenient interrogation at every stage —     │
 │  defect-triggered challenge; charitable completion with    │
-│  disclosure ([Claude 补全]) for gaps short of a defect;      │
+│  disclosure ([AI 补全]) for gaps short of a defect;      │
 │  never hard-blocking. Orchestrator recommends; user        │
 │  decides.                                                  │
 └────────────────────────────────────────────────────────────┘
@@ -1240,7 +1165,7 @@ Step 4: Registration
       - §6 Research Flow
       - §7 Taxonomy tables (analytic dimension + methodological depth + domain)
   → Create commands/<domain>.md under one of the 8 composite commands or as a new command in the phil: namespace
-  → Update the Skills overview in CLAUDE.md
+  → Update `Framework/Workflow/manifest.json` and regenerate adapters
 
 Step 5: Dependency check
   → If the new Skill requires new domain knowledge (glossaries, form libraries):
@@ -1541,7 +1466,8 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.5.0-alpha · Last updated 2026-07-17 · v0.5.0: writing-workflow reorganization ("reading-before-thesis") — phil-orchestrator's pipeline goes from 5 to 6 stages (Topic Orientation & Reading Plan → Reading & Analysis → Ideation/Conception Incubation → Outline → Draft & Iterative Revision → Review & Final), splitting the old Stage 1 (question formulation) into scoping (new Stage 1) and thesis crystallization (new Stage 3); Rule 1 gains Workflow Gates lenient interrogation (宽容性诘问) — defect-triggered challenge vs. charitable completion disclosed via `[Claude 补全]`, never hard-blocking; phil-tutor gains an incubating mode (构思孵化) alongside reading mode, writing the new unversioned `{topic}-conception.txt` artifact; phil-writer draft mode gains user-led (严肃学术论文) / claude-led (课程论文) collaboration sub-modes plus an 8th prose standard, Disclosure Integrity; every agent now carries `model:` frontmatter (phil-tutor, metaphysician, metaethicist, phil-writer → `inherit`; phil-reviewer, phil-commentator, phil-orchestrator → `opus`) per a new model-economy convention; fixed 5 pre-existing `agentsphil:*` path typos → `agents/phil-*`. This version bump also absorbs the undocumented 0.4.2–0.4.5 span (Zotero integration — see changelog.md; not yet folded into this document's body).*
+*Document version 0.6.0-alpha · Last updated 2026-07-17 · platform-neutral `Framework/Workflow/` source, manifest-driven Claude Code/Codex adapters, portable scripts, collaboration aliases, runtime capability mapping, and explicit Zotero full/partial/skipped degradation.*
+*Previous: 0.5.0-alpha · 2026-07-17 · six-stage reading-before-thesis workflow, conception incubation, lenient-interrogation gates, dual draft collaboration, and model tiers.*
 *Previous: 0.4.1-alpha · 2026-07-14 · literature ingestion — /phil:ingest command + phil-summarize skill + summary-schema.json; canonical bibliography stem {Author}_{Year}_{Title}; Summaries/ (Level 0.5) activated*
 *Previous: 0.4-alpha · 2026-07-14 · dual-repo restructure (privacy boundary = repo boundary) — Philosophers-DB → Shared/, papers & bibliography → Private/ (inner private repo, PDFs untracked), per-paper refs.md + two-hop Citation Gate + literature recommendation trigger points*
 *Previous: 0.3-alpha · 2026-07-12 · Merge: phil:tutor tutor agent + citation-extract skill; audit fix: schema wiring, dead link repair, agent pruning, hook removal*

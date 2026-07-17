@@ -1,10 +1,9 @@
 ---
-description: Essentialist Claim Detection — detect and evaluate use of the essence/accident distinction; analyze modal profiles of essential properties using Finean and Kripkean frameworks
 name: phil-essence-detect
-domain: metaphysics
-version: 1.0.0
+description: "Essentialist Claim Detection — detect and evaluate use of the essence/accident distinction; analyze modal profiles of essential properties using Finean and Kripkean frameworks"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Essentialist Claim Detection
 
 ## Overview

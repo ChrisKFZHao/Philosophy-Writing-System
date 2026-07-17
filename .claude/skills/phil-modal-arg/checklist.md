@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Modal Argument Analysis Quality Checklist
 
 > After each modal argument analysis, check each item. A fully checked list indicates a high-quality modal analysis report.

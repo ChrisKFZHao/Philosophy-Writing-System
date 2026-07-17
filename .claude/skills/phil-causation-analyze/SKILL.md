@@ -1,10 +1,9 @@
 ---
-description: Causal Claim Analysis — identify theoretical affiliations of causal claims; evaluate Humean vs anti-Humean readings; detect causal exclusion and overdetermination problems
 name: phil-causation-analyze
-domain: metaphysics
-version: 1.0.0
+description: "Causal Claim Analysis — identify theoretical affiliations of causal claims; evaluate Humean vs anti-Humean readings; detect causal exclusion and overdetermination problems"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Causal Claim Analysis
 
 ## Overview

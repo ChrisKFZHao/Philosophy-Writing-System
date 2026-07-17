@@ -1,7 +1,8 @@
 ---
-description: Literature ingestion ("scraping") — scans the bibliography for unprocessed PDFs, renames them to the canonical stem, registers them in INDEX.md, generates Level 0.5 summaries (papers, monographs with chapter segments, and edited collections with per-paper summaries), runs recommendation trigger point 1, and auto-registers sources in Zotero as linked-file items (DOI-first, then ISBN, then bibtex for books; per-paper bookSection items for collections)
+description: "Literature ingestion (\"scraping\") — scans the bibliography for unprocessed PDFs, renames them to the canonical stem, registers them in INDEX.md, generates Level 0.5 summaries (papers, monographs with chapter segments, and edited collections with per-paper summaries), runs recommendation trigger point 1, and auto-registers sources in Zotero as linked-file items (DOI-first, then ISBN, then bibtex for books; per-paper bookSection items for collections)"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # /phil:ingest
 
 ## Usage
@@ -15,7 +16,7 @@ description: Literature ingestion ("scraping") — scans the bibliography for un
 
 ## Positioning
 
-The **entry point of the PDF Processing Workflow** (media-library "scraper" analogy): whenever new PDFs land in `Private/Bibliography/PDF/`, this command normalizes them into the library. It implements **recommendation trigger point 1** (on ingestion — new source's topics matched against each project CLAUDE.md's topic keywords).
+The **entry point of the PDF Processing Workflow** (media-library "scraper" analogy): whenever new PDFs land in `Private/Bibliography/PDF/`, this command normalizes them into the library. It implements **recommendation trigger point 1** (on ingestion — new source topics matched against each project's guidance-file keywords).
 
 Relation to phil:reconstruct:
 - **ingest** performs cheap intake: rename + register + Level 0.5 summary (the lowest analysis rung)
@@ -35,11 +36,10 @@ Relation to phil:reconstruct:
 
 ### Step 1: Scan (MUST be programmatic — token-economy hard requirement)
 
-Detect unprocessed PDFs by shell set-comparison. **Do not read the directory listing or INDEX.md into the model to make this judgment.**
+Detect unprocessed PDFs with the deterministic scanner. **Do not read the directory listing or INDEX.md into the model to make this judgment.**
 
 ```bash
-ls "Private/Bibliography/PDF/"*.pdf                              # actual files
-grep -o 'PDF/[^ |]*\.pdf' "Private/Bibliography/INDEX.md"        # registered paths
+python "Framework/Workflow/Scripts/bibliography-scan.py" --json
 ```
 
 A PDF is **unprocessed** if ANY of:
@@ -102,13 +102,20 @@ By document type:
 
 ### Step 7: Recommend (trigger point 1)
 
-Match the summary's `topics[]` against every `Private/Projects/*/CLAUDE.md` `## 主题关键词` list. Report overlaps per project and **offer** (never auto-write) `candidate` rows for that project's refs.md. Skip KEYs already present in that refs.md under any status, including `rejected`.
+For each `Private/Projects/*/`, resolve guidance as `PROJECT.md`, then `AGENTS.md`, then `CLAUDE.md`. Match the summary's `topics[]` against its `## 主题关键词` or `## Topic Keywords` list. Report overlaps per project and **offer** (never auto-write) `candidate` rows for that project's refs.md. Skip KEYs already present in that refs.md under any status, including `rejected`.
 
 For a **collection**, match **each member paper's own topics** (not just the volume's) — a single collection often contributes candidate references to several different projects. Offer the member paper's KEY (not the volume KEY) as the candidate, since that is the citable unit.
 
 ### Step 8: Zotero registration (identifier-gated, cloud write)
 
 Auto-create the Zotero item(s) and attach the canonical PDF as a **linked file**, so batch ingestion never requires manual "Attach Link to File" clicks. This step writes to the Zotero cloud; new items land in the local Zotero UI only after a desktop sync.
+
+Classify the runtime backend before doing any write, following `Framework/Workflow/Rules/runtime-compatibility.md`:
+- `full`: Zotero MCP write tools plus the linked-file helper are available; run this step normally.
+- `partial`: only a local Zotero plugin/API is available; do not create metadata or linked files, and report a manual follow-up.
+- `skipped`: no Zotero backend is available; complete Steps 1-7 and report a manual follow-up.
+
+When `--dry-run` is present, report the detected backend but skip every Step 8 write.
 
 **Identifier gate: DOI-first, then ISBN, then bibtex/manual.** Read every identifier from the PDF (Rule 2, never from model memory):
 - `paper` — try the **DOI** (§8A).
@@ -153,14 +160,14 @@ g. **Backfill INDEX**: the volume row's `Zotero` column = book key; each member-
 
 #### 8C. Linked-file attachment (shared helper)
 
-The zotero MCP has no linked-file-creation tool; use the reusable helper `.claude/scripts/zotero-attach-linked.py`. It reads the API key/userID from `~/.claude.json` at run time (never hardcoded/echoed), POSTs through the local proxy `127.0.0.1:6789` with retries, and prints only the resulting attachment key(s):
+The Zotero MCP has no linked-file-creation tool; use the reusable helper `Framework/Workflow/Scripts/zotero-attach-linked.py`. It reads credentials from process environment variables or the active runtime's user-level configuration, never from repository files. It uses the configured proxy, falling back to `127.0.0.1:6789`, retries transient failures, and prints only resulting attachment keys:
 
 ```bash
 # single parent (paper, or a monograph's book item)
-python ".claude/scripts/zotero-attach-linked.py" --parent <parent-key> --stem <canonical-stem>.pdf --verify
+python "Framework/Workflow/Scripts/zotero-attach-linked.py" --parent <parent-key> --stem <canonical-stem>.pdf --verify
 
 # batch — collection: the book item + every bookSection, one POST, same volume stem
-python ".claude/scripts/zotero-attach-linked.py" --parents <book-key>,<sec1-key>,<sec2-key>,... --stem <volume-stem>.pdf --verify
+python "Framework/Workflow/Scripts/zotero-attach-linked.py" --parents <book-key>,<sec1-key>,<sec2-key>,... --stem <volume-stem>.pdf --verify
 ```
 
 It emits the `linked_file` payload `{"path":"attachments:<stem>.pdf", ...}` (`attachments:` = base-directory-relative, survives machine moves). `--verify` GETs each new attachment back to confirm `linkMode`/`path`. A new-item POST needs no `If-Unmodified-Since-Version` (that header is only for key-based PATCH/DELETE). Batch mode prints `ATTACHMENT_KEY <parent> <key>` per line and auto-splits at Zotero's 50-item cap. Capture the printed keys from stdout — do not route them through a subagent return value.
@@ -172,7 +179,7 @@ It emits the `linked_file` payload `{"path":"attachments:<stem>.pdf", ...}` (`at
 Batch report (in Chinese, project convention):
 
 1. **总览** — scanned N / unprocessed M / processed / skipped / needs-year；每篇标注类型（paper / monograph / collection）
-2. **逐文献块** — original name → canonical name; KEY; document type; actions taken (renamed / registered / analysis-renamed / summarized / skipped + reason); topics; per-project recommendation hits (or "已登记，抑制推荐"); **Zotero 状态**（已建条目 `<key>` / 已存在条目 `<key>` / 无 DOI+ISBN 跳过 + 手动步骤）
+2. **逐文献块** — original name → canonical name; KEY; document type; actions taken (renamed / registered / analysis-renamed / summarized / skipped + reason); topics; per-project recommendation hits (or "已登记，抑制推荐"); **Zotero 状态**（`full` / `partial` / `skipped`，以及已建条目、已存在条目或手动步骤）
    - **论文集额外列出各成员论文**：成员 KEY、页码范围、成员摘要文件、各自的推荐命中、各自的 bookSection `<key>`
 3. **尾注** — INDEX consistency notes; follow-ups surfaced (e.g., provisional analyses whose PDF is now available for verification); **Zotero 桌面同步提醒**（新建条目须桌面端同步一次后才出现在本地界面）+ 任何解析全失败的手动待办；书籍入库所走的级联层级（DOI/ISBN/bibtex，注明哪一级命中）；若走了 ISBN 路径，附 `zotero_add_by_isbn` 未产生 stored 副本的核验结果
 
@@ -186,4 +193,4 @@ Batch report (in Chinese, project convention):
 - One physical PDF per volume — never split or copy; collection member rows point at the shared volume file + page range + `in <volume-KEY>`
 - `--dry-run` performs Step 1 (and metadata peeks where needed for reporting) but writes nothing — it **skips Step 8 entirely** (Step 8 writes to the Zotero cloud)
 - Step 8 is identifier-gated: **paper → DOI**; **book → cascade DOI-first (whole-book and, for collections, per-chapter DOIs) → ISBN → `@book`/`@incollection` bibtex**; nothing resolves and no metadata → manual-follow-up block. Per-chapter DOIs are preferred over hand-built `@incollection` bibtex when present (CrossRef-verified). Rule 2 (title-page verification) applies to CrossRef *and* Open Library / Google Books metadata (the latter is less reliable — cross-check is mandatory), and to CrossRef's own output (it may drop subtitles). `zotero_add_by_isbn` has no `attach_mode`; verify no stored copy when the ISBN path is used. Zotero collections are never auto-filed
-- The Zotero API key and userID are read from `~/.claude.json` at run time and never hardcoded or echoed; item keys are written straight into INDEX, never passed through subagent return values (proxy redaction rewrites `KEY:` lines to `[密钥]`)
+- Zotero credentials are read from process environment variables or the active runtime's user-level configuration and are never hardcoded or echoed; item keys are written straight into INDEX, never passed through subagent return values (proxy redaction rewrites `KEY:` lines to `[密钥]`)

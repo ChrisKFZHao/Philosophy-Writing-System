@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Essentialist Claim Detection Quality Checklist
 
 > After each essentialist claim analysis, check each item. A fully checked list indicates a high-quality analysis.

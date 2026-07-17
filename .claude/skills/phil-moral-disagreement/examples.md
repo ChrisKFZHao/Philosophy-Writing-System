@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Disagreement Analysis Examples
 
 > This document demonstrates the practical application of moral disagreement analysis across different argument types. Each example shows the complete input-to-output process.

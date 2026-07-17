@@ -1,10 +1,9 @@
 ---
-description: "Analyze analogical arguments by mapping source–target correspondences, evaluating the relevance of shared properties, detecting disanalogies, and assessing the argumentative force of analogical inference."
 name: phil-analogy-check
-domain: general
-version: 1.0.0
+description: "Analyze analogical arguments by mapping source–target correspondences, evaluating the relevance of shared properties, detecting disanalogies, and assessing the argumentative force of analogical inference."
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # phil-analogy-check
 
 ## 1. Overview

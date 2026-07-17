@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Intuition Pump Analysis Examples
 
 > This document demonstrates the application of intuition pump analysis across five canonical philosophical thought experiments. Each example shows the complete input-to-output process, with distinct analytical dimensions highlighted.

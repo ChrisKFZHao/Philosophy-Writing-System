@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Conceivability Argument Analysis Quality Checklist
 
 > After each conceivability argument analysis, check each item. A fully checked list indicates a high-quality analysis.

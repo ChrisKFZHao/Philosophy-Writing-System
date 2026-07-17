@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Normativity Analysis Quality Checklist
 
 > After each normativity analysis, check each item. A fully checked list indicates a high-quality analysis.

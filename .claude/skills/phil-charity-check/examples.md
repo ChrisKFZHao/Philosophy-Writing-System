@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Charity Check Examples
 
 ---
@@ -36,7 +37,7 @@ Reconstruction note: "The argument relies on P1 as the sole criterion of knowled
 - **Problem**: Restricting "experience" to "sensory experience" excludes possible inner experience (such as self-perception,
          affective experience, etc.). For Locke himself, experience divides into "sensation" (sensory) and
          "reflection" (reflection on internal operations), both termed "experience."
-- **Alternative Interpretations**: 
+- **Alternative Interpretations**:
   - **Strong alternative**: P1: All human knowledge's conceptual material ultimately derives from experience (sensory or reflective)
     (Distance: Small — only one word needs changing)
 - **Impact of Substitution**: With the strong alternative, P2 no longer conflicts (mathematical truths may acquire

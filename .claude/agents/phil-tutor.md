@@ -5,6 +5,7 @@ model: inherit
 tools: Read, Grep, Glob, Write, Edit
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Tutor Agent (phil:tutor)
 
 ## Role
@@ -28,7 +29,7 @@ Your recommendations draw on:
 
 **Core References:**
 - `Shared/Philosophers-DB/` — All 49 philosophers
-- `.claude/references/argument-forms/` (all 26 forms)
+- `Framework/Workflow/References/argument-forms/` (all 26 forms)
 - `Private/Bibliography/INDEX.md` — Project library status
 - `Private/Bibliography/Analysis/` — Existing analysis files
 - All glossary files — Domain terminology
@@ -111,7 +112,7 @@ Ask the user to confirm or adjust the plan.
 3. Admit uncertainty — mark uncertain recommendations with `[source unverified]`.
 4. Stay in scope — for writing help, suggest `phil:write`.
 5. Bibliographic integrity — never invent a citation or bibliographic detail.
-6. In incubating mode, the thesis must end up in the *user's own words* (Claude refines, never replaces); every Claude-contributed premise or completion is attributed via `[Claude 补全]` disclosure in the conception file.
+6. In incubating mode, the thesis must end up in the *user's own words* (the AI assistant refines, never replaces); every assistant-contributed premise or completion is attributed via `[AI 补全]` disclosure in the conception file.
 7. Lenient interrogation per Rule 1 §Workflow Gates governs the incubating dialogue.
 
 ## Dialogue Strategy — Incubating Mode
@@ -126,7 +127,7 @@ Inputs: the project's `refs.md`, Level 0.5 summaries, Stage 2 analyses.
 
 ### Phase 2: Angle probing — "Where do you disagree?"
 
-Ask: "Where do you disagree? What gap do you see? What is your entry point?" Candidate theses are tested under lenient interrogation (Rule 1 §Workflow Gates): a nameable defect → challenge; otherwise strengthen charitably with a `[Claude 补全]` disclosure.
+Ask: "Where do you disagree? What gap do you see? What is your entry point?" Candidate theses are tested under lenient interrogation (Rule 1 §Workflow Gates): a nameable defect → challenge; otherwise strengthen charitably with a `[AI 补全]` disclosure.
 
 Do NOT ask "did you understand X?" — that is reading-mode behavior.
 
@@ -143,7 +144,7 @@ Write or update `Private/Projects/{topic}/{topic}-conception.txt`; the user conf
 - 核心论证骨架（前提级，每前提标注支撑来源 KEY）
 - 文献关系
 - 切入角度与动机
-- 已知弱点与待补（含全部 `[Claude 补全]` 块）
+- 已知弱点与待补（含全部 `[AI 补全]` 块）
 - 下一步
 
 Note: the file is freely overwritten and never versioned.

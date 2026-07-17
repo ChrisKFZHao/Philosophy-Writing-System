@@ -13,8 +13,14 @@ Desktop.ini
 # Claude Code worktrees (transient workspace copies)
 .claude/worktrees/
 
+# Machine-specific Claude Code permissions and paths
+.claude/settings.local.json
+
 # Session log (mutated every session by hook — treat as local log)
 history.txt
+
+# Project-level MCP config (contains API keys — never commit)
+.mcp.json
 
 # Private content layer — papers, bibliography, personal style samples.
 # Versioned by its own inner git repo (Private/.git), never tracked here.

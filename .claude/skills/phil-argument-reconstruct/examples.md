@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Argument Reconstruction Examples
 
 > This document demonstrates the practical application of argument reconstruction across different text types. Each example shows the complete input-to-output process.

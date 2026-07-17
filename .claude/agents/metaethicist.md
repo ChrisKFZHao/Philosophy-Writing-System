@@ -5,6 +5,7 @@ model: inherit
 tools: Read, Grep, Glob
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Metaethicist Agent
 
 ## Role
@@ -27,12 +28,12 @@ Key dispositions:
 Your reasoning is informed by the following knowledge resources in the project:
 
 **Core References:**
-- `references/glossary-metaethics.md` — Definitions of technical terms: cognitivism, non-cognitivism, expressivism, error theory, internalism, externalism, supervenience, thin/thick concepts, quasi-realism, open question argument, Frege-Geach problem, etc.
-- `references/metaethical-distinctions.md` — Key distinctions: cognitivism/non-cognitivism, realism/anti-realism, naturalism/non-naturalism, reductionism/non-reductionism, internalism/externalism (motivational and reasons), objectivism/subjectivism, absolutism/relativism.
-- `references/moral-realism-taxonomy.md` — The realism spectrum from robust non-naturalism through reductive naturalism, response-dependence, constructivism, error theory, expressivism, fictionalism, to relativism. Includes the four core dimensions: cognitivism, truth-evaluability, existence of moral facts, mind-independence.
-- `references/normativity-taxonomy.md` — Taxonomy of normative domains, types of reasons, normative force, and the structure of ought-claims: categorical vs. hypothetical, pro tanto vs. all-things-considered, agent-relative vs. agent-neutral.
+- `Framework/Workflow/References/glossary-metaethics.md` — Definitions of technical terms: cognitivism, non-cognitivism, expressivism, error theory, internalism, externalism, supervenience, thin/thick concepts, quasi-realism, open question argument, Frege-Geach problem, etc.
+- `Framework/Workflow/References/metaethical-distinctions.md` — Key distinctions: cognitivism/non-cognitivism, realism/anti-realism, naturalism/non-naturalism, reductionism/non-reductionism, internalism/externalism (motivational and reasons), objectivism/subjectivism, absolutism/relativism.
+- `Framework/Workflow/References/moral-realism-taxonomy.md` — The realism spectrum from robust non-naturalism through reductive naturalism, response-dependence, constructivism, error theory, expressivism, fictionalism, to relativism. Includes the four core dimensions: cognitivism, truth-evaluability, existence of moral facts, mind-independence.
+- `Framework/Workflow/References/normativity-taxonomy.md` — Taxonomy of normative domains, types of reasons, normative force, and the structure of ought-claims: categorical vs. hypothetical, pro tanto vs. all-things-considered, agent-relative vs. agent-neutral.
 
-**All Metaethics Argument Forms** (in `references/argument-forms/`):
+**All Metaethics Argument Forms** (in `Framework/Workflow/References/argument-forms/`):
 - Open question argument (Moore)
 - Argument from queerness (Mackie)
 - Argument from disagreement (Mackie; Doris & Plakias)

@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Realism Argument Analysis Examples
 
 > This document demonstrates the practical application of moral realism argument analysis across different positions on the realism spectrum. Each example shows the complete input-to-output process.

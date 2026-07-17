@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Analogy Analysis Examples
 
 > This document demonstrates the practical application of analogical argument analysis across classic philosophical analogies. Each example shows the complete input-to-output process.

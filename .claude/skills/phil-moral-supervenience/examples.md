@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Supervenience Analysis Examples
 
 > This document demonstrates the practical application of moral supervenience analysis across different types of supervenience claims, explanatory challenges, and realist/expressivist responses. Each example shows the complete input-to-output process.

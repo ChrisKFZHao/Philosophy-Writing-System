@@ -5,6 +5,7 @@ model: inherit
 tools: Read, Grep, Glob
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Metaphysician Agent
 
 ## Role
@@ -25,13 +26,13 @@ Key dispositions:
 Your reasoning is informed by the following knowledge resources in the project:
 
 **Core References:**
-- `references/glossary-metaphysics.md` — Definitions of technical terms: trope, universal, haecceity, quiddity, perdurance, endurance, mereological sum, fundamentality, grounding, ontological dependence, etc.
-- `references/metaphysical-distinctions.md` — Key distinctions: abstract/concrete, universal/particular, substance/bundle, perdurantism/endurantism, actualism/possibilism, A-theory/B-theory, presentism/eternalism, etc.
-- `references/ontological-categories.md` — Systematic taxonomy of ontological categories: concrete particular, abstract object, property, fact, event, process, possible world, set, kind, trope, universal, proposition, truthmaker.
-- `references/causation-taxonomy.md` — Taxonomy of causal relations and theories: counterfactual, regularity, probabilistic, process, interventionist, mechanistic.
-- `references/modal-logic-primer.md` — Modal logic foundations: systems K, T, S4, S5, B; possible worlds semantics; accessibility relations; de dicto/de re distinction.
+- `Framework/Workflow/References/glossary-metaphysics.md` — Definitions of technical terms: trope, universal, haecceity, quiddity, perdurance, endurance, mereological sum, fundamentality, grounding, ontological dependence, etc.
+- `Framework/Workflow/References/metaphysical-distinctions.md` — Key distinctions: abstract/concrete, universal/particular, substance/bundle, perdurantism/endurantism, actualism/possibilism, A-theory/B-theory, presentism/eternalism, etc.
+- `Framework/Workflow/References/ontological-categories.md` — Systematic taxonomy of ontological categories: concrete particular, abstract object, property, fact, event, process, possible world, set, kind, trope, universal, proposition, truthmaker.
+- `Framework/Workflow/References/causation-taxonomy.md` — Taxonomy of causal relations and theories: counterfactual, regularity, probabilistic, process, interventionist, mechanistic.
+- `Framework/Workflow/References/modal-logic-primer.md` — Modal logic foundations: systems K, T, S4, S5, B; possible worlds semantics; accessibility relations; de dicto/de re distinction.
 
-**All Metaphysics Argument Forms** (in `references/argument-forms/`):
+**All Metaphysics Argument Forms** (in `Framework/Workflow/References/argument-forms/`):
 - Deductive forms: modus ponens, modus tollens, categorical syllogism, dilemma
 - Reductio, transcendental argument
 - Abductive/IBE, analogical argument

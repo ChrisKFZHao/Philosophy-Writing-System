@@ -1,37 +1,44 @@
 # CLAUDE.md
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
+> Claude adapter: use `/phil:<name>` commands from `.claude/commands/`; generated skills and roles live under `.claude/`.
+
 > **Project Status: Alpha** — All modules, agents, and skills are functional but have not undergone extensive field testing. Behavioral rules, workflows, and knowledge bases are subject to refinement.
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with code in this repository.
 
 ## Project Nature
 
-This is a philosophical writing workflow project, not a software project — content (manuscripts, analyses, bibliography) is text or PDF. **Reusable helper scripts are permitted** as framework infrastructure: when a command needs a capability no tool provides (e.g. the zotero MCP has no linked-file-creation tool), a small parameterized script may live under `.claude/scripts/` rather than being re-derived each run. Such scripts read secrets from config at run time (never hardcode), print only non-sensitive results, and are documented in the changelog. Content directories stay code-free; scripts belong to the framework layer only.
+This is a philosophical writing workflow project, not a software project — content (manuscripts, analyses, bibliography) is text or PDF. **Reusable helper scripts are permitted** as framework infrastructure: when a command needs a capability no tool provides (e.g. the Zotero MCP has no linked-file-creation tool), a small parameterized script may live under `Framework/Workflow/Scripts/` rather than being re-derived each run. Such scripts read secrets from user-level runtime configuration (never hardcode), print only non-sensitive results, and are documented in the changelog. Content directories stay code-free; scripts belong to the framework layer only.
 
 ## Behavioral Rules
 
-These rules apply to ALL interactions in this project. Full rule text is in `.claude/rules/`.
+These rules apply to ALL interactions in this project. Full rule text is in `Framework/Workflow/Rules/`.
 
 ### Rule 1: No Sycophancy — Conditional Socratic Engagement
-→ [rules/socratic-engagement.md](.claude/rules/socratic-engagement.md)
+→ [socratic-engagement.md](Framework/Workflow/Rules/socratic-engagement.md)
 Assess clarity before responding. Clear ideas → execute directly. Vague ideas → Socratic questioning.
 Trigger is **vagueness**, not novelty. Do not fabricate objections for the sake of appearing rigorous.
-At workflow gates and section boundaries, a second trigger applies: a nameable defect → challenge; otherwise charitable completion with explicit `[Claude 补全]` disclosure (宽容性诘问). Gates never hard-block.
+At workflow gates and section boundaries, a second trigger applies: a nameable defect → challenge; otherwise charitable completion with explicit `[AI 补全]` disclosure (宽容性诘问). Gates never hard-block.
 
 ### Rule 2: No Hallucinated Citations
-→ [rules/citation-integrity.md](.claude/rules/citation-integrity.md)
+→ [citation-integrity.md](Framework/Workflow/Rules/citation-integrity.md)
 Never generate unverified references, quotations, page numbers, or publication details.
 Mark unverified claims with `[source unverified]` or `[citation needed]`.
 
 ### Rule 3: Trigger-Based Version Management
-→ [rules/version-management.md](.claude/rules/version-management.md)
+→ [version-management.md](Framework/Workflow/Rules/version-management.md)
 Version cuts are NOT automatic. Three triggers: (1) post-review revision, (2) new insight/argument, (3) significant compression/expansion. Same-day triggers are merged. Draft file (`-draft.txt`) is never versioned.
+
+### Rule 4: Runtime Compatibility
+→ [runtime-compatibility.md](Framework/Workflow/Rules/runtime-compatibility.md)
+Resolve project guidance, collaboration aliases, capability degradation, delegation fallback, and Zotero status through the shared runtime-neutral policy. New AI-authored completion disclosures use `[AI 补全]`.
 
 ## Naming & Language Conventions
 
 **Directory naming:**
-- Every directory outside `.claude/` starts with an uppercase letter (`Framework/`, `Shared/`, `Private/`, `Private/Projects/`, `Private/Bibliography/PDF/`). Hyphenated names capitalize each segment; acronyms stay uppercase (`Philosophers-DB`).
-- Exception 1: the `.claude/` tree stays lowercase — its paths (`skills/`, `agents/`, `commands/`, …) are fixed by Claude Code's discovery mechanism.
+- Every non-hidden framework or content directory starts with an uppercase letter (`Framework/`, `Shared/`, `Private/`, `Private/Projects/`, `Private/Bibliography/PDF/`). Hyphenated names capitalize each segment; acronyms stay uppercase (`Philosophers-DB`).
+- Exception 1: `.claude/` and `.agents/` are generated runtime-discovery directories and retain the names required by their hosts.
 - Exception 2: content-item directories (individual project topics, e.g. `Private/Projects/srinivasan-critique/`) use lowercase English kebab-case, matching their filename prefix (`srinivasan-critique-draft.txt`).
 - Filenames use lowercase kebab-case, except conventional uppercase files (`CLAUDE.md`, `README.md`, `INDEX.md`, `VERSIONS.md`, `ARCHITECTURE.md`, `MEMORY.md`).
 - Exception 3 — bibliography stems: files in `Private/Bibliography/` share the canonical stem `{Author}_{Year}_{Title}` across `.pdf` / `.analysis.txt` / `.summary.txt`. Segments are separated by **underscores**; words within a segment are hyphen-joined (underscores mark segment boundaries, so hyphens stay free for hyphenated surnames and the title itself). Author = first author's surname, capitalized, ASCII. Year = 4 digits, or `nd` when unverifiable from the PDF (then marked `[year unverified]` in INDEX). Title = the complete title from the title page (articles kept, subtitle included, punctuation stripped, TitleCase). Examples: `Austin_1956_A-Plea-for-Excuses.pdf`, `Shafer-Landau_2003_Moral-Realism-A-Defence.pdf`. Safety valve: stems over 100 characters truncate at the subtitle boundary (INDEX keeps the full title). KEYs stay `AUTHOR-TITLE` without year — the KEY is the stable identifier consumed by refs.md and the Citation Gate; the file stem is the locator. On an AUTHOR-TITLE collision, the newer entry's KEY appends the year.
@@ -40,38 +47,35 @@ Version cuts are NOT automatic. Three triggers: (1) post-review revision, (2) ne
 **Language:**
 - Definition layer (rules, commands, agents, skills, schemas, ARCHITECTURE, changelog, this file) — **English**.
 - Writing output (manuscripts, analysis reports, review reports) — **Chinese**.
-- Deliberate exceptions kept in **Chinese**: the two `README.md` files (user-facing docs) and the 5 report templates in `.claude/shared/templates/` (they are output skeletons — their headings become the headings of generated reports).
+- Deliberate exceptions kept in **Chinese**: the two `README.md` files (user-facing docs) and the 5 report templates in `Framework/Workflow/Templates/` (they are output skeletons — their headings become the headings of generated reports).
 
 ## Directory Structure
 
 **Dual-repo structure (v0.4): the privacy boundary IS the repo boundary.** The outer repo contains only the framework (shareable); all papers, bibliography, and personal style samples live in `Private/` (gitignored by the outer repo; an independent inner git repo with a private remote).
 
 ```
-.claude/       Framework executable layer (tracked by outer repo; lowercase — tool constraint)
-  ├── settings.json   Permissions + hooks (committed)
-  ├── commands/       8 composite commands (phil:* namespace)
-  ├── rules/          3 behavioral rule modules
-  ├── skills/         30 domain analysis skills (engine)
-  ├── agents/         7 philosophy-specialized agents (3 dialogic + 4 production)
-  ├── references/     Methodological knowledge (glossaries, argument forms, taxonomies)
-  ├── shared/         Data contracts (13 JSON schemas + 5 report templates)
-  └── scripts/        Reusable helper scripts (e.g. zotero-attach-linked.py — fills tool gaps)
-Framework/     Framework non-executable layer (tracked by outer repo)
-  ├── ARCHITECTURE.md System architecture document
-  ├── changelog.md    Framework version history
-  └── Lessons/        Distilled feedback-to-framework from individual projects
+Framework/Workflow/       Platform-neutral single source of truth
+  ├── manifest.json       30 skills + 8 workflows + 7 roles and dependencies
+  ├── Skills/             Atomic philosophy skills
+  ├── Workflows/          Composite phil:* workflows
+  ├── Roles/              Runtime-neutral role prompts
+  ├── Rules/              Behavioral and runtime compatibility rules
+  ├── References/         Glossaries, argument forms, and taxonomies
+  ├── Schemas/            Data contracts
+  ├── Templates/          Report, root-guide, and project templates
+  └── Scripts/            Generator, doctor, scanners, and Zotero helper
+.claude/                  Generated Claude Code adapter (committed)
+.agents/skills/           Generated Codex adapter (committed)
+Framework/                Architecture, changelog, and Lessons
 Shared/        Shareable curated knowledge (tracked by outer repo)
   ├── Philosophers-DB/  49 philosopher profiles (General/Metaphysics/Metaethics)
   └── Format/           Format templates (LaTeX/Word — shareable)
 Private/       Private content layer (outer gitignore; independent inner repo, PDFs excluded)
   ├── Projects/{topic}/   One directory per writing project (manuscript, refs.md,
-  │                       VERSIONS.md, feedback-to-framework.md, project-level CLAUDE.md)
+  │                       VERSIONS.md, feedback-to-framework.md, project guidance)
   ├── Bibliography/       Master reference library (PDF/ in no git, Analysis/, INDEX.md)
   ├── Concepts/           Cross-project concept notes
   └── Style/              Personal writing samples (style calibration)
-
-Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory\
-  Session-persistent knowledge (user preferences, project feedback, references)
 ```
 
 ## Commands Reference
@@ -81,13 +85,13 @@ Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory
 | `phil:reconstruct` | Full-dimensional understanding of a source | 9-20 skills (mixed serial/parallel, auto domain detection) |
 | `phil:evaluate` | Simultaneous multi-angle critique | 7 skills (fully parallel) |
 | `phil:review` | Peer review | phil-reviewer agent (8 dimensions + perspective simulation) |
-| `phil:write` | Philosophical writing | phil-writer agent (outline / draft / revision; draft mode has dual collaboration modes user-led/claude-led) |
+| `phil:write` | Philosophical writing | phil-writer agent (outline / draft / revision; draft mode has dual collaboration modes user-led/assistant-led) |
 | `phil:comment` | Argument detail and conceptual clarification | phil-commentator agent (6 critical dimensions) |
 | `phil:pipeline` | One-command full pipeline | phil-orchestrator agent (6 stages with lenient-interrogation gates) |
 | `phil:tutor` | Tutor-style literature dialogue — probe ideas, test understanding, recommend sources | phil-tutor agent (two modes: reading — Socratic dialogue + 4-phase arc; incubating — Stage 3 conception incubation producing the conception file) |
 | `phil:ingest` | Literature ingestion ("scraping") — scan library, rename to canonical stem, register in INDEX, Level 0.5 summary, recommendation trigger 1 | shell scan + pdf skill + phil-summarize |
 
-Each command file in `.claude/commands/` defines its skill composition, execution order, and output format.
+Each workflow file in `Framework/Workflow/Workflows/` defines its skill composition, execution order, and output format.
 
 ## Workflow Conventions
 
@@ -95,10 +99,12 @@ Each command file in `.claude/commands/` defines its skill composition, executio
 - Plain text writing; no markup languages (final LaTeX is stored as .txt in the same directory; copy .txt → .tex temporarily at compile time)
 - Manuscripts are written in Chinese
 - Directory & filenames use English kebab-case of the project topic
-- Each project declares its draft collaboration mode via a `collaboration: user-led | claude-led` key in the project-level CLAUDE.md (`user-led` = serious academic papers / 严肃学术论文, `claude-led` = course papers / 课程论文); if absent, `phil-writer` asks once and suggests recording it.
+- Resolve project guidance in this order: `PROJECT.md`, `AGENTS.md`, then `CLAUDE.md`. New projects use `PROJECT.md` plus thin runtime adapters.
+- Each project declares its draft collaboration mode via `collaboration: user-led | assistant-led`; legacy `claude-led` and `codex-led` values normalize to `assistant-led` with a deprecation notice.
 
 **Per-project files:**
-- `CLAUDE.md` — project-level conventions + topic keywords (used for literature-recommendation matching)
+- `PROJECT.md` — platform-neutral project conventions + topic keywords (new-project standard)
+- `CLAUDE.md` / `AGENTS.md` — thin runtime adapters; legacy projects may use either as the fallback guidance file
 - `refs.md` — project-level reference list: `KEY | role (core-target/support/background) | status (cited/candidate/rejected) | notes`; each KEY points to the master library INDEX — zero file duplication
 - `{topic}-conception.txt` — Conception notes from ideation (Stage 3, `phil:tutor` incubating mode). Freely overwritten. Never versioned. Consumed by `phil:write outline`.
 - `{topic}-draft.txt` — Working draft. Freely overwritten. Never versioned.
@@ -136,13 +142,13 @@ This is a model-executed behavioral rule:
 
 Distilled from live runs (v0.4.2–v0.4.5). Goal: spend tokens on philosophy, not plumbing — without degrading capability (when a cheap path is insufficient, escalate; never guess).
 
-1. **Capability lookup order**: dedicated tools (pdf skill, file tools) → zotero MCP tools → `.claude/scripts/` → only then write new code. Before writing any helper, check `.claude/scripts/` and `Framework/Lessons/` for a prior solution.
-2. **Solidify on second use**: an inline solution needed twice becomes a parameterized script in `.claude/scripts/` (secrets from `~/.claude.json` at run time; proxy + retries built in; documented in changelog). Precedent: `zotero-attach-linked.py` — its urllib/proxy/retry logic is never rewritten inline.
+1. **Capability lookup order**: dedicated tools (pdf skill, file tools) → Zotero MCP/tools → `Framework/Workflow/Scripts/` → only then write new code. Before writing any helper, check `Framework/Workflow/Scripts/` and `Framework/Lessons/` for a prior solution.
+2. **Solidify on second use**: an inline solution needed twice becomes a parameterized script in `Framework/Workflow/Scripts/` (secrets from user-level runtime configuration; proxy + retries built in; documented in changelog). Precedent: `zotero-attach-linked.py` — its urllib/proxy/retry logic is never rewritten inline.
 3. **Batch over loop**: with 2+ items, use batch variants — `zotero-attach-linked.py --parents` (single POST, auto-split at 50), `zotero_get_items_children`, `zotero_batch_update_tags` — instead of N single calls.
 4. **Read at the cheapest sufficient level**: INDEX row → `.summary.txt` (Level 0.5) → `.analysis.txt` → PDF outline / page range → full text. Never run full-text extraction to answer what a summary already answers. Full-text reads are justified only by the analysis-level escalation triggers (Citation Gate) or an explicit read request.
 5. **Validated methods are settled**: procedures marked verified in `Framework/Lessons/` (e.g. the annotation-preserving stored→linked migration) are executed, not re-tested. Check `history.txt` / changelog / Lessons before re-investigating a known problem.
 6. **Environment facts are read, not re-probed**: proxy `127.0.0.1:6789`, Zotero hybrid MCP mode, API-key location, the 50-item write-batch cap — all recorded in this file, Lessons, and memory.
-7. **Model economy**: Agents carry `model:` frontmatter. Dialogic/writing agents (`phil-tutor`, `metaphysician`, `metaethicist`, `phil-writer`) `inherit` the session model — this work is quality-sensitive; cost is controlled per-session via `/model`. Review/coordination agents (`phil-reviewer`, `phil-commentator`, `phil-orchestrator`) are pinned to `opus`. Skills and commands run on the session model — run bulk ingestion/summary sessions on a cheaper session model (e.g. `/model sonnet`). Pricing snapshot (cached 2026-06-24, $/MTok in/out): Fable 5 10/50 · Opus 4.8 5/25 · Sonnet 5 3/15 (intro 2/10 through 2026-08-31) · Haiku 4.5 1/5 — prices drift; re-check before re-tuning.
+7. **Model economy**: Neutral roles declare `quality_tier: inherit | high`. Runtime adapters map that tier to host-specific settings; Codex skills do not name a provider model. Bulk ingestion and summarization should use a cost-appropriate session model without weakening citation verification.
 
 ## Common Operations
 
@@ -166,9 +172,9 @@ Prefix with `!` to run in-session:
 
 - **Naming ownership belongs to the framework**: rename to the canonical stem *before* linking in Zotero; never rename after. Zotero must never auto-rename linked files.
 - **INDEX.md `Zotero` column**: `KEY ↔ Zotero item key ↔ file stem` three-way mapping (`—` = not in Zotero).
-- **Fixed order for new PDFs**: ingest first, then link in Zotero. As of v0.4.3, `/phil:ingest` Step 8 automates the Zotero side under an identifier gate: papers use **DOI** (`zotero_add_by_doi(attach_mode='none')`); books use a **fallback cascade DOI-first → ISBN → bibtex** (v0.4.5, replacing the earlier ISBN-only rule — scholarly-press ISBNs are often absent from Open Library/Google Books while the publisher registers CrossRef DOIs). For an edited collection the **per-chapter DOIs are the preferred member-creation path** (each resolves as a CrossRef `bookSection`; verify returned titles against the TOC — CrossRef may drop subtitles), falling back to one `@incollection` per member via `zotero_add_by_bibtex`; the `book` volume item comes from the whole-book DOI, else ISBN, else an `@book` bibtex. The one volume PDF is linked to the book item *and* every member item via `.claude/scripts/zotero-attach-linked.py` batch mode; INDEX is backfilled with each item key. Sources where nothing resolves and no metadata is available fall back to a manual "Attach Link to File". For existing Zotero items with *stored* attachments: copy out under the canonical stem → ingest → convert stored→linked via the web API (annotation-preserving method in the Lessons doc; `linkMode` is API-immutable, so create-new + reparent annotations + trash old).
+- **Fixed order for new PDFs**: ingest first, then link in Zotero. Step 8 uses DOI-first → ISBN → bibtex and `Framework/Workflow/Scripts/zotero-attach-linked.py`; when the full Zotero backend is unavailable, Steps 1–7 still complete and Step 8 reports `partial` or `skipped` with a manual follow-up.
 - **Lazy migration**: stored attachments are migrated only when their collection becomes a writing project — no bulk sweeps. Zotero collections are not mirrored as directories.
-- **MCP mode**: hybrid — reads on local SQLite (`ZOTERO_LOCAL=true`), writes via web API key (configured in `~/.claude.json`); cloud writes land locally only after a desktop sync. Zotero-imported metadata (e.g. JSTOR) is unreliable — title-page verification (Rule 2) applies on this inflow path too.
+- **MCP mode**: hybrid — reads on local SQLite (`ZOTERO_LOCAL=true`), writes via user-level credentials; cloud writes land locally only after a desktop sync. Zotero-imported metadata is unreliable, so title-page verification applies on this inflow path too.
 
 ### Manuscript Work Cycle
 1. **Incubate**: `/phil:tutor incubating` → `{topic}-conception.txt` (thesis + argument sketch in the user's own words)
@@ -195,27 +201,25 @@ Session summaries are written to `history.txt` by the model at the end of each c
 
 ## Knowledge Base
 
-**Argument Forms**: 26 canonical forms in `.claude/references/argument-forms/` (see `argument-forms/INDEX.md` for the general/metaphysics/metaethics breakdown).
+**Argument Forms**: 26 canonical forms in `Framework/Workflow/References/argument-forms/` (see `argument-forms/INDEX.md` for the general/metaphysics/metaethics breakdown).
 
-**Glossaries & Taxonomies**: `.claude/references/` contains domain-specific reference files (glossary-metaphysics.md, glossary-metaethics.md, ontological-categories.md, causation-taxonomy.md, moral-realism-taxonomy.md, normativity-taxonomy.md, fallacy-catalog.md, modal-logic-primer.md, thought-experiment-templates.md).
+**Glossaries & Taxonomies**: `Framework/Workflow/References/` contains domain-specific reference files.
 
 **Philosopher Database**: `Shared/Philosophers-DB/` — 49 philosophers across 3 domains (General/Metaphysics/Metaethics). Curated — may be cited.
 
-**Data Contracts**: `.claude/shared/` — 13 JSON schemas for cross-skill composability + 5 report templates in `.claude/shared/templates/` (templates deliberately in Chinese — output skeletons).
+**Data Contracts**: `Framework/Workflow/Schemas/` contains 13 JSON schemas; `Framework/Workflow/Templates/` contains the report templates.
 
 ## Cross-Session Memory
 
-Persistent file-based memory at `C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory\`. Each memory is a `.md` file with frontmatter. `MEMORY.md` serves as the session index.
-
-Write memories for: user preferences, project goals, substantive feedback, external references. Do NOT memory code structure, git history, or CLAUDE.md contents — those are already in the repo.
+Runtime-specific memory is optional and not a cross-runtime contract. Durable shared state belongs in project artifacts, `Framework/Lessons/`, or the gitignored `history.txt`; do not duplicate repository structure or git history in runtime memory.
 
 ## Architecture
 
-The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.5.0-alpha), built atop `academic-research-skills` v3.15.0 (external plugin — all `ars-*` capabilities require this plugin to be installed), covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
+The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.6.0-alpha), built atop optional academic-research skills and covering general analytic philosophy, metaphysics, and metaethics.
 
-- **30 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
-- **8 Commands** — Composite orchestration in `.claude/commands/`
-- **7 Agents** — 3 dialogic (metaphysician, metaethicist, phil-tutor) + 4 production (writer, reviewer, commentator, orchestrator). All in `.claude/agents/`
-- **13 JSON Schemas + 5 Report Templates** — Data contracts in `.claude/shared/`
-- **26 Argument Forms** — Canonical definitions in `.claude/references/argument-forms/`
+- **30 Skills** — canonical definitions in `Framework/Workflow/Skills/`
+- **8 Workflows** — canonical orchestration in `Framework/Workflow/Workflows/`
+- **7 Roles** — canonical role prompts in `Framework/Workflow/Roles/`
+- **13 JSON Schemas + 5 Report Templates** — data contracts and output skeletons
+- **26 Argument Forms** — canonical definitions in `Framework/Workflow/References/argument-forms/`
 - For complete skill inventory, build roadmap, and detailed architecture — see `ARCHITECTURE.md`

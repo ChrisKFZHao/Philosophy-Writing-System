@@ -1,10 +1,9 @@
 ---
-description: Universal argument reconstruction framework — converting everyday language arguments into standard premise-conclusion form, supporting all argument types: deductive, inductive, reductio, abductive, inference to the best explanation, and more
 name: phil-argument-reconstruct
-domain: general
-version: 1.0.0
+description: "Universal argument reconstruction framework — converting everyday language arguments into standard premise-conclusion form, supporting all argument types: deductive, inductive, reductio, abductive, inference to the best explanation, and more"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Argument Reconstruction
 
 ## Overview

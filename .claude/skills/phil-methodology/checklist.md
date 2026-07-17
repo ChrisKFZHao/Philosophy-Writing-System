@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Philosophical Methodology Analysis Quality Checklist
 
 > After each methodology analysis, check each item. A fully checked list indicates a high-quality analysis.

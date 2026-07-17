@@ -1,10 +1,9 @@
 ---
-description: Identity and Persistence Analysis — analyze identity conditions across time and possible worlds; evaluate endurance vs perdurance frameworks and detect identity problems
 name: phil-identity-persistence
-domain: metaphysics
-version: 1.0.0
+description: "Identity and Persistence Analysis — analyze identity conditions across time and possible worlds; evaluate endurance vs perdurance frameworks and detect identity problems"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Identity and Persistence Analysis
 
 ## Overview

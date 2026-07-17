@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Counterexample Construction & Evaluation Quality Checklist
 
 > After each counterexample analysis, check each item. A fully checked list indicates a high-quality counterexample report.

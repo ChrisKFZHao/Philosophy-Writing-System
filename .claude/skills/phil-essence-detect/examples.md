@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Essentialist Claim Detection Examples
 
 > This document demonstrates the practical application of essentialist claim detection across different essence frameworks. Each example shows the complete input-to-output process for a distinct essentialist-theoretic challenge.

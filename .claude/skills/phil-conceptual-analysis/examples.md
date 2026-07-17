@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Conceptual Analysis Examples
 
 > This document demonstrates the practical application of conceptual analysis across different philosophical domains. Each example shows the complete input-to-output process.

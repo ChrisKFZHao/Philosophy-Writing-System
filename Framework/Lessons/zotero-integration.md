@@ -29,13 +29,13 @@
 
 ## Stored→linked conversion via web API (annotation-preserving)
 
-Prerequisites: write-enabled API key configured in the zotero MCP env in `~/.claude.json` (hybrid mode: reads stay on local SQLite via `ZOTERO_LOCAL=true`; writes go to the cloud). The item must already be synced to the cloud; desktop must sync once afterwards for changes to land locally.
+Prerequisites: a write-enabled API key in the Zotero MCP environment or user-level Claude/Codex configuration (hybrid mode: reads stay on local SQLite via `ZOTERO_LOCAL=true`; writes go to the cloud). Credentials never belong in this repository. The item must already be synced to the cloud; desktop must sync once afterwards for changes to land locally.
 
 Per item (all requests to `api.zotero.org/users/{userID}`):
 
 1. `POST /items` — create a `linked_file` attachment under the parent:
    `{"itemType":"attachment","linkMode":"linked_file","parentItem":"<parent>","path":"attachments:<canonical-stem>.pdf","contentType":"application/pdf","title":"<canonical-stem>.pdf"}`
-   (`attachments:` = base-directory-relative path — survives machine moves). The reusable helper `.claude/scripts/zotero-attach-linked.py --parent <parent> --stem <canonical-stem>.pdf --verify` encapsulates this POST (auth from `~/.claude.json`, proxy, retries, verify) — the same script `/phil:ingest` Step 8 uses.
+   (`attachments:` = base-directory-relative path — survives machine moves). The reusable helper `Framework/Workflow/Scripts/zotero-attach-linked.py --parent <parent> --stem <canonical-stem>.pdf --verify` encapsulates this POST (auth from environment or user-level runtime configuration, proxy, retries, verify) — the same script `phil:ingest` Step 8 uses.
 2. `GET /items/<old-att>/children` — list annotations; for each, `PATCH {"parentItem":"<new-att>"}` (annotation reparenting is allowed; returns 204)
 3. Verify the annotation count on the new attachment matches, then `PATCH {"deleted":1}` on the old stored attachment (recoverable from Trash — do not empty Trash until the user has visually confirmed)
 

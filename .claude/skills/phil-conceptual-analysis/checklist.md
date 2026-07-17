@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Conceptual Analysis Quality Checklist
 
 > After each conceptual analysis, check each item. A fully checked list indicates a high-quality analysis.

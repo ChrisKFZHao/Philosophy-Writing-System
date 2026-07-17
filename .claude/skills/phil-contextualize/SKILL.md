@@ -1,10 +1,9 @@
 ---
-description: Situates a philosophical argument within its broader intellectual landscape — the debate tradition, opposing positions, historical context, and dialectical stakes — producing a structured contextualization report that maps the argument's position among rival positions, identifies its targets and ancestors, reconstructs the historical development of the debate, and assesses what turns on the argument's success or failure.
 name: phil-contextualize
-domain: general
-version: 1.0.0
+description: "Situates a philosophical argument within its broader intellectual landscape — the debate tradition, opposing positions, historical context, and dialectical stakes — producing a structured contextualization report that maps the argument's position among rival positions, identifies its targets and ancestors, reconstructs the historical development of the debate, and assesses what turns on the argument's success or failure."
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Argument Contextualization
 
 ## Overview

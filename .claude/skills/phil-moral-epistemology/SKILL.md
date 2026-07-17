@@ -1,10 +1,9 @@
 ---
-description: "Moral Epistemology Analysis — evaluate the possibility of moral knowledge; analyze intuitionist, coherentist, and reliabilist justification pathways; assess evolutionary debunking challenges"
 name: phil-moral-epistemology
-domain: metaethics
-version: 1.0.0
+description: "Moral Epistemology Analysis — evaluate the possibility of moral knowledge; analyze intuitionist, coherentist, and reliabilist justification pathways; assess evolutionary debunking challenges"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Epistemology Analysis
 
 ## Overview

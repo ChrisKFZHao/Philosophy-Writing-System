@@ -1,10 +1,9 @@
 ---
-description: Charity Check — verify that argument reconstruction has built the strongest version of the original text, detecting oversimplification, distortion, and uncharitable interpretation
 name: phil-charity-check
-domain: general
-version: 1.0.0
+description: "Charity Check — verify that argument reconstruction has built the strongest version of the original text, detecting oversimplification, distortion, and uncharitable interpretation"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Charity Check
 
 ## Overview
@@ -129,7 +128,7 @@ Output in standard format:
 - **Original Expression**: <excerpt from original text>
 - **Reconstructed Version**: <current version>
 - **Problem**: <why this interpretation is unfair to the interlocutor>
-- **Alternative Interpretations**: 
+- **Alternative Interpretations**:
   - Weak alternative: <stronger but still conservative version> (Distance: Small / Medium / Large)
   - Strong alternative: <strongest possible version> (Distance: Small / Medium / Large)
 - **Impact of Substitution**: <how the argument's strength changes if the alternative version is adopted>

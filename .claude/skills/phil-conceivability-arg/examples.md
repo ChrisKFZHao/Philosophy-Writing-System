@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Conceivability Argument Analysis Examples
 
 > This document demonstrates the practical application of conceivability argument analysis across different argument types and difficulty levels. Each example shows the complete input-to-output process.

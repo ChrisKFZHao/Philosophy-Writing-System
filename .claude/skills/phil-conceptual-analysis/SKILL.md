@@ -1,10 +1,9 @@
 ---
-description: Conceptual analysis — extracting, clarifying, and testing the structure of philosophical concepts through necessary/sufficient condition analysis, case testing, and dimensional mapping to chart the logical geography of concepts
 name: phil-conceptual-analysis
-domain: general
-version: 1.0.0
+description: "Conceptual analysis — extracting, clarifying, and testing the structure of philosophical concepts through necessary/sufficient condition analysis, case testing, and dimensional mapping to chart the logical geography of concepts"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Conceptual Analysis
 
 ## Overview

@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Grounding Analysis Examples
 
 > This document demonstrates the practical application of grounding/constitution analysis across different dependence relation types. Each example shows the complete input-to-output process.

@@ -1,7 +1,8 @@
 ---
-description: One-command full pipeline — invokes the phil-orchestrator agent, 6 stages: topic orientation & reading plan → reading & analysis → conception incubation → outline → draft & iterative revision → review & final, with a lenient-interrogation quality gate at each stage
+description: "One-command full pipeline — invokes the phil-orchestrator agent, 6 stages: topic orientation & reading plan → reading & analysis → conception incubation → outline → draft & iterative revision → review & final, with a lenient-interrogation quality gate at each stage"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # /phil:pipeline
 
 ## Usage
@@ -31,12 +32,12 @@ One-command, end-to-end philosophy paper production. Invokes the `phil-orchestra
 | 5. Draft & Iterative Revision | Section-by-section production under the chosen collaboration mode (`phil-writer` draft mode) | 7 prose standards met; boundary-interrogation record complete |
 | 6. Review & Final | Review-revision cycles to a polished manuscript (`phil-reviewer` + `phil-writer` revision mode) | Fatal findings resolved; user approves |
 
-All gates are **dialogic lenient-interrogation gates**, not hard blocks: a nameable defect in the user's work triggers a challenge; a gap short of a defect is filled charitably with an explicit `[Claude 补全]` disclosure; the user may always proceed, and any override or skip is recorded (see Rule 1 §Workflow Gates in `.claude/rules/socratic-engagement.md`). There is no "loop until the gate passes" hard requirement — the orchestrator recommends, the user decides.
+All gates are **dialogic lenient-interrogation gates**, not hard blocks: a nameable defect in the user's work triggers a challenge; a gap short of a defect is filled charitably with an explicit `[AI 补全]` disclosure; the user may always proceed, and any override or skip is recorded (see Rule 1 §Workflow Gates in `Framework/Workflow/Rules/socratic-engagement.md`). There is no "loop until the gate passes" hard requirement — the orchestrator recommends, the user decides.
 
 ## Notes
 
 - **Stage 0 prerequisite** (outside the pipeline): sources must already be ingested via `/phil:ingest` before the pipeline begins — the orchestrator directs the user there if a referenced source is missing from `Private/Bibliography/INDEX.md`.
 - Stages internally invoke `/phil:reconstruct`, `/phil:evaluate`, `/phil:review`, `/phil:tutor` (reading and incubating modes), and `/phil:write` as needed
-- **Stage 5 begins by selecting the collaboration mode**: the orchestrator reads the `collaboration:` key from the project's CLAUDE.md, or asks the user once (`user-led` / `claude-led`) — see `phil-writer`'s Draft mode.
+- **Stage 5 begins by selecting the collaboration mode**: the orchestrator reads the `collaboration:` key from the project's guidance file (PROJECT.md, falling back to AGENTS.md or CLAUDE.md), or asks the user once (`user-led` / `assistant-led`) — see `phil-writer`'s Draft mode.
 - ARS capabilities may be invoked selectively (deep-research, citation-check, format-convert; requires the external ARS plugin)
 - Write all output in Chinese (project convention)

@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Identity and Persistence Analysis Quality Checklist
 
 > After each identity/persistence analysis, check each item. A fully checked list indicates a high-quality analysis.

@@ -1,10 +1,9 @@
 ---
-description: Counterexample generation and evaluation — using the output of argument reconstruction as a blueprint to systematically construct and assess counterexamples targeting premises, inferential chains, or conclusions
 name: phil-counterexample
-domain: general
-version: 1.0.0
+description: "Counterexample generation and evaluation — using the output of argument reconstruction as a blueprint to systematically construct and assess counterexamples targeting premises, inferential chains, or conclusions"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Counterexample Generation & Evaluation
 
 ## Overview

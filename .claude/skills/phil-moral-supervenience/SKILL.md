@@ -1,10 +1,9 @@
 ---
-description: "Moral Supervenience Analysis — analyze the supervenience of moral properties on natural properties; evaluate Blackburn's supervenience challenge and realist/expressivist responses"
 name: phil-moral-supervenience
-domain: metaethics
-version: 1.0.0
+description: "Moral Supervenience Analysis — analyze the supervenience of moral properties on natural properties; evaluate Blackburn's supervenience challenge and realist/expressivist responses"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Supervenience Analysis
 
 ## Overview

@@ -1,10 +1,9 @@
 ---
-description: Implicit premise detection — systematically detecting unstated assumptions, hidden conditions, and framework presuppositions in philosophical arguments; classifying and evaluating all gaps that constitute implicit obstacles to an argument's validity
 name: phil-premise-detect
-domain: general
-version: 1.0.0
+description: "Implicit premise detection — systematically detecting unstated assumptions, hidden conditions, and framework presuppositions in philosophical arguments; classifying and evaluating all gaps that constitute implicit obstacles to an argument's validity"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Implicit Premise Detection
 
 ## Overview

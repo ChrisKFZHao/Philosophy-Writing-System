@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Psychology Analysis Quality Checklist
 
 > After each moral psychology analysis, check each item. A fully checked list indicates a high-quality analysis.

@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Argument Contextualization Examples
 
 > This document demonstrates the practical application of argument contextualization across different debate landscapes. Each example shows the complete input-to-output process, illustrating how arguments are situated within traditions, positioned among rivals, and assessed for contextual integrity.

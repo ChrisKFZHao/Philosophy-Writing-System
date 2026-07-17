@@ -1,10 +1,9 @@
 ---
-description: Distinction Tracking — identify, index, and trace all key conceptual distinctions in philosophical texts; test distinctions for consistency, exhaustiveness, and argumentative function
 name: phil-distinction-track
-domain: general
-version: 1.0.0
+description: "Distinction Tracking — identify, index, and trace all key conceptual distinctions in philosophical texts; test distinctions for consistency, exhaustiveness, and argumentative function"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Distinction Tracking
 
 ## Overview

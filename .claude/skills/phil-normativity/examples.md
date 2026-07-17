@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Normativity Analysis Examples
 
 > This document demonstrates the practical application of normativity analysis across different philosophical arguments. Each example shows the complete input-to-output process, covering ought-type classification, source diagnosis, reasons internalism/externalism assessment, bindingness mechanism tracing, and normative architecture mapping.

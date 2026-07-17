@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Modal Argument Analysis Examples
 
 ---
@@ -50,7 +51,7 @@ The De re version adds an implicit existential presupposition: that there is a s
 - Implicit modal system: The argument requires S5 to derive the De re conclusion
 - Basis for attribution: Moving from "every world has a First Cause" to "the same First Cause exists in all worlds"
            requires S5 (universal inter-accessibility of worlds)
-- Challenges from possible rival systems: 
+- Challenges from possible rival systems:
   * In S4, an entity is not guaranteed to exist in all mutually accessible worlds
   * In T, entity identity cannot be tracked across worlds
 
@@ -107,7 +108,7 @@ P1 claims "zombies are conceivable" — but what kind of conceivability is meant
 Implicit modal scope:
 - P1 should be read as "◇(zombies could exist in some possible worlds)"
 - The inference from P1 to C implicitly assumes "◇(beings physically identical to humans but lacking consciousness)
-  → ¬(consciousness is physical)" — 
+  → ¬(consciousness is physical)" —
   This presupposes that the necessity of the consciousness-physical relation is logical, conceptual, or metaphysical.
   A physicalist can accept that it is necessary that beings physically identical to humans have consciousness,
   while also accepting that zombies are logically possible — the two do not conflict.

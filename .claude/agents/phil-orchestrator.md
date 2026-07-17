@@ -5,6 +5,7 @@ model: opus
 tools: Read, Grep, Glob, Agent
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Philosophy Pipeline Orchestrator
 
 ## Role
@@ -48,11 +49,11 @@ Your coordinating decisions are informed by:
 5. Assemble the reading plan: scan `Private/Bibliography/INDEX.md` topics and recommendation triggers; register reading candidates in the project's `refs.md`; identify acquisition gaps (`/phil:ingest` for new PDFs).
 
 **Output**:
-- Project directory bootstrapped: `CLAUDE.md` topic keywords, `refs.md` candidates
+- Project directory bootstrapped: project-guidance topic keywords, `refs.md` candidates
 - A topic statement with provisional guiding questions (marked revisable)
 - A prioritized reading list
 
-**Quality Gate** (lenient): The topic is determinate enough to direct reading; the reading list covers the debate's core positions; the user can state in one sentence which dispute they are entering. Defect example (challenge): the topic conflates two distinct debates. Otherwise, Claude may charitably sharpen scope wording, disclosed as its own.
+**Quality Gate** (lenient): The topic is determinate enough to direct reading; the reading list covers the debate's core positions; the user can state in one sentence which dispute they are entering. Defect example (challenge): the topic conflates two distinct debates. Otherwise, the AI assistant may charitably sharpen scope wording, disclosed as its own.
 
 **User Decision**: Approve the topic statement and reading list, or iterate further.
 
@@ -83,7 +84,7 @@ Your coordinating decisions are informed by:
 
 **Output**: `{topic}-conception.txt`.
 
-**Quality Gate** (lenient): The user states, in their own words, a thesis and main argument line; the thesis is arguable and positioned against named interlocutors. Defect (challenge): the thesis is internally unstable, immediately counterexampled, or restates a source's position as if novel. Gaps (charitable completion): a missing premise or piece of support sketched by Claude into the conception file's 待补 section, marked `[Claude 补全]`.
+**Quality Gate** (lenient): The user states, in their own words, a thesis and main argument line; the thesis is arguable and positioned against named interlocutors. Defect (challenge): the thesis is internally unstable, immediately counterexampled, or restates a source's position as if novel. Gaps (charitable completion): a missing premise or piece of support sketched by the AI assistant into the conception file's 待补 section, marked `[AI 补全]`.
 
 This stage absorbs the old question-formulation stage's "refined question" output — it is subsumed into the conception file.
 
@@ -106,7 +107,7 @@ This stage absorbs the old question-formulation stage's "refined question" outpu
 - Objections mapped to response locations
 - Estimated character count per section
 
-**Quality Gate** (lenient): Existing criteria — argument flow logically valid (conclusions follow from premises, sections build on each other), all mapped positions from the dialectical map are addressed — PLUS interrogation: ask the user to defend 1–2 structural choices (why does §N precede §M? which section carries the heaviest burden?). Defect → challenge. Structural weakness short of a defect → Claude proposes a patch marked as its own suggestion.
+**Quality Gate** (lenient): Existing criteria — argument flow logically valid (conclusions follow from premises, sections build on each other), all mapped positions from the dialectical map are addressed — PLUS interrogation: ask the user to defend 1–2 structural choices (why does §N precede §M? which section carries the heaviest burden?). Defect → challenge. Structural weakness short of a defect → the AI assistant proposes a patch marked as its own suggestion.
 
 **User Decision**: Approve the outline, request revisions, or return to Stage 2 or Stage 3 if outlining reveals a gap in analysis or conception.
 
@@ -115,7 +116,7 @@ This stage absorbs the old question-formulation stage's "refined question" outpu
 **Purpose**: Produce a complete manuscript draft through section-by-section production and revision.
 
 **Actions**:
-1. Select the collaboration mode first: read the project CLAUDE.md's `collaboration:` declaration, or ask (`user-led` / `claude-led`).
+1. Select the collaboration mode first: resolve project guidance as `PROJECT.md`, `AGENTS.md`, then `CLAUDE.md`; read its `collaboration:` declaration, or ask (`user-led` / `assistant-led`).
 2. Invoke `phil-writer` in **draft mode**, with section-by-section production and boundary interrogation per the chosen mode (see `phil-writer` Mode 2: Collaboration Modes).
 3. In-stage iteration (redrafting sections) is normal; version-cut triggers (Rule 3) apply as usual.
 4. Optionally, run self-review checks: `phil-counterexample` on the paper's own arguments, `phil-charity-check` on its treatment of opponents.
@@ -124,7 +125,7 @@ This stage absorbs the old question-formulation stage's "refined question" outpu
 - Working title and abstract
 - Numbered sections with argumentative prose
 - Inline citations
-- Notes to Self appendix, including charitable completions (`[Claude 补全]`) and interrogation skips/overrides
+- Notes to Self appendix, including charitable completions (`[AI 补全]`) and interrogation skips/overrides
 
 **Quality Gate**: The 7 prose standards (unchanged), plus: the boundary-interrogation record is complete (skips noted in Notes to Self).
 
@@ -136,7 +137,7 @@ This stage absorbs the old question-formulation stage's "refined question" outpu
 
 **Actions**:
 1. Invoke `phil-reviewer` in **standard mode** on the Stage 5 draft. The reviewer produces a structured review report with dimension-by-dimension findings, severity grades, and a revision priority matrix.
-2. The user adjudicates each fatal/severe finding — accept / rebut / defer — before revision consumes the report. A defect in the user's rebuttal of a finding → challenge; otherwise Claude implements per the collaboration mode.
+2. The user adjudicates each fatal/severe finding — accept / rebut / defer — before revision consumes the report. A defect in the user's rebuttal of a finding → challenge; otherwise the AI assistant implements per the collaboration mode.
 3. Optionally, invoke `phil-reviewer` in **perspective mode** for additional scrutiny from specific philosophical stances, or invoke `phil-commentator` for critical engagement that goes beyond review (adversarial skeptic, on request).
 4. Invoke `phil-writer` in **revision mode**, providing the draft, all review/commentary reports, and the user's adjudications. The writer addresses findings in priority order (structural → conceptual → dialectical → modal → stylistic) and produces a revised manuscript with change log.
 5. Loop: if the revision log shows unresolved fatal or severe findings, return to step 1 (re-review the revised manuscript). Continue until:

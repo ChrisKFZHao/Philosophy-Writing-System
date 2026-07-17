@@ -1,10 +1,9 @@
 ---
-description: Moral Realism Argument Analysis — analyze arguments for/against moral realism, anti-realism, error theory, and non-cognitivism; map positions on the realism spectrum
 name: phil-moral-realism
-domain: metaethics
-version: 1.0.0
+description: "Moral Realism Argument Analysis — analyze arguments for/against moral realism, anti-realism, error theory, and non-cognitivism; map positions on the realism spectrum"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Realism Argument Analysis
 
 ## Overview
@@ -283,13 +282,13 @@ Produce the complete Moral Realism Position Analysis Report in the Output format
 - `phil-premise-detect`: Uses the premise audit to identify implicit metaethical presuppositions that the explicit argument depends on. Many metaethical arguments have significant implicit commitments (e.g., an argument at the normative level may implicitly presuppose cognitivism).
 
 **References (knowledge dependencies)**:
-- `references/moral-realism-taxonomy.md`: The canonical realism spectrum taxonomy — detailed definitions of each position and the diagnostic questions that distinguish adjacent positions. This is the primary reference for Step 2 classification.
-- `references/glossary-metaethics.md`: Definitions of all core metaethical terms used throughout the analysis.
-- `references/metaethical-distinctions.md`: The realism/anti-realism, cognitivism/non-cognitivism, naturalism/non-naturalism, reductionism/non-reductionism distinctions.
-- `references/argument-forms/open-question-argument.md`: Canonical structure of Moore's open question argument.
-- `references/argument-forms/queerness-argument.md`: Canonical structure of Mackie's argument from queerness.
-- `references/argument-forms/companions-in-guilt.md`: Canonical structure of the companions in guilt strategy.
-- `references/argument-forms/disagreement-argument.md`: Canonical structure of the argument from moral disagreement.
+- `Framework/Workflow/References/moral-realism-taxonomy.md`: The canonical realism spectrum taxonomy — detailed definitions of each position and the diagnostic questions that distinguish adjacent positions. This is the primary reference for Step 2 classification.
+- `Framework/Workflow/References/glossary-metaethics.md`: Definitions of all core metaethical terms used throughout the analysis.
+- `Framework/Workflow/References/metaethical-distinctions.md`: The realism/anti-realism, cognitivism/non-cognitivism, naturalism/non-naturalism, reductionism/non-reductionism distinctions.
+- `Framework/Workflow/References/argument-forms/open-question-argument.md`: Canonical structure of Moore's open question argument.
+- `Framework/Workflow/References/argument-forms/queerness-argument.md`: Canonical structure of Mackie's argument from queerness.
+- `Framework/Workflow/References/argument-forms/companions-in-guilt.md`: Canonical structure of the companions in guilt strategy.
+- `Framework/Workflow/References/argument-forms/disagreement-argument.md`: Canonical structure of the argument from moral disagreement.
 
 **Dependents (downstream)**:
 - `phil-moral-disagreement` (P2): Uses the realism position classification and vulnerability assessment to evaluate how disagreement arguments bear on the argument — whether disagreement is predicted, problematic, or irrelevant given the position.

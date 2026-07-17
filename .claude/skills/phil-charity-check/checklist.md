@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Charity Check Quality Checklist
 
 > After each charity audit, check each item. A fully checked list indicates a high-quality charity audit report.

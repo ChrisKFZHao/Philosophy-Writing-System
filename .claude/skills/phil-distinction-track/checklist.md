@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Distinction Tracking Quality Checklist
 
 > After each distinction-tracking analysis, check each item. A fully checked list indicates a high-quality distinction tracking report.

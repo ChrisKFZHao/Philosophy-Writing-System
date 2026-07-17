@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Semantics Analysis Quality Checklist
 
 > After each moral semantics analysis, check each item. A fully checked list indicates a high-quality analysis.

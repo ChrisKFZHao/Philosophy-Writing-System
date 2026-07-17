@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Ontological Commitment Detection Examples
 
 > This document demonstrates the practical application of ontological commitment detection across different argument types and commitment patterns. Each example shows the complete input-to-output process using Quinean criterion and ontological category taxonomy.

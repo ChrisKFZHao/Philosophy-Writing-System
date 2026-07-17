@@ -1,9 +1,9 @@
 ---
-description: Generates a Level 0.5 summary of a single philosophical source — core thesis, argument route, key concepts, interlocutors, and topic tags — as the cheapest analysis rung and the substrate for literature recommendation
-domain: general
-version: 1.0.0
+name: phil-summarize
+description: "Generates a Level 0.5 summary of a single philosophical source — core thesis, argument route, key concepts, interlocutors, and topic tags — as the cheapest analysis rung and the substrate for literature recommendation"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # SKILL: phil-summarize — Level 0.5 Source Summary
 
 ## 1. Overview
@@ -12,7 +12,7 @@ Produces the Level 0.5 summary of a single document: core thesis + argument rout
 
 This skill is a **pure function**: (extracted text + verified metadata) in → one summary out. It does not touch the filesystem, INDEX.md, or any project files — the caller (normally `/phil:ingest`) writes `Private/Bibliography/Summaries/{stem}.summary.txt` and updates the INDEX row.
 
-Output conforms to `summary-schema.json` (`.claude/shared/summary-schema.json`).
+Output conforms to `summary-schema.json` (`Framework/Workflow/Schemas/summary-schema.json`).
 
 ## 2. Input
 
@@ -73,7 +73,7 @@ Assemble the structured output with a `SUM-` prefixed `summary_id`, per `report-
 
 - **Upstream**: `pdf` skill (text extraction); `/phil:ingest` (orchestration, metadata verification)
 - **Downstream**: recommendation trigger point 1 (ingest-time matching); phil:tutor trigger point 2 (INDEX scanning); `phil-argument-reconstruct` (Level 1 escalation)
-- **References**: `Private/Bibliography/INDEX.md` (topics vocabulary); `Private/Projects/*/CLAUDE.md` (project keyword lists)
+- **References**: `Private/Bibliography/INDEX.md` (topics vocabulary); `Private/Projects/*/PROJECT.md (falling back to AGENTS.md or CLAUDE.md)` (project keyword lists)
 
 ## 8. Boundary Conditions
 

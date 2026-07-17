@@ -1,10 +1,9 @@
 ---
-description: "Moral Semantics Analysis — analyze moral language; map cognitivism/expressivism/prescriptivism positions; evaluate Frege-Geach problem responses and truth-aptness"
 name: phil-moral-semantics
-domain: metaethics
-version: 1.0.0
+description: "Moral Semantics Analysis — analyze moral language; map cognitivism/expressivism/prescriptivism positions; evaluate Frege-Geach problem responses and truth-aptness"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Semantics Analysis
 
 ## Overview
@@ -304,8 +303,8 @@ Assemble the findings from Steps 1-5 into a structured report conforming to `mor
 - `phil-conceptual-analysis`: Uses the concept-map report to identify thick and thin moral concepts, analyze their structure (necessary/sufficient conditions, descriptive/evaluative components), and assess disentanglement.
 
 **Referenced knowledge resources:**
-- `references/glossary-metaethics.md`: Definitions of core semantic concepts (cognitivism, non-cognitivism, expressivism, emotivism, prescriptivism, truth-aptness, Frege-Geach problem, thick/thin concepts, minimal truth, quasi-realism, norm-expressivism).
-- `references/metaethical-distinctions.md`: The cognitivism/non-cognitivism distinction, the realism/anti-realism distinction (and how they cross-cut), analytic/synthetic naturalism, and radical/moderate expressivism.
+- `Framework/Workflow/References/glossary-metaethics.md`: Definitions of core semantic concepts (cognitivism, non-cognitivism, expressivism, emotivism, prescriptivism, truth-aptness, Frege-Geach problem, thick/thin concepts, minimal truth, quasi-realism, norm-expressivism).
+- `Framework/Workflow/References/metaethical-distinctions.md`: The cognitivism/non-cognitivism distinction, the realism/anti-realism distinction (and how they cross-cut), analytic/synthetic naturalism, and radical/moderate expressivism.
 
 **Feeds into (downstream):**
 - `phil-moral-realism`: Semantic commitments inform the realism spectrum classification. A non-cognitivist semantics rules out robust realist and standard error-theoretic positions (both require truth-aptness). A cognitivist semantics is compatible with the full realism/anti-realism spectrum. The semantic analysis report should be passed to the realism skill.

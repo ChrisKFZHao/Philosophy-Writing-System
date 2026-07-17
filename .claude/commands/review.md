@@ -1,7 +1,8 @@
 ---
-description: Peer review of philosophical papers — invokes the phil-reviewer agent, 8-dimension review + perspective simulation (Quinean/Lewisian/Kripkean etc.)
+description: "Peer review of philosophical papers — invokes the phil-reviewer agent, 8-dimension review + perspective simulation (Quinean/Lewisian/Kripkean etc.)"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # /phil:review
 
 ## Usage
@@ -36,4 +37,4 @@ Standard review report containing:
 - Difference from `/phil:evaluate`: review targets one's own manuscript and provides constructive revision suggestions; evaluate targets others' texts and provides critical analysis
 - Difference from `/phil:comment`: review is whole-paper review; comment focuses on argument details and conceptual clarification
 - Write all output in Chinese (project convention)
-- Output format follows the review report template in `shared/templates/`
+- Output format follows the review report template in `Framework/Workflow/Templates/`

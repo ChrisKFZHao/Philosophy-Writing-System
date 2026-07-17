@@ -1,10 +1,9 @@
 ---
-description: Thought experiment analysis — deconstructing the structure, intuition mechanisms, and argumentative force of philosophical thought experiments
 name: phil-thought-experiment
-domain: general
-version: 1.0.0
+description: "Thought experiment analysis — deconstructing the structure, intuition mechanisms, and argumentative force of philosophical thought experiments"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Thought Experiment Analysis
 
 ## Overview

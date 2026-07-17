@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Thought Experiment Analysis Quality Checklist
 
 > After each thought experiment analysis, check each item. A fully checked list indicates a high-quality thought experiment analysis report.

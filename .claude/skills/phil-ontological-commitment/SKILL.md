@@ -1,10 +1,9 @@
 ---
-description: Ontological Commitment Detection — identify entity types and existence categories presupposed by arguments using Quinean criterion and category taxonomy
 name: phil-ontological-commitment
-domain: metaphysics
-version: 1.0.0
+description: "Ontological Commitment Detection — identify entity types and existence categories presupposed by arguments using Quinean criterion and category taxonomy"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Ontological Commitment Detection
 
 ## Overview

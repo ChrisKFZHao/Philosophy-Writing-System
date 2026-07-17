@@ -1,10 +1,9 @@
 ---
-description: Natural Kind Analysis — analyze arguments concerning natural kind classification; evaluate kind essentialism, HPC theory, and conventionalist approaches
 name: phil-natural-kind-analyze
-domain: metaphysics
-version: 1.0.0
+description: "Natural Kind Analysis — analyze arguments concerning natural kind classification; evaluate kind essentialism, HPC theory, and conventionalist approaches"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Natural Kind Analysis
 
 ## Overview

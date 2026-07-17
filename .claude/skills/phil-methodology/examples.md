@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Philosophical Methodology Analysis Examples
 
 > This document demonstrates the practical application of methodology analysis across different philosophical methods. Each example shows the complete input-to-output process, illustrating how methodological commitments are detected, classified, and evaluated.

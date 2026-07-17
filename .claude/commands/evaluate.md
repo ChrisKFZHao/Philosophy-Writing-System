@@ -1,7 +1,8 @@
 ---
-description: Simultaneous multi-angle critique of philosophical texts — runs counterexample generation, dialectical mapping, analogy assessment, parity checking, intuition pump detection, methodological reflection, and fallacy analysis in parallel
+description: "Simultaneous multi-angle critique of philosophical texts — runs counterexample generation, dialectical mapping, analogy assessment, parity checking, intuition pump detection, methodological reflection, and fallacy analysis in parallel"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # /phil:evaluate
 
 ## Usage

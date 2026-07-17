@@ -1,5 +1,20 @@
 # Framework Changelog
 
+## v0.6.0-alpha — 2026-07-17
+
+**Platform-neutral workflow core with generated Claude Code and Codex adapters**
+
+- Added `Framework/Workflow/manifest.json` as the validated inventory and dependency contract for 30 atomic skills, 8 composite workflows, and 7 roles.
+- Moved editable skills, workflows, roles, rules, references, schemas, templates, and helper scripts into `Framework/Workflow/`; `.claude/` and `.agents/skills/` are now deterministic committed adapters.
+- Added `build-adapters.py` (`--check`) and `workflow-doctor.py`; generation rejects unknown fields, duplicate IDs/sources, missing dependencies, missing sources, output collisions, stale files, and unexpected adapter files.
+- Completed Codex coverage with `source-command-write`, `source-command-comment`, `source-command-pipeline`, and `source-command-tutor`; role-led Codex workflows now read the canonical role prompt instead of referring to an unavailable named agent.
+- Replaced provider-specific collaboration output with canonical `user-led | assistant-led` and `[AI 补全]`; `claude-led` and `codex-led` remain deprecated aliases for one minor version.
+- Added runtime-neutral `quality_tier: inherit | high` and capability declarations. Claude maps `high` to `opus`; Codex inherits the session model and serializes dependency stages when delegation is unavailable.
+- Added `bibliography-scan.py` to replace Bash-only `ls`/`grep` intake checks, plus `workflow-policy.py` and stdlib regression tests.
+- Moved and extended `zotero-attach-linked.py` to read credentials from environment or either runtime's user configuration. Ingest now reports Zotero `full`, `partial`, or `skipped`; dry-run never writes.
+- Added platform-neutral new-project templates without modifying the three existing projects in the independent `Private/` repository.
+- Removed machine-specific paths and automatic project-MCP enablement from tracked Claude settings; `.claude/settings.local.json` is now ignored.
+
 ## v0.5.0-alpha — 2026-07-17
 
 **Writing-workflow reorganization: reading-before-thesis 6-stage pipeline + lenient interrogation (宽容性诘问) + tutor incubating mode + dual draft collaboration + per-agent model economy**
@@ -40,10 +55,10 @@
 
 **`/phil:ingest` Step 8: Zotero item auto-registration** (batch-scalable — removes the manual "Attach Link to File" click)
 
-- New Step 8 (DOI-gated, cloud write): for a PDF with a verified DOI, `zotero_add_by_doi(attach_mode='none', if_exists='skip')` creates the parent metadata item (no stored copy), CrossRef metadata is cross-checked against the title-page metadata (Rule 2 on the inflow path), the canonical PDF is attached as a `linked_file` via the reusable helper `.claude/scripts/zotero-attach-linked.py` (auth from `~/.claude.json`, proxy, retries, `--verify`), and INDEX's `Zotero` column is backfilled with the parent key
-- First committed framework script: `.claude/scripts/zotero-attach-linked.py` fills the zotero MCP's linked-file gap and is shared by Step 8 and the Lessons migration path
+- New Step 8 (DOI-gated, cloud write): for a PDF with a verified DOI, `zotero_add_by_doi(attach_mode='none', if_exists='skip')` creates the parent metadata item (no stored copy), CrossRef metadata is cross-checked against the title-page metadata (Rule 2 on the inflow path), the canonical PDF is attached as a `linked_file` via the reusable helper now located at `Framework/Workflow/Scripts/zotero-attach-linked.py` (user-level auth, proxy, retries, `--verify`), and INDEX's `Zotero` column is backfilled with the parent key
+- First committed framework script: `zotero-attach-linked.py` fills the Zotero MCP's linked-file gap and is shared by Step 8 and the Lessons migration path; v0.6 moved it to `Framework/Workflow/Scripts/`
 - No-DOI sources (SEP entries, working papers) fall back to a reported manual follow-up — automation is never forced on unverifiable metadata
-- Guardrails: `--dry-run` skips Step 8 (it writes to the cloud); collections are never auto-filed (lazy-migration principle); the API key/userID are read from `~/.claude.json` at run time and never hardcoded; item keys are written straight into INDEX, never round-tripped through subagent return values (proxy redaction rewrites `KEY:` lines to `[密钥]`)
+- Guardrails: `--dry-run` skips Step 8 (it writes to the cloud); collections are never auto-filed (lazy-migration principle); the API key/userID are read from user-level runtime configuration and never hardcoded; item keys are written straight into INDEX, never round-tripped through subagent return values (proxy redaction rewrites `KEY:` lines to `[密钥]`)
 - `Framework/Lessons/zotero-integration.md` "New PDF" flow updated to describe the automated path; validated live on `BUILES-RATES-OF-CHANGE`
 
 ## v0.4.2-alpha — 2026-07-14
@@ -54,7 +69,7 @@
 - INDEX.md gains a `Zotero` column: `KEY ↔ Zotero item key ↔ file stem` three-way mapping
 - Validated stored→linked migration via web API preserving annotations (`linkMode` is API-immutable → create linked attachment + reparent annotations + trash old); Zotmoov UI path retained as no-API fallback
 - Lazy migration policy: Zotero collections are not mirrored; a collection is migrated only when it becomes a writing project
-- MCP hybrid mode: local SQLite reads + web API writes (key in `~/.claude.json`); JSTOR-style metadata pollution confirmed → Rule 2 title-page verification mandatory on the Zotero inflow path
+- MCP hybrid mode: local SQLite reads + web API writes (key in user-level runtime configuration); JSTOR-style metadata pollution confirmed → Rule 2 title-page verification mandatory on the Zotero inflow path
 - Full workflow: `Framework/Lessons/zotero-integration.md`; B3 (Philosophers-DB master-library rework) moves to v0.4.3
 
 ## v0.4.1-alpha — 2026-07-14

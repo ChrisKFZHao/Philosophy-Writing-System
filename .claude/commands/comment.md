@@ -1,7 +1,8 @@
 ---
-description: In-depth philosophical commentary — invokes the phil-commentator agent, focusing on argumentative detail: unstated assumptions, alternative readings, missing distinctions, hidden commitments, dialectical blind spots
+description: "In-depth philosophical commentary — invokes the phil-commentator agent, focusing on argumentative detail: unstated assumptions, alternative readings, missing distinctions, hidden commitments, dialectical blind spots"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # /phil:comment
 
 ## Usage

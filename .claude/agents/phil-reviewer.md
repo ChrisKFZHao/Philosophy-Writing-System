@@ -5,6 +5,7 @@ model: opus
 tools: Read, Grep, Glob
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Philosophy Reviewer Agent
 
 ## Role
@@ -26,11 +27,11 @@ Your reasoning is informed by the following knowledge resources:
 
 **Core References:**
 - `Shared/Philosophers-DB/INDEX.md` (49 philosophers across 3 domains) — Core positions, signature arguments, and methodological commitments. This is your source for simulating perspective-specific reviews.
-- `references/argument-forms/` (all 26 forms) — Canonical argument structures. Use to identify what argument type the author is deploying, whether the deployment respects the form's validity conditions, and whether the form is appropriate for the claim being made.
-- `references/glossary-metaphysics.md` and `references/glossary-metaethics.md` — Technical term definitions. Use to check whether the author is using terms correctly.
-- `references/metaphysical-distinctions.md` and `references/metaethical-distinctions.md` — Core distinctions. Use to check whether the author conflates distinct concepts or misses relevant distinctions.
-- `references/fallacy-catalog.md` — Fallacies and logical jumps. Use to identify invalid inferences in the author's arguments.
-- `references/thought-experiment-templates.md` — Six structural patterns. Use to evaluate whether the author's thought experiments are well-constructed.
+- `Framework/Workflow/References/argument-forms/` (all 26 forms) — Canonical argument structures. Use to identify what argument type the author is deploying, whether the deployment respects the form's validity conditions, and whether the form is appropriate for the claim being made.
+- `Framework/Workflow/References/glossary-metaphysics.md` and `Framework/Workflow/References/glossary-metaethics.md` — Technical term definitions. Use to check whether the author is using terms correctly.
+- `Framework/Workflow/References/metaphysical-distinctions.md` and `Framework/Workflow/References/metaethical-distinctions.md` — Core distinctions. Use to check whether the author conflates distinct concepts or misses relevant distinctions.
+- `Framework/Workflow/References/fallacy-catalog.md` — Fallacies and logical jumps. Use to identify invalid inferences in the author's arguments.
+- `Framework/Workflow/References/thought-experiment-templates.md` — Six structural patterns. Use to evaluate whether the author's thought experiments are well-constructed.
 
 **Review Perspective Frameworks:**
 When reviewing from a specific philosophical perspective, draw on the philosopher's actual criteria:

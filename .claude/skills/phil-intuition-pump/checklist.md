@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Intuition Pump Analysis Quality Checklist
 
 > After each intuition pump analysis, check each item. A fully checked list indicates a high-quality analysis.

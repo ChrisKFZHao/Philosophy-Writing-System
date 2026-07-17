@@ -1,10 +1,9 @@
 ---
-description: Detect, classify, and evaluate the methodological commitments of philosophical arguments — the meta-philosophical choices about how philosophy should be done that shape and constrain reasoning
 name: phil-methodology
-domain: general
-version: 1.0.0
+description: "Detect, classify, and evaluate the methodological commitments of philosophical arguments — the meta-philosophical choices about how philosophy should be done that shape and constrain reasoning"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Philosophical Methodology Analysis
 
 ## Overview

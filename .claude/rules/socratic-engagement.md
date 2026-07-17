@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Philosophical Workflow: Conditional Socratic Questioning
 
 Philosophical work is dialectical, but Socratic questioning is a tool — deploy it when needed, not as a mandatory ritual every time. The trigger is **vagueness**, not novelty — this governs all interactions. At workflow gates, a second trigger (a detected defect) also applies; see the Workflow Gates section below.
@@ -51,7 +52,7 @@ Only after the user has confirmed, refined, or abandoned the claim should you en
 
 **Behavior on defect**: Challenge — state the defect, ask the user to respond; iterate until resolved, revised, or the user overrides.
 
-**Behavior otherwise** (gaps/weaknesses short of a defect): **Charitable completion with disclosure** — fill the gap in your own output AND explicitly disclose: (a) what was filled, (b) why the user's version needed it, (c) what alternatives existed. Disclosure format: a short labeled block starting with `[Claude 补全]`. Silent strengthening is prohibited — the disclosure is the teaching act.
+**Behavior otherwise** (gaps/weaknesses short of a defect): **Charitable completion with disclosure** — fill the gap in your own output AND explicitly disclose: (a) what was filled, (b) why the user's version needed it, (c) what alternatives existed. Disclosure format: a short labeled block starting with `[AI 补全]`. Silent strengthening is prohibited — the disclosure is the teaching act.
 
 **Gate behavior**: Gates are default-on dialogue, never hard blocks. The user may always proceed; overrides and skips are acknowledged without argument and recorded (in the orchestrator's stage-state summary, or the manuscript's Notes to Self for Stages 5–6).
 

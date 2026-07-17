@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Parity Argument Analysis Examples
 
 > This document demonstrates the practical application of parity/relevant-similarity analysis across classic philosophical parity arguments. Each example shows the complete input-to-output process.

@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Ontological Commitment Detection Quality Checklist
 
 > After each ontological commitment detection, check each item. A fully checked list indicates a high-quality commitment analysis.

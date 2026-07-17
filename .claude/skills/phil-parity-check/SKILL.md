@@ -1,10 +1,9 @@
 ---
-description: Evaluates parity arguments and relevant-similarity claims in philosophical reasoning by systematically checking whether claimed analogies hold under scrutiny.
 name: phil-parity-check
-domain: general
-version: 1.0.0
+description: "Evaluates parity arguments and relevant-similarity claims in philosophical reasoning by systematically checking whether claimed analogies hold under scrutiny."
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # SKILL: phil-parity-check --- Parity / Relevant Similarity Analysis
 
 ## 1. Overview

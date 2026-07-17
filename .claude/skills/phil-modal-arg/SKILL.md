@@ -1,10 +1,9 @@
 ---
-description: Modal Argument Analysis — evaluate the logical structure of possibility, necessity, and contingency claims; detect modal fallacies; identify hidden modal assumptions; locate possible-worlds reasoning positions
 name: phil-modal-arg
-domain: general
-version: 1.0.0
+description: "Modal Argument Analysis — evaluate the logical structure of possibility, necessity, and contingency claims; detect modal fallacies; identify hidden modal assumptions; locate possible-worlds reasoning positions"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Modal Argument Analysis
 
 ## Overview

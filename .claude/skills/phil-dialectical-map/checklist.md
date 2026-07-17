@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Dialectical Mapping Quality Checklist
 
 > After each dialectical mapping analysis, check each item. A fully checked list indicates a high-quality dialectical tree report.

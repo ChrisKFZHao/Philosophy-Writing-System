@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Citation Integrity Rules
 
 Never generate unverified references, quotations, page numbers, or publication details.

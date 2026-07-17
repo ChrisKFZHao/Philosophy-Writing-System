@@ -1,10 +1,9 @@
 ---
-description: "Normativity Analysis — analyze the source and structure of normativity; classify categorical/hypothetical imperatives, internal/external reasons, and constitutive vs substantive normativity"
 name: phil-normativity
-domain: metaethics
-version: 1.0.0
+description: "Normativity Analysis — analyze the source and structure of normativity; classify categorical/hypothetical imperatives, internal/external reasons, and constitutive vs substantive normativity"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Normativity Analysis
 
 ## Overview
@@ -327,9 +326,9 @@ Assemble the findings from Steps 1-6 into a structured report conforming to `nor
 - `phil-conceptual-analysis` (indirect): Understanding key concepts (reason, ought, value, obligation) as they function in the argument informs normativity classification. If the argument uses "reason" in an idiosyncratic way, the concept-map report clarifies this.
 
 **Referenced knowledge resources:**
-- `references/normativity-taxonomy.md`: The canonical taxonomy of normative theories, with detailed profiles of each source theory, their key proponents, strengths, and standard objections. All source classifications should be cross-referenced with this taxonomy.
-- `references/glossary-metaethics.md`: Standard definitions of key terms (categorical imperative, internal reason, constitutive norm, bindingness, regress argument) to ensure consistent usage across all metaethics skills.
-- `references/metaethical-distinctions.md`: A guide to the major distinctions in metaethics and how they cross-cut one another. Used to check for category errors (e.g., treating the internalism/externalism distinction as if it were the same as the cognitivism/non-cognitivism distinction).
+- `Framework/Workflow/References/normativity-taxonomy.md`: The canonical taxonomy of normative theories, with detailed profiles of each source theory, their key proponents, strengths, and standard objections. All source classifications should be cross-referenced with this taxonomy.
+- `Framework/Workflow/References/glossary-metaethics.md`: Standard definitions of key terms (categorical imperative, internal reason, constitutive norm, bindingness, regress argument) to ensure consistent usage across all metaethics skills.
+- `Framework/Workflow/References/metaethical-distinctions.md`: A guide to the major distinctions in metaethics and how they cross-cut one another. Used to check for category errors (e.g., treating the internalism/externalism distinction as if it were the same as the cognitivism/non-cognitivism distinction).
 
 **Dependents (downstream):**
 - `phil-moral-psychology`: The moral psychology skill builds directly on the normativity analysis. The reasons internalism/externalism diagnosis from this skill feeds into the motivational internalism/externalism analysis in moral psychology. The bindingness mechanism analysis constrains the moral-psychological architecture.

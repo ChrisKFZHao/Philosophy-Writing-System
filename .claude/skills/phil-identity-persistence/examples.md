@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Identity and Persistence Analysis Examples
 
 > This document demonstrates the practical application of identity and persistence analysis across different identity problem types and persistence frameworks. Each example shows the complete input-to-output process using Leibniz's Law, sortal analysis, and framework sensitivity assessment.

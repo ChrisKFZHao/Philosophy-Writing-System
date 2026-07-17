@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Causal Claim Analysis Examples
 
 > This document demonstrates the practical application of causal claim analysis across different theoretical frameworks. Each example shows the complete input-to-output process for a distinct causal-theoretic problem.

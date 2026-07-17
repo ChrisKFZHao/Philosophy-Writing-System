@@ -1,7 +1,8 @@
 ---
-description: Full-dimensional comprehension of philosophical texts — simultaneously runs argument reconstruction, charity audit, implicit premise detection, conceptual analysis, distinction tracking, thought experiment analysis, modal analysis, and contextualization, with automatic domain detection triggering specialized metaphysics/metaethics analyses
+description: "Full-dimensional comprehension of philosophical texts — simultaneously runs argument reconstruction, charity audit, implicit premise detection, conceptual analysis, distinction tracking, thought experiment analysis, modal analysis, and contextualization, with automatic domain detection triggering specialized metaphysics/metaethics analyses"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # /phil:reconstruct
 
 ## Usage

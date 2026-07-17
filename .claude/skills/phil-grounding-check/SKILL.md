@@ -1,10 +1,9 @@
 ---
-description: "Grounding/Constitution Analysis — detect grounding, supervenience, realization, and constitution relations; map ontological dependence topology and evaluate explanatory adequacy"
 name: phil-grounding-check
-domain: metaphysics
-version: 1.0.0
+description: "Grounding/Constitution Analysis — detect grounding, supervenience, realization, and constitution relations; map ontological dependence topology and evaluate explanatory adequacy"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Grounding/Constitution Analysis
 
 ## Overview

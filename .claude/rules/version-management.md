@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Manuscript Version Management
 
 Version cuts are not performed automatically on every save. Cut a new version only when one of the following three types of event fires:

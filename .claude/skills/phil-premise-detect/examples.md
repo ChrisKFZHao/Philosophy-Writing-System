@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Implicit Premise Detection Examples
 
 > Each example demonstrates: given an already reconstructed standard-form argument, systematically detect the unstated implicit premises within it.

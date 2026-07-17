@@ -1,7 +1,8 @@
 ---
-description: Tutor-style dialogue — two modes. reading (default): asks about your thinking, probes your understanding, surfaces blind spots, recommends readings, and plans next steps. incubating: conception incubation (构思孵化), helping you crystallize your own thesis and argument sketch
+description: "Tutor-style dialogue — two modes. reading (default): asks about your thinking, probes your understanding, surfaces blind spots, recommends readings, and plans next steps. incubating: conception incubation (构思孵化), helping you crystallize your own thesis and argument sketch"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # /phil:tutor
 
 ## Usage
@@ -39,7 +40,7 @@ Relation to phil:reconstruct:
 
 ## Agent Used
 
-This command launches the `phil-tutor` agent (defined in `.claude/agents/phil-tutor.md`).
+This command adopts the `phil-tutor` role defined in `Framework/Workflow/Roles/phil-tutor.md`.
 
 The agent may internally invoke the following skill when needed:
 - `phil-citation-extract` — extract citations from the current text for recommendation purposes
@@ -70,7 +71,7 @@ A parallel four-phase arc, oriented toward crystallizing your own position rathe
 | 3: Argument sketching | Sketches your main line at premise level, mapping each premise to a supporting refs.md KEY | Confirm, revise, or supply missing premises |
 | 4: Conception consolidation | Writes/updates `{topic}-conception.txt` | Confirm the conception, or ask for another round |
 
-Lenient interrogation (Rule 1 §Workflow Gates) governs this dialogue throughout: a nameable defect in the candidate thesis triggers a challenge; gaps short of a defect are filled charitably with an explicit `[Claude 补全]` disclosure in the conception file, never silently.
+Lenient interrogation (Rule 1 §Workflow Gates) governs this dialogue throughout: a nameable defect in the candidate thesis triggers a challenge; gaps short of a defect are filled charitably with an explicit `[AI 补全]` disclosure in the conception file, never silently.
 
 ## Notes
 

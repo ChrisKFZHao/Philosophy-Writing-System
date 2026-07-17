@@ -1,10 +1,9 @@
 ---
-description: "Analyze intuition pumps — philosophical thought experiments designed to elicit specific intuitive judgments that serve as argumentative premises. Systematic analysis of pump mechanisms, cognitive architecture, debunking susceptibility, framing effects, and dialectical force."
 name: phil-intuition-pump
-domain: general
-version: 1.0.0
+description: "Analyze intuition pumps — philosophical thought experiments designed to elicit specific intuitive judgments that serve as argumentative premises. Systematic analysis of pump mechanisms, cognitive architecture, debunking susceptibility, framing effects, and dialectical force."
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # phil-intuition-pump — Intuition Pump Analysis
 
 ---

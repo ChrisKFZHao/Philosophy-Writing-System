@@ -1,10 +1,9 @@
 ---
-description: Dialectical mapping — constructing a structured dialectical tree of theses, objections, and responses within a philosophical debate, tracking the offensive and defensive evolution of arguments
 name: phil-dialectical-map
-domain: general
-version: 1.0.0
+description: "Dialectical mapping — constructing a structured dialectical tree of theses, objections, and responses within a philosophical debate, tracking the offensive and defensive evolution of arguments"
 ---
 
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Dialectical Mapping
 
 ## Overview

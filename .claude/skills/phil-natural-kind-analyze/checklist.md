@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Natural Kind Analysis Quality Checklist
 
 > After each natural kind analysis, check each item. A fully checked list indicates a high-quality analysis.

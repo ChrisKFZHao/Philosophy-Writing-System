@@ -1,3 +1,4 @@
+<!-- Generated from Framework/Workflow. Do not edit directly. -->
 # Moral Semantics Analysis Examples
 
 > This document demonstrates the practical application of moral semantics analysis across different philosophical arguments. Each example shows the complete input-to-output process, covering semantic position classification, Frege-Geach embedding tests, truth-aptness assessment, and thick/thin concept analysis.
