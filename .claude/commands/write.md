@@ -1,5 +1,5 @@
 ---
-description: Philosophical writing — invokes the phil-writer agent with three modes: outline (structured outline), draft (section-by-section composition), revision (review-driven revision)
+description: Philosophical writing — invokes the phil-writer agent with three modes: outline (structured outline), draft (section-by-section composition, with user-led/claude-led collaboration modes), revision (review-driven revision)
 ---
 
 # /phil:write
@@ -7,7 +7,7 @@ description: Philosophical writing — invokes the phil-writer agent with three 
 ## Usage
 
 ```
-/phil:write <mode: outline|draft|revision> [context]
+/phil:write <mode: outline|draft|revision> [collaboration: user-led|claude-led] [context]
 ```
 
 ## Role
@@ -23,15 +23,22 @@ Philosophical paper writing. Invokes the `phil-writer` agent.
 
 ### Outline mode
 - Input: thesis or research question + analysis context
+- **Preferentially consumes `Private/Projects/{topic}/{topic}-conception.txt`** (the Stage 3 ideation output) when it exists — the writer refines the user's own thesis and argument sketch rather than inventing a replacement. Any substantive deviation from the conception file's thesis is flagged and justified to the user before proceeding. Absent a conception file, falls back to a user-supplied thesis or research question.
 - Output: structured outline (thesis, section plan, distinction inventory, anticipated objections)
 
 ### Draft mode
 - Input: approved outline + analysis outputs
 - Output: complete manuscript sections, argument-first prose, Chinese academic conventions
 
+**Collaboration Modes** (dual sub-modes):
+- **`user-led`** (严肃学术论文 — serious academic papers): the user writes sections into `{topic}-draft.txt`; per section, Claude gives Socratic feedback triggered only by a nameable defect (Rule 1 §Workflow Gates), offers gap-filling as `[Claude 补全]`-disclosed suggestions, and polishes against the 7 prose standards below. Claude edits the draft only to apply changes the user has explicitly accepted — never a silent rewrite.
+- **`claude-led`** (课程论文 — course papers): Claude drafts section-by-section, with **default-on boundary interrogation** — 1–3 ownership questions posed to the user at each section boundary. Skips are recorded in the manuscript's Notes to Self.
+- Selection: read the `collaboration:` key from the project's CLAUDE.md; if absent, ask the user once and suggest recording it. The `[collaboration: user-led|claude-led]` argument above overrides this for a single invocation.
+
 ### Revision mode
 - Input: manuscript + reviewer feedback
 - Output: revised draft + change log, prioritized by type (structure → concepts → dialectic → modality → style)
+- **Collaboration-mode interaction**: in `user-led`, revision mode produces a prioritized change plan plus per-finding suggested edits, which the user implements. In `claude-led`, current behavior applies, plus: findings that trace back to a user-authored or user-approved choice are asked about (lenient interrogation) before Claude rewrites.
 
 ## 7 Standards of Philosophical Prose
 
@@ -47,4 +54,6 @@ Philosophical paper writing. Invokes the `phil-writer` agent.
 
 - Write the writing output in Chinese
 - Recommended: run the analysis skills (`/phil:reconstruct` + `/phil:evaluate`) before writing
+- The draft collaboration mode is recorded via a `collaboration:` key in the project-level CLAUDE.md; a per-invocation `[collaboration: ...]` argument overrides it for that call only
+- Rule 1 §Workflow Gates (lenient interrogation) governs all boundary interrogation and Socratic feedback in draft and revision modes — a nameable defect triggers a challenge, otherwise gaps are charitably completed with `[Claude 补全]` disclosure; gates never hard-block
 - Optionally invoke ARS capabilities (citation-check, format-convert; requires the external ARS plugin) for final polishing

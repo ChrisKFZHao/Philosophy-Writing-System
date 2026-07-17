@@ -1,6 +1,7 @@
 ---
 description: "Metaphysical analyst — Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, identity conditions, causal analysis, and essence detection"
 namespace: phil
+model: inherit
 tools: Read, Grep, Glob
 ---
 

@@ -12,5 +12,5 @@ Version cuts are not performed automatically on every save. Cut a new version on
 
 - Multiple triggers on the same day are merged into one version
 - The version description lists all triggers included
-- The draft (`-draft.txt`) is never versioned — it is the living working file
+- The draft (`-draft.txt`) is never versioned — it is the living working file. Conception notes (`-conception.txt`) are likewise never versioned — a living file superseded by the outline
 - After a version cut, the draft is not cleared — it persists as the working copy for the next round

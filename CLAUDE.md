@@ -16,6 +16,7 @@ These rules apply to ALL interactions in this project. Full rule text is in `.cl
 → [rules/socratic-engagement.md](.claude/rules/socratic-engagement.md)
 Assess clarity before responding. Clear ideas → execute directly. Vague ideas → Socratic questioning.
 Trigger is **vagueness**, not novelty. Do not fabricate objections for the sake of appearing rigorous.
+At workflow gates and section boundaries, a second trigger applies: a nameable defect → challenge; otherwise charitable completion with explicit `[Claude 补全]` disclosure (宽容性诘问). Gates never hard-block.
 
 ### Rule 2: No Hallucinated Citations
 → [rules/citation-integrity.md](.claude/rules/citation-integrity.md)
@@ -80,10 +81,10 @@ Memory: C:\Users\zhaok\.claude\projects\C--Projects-Philosophical-Writing\memory
 | `phil:reconstruct` | Full-dimensional understanding of a source | 9-20 skills (mixed serial/parallel, auto domain detection) |
 | `phil:evaluate` | Simultaneous multi-angle critique | 7 skills (fully parallel) |
 | `phil:review` | Peer review | phil-reviewer agent (8 dimensions + perspective simulation) |
-| `phil:write` | Philosophical writing | phil-writer agent (outline / draft / revision) |
+| `phil:write` | Philosophical writing | phil-writer agent (outline / draft / revision; draft mode has dual collaboration modes user-led/claude-led) |
 | `phil:comment` | Argument detail and conceptual clarification | phil-commentator agent (6 critical dimensions) |
-| `phil:pipeline` | One-command full pipeline | phil-orchestrator agent (5 stages with quality gates) |
-| `phil:tutor` | Tutor-style literature dialogue — probe ideas, test understanding, recommend sources | phil-tutor agent (Socratic dialogue + 4-phase arc) |
+| `phil:pipeline` | One-command full pipeline | phil-orchestrator agent (6 stages with lenient-interrogation gates) |
+| `phil:tutor` | Tutor-style literature dialogue — probe ideas, test understanding, recommend sources | phil-tutor agent (two modes: reading — Socratic dialogue + 4-phase arc; incubating — Stage 3 conception incubation producing the conception file) |
 | `phil:ingest` | Literature ingestion ("scraping") — scan library, rename to canonical stem, register in INDEX, Level 0.5 summary, recommendation trigger 1 | shell scan + pdf skill + phil-summarize |
 
 Each command file in `.claude/commands/` defines its skill composition, execution order, and output format.
@@ -94,10 +95,12 @@ Each command file in `.claude/commands/` defines its skill composition, executio
 - Plain text writing; no markup languages (final LaTeX is stored as .txt in the same directory; copy .txt → .tex temporarily at compile time)
 - Manuscripts are written in Chinese
 - Directory & filenames use English kebab-case of the project topic
+- Each project declares its draft collaboration mode via a `collaboration: user-led | claude-led` key in the project-level CLAUDE.md (`user-led` = serious academic papers / 严肃学术论文, `claude-led` = course papers / 课程论文); if absent, `phil-writer` asks once and suggests recording it.
 
 **Per-project files:**
 - `CLAUDE.md` — project-level conventions + topic keywords (used for literature-recommendation matching)
 - `refs.md` — project-level reference list: `KEY | role (core-target/support/background) | status (cited/candidate/rejected) | notes`; each KEY points to the master library INDEX — zero file duplication
+- `{topic}-conception.txt` — Conception notes from ideation (Stage 3, `phil:tutor` incubating mode). Freely overwritten. Never versioned. Consumed by `phil:write outline`.
 - `{topic}-draft.txt` — Working draft. Freely overwritten. Never versioned.
 - `{topic}-v{N}.txt` — Cut version. Created from draft when a trigger fires.
 - `{topic}-review.txt` — Review report.
@@ -139,6 +142,7 @@ Distilled from live runs (v0.4.2–v0.4.5). Goal: spend tokens on philosophy, no
 4. **Read at the cheapest sufficient level**: INDEX row → `.summary.txt` (Level 0.5) → `.analysis.txt` → PDF outline / page range → full text. Never run full-text extraction to answer what a summary already answers. Full-text reads are justified only by the analysis-level escalation triggers (Citation Gate) or an explicit read request.
 5. **Validated methods are settled**: procedures marked verified in `Framework/Lessons/` (e.g. the annotation-preserving stored→linked migration) are executed, not re-tested. Check `history.txt` / changelog / Lessons before re-investigating a known problem.
 6. **Environment facts are read, not re-probed**: proxy `127.0.0.1:6789`, Zotero hybrid MCP mode, API-key location, the 50-item write-batch cap — all recorded in this file, Lessons, and memory.
+7. **Model economy**: Agents carry `model:` frontmatter. Dialogic/writing agents (`phil-tutor`, `metaphysician`, `metaethicist`, `phil-writer`) `inherit` the session model — this work is quality-sensitive; cost is controlled per-session via `/model`. Review/coordination agents (`phil-reviewer`, `phil-commentator`, `phil-orchestrator`) are pinned to `opus`. Skills and commands run on the session model — run bulk ingestion/summary sessions on a cheaper session model (e.g. `/model sonnet`). Pricing snapshot (cached 2026-06-24, $/MTok in/out): Fable 5 10/50 · Opus 4.8 5/25 · Sonnet 5 3/15 (intro 2/10 through 2026-08-31) · Haiku 4.5 1/5 — prices drift; re-check before re-tuning.
 
 ## Common Operations
 
@@ -167,10 +171,11 @@ Prefix with `!` to run in-session:
 - **MCP mode**: hybrid — reads on local SQLite (`ZOTERO_LOCAL=true`), writes via web API key (configured in `~/.claude.json`); cloud writes land locally only after a desktop sync. Zotero-imported metadata (e.g. JSTOR) is unreliable — title-page verification (Rule 2) applies on this inflow path too.
 
 ### Manuscript Work Cycle
-1. **Draft** in `Private/Projects/{topic}/{topic}-draft.txt`
-2. **Review** with `phil:review` → review report
-3. **Revise** draft → cut version when trigger fires
-4. **Version cut**: `cp draft.txt v{N}.txt` + update `VERSIONS.md`
+1. **Incubate**: `/phil:tutor incubating` → `{topic}-conception.txt` (thesis + argument sketch in the user's own words)
+2. **Draft** in `Private/Projects/{topic}/{topic}-draft.txt`
+3. **Review** with `phil:review` → review report
+4. **Revise** draft → cut version when trigger fires
+5. **Version cut**: `cp draft.txt v{N}.txt` + update `VERSIONS.md`
 
 ### LaTeX Compilation
 ```bash
@@ -206,7 +211,7 @@ Write memories for: user preferences, project goals, substantive feedback, exter
 
 ## Architecture
 
-The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.4-alpha), built atop `academic-research-skills` v3.15.0 (external plugin — all `ars-*` capabilities require this plugin to be installed), covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
+The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.5.0-alpha), built atop `academic-research-skills` v3.15.0 (external plugin — all `ars-*` capabilities require this plugin to be installed), covering three subdomains: general analytic philosophy, metaphysics, and metaethics.
 
 - **30 Skills** — Phase 1-6 complete. All skills in `.claude/skills/`
 - **8 Commands** — Composite orchestration in `.claude/commands/`

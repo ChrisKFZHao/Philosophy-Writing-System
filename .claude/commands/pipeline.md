@@ -1,5 +1,5 @@
 ---
-description: One-command full pipeline — invokes the phil-orchestrator agent, 5 stages: philosophical question → literature review → outline → first draft → final draft, with a quality gate at each stage
+description: One-command full pipeline — invokes the phil-orchestrator agent, 6 stages: topic orientation & reading plan → reading & analysis → conception incubation → outline → draft & iterative revision → review & final, with a lenient-interrogation quality gate at each stage
 ---
 
 # /phil:pipeline
@@ -20,20 +20,23 @@ One-command, end-to-end philosophy paper production. Invokes the `phil-orchestra
 |------|------|
 | Agent | `phil-orchestrator` |
 
-## 5-Stage Process
+## 6-Stage Process
 
 | Stage | Content | Quality Gate |
 |------|------|--------|
-| 1 | Philosophical question clarification + position specification | Thesis clarity check |
-| 2 | Literature review + analysis | Citation integrity check |
-| 3 | Structured outline | Argument logic check |
-| 4 | Section-by-section first draft | 7 philosophical prose standards check |
-| 5 | Review + revision → final draft | 8-dimension review |
+| 1. Topic Orientation & Reading Plan | Scope the dispute + assemble a library-grounded reading plan | Topic is determinate enough to direct reading; reading list covers the debate's core positions |
+| 2. Reading & Analysis | Ground the topic in the literature (`phil-tutor` reading mode + analysis skills) | User can state each core source's thesis and main argument in their own words |
+| 3. Ideation / Conception Incubation (构思孵化) | Incubate the user's own thesis and argument sketch (`phil-tutor` incubating mode) → `{topic}-conception.txt` | User states their own thesis and argument line, positioned against named interlocutors |
+| 4. Outline | Structure the paper's argument (`phil-writer` outline mode, consuming the conception file) | Argument flow is logically valid; user defends 1–2 structural choices |
+| 5. Draft & Iterative Revision | Section-by-section production under the chosen collaboration mode (`phil-writer` draft mode) | 7 prose standards met; boundary-interrogation record complete |
+| 6. Review & Final | Review-revision cycles to a polished manuscript (`phil-reviewer` + `phil-writer` revision mode) | Fatal findings resolved; user approves |
 
-Each stage must pass its quality gate before advancing to the next. On failure, loop through revision until the gate passes or the user manually skips it.
+All gates are **dialogic lenient-interrogation gates**, not hard blocks: a nameable defect in the user's work triggers a challenge; a gap short of a defect is filled charitably with an explicit `[Claude 补全]` disclosure; the user may always proceed, and any override or skip is recorded (see Rule 1 §Workflow Gates in `.claude/rules/socratic-engagement.md`). There is no "loop until the gate passes" hard requirement — the orchestrator recommends, the user decides.
 
 ## Notes
 
-- Stages internally invoke `/phil:reconstruct`, `/phil:evaluate`, `/phil:review`, and `/phil:write` as needed
+- **Stage 0 prerequisite** (outside the pipeline): sources must already be ingested via `/phil:ingest` before the pipeline begins — the orchestrator directs the user there if a referenced source is missing from `Private/Bibliography/INDEX.md`.
+- Stages internally invoke `/phil:reconstruct`, `/phil:evaluate`, `/phil:review`, `/phil:tutor` (reading and incubating modes), and `/phil:write` as needed
+- **Stage 5 begins by selecting the collaboration mode**: the orchestrator reads the `collaboration:` key from the project's CLAUDE.md, or asks the user once (`user-led` / `claude-led`) — see `phil-writer`'s Draft mode.
 - ARS capabilities may be invoked selectively (deep-research, citation-check, format-convert; requires the external ARS plugin)
 - Write all output in Chinese (project convention)

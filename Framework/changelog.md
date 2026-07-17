@@ -1,5 +1,20 @@
 # Framework Changelog
 
+## v0.5.0-alpha — 2026-07-17
+
+**Writing-workflow reorganization: reading-before-thesis 6-stage pipeline + lenient interrogation (宽容性诘问) + tutor incubating mode + dual draft collaboration + per-agent model economy**
+
+- `phil-orchestrator`'s pipeline goes from 5 stages to 6: Stage 0 (prerequisite, outside the pipeline) `/phil:ingest`; Stage 1 Topic Orientation & Reading Plan; Stage 2 Reading & Analysis; Stage 3 Ideation / Conception Incubation (构思孵化, NEW); Stage 4 Outline; Stage 5 Draft & Iterative Revision; Stage 6 Review & Final. The old Stage 1 ("question formulation") is split: scoping → new Stage 1, thesis crystallization → new Stage 3
+- Rule 1 (`socratic-engagement.md`) gains a `## Workflow Gates: Lenient Interrogation (宽容性诘问)` section: two triggers (vagueness OR a nameable defect); a defect triggers a challenge; a gap short of a defect gets charitable completion disclosed via `[Claude 补全]`; gates are dialogic and never hard-block; overrides are recorded. Citation Gate (Rule 2) is explicitly unchanged
+- `phil-tutor` gains two modes — `reading` (existing 4-phase literature dialogue) and `incubating` (Stage 3: landscape recall → angle probing → argument sketching → conception consolidation) — plus a `tools:` line (Read, Grep, Glob, Write, Edit); incubating mode writes `Private/Projects/{topic}/{topic}-conception.txt` with the thesis kept in the user's own words and all Claude contributions disclosed
+- New per-project artifact `{topic}-conception.txt`: Chinese content, freely overwritten, never versioned (Rule 3 exemption added in `version-management.md`)
+- `phil-writer` draft mode gains dual collaboration modes declared via the project CLAUDE.md's `collaboration:` key: `user-led` (严肃学术论文 — user writes, Claude gives defect-triggered Socratic feedback plus disclosed suggestions, applies only user-accepted edits) and `claude-led` (课程论文 — Claude drafts with default-on boundary interrogation, 1–3 ownership questions per section boundary); new Quality Standard 8, Disclosure Integrity; outline mode preferentially consumes the conception file, refining rather than replacing the user's thesis; revision mode interacts with the active collaboration mode
+- Command files and the root `CLAUDE.md` conventions updated to match the new stages, modes, and artifact
+- `ARCHITECTURE.md` bumped to 0.5.0-alpha with the 6-stage pipeline redrawn (§6), agent-layer sections updated (Layers 3 and 5), and 5 pre-existing path typos fixed (`agentsphil:*` → `agents/phil-*`)
+- Model economy: all 7 agents gain `model:` frontmatter — `inherit` for phil-tutor, metaphysician, metaethicist, phil-writer (quality-sensitive dialogue/prose follows the session model); `opus` for phil-reviewer, phil-commentator, phil-orchestrator (review/coordination pinned to Opus 4.8) — plus session-level guidance (bulk ingestion/summarization on a cheaper session model) and a pricing snapshot (cached 2026-06-24, $/MTok in/out: Fable 5 10/50 · Opus 4.8 5/25 · Sonnet 5 3/15, intro 2/10 through 2026-08-31 · Haiku 4.5 1/5)
+- Roadmap reorder: multi-purpose output (paper/report/presentation) moves from v0.5 to v0.6; the former v0.6 items (Stage 2.5 incubation + adversarial gates, "A2+B2") land now, in lenient form; commentator-as-skeptic remains an optional Stage 6 escalation
+- **Validation: pending** — the batch-convention validation run (retro-incubation via `/phil:tutor incubating` + a `user-led` draft session on the srinivasan-critique project) has not yet been executed; results will be appended once it runs
+
 ## v0.4.5-alpha — 2026-07-14
 
 **`/phil:ingest` Step 8 book gate: ISBN-only → fallback cascade DOI-first → ISBN → bibtex** (validated on the first real edited-collection ingestion)

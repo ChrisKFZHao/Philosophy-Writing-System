@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.4.1-alpha &emsp; **Status**: Alpha
+> **Version**: 0.5.0-alpha &emsp; **Status**: Alpha
 >
 > **Built atop `academic-research-skills` (v3.15.0)**
 > This system does not re-implement ARS's existing capabilities (literature search, paper writing, peer review, citation verification). Instead, it layers on top of ARS an **analytic-philosophy-specific methodological layer**.
@@ -159,8 +159,8 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   ├── phil-writer.md                # [Phase 6] Philosophy writer (outline/draft/revision)
 │   ├── phil-reviewer.md              # [Phase 6] Philosophy reviewer (8-dimension + perspective)
 │   ├── phil-commentator.md           # [Phase 6] Philosophy commentator (critical/response/position)
-│   ├── phil-orchestrator.md          # [Phase 6] Pipeline orchestrator (5-stage workflow)
-│   └── phil-tutor.md                 # [New] Tutor agent — dialogic reading mentor (Socratic + recommendations)
+│   ├── phil-orchestrator.md          # [Phase 6] Pipeline orchestrator (6-stage workflow)
+│   └── phil-tutor.md                 # [New] Tutor agent — dialogic mentor (reading + incubating modes)
 │
 ├── references/
 │   ├── glossary-metaethics.md        # Metaethics terminology glossary
@@ -204,8 +204,8 @@ The system is optimized for **analytic philosophy**, not general academic writin
 │   ├── review.md                      # phil:review — Peer review agent (8 dimensions)
 │   ├── write.md                       # phil:write — Philosophy writer agent (outline/draft/revision)
 │   ├── comment.md                     # phil:comment — Deep commentary agent (argument details)
-│   ├── pipeline.md                    # phil:pipeline — Full pipeline orchestrator (5 stages)
-│   ├── tutor.md                       # [New] phil:tutor — Dialogic reading mentor (Socratic + recommendations)
+│   ├── pipeline.md                    # phil:pipeline — Full pipeline orchestrator (6 stages)
+│   ├── tutor.md                       # [New] phil:tutor — Dialogic mentor (reading + incubating modes)
 │   └── ingest.md                      # [v0.4.1] phil:ingest — Literature ingestion (scan/rename/register/summarize/recommend)
 │
 │
@@ -386,13 +386,13 @@ Metaethics Knowledge Cluster:
 **When Used**: When the user needs interactive exploration of philosophical questions.
 
 **Contents**:
-- **`agents/metaphysician.md`** — **Metaphysical analyst: Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, and other meta-metaphysical questions**
-- **`agents/metaethicist.md`** — **Metaethical analyst: Socratic dialogue specialized in moral realism, normative reasons, moral semantics, and other metaethical questions**
-- **`agents/phil-writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards**
-- **`agentsphil:reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews**
-- **`agentsphil:commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots**
-- **`agents/phil-orchestrator.md`** — **[Phase 6] Pipeline orchestrator: coordinates the 5-stage writing pipeline (question → literature → outline → draft → final) with quality gates**
-- **`agents/phil-tutor.md`** — **[New] Tutor agent: dialogic reading mentor — asks about the user's reading, probes understanding Socratically, identifies gaps, and recommends literature with individualized rationale**
+- **`agents/metaphysician.md`** — **Metaphysical analyst: Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, and other meta-metaphysical questions** (`model: inherit`)
+- **`agents/metaethicist.md`** — **Metaethical analyst: Socratic dialogue specialized in moral realism, normative reasons, moral semantics, and other metaethical questions** (`model: inherit`)
+- **`agents/phil-writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards; draft mode adds user-led/claude-led collaboration sub-modes** (`model: inherit`)
+- **`agents/phil-reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews** (`model: opus`)
+- **`agents/phil-commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots** (`model: opus`)
+- **`agents/phil-orchestrator.md`** — **[Phase 6] Pipeline orchestrator: coordinates the 6-stage writing pipeline (topic orientation & reading plan → reading & analysis → conception incubation → outline → draft & iterative revision → review & final) with lenient-interrogation quality gates** (`model: opus`)
+- **`agents/phil-tutor.md`** — **[New] Tutor agent: dialogic mentor with two modes — reading (Socratic literature dialogue: probes understanding, identifies gaps, recommends literature) and incubating (构思孵化, conception incubation for pipeline Stage 3)** (`model: inherit`)
 
 ### Layer 4: Cross-Layer Interface (ARS Bridge)
 **Rationale**: The analysis outputs of this system must flow into ARS's writing pipeline to produce papers.
@@ -413,25 +413,27 @@ Metaethics Knowledge Cluster:
 **When Used**: When transitioning from analysis to production — generating outlines, drafting manuscripts, reviewing for philosophical rigor, and managing the full writing pipeline.
 
 **Contents**:
-- `agentsphil:writer.md` — Philosophy writer agent with three modes:
-  - **Outline mode**: Transforms analysis outputs (argument reconstructions, concept maps, dialectical trees) into structured paper outlines with thesis, section plan, distinction inventory, and objection mapping.
-  - **Draft mode**: Section-by-section manuscript drafting with 7 philosophy-aware prose standards (argument transparency, conceptual precision, modal accuracy, dialectical positioning, distinction preservation, counterexample resilience, ontological explicitness).
-  - **Revision mode**: Prioritized revision based on reviewer findings (structural → conceptual → dialectical → modal → stylistic) with change tracking.
-- `agentsphil:reviewer.md` — Philosophy reviewer agent with two modes:
+- `agents/phil-writer.md` — Philosophy writer agent (`model: inherit`) with three modes:
+  - **Outline mode**: Transforms analysis outputs (argument reconstructions, concept maps, dialectical trees) into structured paper outlines with thesis, section plan, distinction inventory, and objection mapping. Preferentially consumes the Stage 3 conception file (`{topic}-conception.txt`) when present, refining — never replacing — the user's own thesis.
+  - **Draft mode**: Section-by-section manuscript drafting with 7 philosophy-aware prose standards (argument transparency, conceptual precision, modal accuracy, dialectical positioning, distinction preservation, counterexample resilience, ontological explicitness) plus an 8th, Disclosure Integrity. Two collaboration sub-modes selected via the project CLAUDE.md's `collaboration:` key: **`user-led`** (严肃学术论文 — the user writes; Claude gives defect-triggered Socratic feedback and disclosed suggestions, applying only user-accepted edits) and **`claude-led`** (课程论文 — Claude drafts section-by-section with default-on boundary interrogation, 1–3 ownership questions per section boundary).
+  - **Revision mode**: Prioritized revision based on reviewer findings (structural → conceptual → dialectical → modal → stylistic) with change tracking; interacts with the active collaboration mode (user-led: suggested edits only; claude-led: interrogates findings tracing to user-approved choices before rewriting).
+- `agents/phil-reviewer.md` — Philosophy reviewer agent (`model: opus`) with two modes:
   - **Standard review**: 8-dimension evaluation (argument validity, charity, conceptual clarity, modal rigor, counterexample resilience, dialectical completeness, ontological commitment transparency, methodological consistency) with severity grading and revision priority matrix.
   - **Perspective review**: Review from a specified philosophical stance (Quinean, Lewisian, Kripkean, Finean, Mackiean, Expressivist, etc.), distinguishing perspective-dependent from perspective-neutral findings.
-- `agentsphil:commentator.md` — Philosophy commentator agent with three modes:
+- `agents/phil-commentator.md` — Philosophy commentator agent (`model: opus`) with three modes:
   - **Critical commentary**: Identifies unexamined assumptions, alternative interpretations, missing distinctions, undefended inferences, hidden commitments, and dialectical blind spots.
   - **Response paper**: Writes a response from a specified philosophical position.
   - **Dialectical positioning**: Situates work within the broader debate landscape and intellectual lineage.
-- `agents/phil-orchestrator.md` — Pipeline orchestrator coordinating the full 5-stage workflow:
-  - Stage 1: Philosophical question formulation (dialogic agent Socratic clarification)
-  - Stage 2: Literature review and analysis (phil-* analysis chain + ars-deep-research)
-  - Stage 3: Outline refinement (phil-writer outline mode + optional phil-reviewer structural check)
-  - Stage 4: Draft generation (phil-writer draft mode with section-boundary quality checks)
-  - Stage 5: Final manuscript (phil-reviewer → phil-writer revision → loop until quality threshold met)
+- `agents/phil-orchestrator.md` — Pipeline orchestrator (`model: opus`) coordinating the full 6-stage reading-before-thesis workflow:
+  - Stage 0 (prerequisite, outside the pipeline): `/phil:ingest`
+  - Stage 1: Topic Orientation & Reading Plan (dialogic agent Socratic scoping of the dispute, not the thesis)
+  - Stage 2: Reading & Analysis (phil-tutor reading mode + phil-* analysis chain + ars-deep-research)
+  - Stage 3: Ideation / Conception Incubation — 构思孵化 (phil-tutor incubating mode → `{topic}-conception.txt`)
+  - Stage 4: Outline (phil-writer outline mode + optional phil-reviewer structural check)
+  - Stage 5: Draft & Iterative Revision (phil-writer draft mode, collaboration-mode dependent)
+  - Stage 6: Review & Final (phil-reviewer → phil-writer revision → loop until quality threshold met)
   
-  Each stage has a quality gate with explicit pass/fail criteria. The orchestrator recommends advance/revise/return; the user decides.
+  Each stage has a lenient-interrogation quality gate: a nameable defect triggers a challenge; a gap short of a defect is charitably completed with `[Claude 补全]` disclosure; gates are never hard-blocking. The orchestrator recommends advance/revise/return; the user decides.
 
 **Relationship to ARS Bridge (Layer 4)**: Layer 5 handles the core philosophical writing, review, and commentary. The ARS Bridge (Layer 4) remains available for supplementary infrastructure: literature search (`ars-deep-research`), format conversion (`ars-format-convert`), citation verification (`ars-citation-check`). Layer 5 agents are designed to function without ARS but can optionally invoke ARS capabilities for specific tasks.
 
@@ -439,7 +441,7 @@ Metaethics Knowledge Cluster:
 ┌─────────────────────────────────────────────────────┐
 │  Layer 5: Writing & Production (Phase 6)            │
 │   phil-writer  phil-reviewer  phil-commentator      │
-│   phil-orchestrator (5-stage pipeline)              │
+│   phil-orchestrator (6-stage pipeline)              │
 ├─────────────────────────────────────────────────────┤
 │  Layer 4: ARS Bridge  ──  analysis → ARS pipeline  │
 ├─────────────────────────────────────────────────────┤
@@ -747,9 +749,9 @@ Phase 1: Reading and Comprehension
 │  (optional)                                               │
 └──────────────────────────────────────────────────────────┘
           ↓
-Phase 1b: Tutoring and Reading Guidance (optional, invoked via phil:tutor)
+Phase 1b: Tutoring and Reading Guidance (optional, invoked via phil:tutor — reading mode)
 ┌──────────────────────────────────────────────────────────┐
-│  [phil:tutor]           Socratic dialogue about the text  │
+│  [phil:tutor reading]   Socratic dialogue about the text  │
 │    → Ask what user is reading and thinking                │
 │    → Probe understanding, identify blind spots            │
 │    → Recommend literature tailored to gaps                │
@@ -757,6 +759,8 @@ Phase 1b: Tutoring and Reading Guidance (optional, invoked via phil:tutor)
 │    ↕                                                     │
 │  (Internal: may invoke phil-citation-extract to mine      │
 │   citation candidates from the user's current text)       │
+│  (phil:tutor also has an incubating mode — 构思孵化,       │
+│   conception incubation — see Phase 6 Stage 3 below)      │
 └──────────────────────────────────────────────────────────┘
           ↓
 Phase 2: Argument Analysis
@@ -866,49 +870,66 @@ Phase 5: Integrated Report
 │                                 structure                 │
 └──────────────────────────────────────────────────────────┘
           ↓
-Phase 6: Writing & Production (5-Stage Pipeline)
-┌──────────────────────────────────────────────────────────┐
-│                                                          │
-│  Stage 1: Question Formulation                          │
-│  ┌────────────────────────────────────────────────────┐  │
-│  │ metaphysician / metaethicist (Socratic dialogue)   │  │
-│  │ → Refined question + sub-questions + scope        │  │
-│  └────────────────────────────────────────────────────┘  │
-│    ↓                                                     │
-│  Stage 2: Literature Reading & Analysis                 │
-│  ┌────────────────────────────────────────────────────┐  │
-│  │ ars-deep-research → phil-reconstruct →             │  │
-│  │ phil-charity → phil-premises → phil-dialectic →    │  │
-│  │ phil-contextualize → domain-specific phil-* skills │  │
-│  │ → Literature package + dialectical map             │  │
-│  └────────────────────────────────────────────────────┘  │
-│    ↓                                                     │
-│  Stage 3: Outline Refinement                            │
-│  ┌────────────────────────────────────────────────────┐  │
-│  │ phil-writer (outline mode) → Detailed outline      │  │
-│  │   with thesis, section plan, distinction inventory │  │
-│  │ Optional: phil-reviewer structural check           │  │
-│  └────────────────────────────────────────────────────┘  │
-│    ↓                                                     │
-│  Stage 4: Draft Generation                              │
-│  ┌────────────────────────────────────────────────────┐  │
-│  │ phil-writer (draft mode) → Section-by-section      │  │
-│  │   with prose quality checks at each boundary       │  │
-│  │ → Complete manuscript draft + Notes to Self        │  │
-│  └────────────────────────────────────────────────────┘  │
-│    ↓                                                     │
-│  Stage 5: Final Manuscript                              │
-│  ┌────────────────────────────────────────────────────┐  │
-│  │ phil-reviewer (standard + optional perspective)    │  │
-│  │   → phil-writer (revision mode) → loop until       │  │
-│  │   all fatal findings resolved                      │  │
-│  │ Optional: phil-commentator critical engagement     │  │
-│  │ → Final manuscript + review reports + revision log │  │
-│  └────────────────────────────────────────────────────┘  │
-│                                                          │
-│  Quality Gates: Explicit pass/fail at each stage.        │
-│  Orchestrator recommends; user decides.                  │
-└──────────────────────────────────────────────────────────┘
+Phase 6: Writing & Production (6-Stage Pipeline — Reading-Before-Thesis)
+(Old Stage 1 "question formulation" split: scoping → new Stage 1; thesis crystallization → new Stage 3)
+┌────────────────────────────────────────────────────────────┐
+│                                                            │
+│  Stage 0 (prerequisite, outside pipeline): /phil:ingest    │
+│    → PDFs registered in INDEX.md with Level 0.5 summary    │
+│                                                            │
+│  Stage 1: Topic Orientation & Reading Plan                 │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │ metaphysician / metaethicist (Socratic scoping) →  │    │
+│  │ topic statement (provisional) + reading list;      │    │
+│  │ refs.md candidates registered                      │    │
+│  └────────────────────────────────────────────────────┘    │
+│    ↓                                                       │
+│  Stage 2: Reading & Analysis                               │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │ phil-tutor (reading mode) verifies user understanding│  │
+│  │ → phil-reconstruct → phil-charity → phil-premises →│    │
+│  │ phil-dialectical-map → phil-contextualize →        │    │
+│  │ domain-specific phil-* skills                      │    │
+│  │ → Literature package + dialectical map             │    │
+│  └────────────────────────────────────────────────────┘    │
+│    ↓                                                       │
+│  Stage 3: Ideation / Conception Incubation (构思孵化)          │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │ phil-tutor (incubating mode) → user's own thesis + │    │
+│  │ argument sketch, premise-level, sourced to refs.md │    │
+│  │ → {topic}-conception.txt                           │    │
+│  └────────────────────────────────────────────────────┘    │
+│    ↓                                                       │
+│  Stage 4: Outline                                          │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │ phil-writer (outline mode, prefers conception file)│    │
+│  │ → Detailed outline: thesis, section plan,          │    │
+│  │ distinction inventory, objection mapping           │    │
+│  │ Optional: phil-reviewer structural check           │    │
+│  └────────────────────────────────────────────────────┘    │
+│    ↓                                                       │
+│  Stage 5: Draft & Iterative Revision                       │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │ phil-writer (draft mode) → collaboration mode:     │    │
+│  │ user-led (严肃学术论文) / claude-led (课程论文)              │    │
+│  │ → Complete manuscript draft + Notes to Self        │    │
+│  └────────────────────────────────────────────────────┘    │
+│    ↓                                                       │
+│  Stage 6: Review & Final                                   │
+│  ┌────────────────────────────────────────────────────┐    │
+│  │ phil-reviewer (standard + optional perspective)    │    │
+│  │ → phil-writer (revision mode) → loop until         │    │
+│  │ all fatal findings resolved                        │    │
+│  │ Optional: phil-commentator critical engagement     │    │
+│  │ → Final manuscript + review reports + revision log │    │
+│  └────────────────────────────────────────────────────┘    │
+│                                                            │
+│  Quality Gates: Lenient interrogation at every stage —     │
+│  defect-triggered challenge; charitable completion with    │
+│  disclosure ([Claude 补全]) for gaps short of a defect;      │
+│  never hard-blocking. Orchestrator recommends; user        │
+│  decides.                                                  │
+└────────────────────────────────────────────────────────────┘
 ```
 
 ### 6.2 Fast Paths
@@ -966,8 +987,9 @@ Fast Normativity Analysis:
 | **"Revise based on reviewer feedback"** | **`phil:write revision`** | **`phil-writer`** |
 | **"Review this manuscript"** | **`phil:review`** | **`phil-reviewer`** |
 | **"Comment on this argument"** | **`phil:comment`** | **`phil-commentator`** |
-| **"Run the full writing pipeline"** | **`phil:pipeline`** | **`phil-orchestrator`** |
-| **"Discuss my reading and get recommendations"** | **`phil:tutor`** | **`phil-tutor`** (agent) + `phil-citation-extract` (skill) |
+| **"Run the full writing pipeline"** | **`phil:pipeline`** | **`phil-orchestrator`** (6 stages) |
+| **"Discuss my reading and get recommendations"** | **`phil:tutor`** (reading mode, default) | **`phil-tutor`** (agent) + `phil-citation-extract` (skill) |
+| **"Incubate my thesis from what I've read"** | **`phil:tutor incubating`** | **`phil-tutor`** (agent, Stage 3, 构思孵化) |
 
 ---
 
@@ -1107,8 +1129,8 @@ Commands (8 composite commands):
   phil:review         Peer review (phil-reviewer agent, 8 dimensions)
   phil:write          Philosophy writing (phil-writer agent, outline/draft/revision)
   phil:comment        Deep commentary (phil-commentator agent, 6 critical dimensions)
-  phil:pipeline       Full pipeline (phil-orchestrator agent, 5 stages)
-  phil:tutor          Tutor-style literature dialogue (phil-tutor agent, 4-phase arc)
+  phil:pipeline       Full pipeline (phil-orchestrator agent, 6 stages)
+  phil:tutor          Tutor-style dialogue (phil-tutor agent, reading/incubating modes)
   phil:ingest         Literature ingestion (shell scan + pdf skill + phil-summarize)
 
 Underlying 30 skills remain invocable via the Skill tool.
@@ -1519,7 +1541,8 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.4.1-alpha · Last updated 2026-07-14 · v0.4.1: literature ingestion — /phil:ingest command + phil-summarize skill + summary-schema.json; canonical bibliography stem {Author}_{Year}_{Title}; Summaries/ (Level 0.5) activated*
+*Document version 0.5.0-alpha · Last updated 2026-07-17 · v0.5.0: writing-workflow reorganization ("reading-before-thesis") — phil-orchestrator's pipeline goes from 5 to 6 stages (Topic Orientation & Reading Plan → Reading & Analysis → Ideation/Conception Incubation → Outline → Draft & Iterative Revision → Review & Final), splitting the old Stage 1 (question formulation) into scoping (new Stage 1) and thesis crystallization (new Stage 3); Rule 1 gains Workflow Gates lenient interrogation (宽容性诘问) — defect-triggered challenge vs. charitable completion disclosed via `[Claude 补全]`, never hard-blocking; phil-tutor gains an incubating mode (构思孵化) alongside reading mode, writing the new unversioned `{topic}-conception.txt` artifact; phil-writer draft mode gains user-led (严肃学术论文) / claude-led (课程论文) collaboration sub-modes plus an 8th prose standard, Disclosure Integrity; every agent now carries `model:` frontmatter (phil-tutor, metaphysician, metaethicist, phil-writer → `inherit`; phil-reviewer, phil-commentator, phil-orchestrator → `opus`) per a new model-economy convention; fixed 5 pre-existing `agentsphil:*` path typos → `agents/phil-*`. This version bump also absorbs the undocumented 0.4.2–0.4.5 span (Zotero integration — see changelog.md; not yet folded into this document's body).*
+*Previous: 0.4.1-alpha · 2026-07-14 · literature ingestion — /phil:ingest command + phil-summarize skill + summary-schema.json; canonical bibliography stem {Author}_{Year}_{Title}; Summaries/ (Level 0.5) activated*
 *Previous: 0.4-alpha · 2026-07-14 · dual-repo restructure (privacy boundary = repo boundary) — Philosophers-DB → Shared/, papers & bibliography → Private/ (inner private repo, PDFs untracked), per-paper refs.md + two-hop Citation Gate + literature recommendation trigger points*
 *Previous: 0.3-alpha · 2026-07-12 · Merge: phil:tutor tutor agent + citation-extract skill; audit fix: schema wiring, dead link repair, agent pruning, hook removal*
 *Built on academic-research-skills v3.15.0*

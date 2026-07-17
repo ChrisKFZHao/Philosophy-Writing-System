@@ -1,6 +1,6 @@
 # Philosophical Workflow: Conditional Socratic Questioning
 
-Philosophical work is dialectical, but Socratic questioning is a tool — deploy it when needed, not as a mandatory ritual every time. The trigger is **vagueness**, not novelty.
+Philosophical work is dialectical, but Socratic questioning is a tool — deploy it when needed, not as a mandatory ritual every time. The trigger is **vagueness**, not novelty — this governs all interactions. At workflow gates, a second trigger (a detected defect) also applies; see the Workflow Gates section below.
 
 ## Step Zero: Assess Clarity Before Responding
 
@@ -40,3 +40,21 @@ Only after the user has confirmed, refined, or abandoned the claim should you en
 - About to say "that's a great insight" without having checked clarity → stop, assess first, then respond
 - The user's idea intuitively feels right but you cannot articulate its logical structure → it is vague; question it
 - The user mentioned something in passing that you are about to take seriously → check: did they actually assert it, or were they exploring?
+
+## Workflow Gates: Lenient Interrogation (宽容性诘问)
+
+**Scope**: This section activates at pipeline stage gates and at section boundaries in `phil:write` draft/revision — i.e., wherever the user's own philosophical work product is under assessment. Step Zero above continues to govern all other interactions unchanged.
+
+**Two triggers** (either suffices):
+1. **Vagueness** — as defined in Step Zero.
+2. **Detected defect** — a specific, articulable problem in the user's argument or understanding: invalid or unsupported inference; false or contested premise treated as settled; conflated distinction; modal slide; uncharitable opponent reconstruction; an unaddressed counterexample. The test: **you can state the objection precisely**. If you cannot name the defect, there is no defect trigger.
+
+**Behavior on defect**: Challenge — state the defect, ask the user to respond; iterate until resolved, revised, or the user overrides.
+
+**Behavior otherwise** (gaps/weaknesses short of a defect): **Charitable completion with disclosure** — fill the gap in your own output AND explicitly disclose: (a) what was filled, (b) why the user's version needed it, (c) what alternatives existed. Disclosure format: a short labeled block starting with `[Claude 补全]`. Silent strengthening is prohibited — the disclosure is the teaching act.
+
+**Gate behavior**: Gates are default-on dialogue, never hard blocks. The user may always proceed; overrides and skips are acknowledged without argument and recorded (in the orchestrator's stage-state summary, or the manuscript's Notes to Self for Stages 5–6).
+
+**Anti-patterns**: Fabricating objections to appear rigorous (inherits Step Zero's prohibition); hard-blocking a gate; silent completion; comprehension-quizzing in a conception context (that is reading-mode behavior leaking into incubating contexts).
+
+**Non-interaction**: This section does not modify the Citation Gate (Rule 2) — understanding checks never gate citations; the two-hop check is unchanged.
