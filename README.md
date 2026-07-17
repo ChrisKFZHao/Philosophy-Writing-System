@@ -2,7 +2,7 @@
 
 基于 Claude Code 的分析哲学研究与写作系统。提供从文献管理、PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.4.5-alpha
+**版本**: 0.5.0-alpha
 **语言**: Chinese（写作输出）/ English（技能定义与架构文档）
 
 ---
@@ -69,20 +69,27 @@ phil:ingest
 | 2 | + 隐含前提、慈善审查、概念分析、区分追踪 | 首次在手稿中引用 |
 | 3 | + 辩证映射、本体论承诺、模态分析 | 成为核心论敌或关键依赖 |
 
-### 2. 明确立场
+### 2. 阅读与构思
 
-通过对话（或 `phil:pipeline` Stage 1）明确你的核心主张和论证方向。Rule 1（条件 Socratic 追问）保障效率——想法清晰时直接推进，模糊时才追问。
+```
+phil:tutor              # reading 模式（默认）：苏格拉底式文献对话
+phil:tutor incubating   # incubating 模式：构思孵化
+```
+
+阅读阶段用 **reading 模式**与导师对话——检验你对核心文献的理解、暴露盲区、推荐下一步阅读。读透之后进入 **incubating 模式**孵化你自己的论点：讨论文献间关系、切入角度、候选论题，产出 `{topic}-conception.txt`（前提级论证骨架；论题必须是你本人的表述，Claude 补充的前提一律以 `[Claude 补全]` 显式披露）。
 
 ### 3. 写论文
 
 ```
-phil:write outline     # 大纲
-phil:write draft       # 初稿
-phil:review            # 8 维度评审
-phil:write revision    # 修订
+phil:write outline                        # 大纲（优先消费 conception 文件）
+phil:write draft [user-led|claude-led]    # 初稿（双协作模式）
+phil:review                               # 8 维度评审
+phil:write revision                       # 修订
 ```
 
-或一键全流程：`phil:pipeline`
+初稿支持两种协作模式，在项目级 CLAUDE.md 用 `collaboration:` 键声明：**`user-led`**（严肃学术论文——你逐节主笔，Claude 只在能指名论证缺陷时发起挑战，其余缺口以披露式建议补足）/ **`claude-led`**（课程论文——Claude 逐节代笔，每节边界向你提 1–3 个归属问题）。
+
+或一键全流程：`phil:pipeline`——六阶段"先读后立论"管线（主题定向 → 阅读分析 → 构思孵化 → 大纲 → 初稿迭代 → 审稿终稿），每个阶段门都是**宽容性诘问门**：能指名的缺陷才触发挑战，其余补全并披露，你永远可以决定推进。
 
 ---
 
@@ -144,13 +151,15 @@ Philosophical Writing/
 | `phil:reconstruct` | 全维度理解文献 | 9-20 技能（混合串并行，自动领域检测） |
 | `phil:evaluate` | 多角度同时批判 | 7 技能（全并行） |
 | `phil:review` | 同行审稿 | phil-reviewer agent（8 维度 + 立场模拟） |
-| `phil:write` | 哲学写作 | phil-writer agent（outline / draft / revision） |
+| `phil:write` | 哲学写作 | phil-writer agent（outline / draft / revision；draft 含 user-led / claude-led 双协作模式） |
 | `phil:comment` | 论证细节和概念澄清 | phil-commentator agent（6 批判维度） |
-| `phil:pipeline` | 一键全流程 | phil-orchestrator agent（5 阶段 + 质量门） |
-| `phil:tutor` | 导师式文献对话 | phil-tutor agent（Socratic 追问 + 引文推荐 + 阅读规划） |
+| `phil:pipeline` | 一键全流程 | phil-orchestrator agent（6 阶段 + 宽容性诘问门） |
+| `phil:tutor` | 导师式对话 | phil-tutor agent（reading 文献对话 / incubating 构思孵化，双模式） |
 | `phil:ingest` | 文献入库刮削 | shell 扫描 + pdf skill + phil-summarize + Zotero 自动注册（重命名、登记 INDEX、0.5 级摘要、入库推荐） |
 
 每个命令在 `.claude/commands/` 中定义了完整的技能编排、执行顺序和输出格式。底层 30 个分析技能可通过 Skill tool 单独调用。
+
+**模型档位**（v0.5.0）：对话与写作类 agent（tutor / metaphysician / metaethicist / writer）跟随会话模型（`inherit`——成本控制权在会话侧，用 `/model` 切换）；审查与编排类（reviewer / commentator / orchestrator）固定 `opus`；批量入库/摘要类会话建议 `/model sonnet`。
 
 ---
 
@@ -158,7 +167,7 @@ Philosophical Writing/
 
 系统内置三条硬性约束（详见 `.claude/rules/`）：
 
-1. **不谄媚——条件 Socratic 追问**：想法清晰 → 直接执行；想法模糊 → 追问澄清。不以"制造反对"冒充"严谨"。
+1. **不谄媚——条件 Socratic 追问**：想法清晰 → 直接执行；想法模糊 → 追问澄清。不以"制造反对"冒充"严谨"。在工作流阶段门与写作分节边界另有第二触发（**宽容性诘问**，v0.5.0）：能指名的论证缺陷 → 挑战；其余缺口 → 补全并以 `[Claude 补全]` 显式披露；阶段门永不硬阻断。
 2. **不虚构引用**：未经核实的参考文献、引文、页码一律标注 `[source unverified]` 或 `[citation needed]`。Citation Gate：分析级别不足 → 阻断引用。
 3. **触发式版本管理**：不自动切版本。仅在三类事件触发时切分——(a) 审稿/评论后修订，(b) 新洞见或新论证，(c) 压缩或扩展。
 
@@ -174,16 +183,16 @@ Philosophical Writing/
 | 命令（8 个） | Alpha | 全部完成 |
 | 知识库（87 个参考文件） | Alpha | 术语表、论证形式、哲学家数据库均已填充 |
 | 对话 agent（3 个） | Alpha | 已完成，待更多交互验证 |
-| 写作生产（4 个 agent） | Alpha | 已完成，端到端流水线仅一次完整测试 |
-| 行为规则（3 条） | Alpha | 已部署，待长期使用校准 |
+| 写作生产（4 个 agent） | Alpha | 已完成；v0.5.0 重组为六阶段管线 + 双协作模式，验证运行待做 |
+| 行为规则（3 条） | Alpha | 已部署；Rule 1 扩展宽容性诘问（v0.5.0），待长期使用校准 |
 | 文献管理 | Alpha | Citation Gate 框架就位；ingest 已实战运行论文/专著/文集三类文档 |
 | Zotero 集成 | Alpha | 注释保全迁移与自动注册均经实战验证；存量按懒迁移原则逐步转换 |
 
 **已知限制**：
-- 写作流水线仅完成一次完整端到端测试
+- 写作流水线仅完成一次完整端到端测试（旧五阶段）；v0.5.0 六阶段重组、构思孵化与宽容性诘问门尚未实战验证（首次验证运行已排定）
 - 哲学家数据库覆盖不均衡（分析传统为主，大陆哲学较弱）
 - 无自动化测试套件
 
 ---
 
-*最后更新: 2026-07-14（v0.4.5：ingest 支持专著/文集 + Zotero 自动注册级联闸门；README 重写为依赖分层说明）*
+*最后更新: 2026-07-17（v0.5.0：六阶段"先读后立论"写作管线 + 宽容性诘问门 + tutor 构思孵化模式 + 初稿双协作模式 + 模型经济）*
