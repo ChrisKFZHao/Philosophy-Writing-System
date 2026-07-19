@@ -220,7 +220,7 @@ The relationship between contextualization and other skills is bidirectional. Co
 
 - **Argument Forms Library** — The library of canonical argument forms (transcendental arguments, inference to the best explanation, _modus tollens_ refutations, etc.) provides templates for recognizing what kind of argumentative move is being made within the mapped dialectical space. Each form carries its own characteristic dialectical profile — what it presupposes, what it entitles its user to claim, what objections it is vulnerable to — and recognizing the form helps locate the argument within the tradition of its deployment.
 
-- **Philosophers Database** — The database of philosophers, their positions, their intellectual relationships, and their historical contexts provides reference data for ancestor identification and tradition classification. The database enables quick cross-referencing of influence claims and prevents the contextualization from treating as a novel discovery what is in fact a well-documented relationship.
+- **Philosophers Database** — Read `Shared/Philosophers-DB/INDEX.md` first, then load only relevant canonical profiles. Use source-backed claims and their bibliography evidence for ancestor/tradition classification. Treat prompt-only positions and relationships as `[source unverified]` leads, never as established genealogy.
 
 - **Shared Data Contracts** — The structured schemas in `shared/` (particularly `argument-schema.json` for argument structure and any debate-mapping schemas) provide the formal vocabulary for representing position maps, target identifications, and stakes assessments in machine-readable form, enabling cross-skill integration and pipeline automation.
 

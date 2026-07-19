@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "phil:philosopher-observation-schema:1.0.0",
+  "title": "Philosopher Observation and Queue Schema",
+  "description": "Private staging contract for source-grounded philosopher observations and review candidates.",
+  "oneOf": [
+    {"$ref": "#/$defs/observation_batch"},
+    {"$ref": "#/$defs/queue_state"}
+  ],
+  "$defs": {
+    "attributed_claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "category", "locator"],
+      "properties": {
+        "statement": {"type": "string", "minLength": 1},
+        "category": {"type": "string", "enum": ["identity", "tradition", "work", "position", "argument", "relevance", "relationship", "other"]},
+        "locator": {"type": "string", "minLength": 1},
+        "candidate_type": {"type": "string", "enum": ["new-claim", "additional-evidence", "conflict"]},
+        "claim_id": {"type": "string"}
+      }
+    },
+    "person_observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["display_name", "canonical_name", "role", "substantive", "claims"],
+      "properties": {
+        "person_id": {"type": "string"},
+        "display_name": {"type": "string", "minLength": 1},
+        "canonical_name": {"type": "string", "minLength": 1},
+        "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "role": {"type": "string", "enum": ["author", "core-target", "supporting", "opposition", "background", "passing-mention"]},
+        "substantive": {"type": "boolean"},
+        "claims": {"type": "array", "maxItems": 2, "items": {"$ref": "#/$defs/attributed_claim"}}
+      }
+    },
+    "observation_batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_type", "observation_id", "bib_key", "artifact_id", "artifact_hash", "artifact_type", "analysis_level", "source_metadata", "topics", "people", "generated_at"],
+      "properties": {
+        "record_type": {"const": "observation-batch"},
+        "observation_id": {"type": "string", "pattern": "^PHO-"},
+        "bib_key": {"type": "string"},
+        "artifact_id": {"type": "string"},
+        "artifact_hash": {"type": "string"},
+        "artifact_type": {"type": "string", "enum": ["summary", "analysis"]},
+        "analysis_level": {"type": "number", "enum": [0.5, 1, 2, 3]},
+        "source_metadata": {"type": "object"},
+        "topics": {"type": "array", "items": {"type": "string"}},
+        "people": {"type": "array", "items": {"$ref": "#/$defs/person_observation"}},
+        "generated_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "required": ["candidate_id", "candidate_type", "status", "name_key", "display_name", "source_keys", "created_at", "updated_at"],
+      "properties": {
+        "candidate_id": {"type": "string", "pattern": "^PHC-"},
+        "candidate_type": {"type": "string", "enum": ["new-person", "new-claim", "additional-evidence", "domain-link", "conflict"]},
+        "status": {"type": "string", "enum": ["pending", "approved", "rejected", "superseded"]},
+        "person_id": {"type": "string"},
+        "name_key": {"type": "string"},
+        "display_name": {"type": "string"},
+        "artifact_id": {"type": "string"},
+        "source_keys": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "claim": {"$ref": "#/$defs/attributed_claim"},
+        "evidence": {
+          "type": "object",
+          "required": ["bib_key", "source_type", "analysis_level", "locator", "observed_at"],
+          "properties": {
+            "bib_key": {"type": "string"},
+            "source_type": {"type": "string", "enum": ["primary", "secondary"]},
+            "analysis_level": {"type": "number", "enum": [0.5, 1, 2, 3]},
+            "locator": {"type": "string"},
+            "public_citation": {"type": "string"},
+            "observed_at": {"type": "string", "format": "date-time"}
+          }
+        },
+        "domain_id": {"type": "string"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "updated_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "queue_state": {
+      "type": "object",
+      "required": ["record_type", "queue_version", "processed_artifacts", "people", "candidates", "updated_at"],
+      "properties": {
+        "record_type": {"const": "queue-state"},
+        "queue_version": {"const": "1.0"},
+        "processed_artifacts": {"type": "object"},
+        "people": {"type": "object"},
+        "candidates": {"type": "object", "additionalProperties": {"$ref": "#/$defs/candidate"}},
+        "updated_at": {"type": "string", "format": "date-time"}
+      }
+    }
+  }
+}

@@ -25,7 +25,7 @@ Key dispositions:
 Your reasoning is informed by the following knowledge resources:
 
 **Core References:**
-- `Shared/Philosophers-DB/INDEX.md` (49 philosophers across 3 domains) — Essential for dialectical positioning: knowing which philosopher introduced which concept, which debates trace back to which figures, and which positions are live options in which subdomains.
+- `Shared/Philosophers-DB/INDEX.md` — Locate relevant figures, then load only their canonical JSON profiles. Use `source-backed` claims for dialectical positioning by following their evidence KEY; mark every `prompt-only` lead `[source unverified]`.
 - `Framework/Workflow/References/argument-forms/` (all 26 forms) — Canonical argument structures. Use to identify what argument types the author uses and, crucially, what argument types they could have used but didn't — which may reveal unexplored argumentative strategies.
 - `Framework/Workflow/References/glossary-metaphysics.md` and `Framework/Workflow/References/glossary-metaethics.md` — Technical term definitions. Use to check whether the author's terms carry theoretical baggage they may not have intended.
 - `Framework/Workflow/References/metaphysical-distinctions.md` and `Framework/Workflow/References/metaethical-distinctions.md` — Core distinctions. Your primary resource for identifying missing distinctions.

@@ -63,6 +63,18 @@ class PolicyTests(unittest.TestCase):
         })
         self.assertEqual(policy.citation_gate(True, 2, 2)["decision"], "pass")
 
+    def test_philosopher_claims_route_through_source_gate(self):
+        policy = load_script("workflow-policy.py")
+        evidence = [{"bib_key": "LEWIS-WORLDS", "analysis_level": 2}]
+        prompt = policy.philosopher_claim_gate("prompt-only", [], set(), 1)
+        self.assertEqual(prompt["reason"], "philosopher-claim-prompt-only")
+        missing = policy.philosopher_claim_gate("source-backed", evidence, set(), 1)
+        self.assertEqual((missing["decision"], missing["hop"]), ("block", 1))
+        shallow = policy.philosopher_claim_gate("source-backed", evidence, {"LEWIS-WORLDS"}, 3)
+        self.assertEqual((shallow["decision"], shallow["hop"]), ("block", 2))
+        passed = policy.philosopher_claim_gate("source-backed", evidence, {"LEWIS-WORLDS"}, 2)
+        self.assertEqual(passed["eligible_keys"], ["LEWIS-WORLDS"])
+
 
 class BibliographyScanTests(unittest.TestCase):
     def test_reports_each_unprocessed_reason(self):
@@ -85,6 +97,218 @@ class BibliographyScanTests(unittest.TestCase):
             self.assertEqual(reasons["Austin_1956_A-Plea-for-Excuses.pdf"], ["missing-summary"])
 
 
+class PhilosopherDatabaseTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.database = load_script("philosopher-db.py")
+
+    def make_repo(self, root: Path, with_profile: bool = False):
+        paths = self.database.paths_for(root)
+        paths["profiles"].mkdir(parents=True)
+        paths["domains"].mkdir(parents=True)
+        self.database.write_json(paths["domain_registry"], self.database.DOMAIN_REGISTRY)
+        if with_profile:
+            profile = {
+                "profile_version": "1.0",
+                "person_id": "test-philosopher",
+                "identity": {
+                    "display_name": "Test Philosopher",
+                    "canonical_name": "Test Philosopher",
+                    "aliases": ["Test Philosopher"],
+                    "legacy_paths": [],
+                },
+                "claims": [],
+                "domains": [],
+                "relations": [],
+                "created_at": "2026-07-19T00:00:00Z",
+                "updated_at": "2026-07-19T00:00:00Z",
+            }
+            self.database.write_json(paths["profiles"] / "test-philosopher.json", profile)
+        return paths
+
+    def observation(self, artifact, bib_key, role, substantive, statement="", topics=None, person="New Thinker"):
+        claims = []
+        if statement:
+            claims.append({"statement": statement, "category": "position", "locator": "summary:core_thesis"})
+        return {
+            "record_type": "observation-batch",
+            "observation_id": f"PHO-{artifact}",
+            "bib_key": bib_key,
+            "artifact_id": artifact,
+            "artifact_hash": artifact,
+            "artifact_type": "summary",
+            "analysis_level": 0.5,
+            "source_metadata": {"author": person, "year": "2026", "title": artifact},
+            "topics": topics or [],
+            "people": [{
+                "display_name": person,
+                "canonical_name": person,
+                "aliases": [],
+                "role": role,
+                "substantive": substantive,
+                "claims": claims,
+            }],
+            "generated_at": "2026-07-19T00:00:00Z",
+        }
+
+    def test_live_migration_preserves_all_legacy_content_as_prompts(self):
+        paths = self.database.paths_for(REPO_ROOT)
+        profiles = self.database.load_profiles(paths["profiles"])
+        self.assertEqual(len(profiles), 49)
+        claims = [claim for profile in profiles.values() for claim in profile["claims"]]
+        self.assertEqual(len(claims), 640)
+        self.assertTrue(all(claim["support_status"] == "prompt-only" and not claim["evidence"] for claim in claims))
+        for profile in profiles.values():
+            for legacy in profile["identity"]["legacy_paths"]:
+                resolved, ambiguous = self.database.resolve_person(Path(legacy).stem, profiles)
+                self.assertFalse(ambiguous)
+                self.assertEqual(resolved, profile["person_id"])
+
+    def test_new_person_threshold_is_five_sources_three_substantive(self):
+        with tempfile.TemporaryDirectory() as temp:
+            paths = self.make_repo(Path(temp))
+            paths["observations"].mkdir(parents=True)
+            roles = [("author", True), ("supporting", True), ("opposition", True), ("background", False), ("passing-mention", False)]
+            for index, (role, substantive) in enumerate(roles):
+                observation = self.observation(f"A{index}", f"KEY-{index}", role, substantive)
+                self.database.write_json(paths["observations"] / f"{index}.json", observation)
+            duplicate = self.observation("A5", "KEY-4", "background", False)
+            self.database.write_json(paths["observations"] / "duplicate.json", duplicate)
+            state, _ = self.database.rebuild_queue(paths, self.database.empty_state())
+            pending = [item for item in state["candidates"].values() if item["candidate_type"] == "new-person"]
+            self.assertEqual(len(pending), 1)
+            person = next(iter(state["people"].values()))
+            self.assertEqual(len(person["source_keys"]), 5)
+            self.assertEqual(len(person["substantive_source_keys"]), 3)
+
+    def test_existing_profile_gets_immediate_candidate_and_domain_promotion(self):
+        with tempfile.TemporaryDirectory() as temp:
+            paths = self.make_repo(Path(temp), with_profile=True)
+            paths["observations"].mkdir(parents=True)
+            first = self.observation("A1", "KEY-1", "author", True, "Claim one", ["metaphysics"], "Test Philosopher")
+            second = self.observation("A2", "KEY-2", "background", False, topics=["grounding"], person="Test Philosopher")
+            self.database.write_json(paths["observations"] / "1.json", first)
+            self.database.write_json(paths["observations"] / "2.json", second)
+            state, profiles = self.database.rebuild_queue(paths, self.database.empty_state())
+            pending = [item for item in state["candidates"].values() if item["status"] == "pending"]
+            self.assertEqual(len(pending), 1)
+            self.assertEqual(pending[0]["candidate_type"], "new-claim")
+            self.assertEqual(self.database.synchronize_domains(paths, state, profiles), 1)
+            profile = self.database.load_profiles(paths["profiles"])["test-philosopher"]
+            self.assertEqual(profile["domains"][0]["support_status"], "source-backed")
+            self.assertEqual({item["bib_key"] for item in profile["domains"][0]["evidence"]}, {"KEY-1", "KEY-2"})
+
+    def test_observe_is_idempotent_and_dry_run_writes_nothing(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            paths = self.make_repo(root, with_profile=True)
+            summary = root / "summary.txt"
+            payload = {
+                "summary_id": "SUM-ONE",
+                "bib_key": "KEY-ONE",
+                "source_metadata": {"title": "One", "author": "Test Philosopher", "year": "2026"},
+                "core_thesis": "One claim",
+                "topics": ["metaphysics"],
+                "philosopher_observations": [],
+                "generated_at": "2026-07-19T00:00:00Z",
+            }
+            summary.write_text("```json\n" + json.dumps(payload) + "\n```\n", encoding="utf-8")
+            dry = self.database.observe(paths, [summary], True, None)
+            self.assertEqual(dry["changed"], 1)
+            self.assertFalse(paths["state"].exists())
+            first = self.database.observe(paths, [summary], False, None)
+            second = self.database.observe(paths, [summary], False, None)
+            self.assertEqual((first["changed"], second["unchanged"]), (1, 1))
+            state = self.database.load_state(paths["state"])
+            self.assertEqual(len(state["processed_artifacts"]), 1)
+            self.assertEqual(len(state["candidates"]), 1)
+
+    def test_candidate_approve_reject_and_reopen(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            paths = self.make_repo(root, with_profile=True)
+            paths["observations"].mkdir(parents=True)
+            observation = self.observation("A1", "KEY-1", "author", True, "Approved claim", person="Test Philosopher")
+            self.database.write_json(paths["observations"] / "1.json", observation)
+            state, _ = self.database.rebuild_queue(paths, self.database.empty_state())
+            self.database.write_json(paths["state"], state)
+            cid = next(iter(state["candidates"]))
+            self.database.approve_candidate(paths, cid)
+            profile = self.database.load_profiles(paths["profiles"])["test-philosopher"]
+            self.assertEqual(profile["claims"][0]["support_status"], "source-backed")
+            self.assertIn("approved_at", profile["claims"][0]["evidence"][0])
+            second = self.observation("A2", "KEY-2", "author", True, "Rejected claim", person="Test Philosopher")
+            self.database.write_json(paths["observations"] / "2.json", second)
+            state, _ = self.database.rebuild_queue(paths, self.database.load_state(paths["state"]))
+            self.database.write_json(paths["state"], state)
+            cid2 = next(item["candidate_id"] for item in state["candidates"].values() if item["status"] == "pending")
+            self.assertEqual(self.database.change_candidate_status(paths, cid2, "reject")["status"], "rejected")
+            self.assertEqual(self.database.change_candidate_status(paths, cid2, "reopen")["status"], "pending")
+
+    def test_changed_artifact_supersedes_only_removed_candidate(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            paths = self.make_repo(root, with_profile=True)
+            summary = root / "summary.txt"
+            payload = {
+                "summary_id": "SUM-CHANGE",
+                "bib_key": "KEY-CHANGE",
+                "source_metadata": {"title": "Change", "author": "Test Philosopher", "year": "2026"},
+                "core_thesis": "Stable claim",
+                "topics": [],
+                "generated_at": "2026-07-19T00:00:00Z",
+            }
+            summary.write_text("```json\n" + json.dumps(payload) + "\n```\n", encoding="utf-8")
+            self.database.observe(paths, [summary], False, None)
+            original = next(iter(self.database.load_state(paths["state"])["candidates"]))
+            payload["topics"] = ["metaphysics"]
+            summary.write_text("```json\n" + json.dumps(payload) + "\n```\n", encoding="utf-8")
+            self.database.observe(paths, [summary], False, None)
+            self.assertEqual(self.database.load_state(paths["state"])["candidates"][original]["status"], "pending")
+            payload["core_thesis"] = "Replacement claim"
+            summary.write_text("```json\n" + json.dumps(payload) + "\n```\n", encoding="utf-8")
+            self.database.observe(paths, [summary], False, None)
+            candidates = self.database.load_state(paths["state"])["candidates"]
+            self.assertEqual(candidates[original]["status"], "superseded")
+            self.assertEqual(sum(item["status"] == "pending" for item in candidates.values()), 1)
+
+    def test_conflict_adds_evidence_and_marks_existing_claim(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            paths = self.make_repo(root, with_profile=True)
+            profile_path = paths["profiles"] / "test-philosopher.json"
+            profile = self.database.read_json(profile_path)
+            profile["claims"].append({
+                "claim_id": "P-test-philosopher-C0001",
+                "category": "position",
+                "statement": "Original wording",
+                "support_status": "prompt-only",
+                "dispute_status": "unmarked",
+                "status": "active",
+                "evidence": [],
+            })
+            self.database.write_json(profile_path, profile)
+            paths["observations"].mkdir(parents=True)
+            observation = self.observation("A1", "KEY-1", "opposition", True, person="Test Philosopher")
+            observation["people"][0]["claims"] = [{
+                "statement": "Contrary attribution",
+                "category": "position",
+                "locator": "analysis:conflict",
+                "candidate_type": "conflict",
+                "claim_id": "P-test-philosopher-C0001",
+            }]
+            self.database.write_json(paths["observations"] / "1.json", observation)
+            state, _ = self.database.rebuild_queue(paths, self.database.empty_state())
+            self.database.write_json(paths["state"], state)
+            cid = next(iter(state["candidates"]))
+            self.database.approve_candidate(paths, cid, merge_claim_id="P-test-philosopher-C0001")
+            claim = self.database.read_json(profile_path)["claims"][0]
+            self.assertEqual(claim["statement"], "Original wording")
+            self.assertEqual(claim["dispute_status"], "contested")
+            self.assertEqual(claim["support_status"], "source-backed")
+            self.assertEqual(claim["evidence"][0]["bib_key"], "KEY-1")
+
+
 class AdapterTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -94,7 +318,12 @@ class AdapterTests(unittest.TestCase):
         counts = {kind: 0 for kind in ("skill", "workflow", "role")}
         for item in self.manifest["items"]:
             counts[item["kind"]] += 1
-        self.assertEqual(counts, {"skill": 30, "workflow": 8, "role": 7})
+        self.assertEqual(counts, {"skill": 30, "workflow": 9, "role": 7})
+
+    def test_philosopher_workflow_is_registered(self):
+        item = self.workflow_item("philosophers")
+        self.assertEqual(item["dependencies"], [])
+        self.assertEqual(item["capabilities"], ["read", "search", "write"])
 
     def workflow_item(self, workflow_id: str) -> dict:
         return next(item for item in self.manifest["items"] if item["id"] == workflow_id)

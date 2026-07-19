@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "david-enoch",
+  "identity": {
+    "display_name": "David Enoch",
+    "canonical_name": "David Enoch",
+    "aliases": [
+      "David Enoch",
+      "Enoch, David",
+      "enoch"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaethics/enoch.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-david-enoch-C0001",
+      "category": "identity",
+      "statement": "Life: b. 1971",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0002",
+      "category": "tradition",
+      "statement": "Analytic metaethics; robust moral realism; philosophy of law",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0003",
+      "category": "work",
+      "statement": "*Taking Morality Seriously: A Defense of Robust Realism* (2011), \"The Epistemological Challenge to Metanormative Realism\" (2011)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0004",
+      "category": "position",
+      "statement": "Robust moral realism: there are objective, non-natural, irreducibly normative moral truths that are independent of anyone's attitudes, desires, or stances",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0005",
+      "category": "position",
+      "statement": "The third-factor response to debunking arguments: survival (or some other good) is a \"third factor\" that both causally explains our moral judgments (via evolution) and is correlated with objective moral truths (because survival is good); this reconciles evolutionary explanation with moral knowledge",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0006",
+      "category": "position",
+      "statement": "The indispensability argument for moral realism: normative truths are indispensable to deliberation; since we must deliberate, we are committed (pragmatically and epistemically) to the existence of normative truths",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0007",
+      "category": "position",
+      "statement": "The argument from deliberative indispensability: practical deliberation cannot avoid presupposing the existence of normative reasons, making normative realism a pragmatic necessity",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0008",
+      "category": "position",
+      "statement": "Moral disagreement does not undermine moral realism any more than persistent philosophical disagreement undermines realism about philosophy",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0009",
+      "category": "argument",
+      "statement": "The third-factor argument: if survival is objectively good, then evolution would select for organisms that track what is good-for-survival, which correlates with what is objectively good. Our moral judgments are caused (via evolution) by factors that track objective goodness, even if indirectly. This defuses the Darwinian dilemma",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0010",
+      "category": "argument",
+      "statement": "The argument from deliberative indispensability: when we deliberate, we necessarily treat some considerations as reasons; we cannot coherently deliberate while believing there are no reasons. Since we must deliberate, we are rationally committed to realism about reasons",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0011",
+      "category": "argument",
+      "statement": "The argument for robust realism over quietist alternatives: quietist realists (like Scanlon and Dworkin) claim that normative truths exist but refuse to say what they are; robust realists do the metaphysical work",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0012",
+      "category": "relevance",
+      "statement": "`phil-moral-realism` (robust realism as the strongest realist position), `phil-moral-epistemology` (the third-factor account of how we can have moral knowledge despite evolutionary influences), `phil-normativity` (the indispensability of normative reasons for deliberation), `phil-moral-disagreement` (handling the evolutionary challenge to moral objectivity)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-enoch-C0013",
+      "category": "relationship",
+      "statement": "Street (principal opponent; Enoch's third-factor response is the leading realist reply to Street's Darwinian dilemma); Mackie (Enoch accepts Mackie's characterization of objective values but denies this makes them unacceptable); Shafer-Landau (fellow non-naturalist realist with a different approach to the epistemological challenge); Scanlon (quietist realist whom Enoch criticizes for insufficient metaphysical explicitness)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaethics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

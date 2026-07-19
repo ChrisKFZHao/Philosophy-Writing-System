@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "c-l-stevenson",
+  "identity": {
+    "display_name": "C.L. Stevenson",
+    "canonical_name": "C.L. Stevenson",
+    "aliases": [
+      "C.L. Stevenson",
+      "Stevenson, C.L.",
+      "stevenson"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaethics/stevenson.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-c-l-stevenson-C0001",
+      "category": "identity",
+      "statement": "Life: 1908--1979",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0002",
+      "category": "tradition",
+      "statement": "Analytic metaethics; emotivism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0003",
+      "category": "work",
+      "statement": "*Ethics and Language* (1944), *Facts and Values* (1963)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0004",
+      "category": "position",
+      "statement": "Sophisticated emotivism: ethical terms have both emotive meaning (expressing and evoking attitudes) and descriptive meaning (referring to natural properties)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0005",
+      "category": "position",
+      "statement": "The two-patterns analysis: \"this is good\" means roughly \"I approve of this; do so as well\" -- it has both a descriptive component (speaker's attitude) and a dynamic, imperative component (inviting the hearer to share)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0006",
+      "category": "position",
+      "statement": "Persuasive definitions: definitions are not purely descriptive; they redirect attitudes by changing descriptive reference while preserving emotive meaning",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0007",
+      "category": "position",
+      "statement": "Disagreement in attitude vs. disagreement in belief: moral disagreement is fundamentally disagreement in attitude, not disagreement about facts",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0008",
+      "category": "position",
+      "statement": "Moral reasoning is ultimately a form of non-rational persuasion when it engages fundamental evaluative differences",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0009",
+      "category": "argument",
+      "statement": "The argument from the working models: Stevenson provides detailed working models (analyses) of ethical terms showing how they function both to describe and influence; the models' success confirms sophisticated emotivism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0010",
+      "category": "argument",
+      "statement": "The argument from persuasive definitions: the fact that ethical definitions are contested and used persuasively (defining \"justice\" as \"equality\" or \"entitlement\") shows ethical terms have a dynamic, attitudinal function beyond mere description",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0011",
+      "category": "argument",
+      "statement": "The argument for disagreement in attitude: moral disputes cannot be resolved solely by settling factual disputes; there is always a remainder of attitudinal conflict explaining the persistence of moral disagreement",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0012",
+      "category": "relevance",
+      "statement": "`phil-moral-semantics` (the two-patterns analysis as a sophisticated non-cognitivist semantics), `phil-moral-disagreement` (disagreement in attitude vs. disagreement in belief), `phil-moral-psychology` (emotive meaning and the role of attitudes in moral language), `phil-conceptual-analysis` (persuasive definitions as non-neutral conceptual analysis)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-c-l-stevenson-C0013",
+      "category": "relationship",
+      "statement": "Ayer (Stevenson refines and defends Ayer's emotivism against the charge that it reduces ethics to irrational ejaculation); Moore (Stevenson accepts that the naturalistic fallacy shows ethical terms have a special non-descriptive function); Hare (prescriptivism is a rationalist development of Stevenson's insight that ethical language has a directive function); Gibbard (contemporary expressivist who develops Stevenson's project with greater formal sophistication)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaethics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

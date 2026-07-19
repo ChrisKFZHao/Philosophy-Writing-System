@@ -1,5 +1,15 @@
 # Framework Changelog
 
+## v0.6.1-alpha — 2026-07-19
+
+**Philosophers-DB v2: claim-level provenance, dynamic intake, and generated domain views**
+
+- Migrated 49 domain-folder Markdown entries into one canonical `Profiles/` store. All 640 legacy claims are preserved as `prompt-only`; no unsupported legacy content is treated as cited or verified.
+- Added primary/secondary evidence records, source-backed versus prompt-only claim states, dispute state, stable claim IDs, multi-domain links, and generated INDEX/domain views.
+- Added the private `Philosopher-Queue/`, idempotent `philosopher-db.py` batch helper, 5-source/3-substantive new-person threshold, immediate existing-profile candidates, deterministic two-source/one-central-source domain promotion, and candidate approval/rejection/reopen lifecycle.
+- Added `phil:philosophers` (9th workflow), optional philosopher observations in Level 0.5 summaries and persisted reconstructions, and two JSON contracts. Ingest records each batch once without rereading PDFs.
+- Removed the former whole-database citation exception: prompt-only content is `[source unverified]`; source-backed claims route to the actual bibliography KEY and remain subject to the two-hop Citation Gate.
+
 ## v0.6.0-alpha — 2026-07-17
 
 **Platform-neutral workflow core with generated Claude Code and Codex adapters**

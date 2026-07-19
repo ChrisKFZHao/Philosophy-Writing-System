@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "michel-foucault",
+  "identity": {
+    "display_name": "Michel Foucault",
+    "canonical_name": "Michel Foucault",
+    "aliases": [
+      "Foucault, Michel",
+      "Michel Foucault",
+      "foucault"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/foucault.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-michel-foucault-C0001",
+      "category": "identity",
+      "statement": "Life: 1926--1984",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0002",
+      "category": "tradition",
+      "statement": "Continental philosophy; post-structuralism; historical epistemology",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0003",
+      "category": "work",
+      "statement": "*The Order of Things* (1966), *The Archaeology of Knowledge* (1969), *Discipline and Punish* (1975), *The History of Sexuality* (3 vols., 1976--1984)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0004",
+      "category": "position",
+      "statement": "Power-knowledge: power and knowledge are mutually constitutive; knowledge is produced within and sustains power relations",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0005",
+      "category": "position",
+      "statement": "Epistemes: historical periods are characterized by deep conceptual structures (epistemes) that determine what can count as knowledge in a given era",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0006",
+      "category": "position",
+      "statement": "Disciplinary power: modern power operates through disciplinary institutions (prisons, schools, hospitals) that produce docile bodies through surveillance and normalization",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0007",
+      "category": "position",
+      "statement": "Genealogy as method: excavate the contingent historical conditions under which concepts, institutions, and practices emerged, revealing that what appears necessary is the product of power and accident",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0008",
+      "category": "position",
+      "statement": "Truth is a thing of this world, produced by multiple constraints and inducing regular effects of power; each society has its regime of truth",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0009",
+      "category": "argument",
+      "statement": "The Panopticon argument: Bentham's Panopticon is the architectural diagram of modern disciplinary society; the possibility of constant surveillance induces self-regulation without overt coercion",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0010",
+      "category": "argument",
+      "statement": "The historical a priori argument: what counts as true or false in a given period is determined by historically contingent discursive formations that are themselves neither true nor false",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0011",
+      "category": "argument",
+      "statement": "The argument for bio-power: modern states exercise power over populations (birth rates, health, longevity) rather than merely threatening death; the management of life replaces the threat of death",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0012",
+      "category": "relevance",
+      "statement": "`phil-conceptual-analysis` (concepts as historically constituted within discursive formations), `phil-dialectical-map` (power relations and discursive structures), `phil-premise-detect` (archaeological and genealogical methods in argument analysis), `phil-normativity` (the normative implications of genealogical critique), `phil-moral-disagreement` (genealogy of moral concepts showing their historical contingency)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-michel-foucault-C0013",
+      "category": "relationship",
+      "statement": "Nietzsche (primary influence; genealogy as historical critique of moral and epistemic concepts); Kuhn (both emphasize historical discontinuity in knowledge systems); Derrida (fellow post-structuralist; key differences on the status of discourse versus text); Habermas (criticized Foucault's normative ambiguity; the Habermas-Foucault debate on power and reason)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

@@ -1,0 +1,153 @@
+{
+  "profile_version": "1.0",
+  "person_id": "aristotle",
+  "identity": {
+    "display_name": "Aristotle",
+    "canonical_name": "Aristotle",
+    "aliases": [
+      "Aristotle",
+      "aristotle"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/aristotle.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-aristotle-C0001",
+      "category": "identity",
+      "statement": "Life: 384--322 BCE",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0002",
+      "category": "tradition",
+      "statement": "Ancient Greek philosophy; founder of the Peripatetic school; empiricist and systematic philosopher",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0003",
+      "category": "work",
+      "statement": "*Nicomachean Ethics* (c. 340 BCE), *Metaphysics* (c. 350 BCE), *Physics* (c. 350 BCE), *De Anima* (c. 350 BCE), *Categories* (c. 350 BCE)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0004",
+      "category": "position",
+      "statement": "Hylomorphism: substances are composites of matter (hyle) and form (morphe); neither matter alone nor form alone constitutes a complete substance",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0005",
+      "category": "position",
+      "statement": "Four causes: material, formal, efficient, and final causes jointly explain why anything is as it is",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0006",
+      "category": "position",
+      "statement": "Virtue ethics: eudaimonia (flourishing) as the highest good; virtue (arete) as a mean between extremes of excess and deficiency",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0007",
+      "category": "position",
+      "statement": "Essentialism about natural kinds: species have real essences that ground their characteristic powers, activities, and developmental patterns",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0008",
+      "category": "position",
+      "statement": "Categories of being: substance, quantity, quality, relation, place, time, position, state, action, passion -- substance is the primary category on which others depend",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0009",
+      "category": "position",
+      "statement": "Syllogistic logic: valid deductive reasoning proceeds through syllogistic forms classified by figure and mood",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0010",
+      "category": "argument",
+      "statement": "The Function Argument (ergon argument): the good for humans is rational activity of the soul in accordance with virtue over a complete life",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0011",
+      "category": "argument",
+      "statement": "The Unmoved Mover: a first cause of all motion that itself is unmoved, pure actuality without potentiality, thinking on thinking",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0012",
+      "category": "argument",
+      "statement": "The Sea-Battle argument: future contingent propositions are neither true nor false now, challenging logical determinism while preserving bivalence for past and present",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0013",
+      "category": "relevance",
+      "statement": "`phil-essence-detect` (hylomorphic essentialism and real definition as the paradigm of essentialist analysis), `phil-causation-analyze` (four causes framework for causal analysis), `phil-argument-reconstruct` (syllogistic logic as the first formal argument system), `phil-conceptual-analysis` (definition per genus et differentiam), `phil-identity-persistence` (substance-based persistence through change), `phil-natural-kind-analyze` (substantial forms as natural kinds)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-aristotle-C0014",
+      "category": "relationship",
+      "statement": "Plato (teacher; rejected separately existing Forms for immanent forms realized in matter); Hume (causal skepticism as challenge to Aristotelian efficient causation); Fine (neo-Aristotelian essentialism: essence as real definition, not modal profile); Foot (neo-Aristotelian naturalist virtue ethics); MacIntyre (tradition-constituted rationality in an Aristotelian framework)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

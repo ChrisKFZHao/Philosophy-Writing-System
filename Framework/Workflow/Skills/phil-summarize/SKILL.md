@@ -28,6 +28,7 @@ A structured summary conforming to `summary-schema.json`, containing:
 - Source metadata (echoed from input, with `year_verified` provenance flag)
 - Core thesis, argument route, key concepts, interlocutors, topics
 - Rendered Chinese summary text (~300–500 chars)
+- A compact `philosopher_observations[]` block for explicitly named, substantively engaged figures; the private maintenance queue consumes this block without rereading the PDF
 
 ## 4. Methodological Foundations
 
@@ -47,6 +48,8 @@ List 3–6 concepts the text defines, refines, or centrally relies on.
 ### Step 4: Identify Interlocutors
 List the named positions or authors the text substantively engages with (targets, allies, foils). Named engagement only — do not infer unnamed influences.
 
+For each substantive figure, add one structured observation with canonical/display name, role (`core-target`, `supporting`, `opposition`, or `background`), and at most two claims explicitly attributed by the text. Each claim must state its category and an auditable section/page/summary-field locator. Do not convert passing mentions into observations and do not infer influence. The caller derives the source author and their `core_thesis`, so omitting a duplicate author observation is allowed.
+
 ### Step 5: Assign Topics
 Assign 4–8 English topic tags (lowercase phrases, comma style matching the INDEX Topics column). Reuse existing INDEX/project vocabulary where apt; introduce new tags only for genuinely new subject matter.
 
@@ -58,7 +61,7 @@ Compose the summary in Chinese; filenames, KEYs, and topic tags remain in Englis
 - **collection member (chapter)** — run the full paper pipeline (Steps 1–5) on that single member paper exactly as for a standalone paper, 300–500 chars, with its own topics; set `container` to the volume KEY + page range. The edited volume itself also gets a summary in `collection` mode: a volume-level summary of the editors' framing question and the structural arc across parts (no per-member fold-in — each member has its own file).
 
 ### Step 7: Assemble JSON
-Assemble the structured output with a `SUM-` prefixed `summary_id`, per `report-id-registry.md`. Monograph summaries carry `chapters[]` (in-file per-chapter `summary_text`); a collection **volume** summary carries `members[]` (a pointer manifest — chapter_no, title, author, pages, member_key — whose actual summaries live in separate member files); collection **member** summaries carry `container`.
+Assemble the structured output with a `SUM-` prefixed `summary_id`, per `report-id-registry.md`. Add `philosopher_observations[]` without a second model pass. Monograph summaries carry `chapters[]` (in-file per-chapter `summary_text`); a collection **volume** summary carries `members[]` (a pointer manifest — chapter_no, title, author, pages, member_key — whose actual summaries live in separate member files); collection **member** summaries carry `container`.
 
 ## 6. Quality Criteria
 
@@ -66,6 +69,7 @@ Assemble the structured output with a `SUM-` prefixed `summary_id`, per `report-
 - **Charity**: thesis stated in the author's own commitments
 - **Tag stability**: topics reuse existing library vocabulary where applicable
 - **No hallucination**: every element grounded in the provided text; no claims, works, or positions the text does not contain (Rule 2)
+- **Observation economy**: at most two attributed claims per substantive figure; no duplicate author observation and no separate PDF read
 - **Summary ≠ evaluation**: no verdicts on argument success
 
 ## 7. Relations to Other Skills

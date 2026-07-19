@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "peter-singer",
+  "identity": {
+    "display_name": "Peter Singer",
+    "canonical_name": "Peter Singer",
+    "aliases": [
+      "Peter Singer",
+      "Singer, Peter",
+      "singer"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaethics/singer.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-peter-singer-C0001",
+      "category": "identity",
+      "statement": "Life: b. 1946",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0002",
+      "category": "tradition",
+      "statement": "Utilitarian ethics; applied ethics; effective altruism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0003",
+      "category": "work",
+      "statement": "*Animal Liberation* (1975), *Practical Ethics* (1979), *The Expanding Circle* (1981), *The Life You Can Save* (2009), *Ethics in the Real World* (2016)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0004",
+      "category": "position",
+      "statement": "Preference utilitarianism: the right action is the one that best satisfies the preferences of all affected beings, impartially considered",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0005",
+      "category": "position",
+      "statement": "The principle of equal consideration of interests: like interests should be given equal weight regardless of species, race, gender, or other arbitrary characteristics",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0006",
+      "category": "position",
+      "statement": "The demandingness of morality: given the scale of global poverty and preventable suffering, affluent individuals have extensive obligations to donate resources to effective charities",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0007",
+      "category": "position",
+      "statement": "Anti-speciesism: membership in the species Homo sapiens is not morally relevant; the capacity for suffering and enjoyment is the relevant criterion for moral considerability",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0008",
+      "category": "position",
+      "statement": "Moral progress consists in expanding the circle of moral concern from kin to tribe to nation to all humans to all sentient beings",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0009",
+      "category": "argument",
+      "statement": "The drowning child argument (the shallow pond): if you see a child drowning in a shallow pond, you are morally obligated to save them even if it ruins your new shoes; by parity of reasoning, you are obligated to donate to save distant strangers from preventable death, even at some cost. Distance and directness are morally irrelevant",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0010",
+      "category": "argument",
+      "statement": "The argument from marginal cases: if we justify treating non-human animals differently based on their cognitive capacities, then we would also be justified in treating humans with similar cognitive limitations (infants, severely cognitively disabled) the same way. Since we reject the latter, we should reject the former",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0011",
+      "category": "argument",
+      "statement": "The expanding circle argument: moral progress has consisted in expanding the circle of moral concern; the next logical step is to include non-human animals, which the principle of equal consideration of interests demands",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0012",
+      "category": "relevance",
+      "statement": "`phil-thought-experiment` (the shallow pond, the expanding circle, animal suffering analogies), `phil-argument-reconstruct` (Singer's method of argument by analogy and consistency), `phil-normativity` (the scope and demandingness of moral requirements), `phil-moral-psychology` (psychological barriers to impartial altruism and the expanding circle)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-singer-C0013",
+      "category": "relationship",
+      "statement": "Bentham (founder of utilitarianism; Bentham's dictum that the question about animals is \"not, Can they reason? nor, Can they talk? but, Can they suffer?\" directly inspires Singer); Mill (Singer's preference utilitarianism is a descendant of Mill's hedonistic utilitarianism, modified to avoid hedonism's objections); Parfit (Singer engages Parfit on population ethics and the repugnant conclusion, which affects Singer's global-poverty arguments); Hare (Hare's universal prescriptivism influenced Singer's thinking about impartiality in ethics)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaethics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

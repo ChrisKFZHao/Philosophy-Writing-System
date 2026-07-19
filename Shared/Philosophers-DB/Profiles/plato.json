@@ -1,0 +1,144 @@
+{
+  "profile_version": "1.0",
+  "person_id": "plato",
+  "identity": {
+    "display_name": "Plato",
+    "canonical_name": "Plato",
+    "aliases": [
+      "Plato",
+      "plato"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/plato.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-plato-C0001",
+      "category": "identity",
+      "statement": "Life: 428--348 BCE",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0002",
+      "category": "tradition",
+      "statement": "Ancient Greek philosophy; founder of the Western philosophical tradition; rationalist",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0003",
+      "category": "work",
+      "statement": "*Republic* (c. 375 BCE), *Phaedo* (c. 385 BCE), *Meno* (c. 385 BCE), *Theaetetus* (c. 369 BCE), *Parmenides* (c. 370 BCE)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0004",
+      "category": "position",
+      "statement": "Theory of Forms: abstract, non-spatiotemporal entities constitute the ultimate reality; particulars participate in or imitate Forms",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0005",
+      "category": "position",
+      "statement": "Knowledge as justified true belief (articulated in the *Theaetetus*)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0006",
+      "category": "position",
+      "statement": "Recollection theory of learning: all knowledge is innate and recovered through dialectical questioning",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0007",
+      "category": "position",
+      "statement": "Tripartite soul: reason, spirit, and appetite; justice in the soul mirrors justice in the city",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0008",
+      "category": "position",
+      "statement": "Philosopher-kings as ideal rulers in the kallipolis (the just city)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0009",
+      "category": "argument",
+      "statement": "Meno's Paradox and the slave-boy demonstration: learning as recollection of innate knowledge rather than acquisition of new information",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0010",
+      "category": "argument",
+      "statement": "The Allegory of the Cave: epistemic ascent from opinion (doxa) to knowledge (episteme), with the Form of the Good as the ultimate object of understanding",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0011",
+      "category": "argument",
+      "statement": "The Divided Line: hierarchy of cognitive states from eikasia (imaging) through pistis (belief), dianoia (thought), to noesis (understanding)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0012",
+      "category": "relevance",
+      "statement": "`phil-thought-experiment` (the Cave, Ring of Gyges as canonical thought experiments), `phil-premise-detect` (Socratic elenchus as premise extraction method), `phil-essence-detect` (Theory of Forms as essentialist metaphysics), `phil-argument-reconstruct` (the dialogues as exemplars of argument reconstruction), `phil-conceptual-analysis` (Socratic definition-seeking as conceptual analysis precursor)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-plato-C0013",
+      "category": "relationship",
+      "statement": "Aristotle (student; rejected separately existing Forms for immanent forms in hylomorphism); Descartes (innate ideas echo Platonic recollection); Kripke (rigid designation revives essentialist tendencies traceable to Platonic Forms); Frege (Platonism about abstract objects draws on Platonic realism)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

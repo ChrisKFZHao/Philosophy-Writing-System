@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "david-wiggins",
+  "identity": {
+    "display_name": "David Wiggins",
+    "canonical_name": "David Wiggins",
+    "aliases": [
+      "David Wiggins",
+      "Wiggins, David",
+      "david-wiggins"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaphysics/david-wiggins.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-david-wiggins-C0001",
+      "category": "identity",
+      "statement": "Life: 1933--",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0002",
+      "category": "tradition",
+      "statement": "Analytic metaphysics; philosophical logic; ethics",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0003",
+      "category": "work",
+      "statement": "*Identity and Spatio-Temporal Continuity* (1967), *Sameness and Substance* (1980), *Sameness and Substance Renewed* (2001), *Needs, Values, Truth* (1987), *Ethics: Twelve Lectures on the Philosophy of Morality* (2006)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0004",
+      "category": "position",
+      "statement": "Sortal essentialism: identity conditions for objects are relative to sortal concepts (substance concepts); to be an object is to fall under some sortal",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0005",
+      "category": "position",
+      "statement": "The D-thesis: \"a = b\" is not a well-formed identity statement unless there is a sortal F such that \"a is the same F as b\"",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0006",
+      "category": "position",
+      "statement": "The conceptualist-realist view of sortals: sortal concepts are mind-dependent in origin but answer to real, objective similarities in the world",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0007",
+      "category": "position",
+      "statement": "Individual essence: objects have individual essences -- properties an object must have to be the very object it is",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0008",
+      "category": "position",
+      "statement": "Moral properties as response-dependent but objective: analogous to secondary qualities, there is room for objectivity without Platonism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0009",
+      "category": "argument",
+      "statement": "The argument for sortal-dependence of identity: identity is always \"same something\"; without a covering sortal concept, identity questions are indeterminate (the famous example: is the boy the same as the general?)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0010",
+      "category": "argument",
+      "statement": "The argument against bare particulars and haecceities: objects are individuated by their sortal-specific identity criteria, not by primitive thisness",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0011",
+      "category": "argument",
+      "statement": "The argument for a via media between realism and anti-realism about values: moral properties are response-dependent in a way analogous to secondary qualities; they are objective but dependent on human sensibilities",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0012",
+      "category": "relevance",
+      "statement": "`phil-identity-persistence` (sortal-relative identity and persistence conditions), `phil-essence-detect` (sortal essentialism and individual essences -- sortals as the framework for essence), `phil-conceptual-analysis` (sortal concepts and identity criteria), `phil-distinction-track` (sortal-based distinctions among objects), `phil-moral-realism` (response-dependent moral realism)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-wiggins-C0013",
+      "category": "relationship",
+      "statement": "Aristotle (sortal essentialism draws deeply on Aristotle's metaphysics of substance and essence); Geach (collaborator on relative identity; the D-thesis is jointly associated with Geach); Kripke (Wiggins's individual essences parallel Kripkean essentialism but are grounded in sortals rather than rigid designation); Parfit (Wiggins's rich metaphysics of personal identity stands opposed to Parfit's reductionism)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaphysics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

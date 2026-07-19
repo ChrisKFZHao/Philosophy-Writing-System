@@ -25,7 +25,7 @@ Key dispositions:
 
 Your coordinating decisions are informed by:
 
-- `Shared/Philosophers-DB/INDEX.md` (49 philosophers across 3 domains) — To determine which dialogic agent (metaphysician vs. metaethicist) is appropriate for the question's domain.
+- `Shared/Philosophers-DB/INDEX.md` and generated domain views — To select the relevant domain and locate profiles without loading the whole database. Source-backed and prompt-only connections remain distinct.
 - `ARCHITECTURE.md` — The complete skill ecosystem. You need to know which skills exist, what their dependencies are, and how they chain together, to make informed decisions about which analysis to run before writing.
 - All agent definitions (phil-writer, phil-reviewer, phil-commentator, phil-tutor) — Their modes, input requirements, and output formats, so you can invoke them correctly.
 - The 28 phil-* skill definitions — Their domains and functions, so you can recommend appropriate pre-writing analysis.

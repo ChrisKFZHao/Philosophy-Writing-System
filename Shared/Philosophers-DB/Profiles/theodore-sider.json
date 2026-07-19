@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "theodore-sider",
+  "identity": {
+    "display_name": "Theodore Sider",
+    "canonical_name": "Theodore Sider",
+    "aliases": [
+      "Sider, Theodore",
+      "Theodore Sider",
+      "theodore-sider"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaphysics/theodore-sider.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-theodore-sider-C0001",
+      "category": "identity",
+      "statement": "Life: b. 1967",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0002",
+      "category": "tradition",
+      "statement": "Analytic metaphysics; meta-metaphysics; philosophical logic",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0003",
+      "category": "work",
+      "statement": "*Four-Dimensionalism* (2001), *Writing the Book of the World* (2011), *The Tools of Metaphysics and the Metaphysics of Science* (2020), *Logic for Philosophy* (2010)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0004",
+      "category": "position",
+      "statement": "Four-dimensionalism (perdurantism): objects persist through time by having temporal parts at each moment they exist; they are \"spacetime worms\"",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0005",
+      "category": "position",
+      "statement": "Ontological realism about structure: the world has an objective, mind-independent structure; some concepts \"carve nature at the joints\" while others do not",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0006",
+      "category": "position",
+      "statement": "Quantifier variance as insufficient: Hirsch's quantifier variance fails because there is a fact of the matter about which quantifier meaning is joint-carving (more natural)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0007",
+      "category": "position",
+      "statement": "Purity as a theoretical virtue: theories formulated in more fundamental (joint-carving) terms are better theories, all else equal",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0008",
+      "category": "position",
+      "statement": "The argument from temporary intrinsics: an enduring object cannot undergo intrinsic change (e.g., from straight to bent) without contradiction unless it has temporal parts",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0009",
+      "category": "argument",
+      "statement": "The argument from vagueness for four-dimensionalism (the Sider-Lewis argument): if composition were restricted, there would be borderline cases of composition, and thus vague existence; but existence is not vague; therefore composition is unrestricted. Combined with temporal-parts theory, this yields four-dimensionalism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0010",
+      "category": "argument",
+      "statement": "The argument from metaphysical fundamentality against quantifier variance: Hirsch's quantifier variant \"there exists a mereological sum\" does not carve at the joints the way the ontologist's preferred quantifier does; ontological disputes are substantive because nature has a privileged structure",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0011",
+      "category": "argument",
+      "statement": "The knee argument: if someone says \"my knee\" pointing to a region without joint-carving boundaries, they have not failed to refer; but the object they refer to is less natural. Naturalness matters for reference and ontology",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0012",
+      "category": "relevance",
+      "statement": "`phil-ontological-commitment` (joint-carving quantifiers and substantive ontology), `phil-identity-persistence` (four-dimensionalism vs. endurantism in the persistence debate), `phil-natural-kind-analyze` (naturalness as the guide to kinds and induction), `phil-distinction-track` (real vs. merely verbal disputes in metaphysics)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-theodore-sider-C0013",
+      "category": "relationship",
+      "statement": "Lewis (Sider extends Lewis's doctrine of perfectly natural properties into meta-metaphysics and four-dimensionalism); Hirsch (principal rival on quantifier variance and the substantivity of ontological disputes); Quine (Sider's joint-carving naturalism is a descendant of Quine's ontological commitment methodology); van Inwagen (rival on composition; Sider accepts unrestricted composition while van Inwagen restricts it to lives)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaphysics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

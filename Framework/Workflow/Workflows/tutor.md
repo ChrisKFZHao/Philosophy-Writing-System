@@ -78,5 +78,5 @@ Lenient interrogation (Rule 1 §Workflow Gates) governs this dialogue throughout
 - In incubating mode, the conception file's content is written in Chinese (output layer), consistent with manuscript conventions
 - Follows the citation integrity rule (Rule 2): no fabricated bibliographic information
 - If phil:reconstruct has already been run, tell the agent — it will draw on the analysis results in its probing
-- The agent's knowledge sources: Philosophers-DB/ (49 philosophers), argument-forms/ (26 argument forms), Private/Bibliography/INDEX.md (project bibliography)
+- The agent's knowledge sources: Philosophers-DB v2 INDEX plus selected source-backed profiles, argument-forms/ (26 argument forms), Private/Bibliography/INDEX.md (project bibliography)
 - `{topic}-conception.txt` is freely overwritten and never versioned (Rule 3)

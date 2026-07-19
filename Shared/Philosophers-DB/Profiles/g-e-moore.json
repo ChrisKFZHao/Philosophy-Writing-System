@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "g-e-moore",
+  "identity": {
+    "display_name": "G.E. Moore",
+    "canonical_name": "G.E. Moore",
+    "aliases": [
+      "G.E. Moore",
+      "Moore, G.E.",
+      "moore"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaethics/moore.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-g-e-moore-C0001",
+      "category": "identity",
+      "statement": "Life: 1873--1958",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0002",
+      "category": "tradition",
+      "statement": "Analytic philosophy; Cambridge realism; non-naturalist moral realism; intuitionism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0003",
+      "category": "work",
+      "statement": "*Principia Ethica* (1903), \"The Refutation of Idealism\" (1903), \"A Defence of Common Sense\" (1925), *Some Main Problems of Philosophy* (1953), *Ethics* (1912)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0004",
+      "category": "position",
+      "statement": "Moral non-naturalism: goodness is a simple, non-natural, unanalyzable property that is not identical to any natural property",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0005",
+      "category": "position",
+      "statement": "The naturalistic fallacy: it is a mistake to identify the property \"good\" with any natural property (e.g., pleasure, evolved fitness, what is desired); any attempt to define \"good\" in natural terms commits this fallacy",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0006",
+      "category": "position",
+      "statement": "Intuitionism about moral knowledge: fundamental moral truths are self-evident and known by rational intuition, not by empirical investigation",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0007",
+      "category": "position",
+      "statement": "Ideal consequentialism: the right action is the one that produces the greatest amount of intrinsic value, where intrinsic goods include pleasure, the appreciation of beauty, and personal affection",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0008",
+      "category": "position",
+      "statement": "Common sense realism: our ordinary beliefs about the external world are more certain than any philosophical argument purporting to refute them",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0009",
+      "category": "argument",
+      "statement": "The Open Question Argument: for any proposed naturalistic definition of \"good\" (as pleasure, as what we desire to desire, etc.), it remains an open question whether the thing possessing the natural property is good; this shows that goodness is not identical to any natural property",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0010",
+      "category": "argument",
+      "statement": "The argument from simplicity: \"good\" is a simple notion, like \"yellow\"; just as one cannot explain what yellow is to someone who has never seen it, one cannot define \"good\" -- one can only point to instances",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0011",
+      "category": "argument",
+      "statement": "The argument for ideal consequentialism: certain states of consciousness (the pleasures of human intercourse and the enjoyment of beautiful objects) are the greatest goods we know; right action maximizes these",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0012",
+      "category": "relevance",
+      "statement": "`phil-moral-realism` (the paradigm non-naturalist realist view), `phil-moral-epistemology` (intuitionism and self-evident moral knowledge), `phil-moral-semantics` (the naturalistic fallacy and the open question argument as semantic constraints), `phil-conceptual-analysis` (the open question argument as a constraint on conceptual analysis), `phil-normativity` (the nature of goodness and rightness as primitive normative properties)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-g-e-moore-C0013",
+      "category": "relationship",
+      "statement": "Sidgwick (Moore's ideal consequentialism develops Sidgwick's framework but replaces hedonism with a pluralistic theory of value); Mackie (error theorist who accepts Moore's anti-naturalism but concludes that such properties do not exist); Ayer (accepts Moore's critique of naturalism but draws the non-cognitivist conclusion); Shafer-Landau (contemporary non-naturalist realist in the Moorean tradition)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaethics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

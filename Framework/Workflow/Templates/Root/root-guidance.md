@@ -52,7 +52,7 @@ Resolve project guidance, collaboration aliases, capability degradation, delegat
 
 ```
 Framework/Workflow/       Platform-neutral single source of truth
-  ├── manifest.json       30 skills + 8 workflows + 7 roles and dependencies
+  ├── manifest.json       30 skills + 9 workflows + 7 roles and dependencies
   ├── Skills/             Atomic philosophy skills
   ├── Workflows/          Composite phil:* workflows
   ├── Roles/              Runtime-neutral role prompts
@@ -65,7 +65,7 @@ Framework/Workflow/       Platform-neutral single source of truth
 .agents/skills/           Generated Codex adapter (committed)
 Framework/                Architecture, changelog, and Lessons
 Shared/        Shareable curated knowledge (tracked by outer repo)
-  ├── Philosophers-DB/  49 philosopher profiles (General/Metaphysics/Metaethics)
+  ├── Philosophers-DB/  Canonical JSON profiles + generated multi-domain views
   └── Format/           Format templates (LaTeX/Word — shareable)
 Private/       Private content layer (outer gitignore; independent inner repo, PDFs excluded)
   ├── Projects/{topic}/   One directory per writing project (manuscript, refs.md,
@@ -87,6 +87,7 @@ Private/       Private content layer (outer gitignore; independent inner repo, P
 | `phil:pipeline` | One-command full pipeline | phil-orchestrator agent (6 stages with lenient-interrogation gates) |
 | `phil:tutor` | Tutor-style literature dialogue — probe ideas, test understanding, recommend sources | phil-tutor agent (two modes: reading — Socratic dialogue + 4-phase arc; incubating — Stage 3 conception incubation producing the conception file) |
 | `phil:ingest` | Literature ingestion ("scraping") — scan library, rename to canonical stem, register in INDEX, Level 0.5 summary, recommendation trigger 1 | shell scan + pdf skill + phil-summarize |
+| `phil:philosophers` | Review source-grounded philosopher candidates, lazily audit held sources, and rebuild domain views | private queue + deterministic philosopher-db helper |
 
 Each workflow file in `Framework/Workflow/Workflows/` defines its skill composition, execution order, and output format.
 
@@ -119,6 +120,7 @@ Private/Bibliography/
 ├── PDF/                              Original PDFs (in NO git — immutable, re-obtainable)
 ├── Analysis/                         Paired analysis files ({Author}_{Year}_{Title}.analysis.txt)
 ├── Summaries/                        Level 0.5 summaries ({Author}_{Year}_{Title}.summary.txt)
+├── Philosopher-Queue/                 Private observations, counters, and review candidates
 └── INDEX.md                          Master inventory (KEY, analysis level, topics tags)
 ```
 
@@ -202,9 +204,9 @@ Session summaries are written to `history.txt` by the model at the end of each c
 
 **Glossaries & Taxonomies**: `Framework/Workflow/References/` contains domain-specific reference files.
 
-**Philosopher Database**: `Shared/Philosophers-DB/` — 49 philosophers across 3 domains (General/Metaphysics/Metaethics). Curated — may be cited.
+**Philosopher Database**: `Shared/Philosophers-DB/` — canonical claim-level JSON profiles plus generated domain views. `source-backed` claims route to bibliography evidence; `prompt-only` claims are `[source unverified]` discovery hints and cannot bypass the Citation Gate.
 
-**Data Contracts**: `Framework/Workflow/Schemas/` contains 13 JSON schemas; `Framework/Workflow/Templates/` contains the report templates.
+**Data Contracts**: `Framework/Workflow/Schemas/` contains 15 JSON schemas; `Framework/Workflow/Templates/` contains the report templates.
 
 ## Cross-Session Memory
 
@@ -212,11 +214,11 @@ Runtime-specific memory is optional and not a cross-runtime contract. Durable sh
 
 ## Architecture
 
-The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.6.0-alpha), built atop optional academic-research skills and covering general analytic philosophy, metaphysics, and metaethics.
+The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.6.1-alpha), built atop optional academic-research skills and covering general analytic philosophy, metaphysics, and metaethics.
 
 - **30 Skills** — canonical definitions in `Framework/Workflow/Skills/`
-- **8 Workflows** — canonical orchestration in `Framework/Workflow/Workflows/`
+- **9 Workflows** — canonical orchestration in `Framework/Workflow/Workflows/`
 - **7 Roles** — canonical role prompts in `Framework/Workflow/Roles/`
-- **13 JSON Schemas + 5 Report Templates** — data contracts and output skeletons
+- **15 JSON Schemas + 5 Report Templates** — data contracts and output skeletons
 - **26 Argument Forms** — canonical definitions in `Framework/Workflow/References/argument-forms/`
 - For complete skill inventory, build roadmap, and detailed architecture — see `ARCHITECTURE.md`

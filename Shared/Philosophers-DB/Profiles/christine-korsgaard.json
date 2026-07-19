@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "christine-korsgaard",
+  "identity": {
+    "display_name": "Christine Korsgaard",
+    "canonical_name": "Christine Korsgaard",
+    "aliases": [
+      "Christine Korsgaard",
+      "Korsgaard, Christine",
+      "korsgaard"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaethics/korsgaard.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-christine-korsgaard-C0001",
+      "category": "identity",
+      "statement": "Life: b. 1952",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0002",
+      "category": "tradition",
+      "statement": "Kantian ethics; constructivism; philosophy of action",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0003",
+      "category": "work",
+      "statement": "*The Sources of Normativity* (1996), *Creating the Kingdom of Ends* (1996), *Self-Constitution: Agency, Identity, and Integrity* (2009), *The Constitution of Agency* (2008)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0004",
+      "category": "position",
+      "statement": "Kantian constructivism: moral obligations are constructed by the activity of practical reason, not discovered as independent normative facts",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0005",
+      "category": "position",
+      "statement": "Constitutivism about normativity: the binding force of moral requirements derives from the constitutive standards of practical agency itself",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0006",
+      "category": "position",
+      "statement": "Reflective endorsement: morality's authority is established when we reflect on our practical identities and endorse the moral demands these identities place on us",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0007",
+      "category": "position",
+      "statement": "The publicity of reasons: genuine reasons are essentially shareable; private reasons are not genuine reasons at all",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0008",
+      "category": "position",
+      "statement": "Morality is grounded in the necessity of self-constitution: to act at all, one must act on a maxim one can will as universal law",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0009",
+      "category": "argument",
+      "statement": "The argument from reflective endorsement: to determine what is normative, we must step back from desires and reflect on whether they provide reasons; we must consider our practical identities and whether they obligate us. If we cannot reflectively endorse a purported obligation, it lacks normative force",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0010",
+      "category": "argument",
+      "statement": "The argument for the necessity of valuing humanity: practical reason requires that we value our own humanity (rational capacity to set ends); consistency requires valuing humanity in all persons; this yields the categorical imperative",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0011",
+      "category": "argument",
+      "statement": "The argument from the constitution of agency: agency has constitutive standards (unity, efficacy) that are normative for agents; failing to follow the categorical imperative undermines the unity of the self, dissolving the agent into a mere heap of impulses",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0012",
+      "category": "relevance",
+      "statement": "`phil-normativity` (constitutivism about the source of normative requirements -- the central figure for this skill), `phil-moral-realism` (Kantian constructivism as an alternative to both realism and expressivism), `phil-moral-psychology` (reflective endorsement and practical identity), `phil-argument-reconstruct` (Korsgaard's argument from the constitutive conditions of agency)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-christine-korsgaard-C0013",
+      "category": "relationship",
+      "statement": "Kant (primary source; Korsgaard reinterprets Kant's argument for the categorical imperative in terms of reflective endorsement and agency constitution); Nagel (shared emphasis on the impartiality and publicity of reasons); Parfit (Korsgaard's neo-Kantian constructivism as a target in Parfit's defense of non-naturalist realism); Hume (Korsgaard engages Hume's challenge about whether reason alone can be practical)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaethics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

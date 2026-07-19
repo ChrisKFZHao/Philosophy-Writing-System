@@ -1,0 +1,154 @@
+{
+  "profile_version": "1.0",
+  "person_id": "w-v-o-quine",
+  "identity": {
+    "display_name": "W.V.O. Quine",
+    "canonical_name": "W.V.O. Quine",
+    "aliases": [
+      "Quine, W.V.O.",
+      "W.V.O. Quine",
+      "quine"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/quine.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-w-v-o-quine-C0001",
+      "category": "identity",
+      "statement": "Life: 1908--2000",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0002",
+      "category": "tradition",
+      "statement": "Analytic philosophy; naturalism; pragmatism-influenced empiricism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0003",
+      "category": "work",
+      "statement": "\"Two Dogmas of Empiricism\" (1951), *Word and Object* (1960), *From a Logical Point of View* (1953), *Ontological Relativity and Other Essays* (1969), *Pursuit of Truth* (1990)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0004",
+      "category": "position",
+      "statement": "Rejection of the analytic-synthetic distinction: there is no principled boundary between truths of meaning and truths of fact",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0005",
+      "category": "position",
+      "statement": "Confirmation holism: statements face the tribunal of experience collectively; the unit of empirical significance is the whole of science (the Duhem-Quine thesis)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0006",
+      "category": "position",
+      "statement": "Indeterminacy of translation: there is no fact of the matter about which translation manual is correct; meaning is indeterminate beyond behavioral dispositions",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0007",
+      "category": "position",
+      "statement": "Naturalized epistemology: epistemology should be pursued as empirical psychology, not as a priori first philosophy",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0008",
+      "category": "position",
+      "statement": "Ontological commitment: \"to be is to be the value of a bound variable\" -- a theory is committed to the entities that must exist for its quantified statements to be true",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0009",
+      "category": "position",
+      "statement": "Inscrutability of reference: there is no fact of the matter about what our terms refer to beyond the structural role they play in our total theory",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0010",
+      "category": "argument",
+      "statement": "The circularity argument against analyticity: attempts to define \"analytic\" rely on cognate notions (synonymy, meaning, necessity) that are equally in need of explication",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0011",
+      "category": "argument",
+      "statement": "The argument for ontological commitment via quantification: existential quantification is the primary vehicle of ontological commitment; predicates do not carry commitment on their own",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0012",
+      "category": "argument",
+      "statement": "The indeterminacy of translation thought experiment (gavagai): even perfect behavioral evidence underdetermines whether \"gavagai\" means rabbit, undetached rabbit part, or rabbit-stage",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0013",
+      "category": "relevance",
+      "statement": "`phil-ontological-commitment` (the quantifier criterion as the standard method for reading ontological commitments off a theory -- this is the central figure for this skill), `phil-conceptual-analysis` (undermines the analytic-synthetic distinction that classical conceptual analysis presupposes), `phil-premise-detect` (holism challenges individual-premise assessment), `phil-natural-kind-analyze` (naturalized approach to kinds and their individuation)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-w-v-o-quine-C0014",
+      "category": "relationship",
+      "statement": "Carnap (teacher and target; \"Two Dogmas\" directly dismantles Carnap's framework); Lewis (Quinean naturalist who accepted ontological commitment but rejected Quine's desert landscapes for lush modal realism); Putnam (\"The Meaning of Meaning\" extends Quinean indeterminacy into semantic externalism); Davidson (student who pushed Quinean holism further toward the principle of charity and radical interpretation)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

@@ -1,0 +1,154 @@
+{
+  "profile_version": "1.0",
+  "person_id": "david-lewis",
+  "identity": {
+    "display_name": "David Lewis",
+    "canonical_name": "David Lewis",
+    "aliases": [
+      "David Lewis",
+      "Lewis, David",
+      "david-lewis"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaphysics/david-lewis.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-david-lewis-C0001",
+      "category": "identity",
+      "statement": "Life: 1941--2001",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0002",
+      "category": "tradition",
+      "statement": "Analytic metaphysics; modal realism; systematic philosophy",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0003",
+      "category": "work",
+      "statement": "*Counterfactuals* (1973), *Convention* (1969), *On the Plurality of Worlds* (1986), *Parts of Classes* (1991), *Philosophical Papers* (2 vols., 1983, 1986)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0004",
+      "category": "position",
+      "statement": "Genuine modal realism: possible worlds are concrete entities of the same kind as the actual world; \"actual\" is an indexical term, not a mark of ontological privilege",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0005",
+      "category": "position",
+      "statement": "Counterpart theory: individuals are world-bound; transworld identity is replaced by the counterpart relation, a similarity relation between individuals in different worlds",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0006",
+      "category": "position",
+      "statement": "Humean supervenience: all truths supervene on the spatiotemporal distribution of local, perfectly natural properties instantiated at point-sized entities",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0007",
+      "category": "position",
+      "statement": "Unrestricted mereological composition: any collection of objects, no matter how scattered, composes a further object; composition is automatic and unrestricted",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0008",
+      "category": "position",
+      "statement": "Best-systems account of laws: laws of nature are the theorems of the deductive system that best balances simplicity and strength in describing the mosaic of particular facts",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0009",
+      "category": "position",
+      "statement": "Causation is counterfactual dependence: c causes e iff e would not have occurred had c not occurred",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0010",
+      "category": "argument",
+      "statement": "The argument from theoretical utility for modal realism: possible worlds provide an extraordinarily fruitful framework for analyzing modality, counterfactuals, causation, content, and properties; this utility justifies belief in their existence",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0011",
+      "category": "argument",
+      "statement": "The argument for unrestricted composition: there is no principled way to draw a line between cases where composition occurs and cases where it does not (argument from vagueness); therefore composition is unrestricted",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0012",
+      "category": "argument",
+      "statement": "The argument for Humean supervenience over governing conceptions of laws: positing irreducible nomic necessitation between universals violates parsimony and introduces mysterious modal connections",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0013",
+      "category": "relevance",
+      "statement": "`phil-modal-arg` (counterfactual semantics and modal realism), `phil-causation-analyze` (counterfactual theory of causation), `phil-grounding-check` (Humean supervenience as a limiting case of grounding), `phil-ontological-commitment` (unrestricted composition and the argument from theoretical utility), `phil-identity-persistence` (counterpart theory vs. transworld identity)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-lewis-C0014",
+      "category": "relationship",
+      "statement": "Kripke (opponent on modal metaphysics; the Humphrey objection targets counterpart theory); Armstrong (rival on laws of nature -- Lewis's Humeanism vs. Armstrong's necessitation between universals); Stalnaker (co-creator of possible worlds semantics for conditionals); Quine (Lewis's modal realism as a repudiation of Quine's actualist ontological scruples)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaphysics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

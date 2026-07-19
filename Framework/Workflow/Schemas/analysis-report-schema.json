@@ -14,6 +14,15 @@
       "type": "string",
       "description": "Reference to the source text analyzed"
     },
+    "source_bib_key": {
+      "type": "string",
+      "description": "Optional bibliography KEY when the report is persisted as a library analysis"
+    },
+    "philosopher_observations": {
+      "type": "array",
+      "description": "Optional compact observations for a persisted library analysis",
+      "items": {"$ref": "philosopher-observation-schema.json#/$defs/person_observation"}
+    },
     "generated_at": {
       "type": "string",
       "format": "date-time",

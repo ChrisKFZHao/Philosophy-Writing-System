@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "derek-parfit",
+  "identity": {
+    "display_name": "Derek Parfit",
+    "canonical_name": "Derek Parfit",
+    "aliases": [
+      "Derek Parfit",
+      "Parfit, Derek",
+      "parfit"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaethics/parfit.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-derek-parfit-C0001",
+      "category": "identity",
+      "statement": "Life: 1942--2017",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0002",
+      "category": "tradition",
+      "statement": "Analytic philosophy; ethics; personal identity; metaethics",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0003",
+      "category": "work",
+      "statement": "*Reasons and Persons* (1984), *On What Matters* (2 vols., 2011; vol. 3, 2017)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0004",
+      "category": "position",
+      "statement": "Non-naturalist normative realism: there are irreducibly normative, objective reasons that are not natural facts; these reasons are fundamental features of reality",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0005",
+      "category": "position",
+      "statement": "The convergence argument: Kantianism, contractualism, and consequentialism converge on the same set of moral principles; moral disagreement is less fundamental than it appears",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0006",
+      "category": "position",
+      "statement": "Reductionism about personal identity: personal identity is not what matters in survival; what matters is psychological connectedness and continuity (Relation R) with the right kind of cause",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0007",
+      "category": "position",
+      "statement": "The repugnant conclusion and population ethics: total utilitarianism implies that for any population of happy people, a much larger population with lives barely worth living is better -- a conclusion Parfit finds repugnant whose implications he systematically investigates",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0008",
+      "category": "position",
+      "statement": "The triple theory: Kant's formula of universal law, Scanlon's contractualist formula, and rule consequentialism converge on the same principles when properly understood",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0009",
+      "category": "argument",
+      "statement": "The argument for reductionism from fission: if a person's cerebral hemispheres were transplanted into two different bodies, both resulting persons would be psychologically continuous with the original; since identity is one-to-one, neither is identical with the original, but the original does not die -- therefore identity is not what matters",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0010",
+      "category": "argument",
+      "statement": "The convergence argument (the triple theory): Kant's formula, the contractualist formula, and rule consequentialism converge; the main moral theories are not rivals but mutually supporting approaches to the same truths",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0011",
+      "category": "argument",
+      "statement": "The argument for non-naturalism over naturalism: naturalist reductions of normativity leave an open question; the irreducibility of the normative domain is a Moorean fact about the nature of reasons",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0012",
+      "category": "relevance",
+      "statement": "`phil-identity-persistence` (the reductionist account of personal identity and fission cases), `phil-thought-experiment` (teletransportation, fission, the repugnant conclusion, the non-identity problem), `phil-moral-realism` (non-naturalist normative realism), `phil-normativity` (the fundamentality of reasons), `phil-argument-reconstruct` (Parfit's methodical, exhaustive argumentation style)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-derek-parfit-C0013",
+      "category": "relationship",
+      "statement": "Sidgwick (Parfit self-consciously continues Sidgwick's project in *The Methods of Ethics*); Scanlon (Parfit's contractualism incorporates and extends Scanlon's formula); Korsgaard (target of Parfit's anti-constructivist arguments); Williams (Parfit's reductionism about personal identity is criticized by Williams's integrity-based conception of the self)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaethics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

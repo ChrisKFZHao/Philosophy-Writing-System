@@ -2,7 +2,7 @@
 
 同时支持 Claude Code 与 Codex 的分析哲学研究与写作系统。提供从文献管理、PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.6.0-alpha
+**版本**: 0.6.1-alpha
 **语言**: Chinese（写作输出）/ English（技能定义与架构文档）
 
 ---
@@ -41,7 +41,7 @@
 依赖流向概览：
 
 ```
-phil:* 命令（8）──→ 技能（30）+ agents（7）──→ JSON schemas（13，数据契约）
+phil:* 命令（9）──→ 技能（30）+ agents（7）──→ JSON schemas（15，数据契约）
       │                    │
       │                    ├──→ pdf skill（必需）
       │                    └──→ ars-*（可选，ARS 插件）
@@ -121,7 +121,7 @@ phil:write revision                       # 修订
 Philosophical Writing/
 ├── README.md                         # 本文件（外层仓库）
 ├── Framework/Workflow/               # 平台中立唯一事实源
-│   ├── manifest.json                 #   30 skills + 8 workflows + 7 roles
+│   ├── manifest.json                 #   30 skills + 9 workflows + 7 roles
 │   ├── Skills/ Workflows/ Roles/     #   核心定义
 │   ├── Rules/ References/ Schemas/   #   规则、知识与数据契约
 │   ├── Templates/                    #   报告、根指南和新项目模板
@@ -133,12 +133,12 @@ Philosophical Writing/
 │   ├── changelog.md                  #   框架版本历史
 │   └── Lessons/                      #   论文反馈蒸馏（如 zotero-integration.md）
 ├── Shared/                           # 可分享策展知识（外层仓库）
-│   ├── Philosophers-DB/              #   49 位哲学家档案（General/Metaphysics/Metaethics）
+│   ├── Philosophers-DB/              #   规范 JSON 档案 + 动态多领域视图
 │   └── Format/                       #   格式模板（LaTeX/Word，可分享）
 └── Private/                          # 私有内容层（gitignore；独立内层仓库）
     ├── Projects/{topic}/             #   每个写作项目一个目录：手稿 + refs.md +
     │                                 #   VERSIONS.md + feedback-to-framework.md
-    ├── Bibliography/                 #   文献总库（PDF/ 不进 git、Analysis/、Summaries/、INDEX.md）
+    ├── Bibliography/                 #   文献总库（PDF/、Analysis/、Summaries/、Philosopher-Queue/、INDEX.md）
     ├── Concepts/                     #   跨项目概念笔记
     └── Style/                        #   个人写作样文（文风校准）
 ```
@@ -161,6 +161,7 @@ Philosophical Writing/
 | `phil:pipeline` | 一键全流程 | phil-orchestrator agent（6 阶段 + 宽容性诘问门） |
 | `phil:tutor` | 导师式对话 | phil-tutor agent（reading 文献对话 / incubating 构思孵化，双模式） |
 | `phil:ingest` | 文献入库刮削 | shell 扫描 + pdf skill + phil-summarize + Zotero 自动注册（重命名、登记 INDEX、0.5 级摘要、入库推荐） |
+| `phil:philosophers` | 哲学家数据库维护 | 私有候选队列审阅、按人物懒审计、批准/拒绝与领域视图重建 |
 
 每个工作流在 `Framework/Workflow/Workflows/` 定义；生成器输出 Claude commands 与 Codex `source-command-*` 技能。修改中立源后运行 `build-adapters.py`，提交生成结果，并以 `build-adapters.py --check` 防止漂移。
 
@@ -185,7 +186,7 @@ Philosophical Writing/
 | 模块 | 状态 | 说明 |
 |------|------|------|
 | 分析技能（30 个） | Alpha | 全部完成，已内部测试 |
-| 命令（8 个） | Alpha | 全部完成 |
+| 命令（9 个） | Alpha | 全部完成 |
 | 知识库（87 个参考文件） | Alpha | 术语表、论证形式、哲学家数据库均已填充 |
 | 对话 agent（3 个） | Alpha | 已完成，待更多交互验证 |
 | 写作生产（4 个 agent） | Alpha | 已完成；v0.5.0 重组为六阶段管线 + 双协作模式，验证运行待做 |
@@ -194,10 +195,10 @@ Philosophical Writing/
 | Zotero 集成 | Alpha | 注释保全迁移与自动注册均经实战验证；存量按懒迁移原则逐步转换 |
 
 **已知限制**：
-- 双端静态与脚本测试已建立；八个工作流仍需分别在 Claude Code 与 Codex 完成人工最小验收
+- 双端静态与脚本测试已建立；九个工作流仍需分别在 Claude Code 与 Codex 完成人工最小验收
 - 哲学家数据库覆盖不均衡（分析传统为主，大陆哲学较弱）
-- 已有生成一致性、manifest/frontmatter、别名、Zotero 降级与文献扫描的标准库测试；八个工作流仍需分别在两个宿主中做人工最小验收
+- 已有生成一致性、manifest/frontmatter、别名、Zotero 降级、文献扫描与哲学家数据库治理的标准库测试；九个工作流仍需分别在两个宿主中做人工最小验收
 
 ---
 
-*最后更新: 2026-07-17（v0.6.0：平台中立工作流核心 + Claude Code/Codex 生成适配器 + 可移植脚本与运行时降级）*
+*最后更新: 2026-07-19（v0.6.1：哲学家数据库逐项溯源、私有动态候选队列与多领域视图）*

@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "john-stuart-mill",
+  "identity": {
+    "display_name": "John Stuart Mill",
+    "canonical_name": "John Stuart Mill",
+    "aliases": [
+      "John Stuart Mill",
+      "Mill, John Stuart",
+      "mill"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/mill.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-john-stuart-mill-C0001",
+      "category": "identity",
+      "statement": "Life: 1806--1873",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0002",
+      "category": "tradition",
+      "statement": "British empiricism; classical utilitarianism; liberalism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0003",
+      "category": "work",
+      "statement": "*Utilitarianism* (1861), *On Liberty* (1859), *A System of Logic* (1843), *The Subjection of Women* (1869), *An Examination of Sir William Hamilton's Philosophy* (1865)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0004",
+      "category": "position",
+      "statement": "Utilitarianism: actions are right in proportion as they tend to promote happiness; happiness is pleasure and the absence of pain",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0005",
+      "category": "position",
+      "statement": "Higher and lower pleasures: intellectual pleasures are qualitatively superior to merely sensual ones; competent judges prefer the higher",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0006",
+      "category": "position",
+      "statement": "The Harm Principle: the only purpose for which power can be rightfully exercised over any member of a civilized community is to prevent harm to others",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0007",
+      "category": "position",
+      "statement": "Mill's Methods: five canons of inductive reasoning -- method of agreement, method of difference, joint method, method of residues, method of concomitant variation",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0008",
+      "category": "position",
+      "statement": "All inference is ultimately inductive; even deductive logic is an empirical generalization from experience",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0009",
+      "category": "argument",
+      "statement": "The proof of the principle of utility: the sole evidence that something is desirable is that people desire it; each person desires their own happiness; therefore the general happiness is desirable",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0010",
+      "category": "argument",
+      "statement": "The argument for freedom of expression: suppression of opinion robs the human race, whether the opinion is true, false, or partly true",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0011",
+      "category": "argument",
+      "statement": "The argument from competent judges: those acquainted with both higher and lower pleasures prefer the higher, establishing qualitative hedonism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0012",
+      "category": "relevance",
+      "statement": "`phil-argument-reconstruct` (Mill's Methods as argument-analysis heuristics), `phil-premise-detect` (distinguishing descriptive from normative premises in utilitarian reasoning), `phil-normativity` (utilitarian normative theory), `phil-moral-realism` (utilitarianism as a realist moral theory grounded in natural facts about pleasure), `phil-causation-analyze` (Mill's Methods as a framework for causal inference)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-john-stuart-mill-C0013",
+      "category": "relationship",
+      "statement": "Bentham (teacher and founder of classical utilitarianism; Mill departed from Bentham's purely quantitative hedonism); Sidgwick (refined utilitarian reasoning in *The Methods of Ethics*); Singer (contemporary preference utilitarian influenced by Millian reasoning); Moore, G.E. (rejected Mill's naturalism through the open question argument)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

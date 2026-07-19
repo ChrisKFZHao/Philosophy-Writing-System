@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "david-chalmers",
+  "identity": {
+    "display_name": "David Chalmers",
+    "canonical_name": "David Chalmers",
+    "aliases": [
+      "Chalmers, David",
+      "David Chalmers",
+      "david-chalmers"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaphysics/david-chalmers.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-david-chalmers-C0001",
+      "category": "identity",
+      "statement": "Life: b. 1966",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0002",
+      "category": "tradition",
+      "statement": "Analytic philosophy of mind; metaphysics of consciousness; philosophy of language",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0003",
+      "category": "work",
+      "statement": "*The Conscious Mind* (1996), *The Character of Consciousness* (2010), *Constructing the World* (2012), *Reality+: Virtual Worlds and the Problems of Philosophy* (2022)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0004",
+      "category": "position",
+      "statement": "The hard problem of consciousness: explaining why and how physical processing is accompanied by subjective experience is fundamentally different from explaining cognitive functions",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0005",
+      "category": "position",
+      "statement": "Naturalistic dualism (property dualism): consciousness is a fundamental, irreducible feature of the world, not reducible to or derivable from the physical",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0006",
+      "category": "position",
+      "statement": "Two-dimensional semantics: the meaning of an expression can be analyzed along two dimensions -- primary intension (a priori, epistemic) and secondary intension (a posteriori, metaphysical)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0007",
+      "category": "position",
+      "statement": "The conceivability argument: zombies (physically identical to us but lacking consciousness) are conceivable; therefore they are metaphysically possible; therefore consciousness is non-physical",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0008",
+      "category": "position",
+      "statement": "Panprotopsychism (later position): fundamental physical entities may have proto-phenomenal properties that, in the right combinations, constitute consciousness",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0009",
+      "category": "argument",
+      "statement": "The zombie argument for property dualism: a world physically identical to ours but lacking all consciousness is conceivable; this conceivability entails metaphysical possibility (given the right constraints); therefore consciousness is a non-physical property",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0010",
+      "category": "argument",
+      "statement": "The knowledge argument (Mary the color scientist): Mary knows all the physical facts about color vision but learns something new upon seeing red for the first time; therefore there are non-physical facts about consciousness",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0011",
+      "category": "argument",
+      "statement": "The argument from the structure of phenomenal concepts: phenomenal concepts have a special structure explaining why the explanatory gap arises and why physicalism seems false even to type-B physicalists",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0012",
+      "category": "relevance",
+      "statement": "`phil-conceivability-arg` (zombie argument, Mary, and two-dimensional semantics as the framework for evaluating conceivability inferences), `phil-essence-detect` (consciousness and essential vs. necessary properties of phenomenal states), `phil-modal-arg` (two-dimensional semantics as a modal framework), `phil-thought-experiment` (Mary, zombies, inverted spectrum as canonical thought experiments)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-chalmers-C0013",
+      "category": "relationship",
+      "statement": "Jackson, Frank (the knowledge argument originated with Jackson, who later recanted; Chalmers continues to defend it); Kripke (Chalmers's modal framework extends Kripke's a posteriori necessity into two dimensions); Dennett (chief opponent; Dennett denies that there is a hard problem); Nagel (the \"what it is like\" formulation of the problem of consciousness in \"What Is It Like to Be a Bat?\")",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaphysics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "jaegwon-kim",
+  "identity": {
+    "display_name": "Jaegwon Kim",
+    "canonical_name": "Jaegwon Kim",
+    "aliases": [
+      "Jaegwon Kim",
+      "Kim, Jaegwon",
+      "jaegwon-kim"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaphysics/jaegwon-kim.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-jaegwon-kim-C0001",
+      "category": "identity",
+      "statement": "Life: 1934--2019",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0002",
+      "category": "tradition",
+      "statement": "Analytic philosophy of mind; metaphysics of mind",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0003",
+      "category": "work",
+      "statement": "*Supervenience and Mind* (1993), *Mind in a Physical World* (1998), *Physicalism, or Something Near Enough* (2005), *Essays in the Metaphysics of Mind* (2010)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0004",
+      "category": "position",
+      "statement": "The causal exclusion argument: mental causation is incompatible with physical causal closure; non-reductive physicalism faces a dilemma between epiphenomenalism and reduction",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0005",
+      "category": "position",
+      "statement": "The supervenience argument: if mental properties supervene on physical properties, and physical causes are sufficient, then mental properties are causally excluded",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0006",
+      "category": "position",
+      "statement": "Conditional reductionism: mental properties must be functionally reducible to physical properties to secure mental causation, but qualia resist such reduction",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0007",
+      "category": "position",
+      "statement": "Mereological supervenience: the properties of wholes supervene on the properties and relations of their parts",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0008",
+      "category": "position",
+      "statement": "The multiple realization argument against type physicalism does not establish the autonomy of the special sciences",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0009",
+      "category": "argument",
+      "statement": "The causal exclusion argument (formalized): if a mental event M causes a physical event P*, and P* has a sufficient physical cause P, then M is either identical with P (reduction) or M is causally redundant (excluded); given physical causal closure, non-reductive physicalism entails epiphenomenalism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0010",
+      "category": "argument",
+      "statement": "The argument from functional reduction: functional reduction requires identifying the mental property with the property that fills its causal role; if no physical property fills the role, mental causation is lost",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0011",
+      "category": "argument",
+      "statement": "The argument against non-reductive physicalism: non-reductive physicalism tries to have it both ways -- mental properties distinct from physical properties but still causally efficacious in a physically closed world. Causal exclusion shows this is inconsistent",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0012",
+      "category": "relevance",
+      "statement": "`phil-causation-analyze` (causal exclusion and the metaphysics of mental causation), `phil-grounding-check` (supervenience and its relation to causation and dependence), `phil-identity-persistence` (the metaphysics of events and causal relata), `phil-argument-reconstruct` (the exclusion argument's deductive structure)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-jaegwon-kim-C0013",
+      "category": "relationship",
+      "statement": "Davidson (anomalous monism as Kim's primary target; the causal exclusion argument targets token identity without laws); Lewis (supervenience framework and structure of causal relata); Putnam (multiple realization as basis for non-reductive physicalism that Kim challenges); Fodor (special sciences and non-reductive physicalism as alternative to Kim's reductionism)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaphysics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

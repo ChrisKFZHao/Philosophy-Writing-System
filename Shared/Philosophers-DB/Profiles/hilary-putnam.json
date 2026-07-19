@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "hilary-putnam",
+  "identity": {
+    "display_name": "Hilary Putnam",
+    "canonical_name": "Hilary Putnam",
+    "aliases": [
+      "Hilary Putnam",
+      "Putnam, Hilary",
+      "hilary-putnam"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaphysics/hilary-putnam.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-hilary-putnam-C0001",
+      "category": "identity",
+      "statement": "Life: 1926--2016",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0002",
+      "category": "tradition",
+      "statement": "Analytic philosophy; philosophy of language; philosophy of mind; pragmatism (later period)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0003",
+      "category": "work",
+      "statement": "\"The Meaning of 'Meaning'\" (1975), *Reason, Truth and History* (1981), *Representation and Reality* (1988), *The Many Faces of Realism* (1987), *Renewing Philosophy* (1992)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0004",
+      "category": "position",
+      "statement": "Semantic externalism: \"meanings just ain't in the head\" -- the meaning and reference of terms (especially natural kind terms) are partly determined by the external environment and the division of linguistic labor",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0005",
+      "category": "position",
+      "statement": "Twin Earth thought experiment: a physically identical duplicate on a planet where the watery stuff is XYZ (not H2O) does not mean water by \"water\"; reference depends on the actual environment, not internal psychological states",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0006",
+      "category": "position",
+      "statement": "Functional isomorphism (early): mental states are multiply realizable; the same mental state can be realized by different physical substrates sharing the same functional organization",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0007",
+      "category": "position",
+      "statement": "Internal realism (later period): truth is idealized rational acceptability; the world does not come pre-divided into objects and properties independent of our conceptual schemes",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0008",
+      "category": "position",
+      "statement": "The model-theoretic argument against metaphysical realism: any consistent theory can be mapped onto the world in multiple ways; reference is radically indeterminate without pragmatic constraints",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0009",
+      "category": "argument",
+      "statement": "The Twin Earth argument for semantic externalism: Oscar on Earth and Twin Oscar on Twin Earth are molecule-for-molecule identical, yet \"water\" in Oscar's mouth refers to H2O while on Twin Earth it refers to XYZ; therefore meaning is not determined by internal psychological states",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0010",
+      "category": "argument",
+      "statement": "The brains-in-a-vat argument (model-theoretic): the claim \"we are brains in a vat\" is self-refuting because if we were brains in a vat, our words would refer to vat-world objects, not to real brains and vats; the claim cannot coherently assert what it intends to assert",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0011",
+      "category": "argument",
+      "statement": "The no-miracles argument for scientific realism (early Putnam): scientific realism is the only philosophy that does not make the success of science a miracle",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0012",
+      "category": "relevance",
+      "statement": "`phil-natural-kind-analyze` (semantic externalism for kind terms via the Twin Earth argument), `phil-conceivability-arg` (Twin Earth as a conceivability argument and brains-in-a-vat), `phil-conceptual-analysis` (the division of linguistic labor and the nature of concepts), `phil-modal-arg` (internal realism's critique of metaphysical necessity), `phil-identity-persistence` (functional isomorphism and multiple realization)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-hilary-putnam-C0013",
+      "category": "relationship",
+      "statement": "Kripke (independently developed the causal theory of reference and necessary a posteriori truths about kinds); Quine (Putnam's semantic externalism builds on Quine's indeterminacy of translation but rejects meaning holism); Boyd (scientific realism and natural kinds; Putnam and Boyd developed the cluster-kind theory together); Burge (independently arrived at anti-individualism through his arthritis thought experiment)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaphysics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

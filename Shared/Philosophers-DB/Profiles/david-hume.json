@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "david-hume",
+  "identity": {
+    "display_name": "David Hume",
+    "canonical_name": "David Hume",
+    "aliases": [
+      "David Hume",
+      "Hume, David",
+      "hume"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/hume.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-david-hume-C0001",
+      "category": "identity",
+      "statement": "Life: 1711--1776",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0002",
+      "category": "tradition",
+      "statement": "Early modern empiricism; Scottish Enlightenment; skepticism; naturalism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0003",
+      "category": "work",
+      "statement": "*A Treatise of Human Nature* (1739--1740), *An Enquiry Concerning Human Understanding* (1748), *An Enquiry Concerning the Principles of Morals* (1751), *Dialogues Concerning Natural Religion* (1779, posthumous)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0004",
+      "category": "position",
+      "statement": "Empiricism: all ideas derive from impressions; there is no idea without a prior corresponding impression (the Copy Principle)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0005",
+      "category": "position",
+      "statement": "Problem of induction: inductive inferences lack rational justification; they rest on custom and habit, not demonstrative reasoning",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0006",
+      "category": "position",
+      "statement": "Bundle theory of the self: the self is not a persisting substance but a bundle of perceptions in constant flux",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0007",
+      "category": "position",
+      "statement": "Compatibilism about free will: liberty is the power to act according to the determinations of the will; determinism is compatible with moral responsibility",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0008",
+      "category": "position",
+      "statement": "Sentimentalism about ethics: moral distinctions derive from sentiment, not reason; reason is the slave of the passions",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0009",
+      "category": "argument",
+      "statement": "Causal skepticism: our idea of necessary connection has no impression source in the external world; it arises from the mind's expectation after constant conjunction",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0010",
+      "category": "argument",
+      "statement": "The is-ought gap: one cannot validly derive normative conclusions from descriptive premises without explanation; this \"new relation\" requires justification",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0011",
+      "category": "argument",
+      "statement": "The argument from design (via Philo in the *Dialogues*): the analogy between the universe and human artifacts is too weak to support theism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0012",
+      "category": "relevance",
+      "statement": "`phil-causation-analyze` (regularity theory of causation and the problem of induction), `phil-premise-detect` (Hume's Fork: relations of ideas vs. matters of fact), `phil-moral-realism` (the is-ought gap as a foundational challenge to moral realism), `phil-moral-psychology` (passion as the source of moral motivation), `phil-identity-persistence` (bundle theory and its implications for personal identity), `phil-normativity` (the is-ought gap)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-hume-C0013",
+      "category": "relationship",
+      "statement": "Kant (awakened from \"dogmatic slumber\" by Hume; the entire First Critique responds to Humean skepticism); Lewis (Humean supervenience as the contemporary heir of Hume's metaphysics of distinct existences); Ayer (logical positivist appropriation of Hume's Fork as the verification principle); Smith, Michael (Humean theory of motivation as a constraint on metaethical theorizing)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

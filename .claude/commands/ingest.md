@@ -1,5 +1,5 @@
 ---
-description: "Literature ingestion (\"scraping\") — scans the bibliography for unprocessed PDFs, renames them to the canonical stem, registers them in INDEX.md, generates Level 0.5 summaries (papers, monographs with chapter segments, and edited collections with per-paper summaries), runs recommendation trigger point 1, and auto-registers sources in Zotero as linked-file items (DOI-first, then ISBN, then bibtex for books; per-paper bookSection items for collections)"
+description: "Literature ingestion (\"scraping\") — scans the bibliography for unprocessed PDFs, renames them to the canonical stem, registers them in INDEX.md, generates Level 0.5 summaries, batch-records philosopher observations, runs recommendation trigger point 1, and auto-registers sources in Zotero as linked-file items"
 ---
 
 <!-- Generated from Framework/Workflow. Do not edit directly. -->
@@ -30,6 +30,7 @@ Relation to phil:reconstruct:
 | Shell set-comparison | Step 1 scan: programmatic diff of PDF directory vs INDEX registrations (no model reading) |
 | `pdf` skill | Text + title-page metadata extraction (never `pdftotext` CLI directly); for books, also the copyright-page ISBN and the table of contents |
 | `phil-summarize` skill | Level 0.5 summary generation (pure function; this command writes the file) — paper / monograph (chapter segments) / collection (per-paper summaries) modes |
+| `philosopher-db.py` | Batch-ingests compact philosopher observations into the private review queue; never approves semantic content |
 | zotero MCP + web API | Step 8 Zotero registration (book cascade DOI → ISBN → bibtex): `zotero_add_by_doi` (paper; book/chapter DOIs — preferred for collection members), `zotero_add_by_isbn` (book, if no DOI), `zotero_add_by_bibtex` (`@book`/`@incollection` fallback when resolvers fail); the raw web API attaches linked files (single or batch, cloud write) |
 
 ## Steps
@@ -99,6 +100,16 @@ By document type:
 - **paper** — one file `Summaries/{stem}.summary.txt`. (Unchanged.)
 - **monograph** — one file `Summaries/{stem}.summary.txt` containing the volume-level summary **plus per-chapter segments** (`chapters[]`, ~150–300 chars each), driven by the Step 2 table of contents.
 - **collection** — a **volume summary file** `Summaries/{volume-stem}.summary.txt` (`collection` mode: editors' framing + structural arc) **plus one independent file per member paper**, `Summaries/{chapter-author}_{year}_{chapter-title}.summary.txt` (year = the volume's year), each a full single-paper summary with its own topics and a `container` field (volume KEY + page range). Member files are flat in `Summaries/` (no subdirectory).
+
+### Step 6B: Record philosopher observations (one deterministic batch)
+
+After all summary files in this ingestion batch are written, pass them to the maintenance script in one invocation, repeating `--input` for each file:
+
+```bash
+python "Framework/Workflow/Scripts/philosopher-db.py" observe --input <summary-1> --input <summary-2>
+```
+
+The script derives source authors, resolves known aliases, records source/role counts, creates private review candidates, and updates only domain connections that meet the deterministic two-source/one-central-source threshold. It never approves a claim. Identical summary ID/hash pairs are no-ops; a changed artifact supersedes its pending candidates. With `--dry-run`, pass `--dry-run` here too and perform no queue or profile write. Report the number of changed artifacts, pending candidates, and domain updates.
 
 ### Step 7: Recommend (trigger point 1)
 

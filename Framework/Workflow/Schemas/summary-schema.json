@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "phil:summary-schema:1.0.0",
+  "$id": "phil:summary-schema:1.1.0",
   "title": "Level 0.5 Summary Schema",
   "description": "Structured Level 0.5 summary of a single philosophical source: core thesis, argument route, key concepts, interlocutors, and topic tags. Produced by phil-summarize; written to Private/Bibliography/Summaries/ by /phil:ingest.",
   "type": "object",
@@ -76,6 +76,39 @@
       "properties": {
         "container_key": { "type": "string", "description": "The volume's INDEX KEY (EDITOR-TITLE format)" },
         "pages": { "type": "string", "description": "Page range of this paper within the volume (e.g. \"347-383\")" }
+      }
+    },
+    "philosopher_observations": {
+      "type": "array",
+      "description": "Source-grounded observations used by the private philosopher maintenance queue. Include substantive named figures only; the source author is derived from source_metadata if omitted.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["display_name", "canonical_name", "role", "substantive", "claims"],
+        "properties": {
+          "person_id": {"type": "string"},
+          "display_name": {"type": "string"},
+          "canonical_name": {"type": "string"},
+          "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "role": {"type": "string", "enum": ["author", "core-target", "supporting", "opposition", "background", "passing-mention"]},
+          "substantive": {"type": "boolean"},
+          "claims": {
+            "type": "array",
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["statement", "category", "locator"],
+              "properties": {
+                "statement": {"type": "string"},
+                "category": {"type": "string", "enum": ["identity", "tradition", "work", "position", "argument", "relevance", "relationship", "other"]},
+                "locator": {"type": "string"},
+                "candidate_type": {"type": "string", "enum": ["new-claim", "additional-evidence", "conflict"]},
+                "claim_id": {"type": "string"}
+              }
+            }
+          }
+        }
       }
     },
     "year_verified": { "type": "boolean", "description": "True only if the year was read from the PDF itself (Rule 2 provenance)" },

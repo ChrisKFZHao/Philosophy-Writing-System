@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "phil:philosopher-profile-schema:1.0.0",
+  "title": "Philosopher Profile Schema",
+  "description": "Canonical, claim-level philosopher profile. Source-backed claims route users to bibliography evidence; prompt-only claims are discovery hints and cannot support manuscript assertions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["profile_version", "person_id", "identity", "claims", "domains", "relations", "created_at", "updated_at"],
+  "properties": {
+    "profile_version": {"const": "1.0"},
+    "person_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["display_name", "canonical_name", "aliases", "legacy_paths"],
+      "properties": {
+        "display_name": {"type": "string", "minLength": 1},
+        "canonical_name": {"type": "string", "minLength": 1},
+        "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "legacy_paths": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/claim"}
+    },
+    "domains": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/domain_link"}
+    },
+    "relations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/relation"}
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bib_key", "source_type", "analysis_level", "locator", "approved_at"],
+      "properties": {
+        "bib_key": {"type": "string", "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"},
+        "source_type": {"type": "string", "enum": ["primary", "secondary"]},
+        "analysis_level": {"type": "number", "enum": [0.5, 1, 2, 3]},
+        "locator": {"type": "string", "minLength": 1},
+        "public_citation": {"type": "string"},
+        "approved_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "category", "statement", "support_status", "dispute_status", "status", "evidence"],
+      "properties": {
+        "claim_id": {"type": "string", "pattern": "^P-[a-z0-9-]+-C[0-9]{4}$"},
+        "category": {"type": "string", "enum": ["identity", "tradition", "work", "position", "argument", "relevance", "relationship", "other"]},
+        "statement": {"type": "string", "minLength": 1},
+        "support_status": {"type": "string", "enum": ["source-backed", "prompt-only"]},
+        "dispute_status": {"type": "string", "enum": ["unmarked", "contested"]},
+        "status": {"type": "string", "enum": ["active", "deprecated"]},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"support_status": {"const": "source-backed"}}},
+          "then": {"properties": {"evidence": {"minItems": 1}}}
+        },
+        {
+          "if": {"properties": {"support_status": {"const": "prompt-only"}}},
+          "then": {"properties": {"evidence": {"maxItems": 0}}}
+        }
+      ]
+    },
+    "domain_link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain_id", "support_status", "evidence"],
+      "properties": {
+        "domain_id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "support_status": {"type": "string", "enum": ["source-backed", "prompt-only"]},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relation_id", "target_person_id", "relation_type", "statement", "support_status", "dispute_status", "status", "evidence"],
+      "properties": {
+        "relation_id": {"type": "string"},
+        "target_person_id": {"type": "string"},
+        "relation_type": {"type": "string"},
+        "statement": {"type": "string"},
+        "support_status": {"type": "string", "enum": ["source-backed", "prompt-only"]},
+        "dispute_status": {"type": "string", "enum": ["unmarked", "contested"]},
+        "status": {"type": "string", "enum": ["active", "deprecated"]},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      }
+    }
+  }
+}

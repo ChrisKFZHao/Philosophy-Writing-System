@@ -1,0 +1,136 @@
+{
+  "profile_version": "1.0",
+  "person_id": "rene-descartes",
+  "identity": {
+    "display_name": "Rene Descartes",
+    "canonical_name": "Rene Descartes",
+    "aliases": [
+      "Descartes, Rene",
+      "Rene Descartes",
+      "descartes"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/descartes.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-rene-descartes-C0001",
+      "category": "identity",
+      "statement": "Life: 1596--1650",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0002",
+      "category": "tradition",
+      "statement": "Early modern rationalism; founder of modern philosophy; substance dualism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0003",
+      "category": "work",
+      "statement": "*Meditations on First Philosophy* (1641), *Discourse on the Method* (1637), *Principles of Philosophy* (1644), *The Passions of the Soul* (1649)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0004",
+      "category": "position",
+      "statement": "Substance dualism: mind and body are distinct substances; mind is res cogitans (thinking thing), body is res extensa (extended thing)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0005",
+      "category": "position",
+      "statement": "Foundationalism about knowledge: all knowledge rests on indubitable foundations accessed through clear and distinct perception",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0006",
+      "category": "position",
+      "statement": "Innate ideas: certain concepts (God, self, mathematical truths) are built into the mind, not derived from experience",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0007",
+      "category": "position",
+      "statement": "Mechanism about the physical world: all bodily phenomena are explicable through mechanical principles",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0008",
+      "category": "argument",
+      "statement": "The Cogito: \"I think, therefore I am\" (cogito ergo sum) -- the existence of the self is indubitable even under radical doubt",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0009",
+      "category": "argument",
+      "statement": "The Conceivability Argument for dualism: I can clearly and distinctly conceive of myself existing without a body; therefore mind and body are distinct substances",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0010",
+      "category": "argument",
+      "statement": "The Trademark Argument for God's existence: the idea of an infinite perfect being must have an infinite perfect being as its adequate cause",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0011",
+      "category": "relevance",
+      "statement": "`phil-conceivability-arg` (conceivability-to-possibility inferences originating in the Meditations), `phil-argument-reconstruct` (the Meditations as the paradigm of structured philosophical argument from foundations), `phil-thought-experiment` (the Evil Demon as the original skeptical thought experiment), `phil-modal-arg` (conceivability as guide to metaphysical possibility)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-rene-descartes-C0012",
+      "category": "relationship",
+      "statement": "Plato (innate ideas echo Platonic recollection); Chalmers (modern conceivability arguments drawing on Cartesian patterns); Spinoza (rationalist successor who rejected dualism for substance monism); Putnam (\"brains in a vat\" as contemporary version of the Evil Demon scenario)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

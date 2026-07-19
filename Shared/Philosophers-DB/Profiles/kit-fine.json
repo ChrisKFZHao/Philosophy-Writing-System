@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "kit-fine",
+  "identity": {
+    "display_name": "Kit Fine",
+    "canonical_name": "Kit Fine",
+    "aliases": [
+      "Fine, Kit",
+      "Kit Fine",
+      "kit-fine"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaphysics/kit-fine.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-kit-fine-C0001",
+      "category": "identity",
+      "statement": "Life: b. 1946",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0002",
+      "category": "tradition",
+      "statement": "Analytic metaphysics; philosophical logic; philosophy of language",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0003",
+      "category": "work",
+      "statement": "\"Essence and Modality\" (1994), \"The Question of Realism\" (2001), *Semantic Relationism* (2007), \"Guide to Ground\" (2012), *Vagueness: A Global Approach* (2020)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0004",
+      "category": "position",
+      "statement": "Essence as prior to modality: essence is not reducible to necessary properties; necessity is to be understood in terms of essence (the Finean reversal)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0005",
+      "category": "position",
+      "statement": "Non-modal essentialism: an object's essence consists of the properties that make it what it is, which may not include all its necessary properties (Socrates necessarily belongs to {Socrates}, but this is not part of Socrates's essence)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0006",
+      "category": "position",
+      "statement": "Metaphysical grounding: grounding is a non-causal, constitutive form of metaphysical explanation, distinct from supervenience and entailment; it is a strict partial order",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0007",
+      "category": "position",
+      "statement": "The grounding criterion for realism: a domain is \"real\" if facts in that domain are not grounded in facts outside it; anti-realism about a domain is the view that its facts are grounded in something else",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0008",
+      "category": "position",
+      "statement": "Constitutive vs. consequential essence: the constitutive essence is what an object is; consequential essence is what follows logically from the constitutive essence",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0009",
+      "category": "argument",
+      "statement": "The singleton-Socrates argument against modal essentialism: necessarily, Socrates belongs to {Socrates}, but this is no part of what it is to be Socrates; therefore essence is not adequately captured by necessary predication",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0010",
+      "category": "argument",
+      "statement": "The Aristotle argument for the priority of essence: if one asks why Aristotle is necessarily a human, the answer invokes Aristotle's essence; this explanatory asymmetry shows that essence grounds necessity, not the reverse",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0011",
+      "category": "argument",
+      "statement": "The argument for grounding as primitive: grounding resists reduction to modal or counterfactual notions; attempts to define grounding in terms of necessitation plus other conditions fail to capture its explanatory character",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0012",
+      "category": "relevance",
+      "statement": "`phil-essence-detect` (the distinction between essence and necessary properties -- the central figure for this skill), `phil-grounding-check` (grounding as the primary metaphysical dependence relation), `phil-modal-arg` (essence as prior to modality), `phil-distinction-track` (fine-grained metaphysical distinctions between essence, necessity, and ground), `phil-ontological-commitment` (the grounding criterion for realism)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-kit-fine-C0013",
+      "category": "relationship",
+      "statement": "Kripke (Fine rejects Kripke's modal characterization of essence); Aristotle (Finean essentialism as neo-Aristotelian revival of real definition); Lewis (Fine's grounding provides a non-causal explanatory structure that Lewis's Humean supervenience cannot capture); Schaffer (joint development of the grounding literature; Fine provides the logical toolkit)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaphysics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "a-j-ayer",
+  "identity": {
+    "display_name": "A.J. Ayer",
+    "canonical_name": "A.J. Ayer",
+    "aliases": [
+      "A.J. Ayer",
+      "Ayer, A.J.",
+      "ayer"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaethics/ayer.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-a-j-ayer-C0001",
+      "category": "identity",
+      "statement": "Life: 1910--1989",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0002",
+      "category": "tradition",
+      "statement": "Logical positivism; analytic philosophy; emotivism in metaethics",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0003",
+      "category": "work",
+      "statement": "*Language, Truth and Logic* (1936), *The Foundations of Empirical Knowledge* (1940), *The Problem of Knowledge* (1956)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0004",
+      "category": "position",
+      "statement": "The verification principle: a statement is cognitively meaningful only if it is either analytic (true by definition) or empirically verifiable (testable by experience)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0005",
+      "category": "position",
+      "statement": "Emotivism: moral judgments are not statements of fact but expressions of emotion; to say \"stealing is wrong\" is to say \"stealing!!\" in a shocked tone -- it is not a truth-apt claim",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0006",
+      "category": "position",
+      "statement": "Metaphysical statements, theological claims, and ethical pronouncements are all cognitively meaningless because they are neither analytic nor empirically verifiable",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0007",
+      "category": "position",
+      "statement": "All necessary truths are analytic; there is no synthetic a priori, and Kant was wrong about substantive a priori knowledge",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0008",
+      "category": "position",
+      "statement": "Moral disagreement is reducible to disagreement in attitude, not disagreement about facts",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0009",
+      "category": "argument",
+      "statement": "The argument for emotivism: if I say \"stealing is wrong,\" I am not making a factual claim that can be verified or falsified; I am expressing my disapproval of stealing. The ethical term adds no factual content but serves to express and arouse feeling",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0010",
+      "category": "argument",
+      "statement": "The argument from the function of ethical terms: ethical terms function to express feeling and stimulate action, not to make assertions; this explains why ethical disagreement persists -- there are no facts to settle the matter",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0011",
+      "category": "argument",
+      "statement": "The argument against moral naturalism: if \"good\" meant \"conducive to pleasure,\" then \"pleasure is good\" would be a tautology; but it is not -- the sentence has substantive content. Therefore naturalistic definitions of moral terms fail",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0012",
+      "category": "relevance",
+      "statement": "`phil-moral-semantics` (emotivism as the classic non-cognitivist theory of moral language), `phil-moral-epistemology` (rejection of moral knowledge as impossible given non-cognitivism), `phil-moral-realism` (emotivism as the anti-realist foil against which realism defines itself), `phil-conceptual-analysis` (verification principle as criterion of meaningfulness)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-a-j-ayer-C0013",
+      "category": "relationship",
+      "statement": "Moore (Ayer accepts the open question argument against naturalism but draws non-cognitivist conclusions); Stevenson (refined Ayer's crude emotivism into a more sophisticated theory of emotive meaning); Carnap (Ayer's verificationism derives from Carnap and the Vienna Circle); Hare (developed a more rationalist non-cognitivism in prescriptivism, rejecting Ayer's irrationalist emotivism)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaethics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

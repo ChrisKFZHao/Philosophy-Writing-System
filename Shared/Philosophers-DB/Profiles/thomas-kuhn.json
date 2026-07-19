@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "thomas-kuhn",
+  "identity": {
+    "display_name": "Thomas Kuhn",
+    "canonical_name": "Thomas Kuhn",
+    "aliases": [
+      "Kuhn, Thomas",
+      "Thomas Kuhn",
+      "kuhn"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/kuhn.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-thomas-kuhn-C0001",
+      "category": "identity",
+      "statement": "Life: 1922--1996",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0002",
+      "category": "tradition",
+      "statement": "Philosophy of science; historical turn in philosophy of science",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0003",
+      "category": "work",
+      "statement": "*The Structure of Scientific Revolutions* (1962), *The Copernican Revolution* (1957), *The Essential Tension* (1977), *Black-Body Theory and the Quantum Discontinuity* (1978)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0004",
+      "category": "position",
+      "statement": "Paradigm theory of science: normal science operates within a paradigm -- a constellation of shared commitments, exemplary problem-solutions, and methodological standards",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0005",
+      "category": "position",
+      "statement": "Incommensurability: competing paradigms lack a common measure; there is no theory-neutral observation language for adjudicating paradigm disputes",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0006",
+      "category": "position",
+      "statement": "Scientific revolutions: science does not progress by gradual accumulation but by revolutionary paradigm shifts that transform the scientific worldview",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0007",
+      "category": "position",
+      "statement": "Theory-ladenness of observation: what scientists observe is shaped by the paradigm they accept; there is no neutral observation language",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0008",
+      "category": "position",
+      "statement": "No algorithm for theory choice: values like simplicity, accuracy, scope, and fruitfulness are shared but interpreted and weighed differently by different scientists",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0009",
+      "category": "argument",
+      "statement": "The argument from the history of science: careful historical study shows that science does not conform to the logical empiricist model of cumulative progress by accretion",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0010",
+      "category": "argument",
+      "statement": "The Gestalt-switch analogy: paradigm change is like a perceptual switch; after a revolution, scientists work in a different world (metaphorically speaking)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0011",
+      "category": "argument",
+      "statement": "The no-algorithm argument: shared values underdetermine theory choice; paradigm selection cannot be reduced to an algorithm",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0012",
+      "category": "relevance",
+      "statement": "`phil-conceptual-analysis` (conceptual schemes and their epistemic constraints), `phil-argument-reconstruct` (identifying paradigm-relative premises), `phil-natural-kind-analyze` (theory-ladenness affects kind individuation and taxonomy), `phil-distinction-track` (incommensurability and conceptual change across theoretical frameworks), `phil-dialectical-map` (paradigms as structured dialectical positions)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-thomas-kuhn-C0013",
+      "category": "relationship",
+      "statement": "Carnap (Kuhn's target in the philosophy of science; *Structure* undermines the unity-of-science program by rejecting cumulative progress); Quine (underdetermination of theory by evidence as a precursor to incommensurability); Feyerabend (radicalized Kuhn's incommensurability thesis into epistemological anarchism); Foucault (both emphasize historical discontinuity in knowledge systems)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

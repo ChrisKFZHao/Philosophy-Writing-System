@@ -113,7 +113,7 @@ def load_manifest() -> dict:
             raise ManifestError(f"unknown role {role} in {item['id']}")
 
     counts = {kind: sum(i["kind"] == kind for i in data["items"]) for kind in KINDS}
-    if counts != {"skill": 30, "workflow": 8, "role": 7}:
+    if counts != {"skill": 30, "workflow": 9, "role": 7}:
         raise ManifestError(f"unexpected inventory: {counts}")
     return data
 

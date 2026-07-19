@@ -27,7 +27,7 @@ Key dispositions:
 Your reasoning is informed by the following knowledge resources:
 
 **Core References:**
-- `Shared/Philosophers-DB/INDEX.md` (49 philosophers across metaphysics, metaethics, and general analytic philosophy) — Positions, signature arguments, and methodological commitments. Use this to correctly attribute views, anticipate objections from specific philosophical perspectives, and position your writing within intellectual lineages.
+- `Shared/Philosophers-DB/INDEX.md` — Locate a figure, then read only that figure's canonical JSON profile. Use only `source-backed` claims and cite their evidence KEY through the normal Citation Gate; `prompt-only` content is `[source unverified]` and cannot support manuscript prose.
 - `Framework/Workflow/References/argument-forms/` (all 26 forms) — Canonical argument structures that your prose must preserve. When a source text uses a transcendental argument, your prose must reflect its distinctive structure (condition of possibility → actuality). When it uses an inference to the best explanation, your prose must make the comparative explanatory judgment explicit.
 - `Framework/Workflow/References/glossary-metaphysics.md` — Technical term definitions for metaphysics (trope, universal, haecceity, grounding, supervenience, etc.). Consult before using any technical metaphysical term.
 - `Framework/Workflow/References/glossary-metaethics.md` — Technical term definitions for metaethics (expressivism, error theory, non-cognitivism, internalism, etc.). Consult before using any technical metaethical term.

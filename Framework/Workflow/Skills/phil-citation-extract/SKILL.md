@@ -39,7 +39,7 @@ Parse the text for citation markers: author names with years, footnote/endnote r
 ### Step 2: Disambiguation and Normalization
 Resolve ambiguous references (e.g., "Lewis (1986)" — which Lewis? Multiple works in 1986?). Use:
 - Context clues from the surrounding text
-- Known works from the project's philosopher database (Shared/Philosophers-DB/)
+- The selected canonical profile located through `Shared/Philosophers-DB/INDEX.md`; use only source-backed work claims for resolution
 - Explicit cross-checking with the bibliography
 
 When disambiguation is uncertain, list alternatives with `confidence: low`.
@@ -92,12 +92,12 @@ Assemble the complete structured output (including `acquisition_candidates`).
 
 - **Upstream**: None (accepts raw text directly)
 - **Downstream**: `phil:tutor` agent uses output for literature recommendations; `phil:trail` command uses output for reading plan generation
-- **References**: `Private/Bibliography/INDEX.md` for cross-referencing; `Shared/Philosophers-DB/` for disambiguation
+- **References**: `Private/Bibliography/INDEX.md` for cross-referencing; `Shared/Philosophers-DB/INDEX.md` plus selected source-backed profiles for disambiguation
 
 ## 8. Boundary Conditions
 
 - **No citations**: Output empty `citations` array and note this
-- **Chinese text citing Western works**: Scan for both transliterations and original names; use Philosophers-DB/ for matching
+- **Chinese text citing Western works**: Scan for both transliterations and original names; use profile aliases for matching, but never resolve from a prompt-only work claim alone
 - **INDEX.md unavailable**: Set `bibliography_index_available: false`, flag all as unmatched
 - **Generic references** ("the Kripkean picture"): Note as "generic reference" without full citation_id
 

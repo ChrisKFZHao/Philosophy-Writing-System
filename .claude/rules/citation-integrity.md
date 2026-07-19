@@ -8,7 +8,7 @@ Never generate unverified references, quotations, page numbers, or publication d
 - **No fabricated bibliography**: Cite only works you have actually read — via this project's PDFs, notes, or reconstruction texts. If unread, explicitly mark with `[source unverified]` or `[citation needed]`
 - **No invented quotations**: Do not produce "as X argues in Y..." content unless you have actually read the source and can verify the quotation
 - **Distinguish known from inferred**: If you infer a philosopher's position or a source's existence from general philosophical knowledge, use explicit hedging ("presumably...", "possibly...", "it appears that...") and never mix it with assertoric language
-- **Knowledge-base exception**: Philosopher information in `Shared/Philosophers-DB/` is curated and may be cited. But specific papers, page numbers, and quotations not in that database all require verification
+- **Philosopher database is a routing layer, not a citation exception**: `source-backed` claims in `Shared/Philosophers-DB/Profiles/` may orient analysis only by routing to their evidence KEY. Manuscripts must cite that source and pass the normal two-hop Citation Gate. `prompt-only` claims are `[source unverified]` discovery hints and must not appear as unsupported assertions
 
 ## Citation Gate (two-hop check)
 

@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "peter-van-inwagen",
+  "identity": {
+    "display_name": "Peter van Inwagen",
+    "canonical_name": "Peter van Inwagen",
+    "aliases": [
+      "Peter van Inwagen",
+      "peter-van-inwagen",
+      "van Inwagen, Peter"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaphysics/peter-van-inwagen.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-peter-van-inwagen-C0001",
+      "category": "identity",
+      "statement": "Life: b. 1942",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0002",
+      "category": "tradition",
+      "statement": "Analytic metaphysics; philosophy of religion; free will",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0003",
+      "category": "work",
+      "statement": "*An Essay on Free Will* (1983), *Material Beings* (1990), *Metaphysics* (1993), *The Problem of Evil* (2006), *Existence: Essays in Ontology* (2014)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0004",
+      "category": "position",
+      "statement": "Incompatibilism about free will: free will is incompatible with determinism; the Consequence Argument shows that determinism entails that no one has a choice about anything",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0005",
+      "category": "position",
+      "statement": "Organicist answer to the Special Composition Question: composition occurs exactly when the activity of a life constitutes an organism; there are no artifacts, no mereological sums, no inanimate composites",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0006",
+      "category": "position",
+      "statement": "Quinean meta-ontology: ontological questions should be settled by reading existential quantifications off our best theories and assessing the theoretical cost",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0007",
+      "category": "position",
+      "statement": "The Mind argument: indeterminism fares no better than determinism in securing free will because indeterministic events are matters of luck, not of agential control",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0008",
+      "category": "position",
+      "statement": "Mereological nihilism about non-living things: there are only simples and living organisms; tables and chairs do not exist",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0009",
+      "category": "argument",
+      "statement": "The Consequence Argument: if determinism is true, our acts are consequences of laws of nature and remote past events; we have no choice about the laws or the past; therefore we have no choice about our acts (formalized using a modal transfer-of-powerlessness operator N)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0010",
+      "category": "argument",
+      "statement": "The argument for organicism: the only principled, non-arbitrary answer to \"when do things compose something?\" is \"when they constitute a life\"; all other answers generate vagueness and borderline cases",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0011",
+      "category": "argument",
+      "statement": "The argument from evil (logical form): the existence of gratuitous evil is logically incompatible with an all-powerful, all-knowing, wholly good God; van Inwagen defends the free-will defense against this argument",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0012",
+      "category": "relevance",
+      "statement": "`phil-ontological-commitment` (meta-ontology and Quinean methodology for ontological questions), `phil-identity-persistence` (the Special Composition Question and its answers for persistence and composition), `phil-premise-detect` (the Consequence Argument's modal logic and premise structure), `phil-modal-arg` (transfer of powerlessness and necessity in the Consequence Argument)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-peter-van-inwagen-C0013",
+      "category": "relationship",
+      "statement": "Quine (methodological influence for van Inwagen's meta-ontology); Lewis (Lewis's unrestricted composition as the rival answer to the Special Composition Question); Plantinga (ally on incompatibilism; rival on the free-will defense); O'Connor (contemporary agent-causal libertarian engaging with van Inwagen's Mind argument)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaphysics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

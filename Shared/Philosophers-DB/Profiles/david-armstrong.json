@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "david-armstrong",
+  "identity": {
+    "display_name": "David Armstrong",
+    "canonical_name": "David Armstrong",
+    "aliases": [
+      "Armstrong, David",
+      "David Armstrong",
+      "david-armstrong"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/Metaphysics/david-armstrong.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-david-armstrong-C0001",
+      "category": "identity",
+      "statement": "Life: 1926--2014",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0002",
+      "category": "tradition",
+      "statement": "Australian realism; analytic metaphysics; truthmaker theory",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0003",
+      "category": "work",
+      "statement": "*A Materialist Theory of the Mind* (1968), *Universals and Scientific Realism* (2 vols., 1978), *What Is a Law of Nature?* (1983), *A World of States of Affairs* (1997), *Truth and Truthmakers* (2004)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0004",
+      "category": "position",
+      "statement": "Immanent realism about universals: universals are repeatable entities wholly present in each of their instances; they exist only where instantiated (Aristotelian, not Platonic)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0005",
+      "category": "position",
+      "statement": "States of affairs ontology: the fundamental constituents of reality are states of affairs -- particulars having universals; neither particulars nor universals exist independently",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0006",
+      "category": "position",
+      "statement": "The nomic necessitation theory of laws: a law of nature is a relation of necessitation (N) between universals; \"All Fs are Gs\" is a law if N(F, G) obtains",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0007",
+      "category": "position",
+      "statement": "Truthmaker principle: every truth has a truthmaker -- an entity in virtue of which it is true; truth supervenes on being",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0008",
+      "category": "position",
+      "statement": "Central-state materialism about mind: mental states are identical to brain states, characterized in topic-neutral, causal-functional terms",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0009",
+      "category": "argument",
+      "statement": "The argument against resemblance nominalism: resemblance nominalism must posit resemblance relations, but these are themselves universals; an infinite regress ensues unless one accepts at least one universal, undermining the nominalist position",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0010",
+      "category": "argument",
+      "statement": "The inference-to-the-best-explanation argument for universals: the success of scientific practice (measurement, prediction, explanation) is best explained by mind-independent universals that ground objective similarities",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0011",
+      "category": "argument",
+      "statement": "The truthmaker argument for states of affairs: truths like \"a is F\" require truthmakers; neither a alone nor F alone can serve; only the state of affairs a's-being-F can make the truth true",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0012",
+      "category": "relevance",
+      "statement": "`phil-grounding-check` (truthmaking as an ancestor of grounding theory), `phil-natural-kind-analyze` (universals as the ontological ground of natural kinds), `phil-ontological-commitment` (the truthmaker principle as an alternative criterion of ontological commitment), `phil-causation-analyze` (instantiated universals in causal laws), `phil-essence-detect` (universals and the essential properties of kinds)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-david-armstrong-C0013",
+      "category": "relationship",
+      "statement": "Lewis (rival on properties -- Lewis's class nominalism vs. Armstrong's immanent realism; rival on laws -- Lewis's best-systems vs. Armstrong's nomic necessitation); Plato (Armstrong rejects transcendent universals for Aristotelian immanent universals); Martin (collaborator on the truthmaker program); Smart (fellow Australian materialist on the mind-body identity theory)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "metaphysics",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

@@ -15,6 +15,8 @@ Central registry of report ID prefixes used across the 30 analysis skills. Each 
 | `CTX-` | `phil-contextualize` | General |
 | `CE-` | `phil-counterexample` | General |
 | `SUM-` | `phil-summarize` | General |
+| `PHO-` | philosopher observation batch | Infrastructure |
+| `PHC-` | philosopher review candidate | Infrastructure |
 | `DMAP-` | `phil-dialectical-map` | General |
 | `ANLG-` | `phil-analogy-check` | General |
 | `METH-` | `phil-methodology` | General |

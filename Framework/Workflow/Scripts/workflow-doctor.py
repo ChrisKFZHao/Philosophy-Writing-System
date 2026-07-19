@@ -18,7 +18,14 @@ MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 
 
 def check_json(failures: list[str]) -> None:
-    for path in [WORKFLOW_ROOT / "manifest.json", *(WORKFLOW_ROOT / "Schemas").glob("*.json")]:
+    philosopher_root = REPO_ROOT / "Shared/Philosophers-DB"
+    paths = [
+        WORKFLOW_ROOT / "manifest.json",
+        *(WORKFLOW_ROOT / "Schemas").glob("*.json"),
+        *(philosopher_root / "Profiles").glob("*.json"),
+        philosopher_root / "Domains/registry.json",
+    ]
+    for path in paths:
         try:
             json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError) as exc:
@@ -98,6 +105,7 @@ def markdown_files() -> list[Path]:
         REPO_ROOT / ".claude",
         REPO_ROOT / ".agents",
         REPO_ROOT / "Framework/Lessons",
+        REPO_ROOT / "Shared/Philosophers-DB",
         REPO_ROOT / "README.md",
         REPO_ROOT / "AGENTS.md",
         REPO_ROOT / "CLAUDE.md",
@@ -144,8 +152,8 @@ def check_inventory(failures: list[str]) -> None:
         "core_skills": 30,
         "claude_skills": 30,
         "codex_atomic": 30,
-        "claude_workflows": 8,
-        "codex_workflows": 8,
+        "claude_workflows": 9,
+        "codex_workflows": 9,
         "claude_roles": 7,
     }
     if counts != expected:
@@ -164,6 +172,18 @@ def check_adapters(failures: list[str]) -> None:
         failures.append(result.stdout.strip() or result.stderr.strip())
 
 
+def check_philosopher_database(failures: list[str]) -> None:
+    result = subprocess.run(
+        [sys.executable, str(WORKFLOW_ROOT / "Scripts/philosopher-db.py"), "validate"],
+        cwd=REPO_ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+    )
+    if result.returncode:
+        failures.append(result.stdout.strip() or result.stderr.strip())
+
+
 def main() -> int:
     failures: list[str] = []
     check_json(failures)
@@ -171,6 +191,7 @@ def main() -> int:
     check_inventory(failures)
     check_forbidden(failures)
     check_markdown_links(failures)
+    check_philosopher_database(failures)
     check_adapters(failures)
     if failures:
         print("Workflow doctor failed:")

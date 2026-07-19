@@ -1,0 +1,57 @@
+{
+  "registry_version": "1.0",
+  "domains": [
+    {
+      "domain_id": "general",
+      "label": "General Philosophy / Methodology",
+      "topic_keywords": [
+        "methodology",
+        "conceptual analysis",
+        "epistemology",
+        "philosophy of language",
+        "philosophy of mind",
+        "political philosophy",
+        "logic",
+        "pragmatism"
+      ]
+    },
+    {
+      "domain_id": "metaphysics",
+      "label": "Metaphysics",
+      "topic_keywords": [
+        "metaphysics",
+        "ontology",
+        "grounding",
+        "fundamentality",
+        "identity",
+        "persistence",
+        "modality",
+        "possible worlds",
+        "causation",
+        "laws of nature",
+        "natural kind",
+        "properties",
+        "time",
+        "mereology",
+        "philosophy of physics"
+      ]
+    },
+    {
+      "domain_id": "metaethics",
+      "label": "Metaethics",
+      "topic_keywords": [
+        "metaethics",
+        "moral realism",
+        "moral anti-realism",
+        "moral semantics",
+        "normativity",
+        "normative reasons",
+        "moral psychology",
+        "moral disagreement",
+        "moral epistemology",
+        "moral supervenience",
+        "expressivism"
+      ]
+    }
+  ]
+}

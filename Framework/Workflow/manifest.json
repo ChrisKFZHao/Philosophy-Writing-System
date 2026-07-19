@@ -619,7 +619,7 @@
                       "id":  "ingest",
                       "kind":  "workflow",
                       "source":  "Workflows/ingest.md",
-                      "description":  "Literature ingestion (\"scraping\") — scans the bibliography for unprocessed PDFs, renames them to the canonical stem, registers them in INDEX.md, generates Level 0.5 summaries (papers, monographs with chapter segments, and edited collections with per-paper summaries), runs recommendation trigger point 1, and auto-registers sources in Zotero as linked-file items (DOI-first, then ISBN, then bibtex for books; per-paper bookSection items for collections)",
+                      "description":  "Literature ingestion (\"scraping\") — scans the bibliography for unprocessed PDFs, renames them to the canonical stem, registers them in INDEX.md, generates Level 0.5 summaries, batch-records philosopher observations, runs recommendation trigger point 1, and auto-registers sources in Zotero as linked-file items",
                       "dependencies":  [
                                            "phil-summarize"
                                        ],
@@ -633,6 +633,26 @@
                                            "zotero-local"
                                        ],
                       "output_contract":  "ingestion-report-and-library-artifacts",
+                      "platforms":  [
+                                        "claude",
+                                        "codex"
+                                    ]
+                  },
+                  {
+                      "id":  "philosophers",
+                      "kind":  "workflow",
+                      "source":  "Workflows/philosophers.md",
+                      "description":  "Maintain the source-backed philosopher database — inspect private observations, review and apply candidates, lazily audit held sources, validate profiles, and rebuild domain views",
+                      "dependencies":  [
+
+                                       ],
+                      "role":  null,
+                      "capabilities":  [
+                                           "read",
+                                           "search",
+                                           "write"
+                                       ],
+                      "output_contract":  "philosopher-maintenance-report",
                       "platforms":  [
                                         "claude",
                                         "codex"

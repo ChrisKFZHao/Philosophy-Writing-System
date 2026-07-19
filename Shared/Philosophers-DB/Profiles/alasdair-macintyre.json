@@ -1,0 +1,145 @@
+{
+  "profile_version": "1.0",
+  "person_id": "alasdair-macintyre",
+  "identity": {
+    "display_name": "Alasdair MacIntyre",
+    "canonical_name": "Alasdair MacIntyre",
+    "aliases": [
+      "Alasdair MacIntyre",
+      "MacIntyre, Alasdair",
+      "macintyre"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/macintyre.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-alasdair-macintyre-C0001",
+      "category": "identity",
+      "statement": "Life: b. 1929",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0002",
+      "category": "tradition",
+      "statement": "Aristotelian virtue ethics; Thomism; communitarianism",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0003",
+      "category": "work",
+      "statement": "*After Virtue* (1981), *Whose Justice? Which Rationality?* (1988), *Three Rival Versions of Moral Enquiry* (1990), *Dependent Rational Animals* (1999)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0004",
+      "category": "position",
+      "statement": "The Enlightenment project of justifying morality has failed: modern moral discourse is a collection of incoherent fragments from older, coherent traditions",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0005",
+      "category": "position",
+      "statement": "Tradition-constituted rationality: standards of rational justification are internal to traditions of inquiry; there is no tradition-independent, neutral rationality",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0006",
+      "category": "position",
+      "statement": "Virtue ethics as practice-based: virtues are acquired human qualities that enable practitioners to achieve the internal goods of practices; practices give content to the virtues",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0007",
+      "category": "position",
+      "statement": "The narrative unity of a human life: actions are intelligible only within the narrative context of a whole life that has a telos (end or purpose)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0008",
+      "category": "position",
+      "statement": "A tradition is an historically extended, socially embodied argument about the goods that constitute that tradition; traditions can be rationally compared by their capacity to solve problems and explain the failures of rivals",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0009",
+      "category": "argument",
+      "statement": "The argument from interminable moral disagreement: modern moral debates are irresolvable because participants appeal to incommensurable conceptual fragments from rival traditions (the catastrophe thesis)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0010",
+      "category": "argument",
+      "statement": "The argument for the virtue-tradition-practice triad: virtues are defined by their role in practices, which are embedded in traditions, which provide the narrative context for individual lives",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0011",
+      "category": "argument",
+      "statement": "The Aristotelian-Thomistic argument for natural law: biological teleology provides a grounding for ethics that Enlightenment philosophy abandoned and that can be recovered",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0012",
+      "category": "relevance",
+      "statement": "`phil-moral-disagreement` (disagreement as evidence of conceptual breakdown and tradition incommensurability), `phil-dialectical-map` (tradition-constituted reasoning and competing rational frameworks), `phil-normativity` (the grounding of normative claims in tradition and practice), `phil-conceptual-analysis` (concept analysis as tradition-dependent activity), `phil-charity-check` (charitable interpretation of rival traditions)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-alasdair-macintyre-C0013",
+      "category": "relationship",
+      "statement": "Aristotle (primary source for MacIntyre's virtue ethics framework); Aquinas (Thomistic natural law tradition MacIntyre endorses as the most adequate tradition); Nietzsche (MacIntyre's diagnosis of modernity mirrors Nietzsche's but offers an Aristotelian solution rather than a genealogical one); Kuhn (tradition-constituted rationality parallels paradigm-dependence of scientific reasoning)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

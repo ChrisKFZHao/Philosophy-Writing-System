@@ -1,0 +1,154 @@
+{
+  "profile_version": "1.0",
+  "person_id": "ludwig-wittgenstein",
+  "identity": {
+    "display_name": "Ludwig Wittgenstein",
+    "canonical_name": "Ludwig Wittgenstein",
+    "aliases": [
+      "Ludwig Wittgenstein",
+      "Wittgenstein, Ludwig",
+      "wittgenstein"
+    ],
+    "legacy_paths": [
+      "Philosophers-DB/General/wittgenstein.md"
+    ]
+  },
+  "claims": [
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0001",
+      "category": "identity",
+      "statement": "Life: 1889--1951",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0002",
+      "category": "tradition",
+      "statement": "Analytic philosophy; logical atomism (early); ordinary language philosophy (later)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0003",
+      "category": "work",
+      "statement": "*Tractatus Logico-Philosophicus* (1921), *Philosophical Investigations* (1953, posthumous), *The Blue and Brown Books* (1958, posthumous), *On Certainty* (1969, posthumous)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0004",
+      "category": "position",
+      "statement": "Picture theory of meaning (early): propositions are logical pictures of facts; language mirrors reality through shared logical form",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0005",
+      "category": "position",
+      "statement": "The limits of language: what can be said at all can be said clearly; whereof one cannot speak, thereof one must be silent",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0006",
+      "category": "position",
+      "statement": "Meaning as use (later): the meaning of a word is its use in the language-game; meaning is not a mental entity accompanying words",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0007",
+      "category": "position",
+      "statement": "Rule-following considerations: no rule can determine its own application; following a rule is a practice embedded in a shared form of life, not an interpretation all the way down",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0008",
+      "category": "position",
+      "statement": "Private language argument: a language logically private to a single speaker is impossible; meaning requires public criteria of correctness",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0009",
+      "category": "position",
+      "statement": "Family resemblance: concepts like \"game\" are united not by a common essence but by a complex network of overlapping and crisscrossing similarities",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0010",
+      "category": "argument",
+      "statement": "The private language argument: a private linguist lacks any criterion of correctness for applying signs; whatever seems right would be right, making talk of correctness empty",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0011",
+      "category": "argument",
+      "statement": "The family resemblance argument against essentialism: it is a philosophical prejudice that all things called by a common name must share a common defining feature",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0012",
+      "category": "argument",
+      "statement": "The rule-following paradox: no course of action is uniquely determined by a rule because every course can be made to accord with the rule given some interpretation",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0013",
+      "category": "relevance",
+      "statement": "`phil-conceptual-analysis` (family resemblance as alternative to classical necessary-and-sufficient-conditions analysis), `phil-distinction-track` (language-games as distinct normative domains with their own criteria), `phil-premise-detect` (clarifying the logical grammar of philosophical claims), `phil-moral-semantics` (rule-following challenges to semantic theories of moral language), `phil-essence-detect` (anti-essentialist challenge to the whole project of detecting essences)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    },
+    {
+      "claim_id": "P-ludwig-wittgenstein-C0014",
+      "category": "relationship",
+      "statement": "Russell (early mentor; Wittgenstein's *Tractatus* developed within Russell's logical atomism); Carnap (Vienna Circle member deeply influenced by the *Tractatus* but rejected its mysticism); Kripke (Kripkenstein -- controversial interpretation of the rule-following paradox as a skeptical challenge to meaning); Anscombe (student, close collaborator, translator, and interpreter)",
+      "support_status": "prompt-only",
+      "dispute_status": "unmarked",
+      "status": "active",
+      "evidence": []
+    }
+  ],
+  "domains": [
+    {
+      "domain_id": "general",
+      "support_status": "prompt-only",
+      "evidence": []
+    }
+  ],
+  "relations": [],
+  "created_at": "2026-07-19T07:36:23Z",
+  "updated_at": "2026-07-19T07:36:23Z"
+}

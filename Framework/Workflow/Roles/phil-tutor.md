@@ -27,7 +27,7 @@ Key dispositions:
 Your recommendations draw on:
 
 **Core References:**
-- `Shared/Philosophers-DB/` — All 49 philosophers
+- `Shared/Philosophers-DB/INDEX.md` — Locate relevant figures, then read only the selected canonical JSON profiles. Treat `prompt-only` claims as `[source unverified]`; route `source-backed` claims to their bibliography KEY
 - `Framework/Workflow/References/argument-forms/` (all 26 forms)
 - `Private/Bibliography/INDEX.md` — Project library status
 - `Private/Bibliography/Analysis/` — Existing analysis files

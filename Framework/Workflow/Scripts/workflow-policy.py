@@ -51,6 +51,35 @@ def citation_gate(registered: bool, required_level: float, available_level: floa
     return {"decision": "pass", "hop": 2, "reason": "verified"}
 
 
+def philosopher_claim_gate(
+    support_status: str,
+    evidence: list[dict[str, object]],
+    registered_keys: set[str],
+    required_level: float,
+) -> dict:
+    """Route a philosopher claim through its bibliography evidence."""
+    if support_status != "source-backed":
+        return {"decision": "block", "hop": 0, "reason": "philosopher-claim-prompt-only"}
+    if not evidence:
+        return {"decision": "block", "hop": 0, "reason": "philosopher-claim-missing-evidence"}
+    registered = [item for item in evidence if item.get("bib_key") in registered_keys]
+    if not registered:
+        return {"decision": "block", "hop": 1, "reason": "evidence-key-not-registered"}
+    eligible = sorted({
+        str(item["bib_key"])
+        for item in registered
+        if float(item.get("analysis_level", 0)) >= required_level
+    })
+    if not eligible:
+        return {"decision": "block", "hop": 2, "reason": "analysis-level-insufficient"}
+    return {
+        "decision": "pass",
+        "hop": 2,
+        "reason": "source-evidence-sufficient",
+        "eligible_keys": eligible,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)

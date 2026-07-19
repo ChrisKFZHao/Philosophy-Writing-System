@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.6.0-alpha &emsp; **Status**: Alpha
+> **Version**: 0.6.1-alpha &emsp; **Status**: Alpha
 >
 > **Runtime hosts**: Claude Code and Codex
 >
@@ -127,19 +127,19 @@ The system is optimized for **analytic philosophy**, not general academic writin
 
 ```
 Framework/Workflow/                 # Platform-neutral source of truth
-├── manifest.json                   # 30 skills + 8 workflows + 7 roles
+├── manifest.json                   # 30 skills + 9 workflows + 7 roles
 ├── Skills/{skill}/                 # SKILL.md plus examples/checklists
 ├── Workflows/{workflow}.md         # phil:* orchestration
 ├── Roles/{role}.md                 # quality_tier + neutral capabilities
 ├── Rules/                          # behavior + runtime compatibility
 ├── References/                     # argument forms, glossaries, taxonomies
-├── Schemas/                        # 13 JSON contracts + registry
+├── Schemas/                        # 15 JSON contracts + registry
 ├── Templates/                      # reports, generated root guides, project adapters
 ├── Scripts/                        # generator, doctor, scanner, policy, Zotero helper
 └── Tests/                          # stdlib regression tests
 
 .claude/                             # Generated and committed Claude Code adapter
-├── commands/                        # 8 /phil:* commands
+├── commands/                        # 9 /phil:* commands
 ├── skills/                          # 30 atomic skills
 ├── agents/                          # 7 roles; high tier maps to opus
 ├── rules/                           # Generated behavior rules
@@ -147,7 +147,7 @@ Framework/Workflow/                 # Platform-neutral source of truth
 
 .agents/skills/                      # Generated and committed Codex adapter
 ├── phil-*/                          # 30 atomic skills
-└── source-command-*/                # 8 composite workflows
+└── source-command-*/                # 9 composite workflows
 ```
 
 Generation contract:
@@ -182,7 +182,7 @@ General Knowledge Cluster:
   ├── references/fallacy-catalog.md
   ├── references/argument-forms/ (general subset)
   ├── references/thought-experiment-templates.md (general subset)
-  └── Shared/Philosophers-DB/ (general subset)
+  └── Shared/Philosophers-DB/Domains/general.md (generated view)
 
 Metaphysics Knowledge Cluster:
   ├── references/glossary-metaphysics.md          # Core terminology
@@ -192,7 +192,7 @@ Metaphysics Knowledge Cluster:
   ├── references/causation-taxonomy.md            # Causal theories
   ├── references/argument-forms/ (metaphysics subset)
   ├── references/thought-experiment-templates.md (metaphysics subset)
-  └── Shared/Philosophers-DB/ (metaphysician subset)
+  └── Shared/Philosophers-DB/Domains/metaphysics.md (generated view)
 
 Metaethics Knowledge Cluster:
   ├── references/glossary-metaethics.md           # Core terminology
@@ -201,8 +201,14 @@ Metaethics Knowledge Cluster:
   ├── references/normativity-taxonomy.md          # Normativity theories
   ├── references/argument-forms/ (metaethics subset)
   ├── references/thought-experiment-templates.md (metaethics subset)
-  └── Shared/Philosophers-DB/ (metaethicist subset)
+  └── Shared/Philosophers-DB/Domains/metaethics.md (generated view)
 ```
+
+#### Philosopher Database v2
+
+`Shared/Philosophers-DB/Profiles/` is the single canonical, shareable store. Each person has one JSON profile with stable claim IDs; domain membership is many-to-many and `INDEX.md` plus `Domains/*.md` are generated link views. Claims distinguish `source-backed` from `prompt-only`, and primary/secondary evidence is recorded per claim. The database never substitutes for a manuscript citation: source-backed claims route to bibliography KEYs, while prompt-only claims remain `[source unverified]` discovery hints.
+
+`Private/Bibliography/Philosopher-Queue/` holds source observations, recurrence counts, and review candidates. Ingest and persisted reconstruction update it idempotently without rereading PDFs. Unknown figures become new-profile candidates after five distinct source KEYs and three substantive roles; existing profiles receive immediate claim candidates. Semantic content enters Shared only after explicit approval. Deterministic domain links require two distinct sources and at least one author/core-target occurrence.
 
 #### Metaphysics Knowledge Dependency Details
 
@@ -1048,7 +1054,7 @@ Primer references:     <domain>-primer.md
 ```
 Format: phil:<action>  (namespace: phil)
 
-Commands (8 composite commands):
+Commands (9 composite commands):
   phil:reconstruct    Full-dimension text understanding (9-20 skills, mixed serial/parallel)
   phil:evaluate       Multi-angle parallel critique (7 skills, fully parallel)
   phil:review         Peer review (phil-reviewer agent, 8 dimensions)
@@ -1057,6 +1063,7 @@ Commands (8 composite commands):
   phil:pipeline       Full pipeline (phil-orchestrator agent, 6 stages)
   phil:tutor          Tutor-style dialogue (phil-tutor agent, reading/incubating modes)
   phil:ingest         Literature ingestion (shell scan + pdf skill + phil-summarize)
+  phil:philosophers   Philosopher profile review, lazy audit, and view maintenance
 
 Underlying 30 skills remain invocable via the Skill tool.
 Rules:
@@ -1164,7 +1171,7 @@ Step 4: Registration
       - §5 Dependency Graph
       - §6 Research Flow
       - §7 Taxonomy tables (analytic dimension + methodological depth + domain)
-  → Create commands/<domain>.md under one of the 8 composite commands or as a new command in the phil: namespace
+  → Create commands/<domain>.md under one of the 9 composite commands or as a new command in the phil: namespace
   → Update `Framework/Workflow/manifest.json` and regenerate adapters
 
 Step 5: Dependency check
@@ -1191,7 +1198,7 @@ Files to create:
   references/glossary-<X>.md          # Glossary (mandatory)
   references/<X>-distinctions.md      # Core distinctions (recommended)
   references/argument-forms/<X-forms> # New argument forms (recommended)
-  Shared/Philosophers-DB/<X>.md   # Representative philosophers (recommended)
+  Shared/Philosophers-DB/Domains/registry.json  # Add X topic mapping; regenerate the link view
 ```
 
 ### 10.3 Versioning Strategy
@@ -1466,7 +1473,8 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.6.0-alpha · Last updated 2026-07-17 · platform-neutral `Framework/Workflow/` source, manifest-driven Claude Code/Codex adapters, portable scripts, collaboration aliases, runtime capability mapping, and explicit Zotero full/partial/skipped degradation.*
+*Document version 0.6.1-alpha · Last updated 2026-07-19 · claim-level philosopher provenance, private dynamic observation queue, canonical profiles, generated domain views, and the `phil:philosophers` maintenance workflow.*
+*Previous: 0.6.0-alpha · 2026-07-17 · platform-neutral `Framework/Workflow/` source, manifest-driven Claude Code/Codex adapters, portable scripts, collaboration aliases, runtime capability mapping, and explicit Zotero full/partial/skipped degradation.*
 *Previous: 0.5.0-alpha · 2026-07-17 · six-stage reading-before-thesis workflow, conception incubation, lenient-interrogation gates, dual draft collaboration, and model tiers.*
 *Previous: 0.4.1-alpha · 2026-07-14 · literature ingestion — /phil:ingest command + phil-summarize skill + summary-schema.json; canonical bibliography stem {Author}_{Year}_{Title}; Summaries/ (Level 0.5) activated*
 *Previous: 0.4-alpha · 2026-07-14 · dual-repo restructure (privacy boundary = repo boundary) — Philosophers-DB → Shared/, papers & bibliography → Private/ (inner private repo, PDFs untracked), per-paper refs.md + two-hop Citation Gate + literature recommendation trigger points*

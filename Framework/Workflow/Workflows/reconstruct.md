@@ -64,9 +64,12 @@ Generate an integrated argument-comprehension report (structure follows `analysi
 9. **Domain-specific analysis** (as needed): ontological commitment inventory / metaethical position analysis
 10. **Open questions**: concepts awaiting clarification, premises awaiting completion
 
+When the integrated report is persisted under `Private/Bibliography/Analysis/`, include `source_bib_key` and a compact top-level `philosopher_observations[]` block conforming to `philosopher-observation-schema.json`. Reuse already-produced contextualization results; do not reread the source. Then record the artifact with `philosopher-db.py observe --analysis-level <current INDEX level> --input <analysis-file>`. Ad-hoc reports that are not persisted do not update the queue.
+
 ## Notes
 
 - Write all output in Chinese (project convention)
 - Domain detection is automatic; explicitly report which domains were triggered and which skills were activated
 - This command's output is the primary input to `/phil:evaluate` and `/phil:write draft`
+- Philosopher observations create private review candidates only; they never overwrite canonical claims
 - Stage 1 cannot be parallelized (strong dependencies); Stage 2 may run in parallel internally
