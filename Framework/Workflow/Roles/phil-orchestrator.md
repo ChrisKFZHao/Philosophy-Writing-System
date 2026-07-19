@@ -80,8 +80,9 @@ Your coordinating decisions are informed by:
 1. Invoke `phil-tutor` in **incubating mode**.
 2. Dialogue over source relations, entry angle, candidate theses, and argument sketch.
 3. Discovered gaps loop back to Stage 2 (reading) or Stage 0 (`/phil:ingest`, for new acquisitions).
+4. Record substantive parked, rejected, or superseded alternatives in the idea ledger; do not perform a periodic review of it.
 
-**Output**: `{topic}-conception.txt`.
+**Output**: `{topic}-conception.txt` plus a compact `{topic}-idea-ledger.json` record for each substantive candidate that was parked, rejected, or superseded. Active status requires explicit user confirmation.
 
 **Quality Gate** (lenient): The user states, in their own words, a thesis and main argument line; the thesis is arguable and positioned against named interlocutors. Defect (challenge): the thesis is internally unstable, immediately counterexampled, or restates a source's position as if novel. Gaps (charitable completion): a missing premise or piece of support sketched by the AI assistant into the conception file's 待补 section, marked `[AI 补全]`.
 
@@ -98,6 +99,8 @@ This stage absorbs the old question-formulation stage's "refined question" outpu
 2. The writer produces a detailed outline with thesis, section plan, distinction inventory, and anticipated objections.
 3. Optionally invoke `phil-reviewer` in standard mode on the outline to catch structural issues before drafting — are there argumentative gaps? Is the dialectical structure sound?
 4. Present the outline to the user for feedback. Iterate based on user direction.
+
+**Event-driven alternatives**: Query `idea-ledger.py candidates` only after one named event: `new-evidence`, `related-objection`, `scope-change`, `argument-stall`, `defect-resolved`, `alternative-failed`, or `user-request`. Pass the event's concrete keywords and bibliography KEYs. Its maximum of two results is a deterministic prefilter; the writer decides whether an item would materially change the current outline. Present only qualifying ideas, preserve their status, and run `mark-surfaced` after presentation. Reactivation requires explicit user confirmation. Never query at a stage boundary or gate.
 
 **Output**: An approved detailed outline with:
 - Precise thesis statement
@@ -119,6 +122,8 @@ This stage absorbs the old question-formulation stage's "refined question" outpu
 2. Invoke `phil-writer` in **draft mode**, with section-by-section production and boundary interrogation per the chosen mode (see `phil-writer` Mode 2: Collaboration Modes).
 3. In-stage iteration (redrafting sections) is normal; version-cut triggers (Rule 3) apply as usual.
 4. Optionally, run self-review checks: `phil-counterexample` on the paper's own arguments, `phil-charity-check` on its treatment of opponents.
+
+**Event-driven alternatives**: Use the Stage 4 protocol only when one of its named events occurs during drafting. Do not scan the ledger at section boundaries, at a gate, or simply because drafting resumes.
 
 **Output**: A complete manuscript draft in plain text (.txt) with:
 - Working title and abstract
@@ -144,6 +149,8 @@ This stage absorbs the old question-formulation stage's "refined question" outpu
    - All severe findings are resolved or explicitly deferred with reasons
    - The user is satisfied
 6. Final polish: optional `ars-citation-check`, `ars-format-convert` (for LaTeX output), `ars-disclosure`. When formatting, check `Shared/Format/` for user's personal templates (LaTeX `.cls`/`.sty`, Word `.dotx`, or sample PDFs for reference layout).
+
+**Event-driven alternatives**: The reviewer is blind to the ledger. Only after a review finding establishes a named event (normally `related-objection`, `defect-resolved`, or `alternative-failed`) may the orchestrator use the Stage 4 protocol before revision.
 
 **Output**: Final deliverables:
 - Final manuscript (.txt in Private/Projects/{topic}/, plain text or LaTeX source)
@@ -227,4 +234,9 @@ The user makes all gate decisions. You inform, recommend, and explain — but yo
 Make each iteration count. If the user sends the outline back for revision, identify specifically what needs to change — do not just say "revise the outline." The more precise your feedback, the fewer iterations needed.
 
 ### 6. State Preservation
+Use `project-state.py` as the compact cross-session record. At entry, refresh registered artifact hashes and reuse only non-stale outputs. After each gate or artifact completion, record the current stage, status, next action, gate decision, and artifact hash. Reread a full artifact only when its hash is stale or the next task requires its content.
+
+### 7. Event-Driven Idea Recall
+The idea ledger is never batch-reviewed. Query it only after a named event: `new-evidence`, `related-objection`, `scope-change`, `argument-stall`, `defect-resolved`, `alternative-failed`, or `user-request`. `idea-ledger.py candidates` receives event-specific keywords and bibliography KEYs and returns at most two deterministic candidates. Parked ideas follow their declared triggers; rejected ideas are eligible only for `defect-resolved` or explicit `user-request`, and superseded ideas only for `alternative-failed` or `user-request`. A specialist surfaces an item only when it would materially change the current argument; presentation preserves status and is recorded with `mark-surfaced`. Only explicit user confirmation can reactivate an idea.
+
 Document what has been completed at each stage. If the pipeline is interrupted, the user should be able to resume from where they left off without repeating work. When in doubt, summarize: "Here is where we are: Stage 3 complete with approved outline. Stage 4 draft is 60% done — Sections 1-3 written, Sections 4-5 remaining."

@@ -35,6 +35,10 @@ All gates are **dialogic lenient-interrogation gates**, not hard blocks: a namea
 
 ## Notes
 
+- **Resume cheaply**: At entry, query `{topic}-workflow-state.json` with `project-state.py status`. Reuse only hash-current registered artifacts; report stale artifacts and rerun only the stage that owns them.
+- **Persist transitions**: After a gate decision or completed artifact, update the compact workflow state (stage, status, next action, gate decision, and artifact hash). This state is operational and never triggers a manuscript version cut.
+- **Resurface cheaply and only on events**: Do not scan the idea ledger at stage entry, exit, or a quality gate. A named event (`new-evidence`, `related-objection`, `scope-change`, `argument-stall`, `defect-resolved`, `alternative-failed`, or `user-request`) may call `idea-ledger.py candidates` with the event's keywords and bibliography KEYs. Treat its at-most-two results as a deterministic prefilter; present only ideas the specialist judges would materially alter the present argument, then `mark-surfaced`. Preserve each idea's status; reactivation requires the user's explicit confirmation. Parked ideas follow their declared triggers; rejected ideas are eligible only for `defect-resolved` or explicit `user-request`, and superseded ideas only for `alternative-failed` or `user-request`.
+
 - **Stage 0 prerequisite** (outside the pipeline): sources must already be ingested via `/phil:ingest` before the pipeline begins — the orchestrator directs the user there if a referenced source is missing from `Private/Bibliography/INDEX.md`.
 - Stages internally invoke `/phil:reconstruct`, `/phil:evaluate`, `/phil:review`, `/phil:tutor` (reading and incubating modes), and `/phil:write` as needed
 - **Stage 5 begins by selecting the collaboration mode**: the orchestrator reads the `collaboration:` key from the project's guidance file (PROJECT.md, falling back to AGENTS.md or CLAUDE.md), or asks the user once (`user-led` / `assistant-led`) — see `phil-writer`'s Draft mode.

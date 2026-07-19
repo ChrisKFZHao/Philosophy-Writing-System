@@ -60,7 +60,7 @@ Framework/Workflow/       Platform-neutral single source of truth
   ├── References/         Glossaries, argument forms, and taxonomies
   ├── Schemas/            Data contracts
   ├── Templates/          Report, root-guide, and project templates
-  └── Scripts/            Generator, doctor, scanners, and Zotero helper
+  └── Scripts/            Generator, doctors, state helpers, scanners, and Zotero helper
 .claude/                  Generated Claude Code adapter (committed)
 .agents/skills/           Generated Codex adapter (committed)
 Framework/                Architecture, changelog, and Lessons
@@ -79,8 +79,8 @@ Private/       Private content layer (outer gitignore; independent inner repo, P
 
 | Command | Function | Runs |
 |---------|----------|------|
-| `phil:reconstruct` | Full-dimensional understanding of a source | 9-20 skills (mixed serial/parallel, auto domain detection) |
-| `phil:evaluate` | Simultaneous multi-angle critique | 7 skills (fully parallel) |
+| `phil:reconstruct` | Progressive understanding of a source | Deterministic Level 1/2/3 plan; reuse verified hash-current coverage; `full`/`deep` override |
+| `phil:evaluate` | Targeted multi-angle critique | Lightweight inference/fallacy baseline + feature/intent-selected dimensions |
 | `phil:review` | Peer review | phil-reviewer agent (8 dimensions + perspective simulation) |
 | `phil:write` | Philosophical writing | phil-writer agent (outline / draft / revision; draft mode has dual collaboration modes user-led/assistant-led) |
 | `phil:comment` | Argument detail and conceptual clarification | phil-commentator agent (6 critical dimensions) |
@@ -105,6 +105,8 @@ Each workflow file in `Framework/Workflow/Workflows/` defines its skill composit
 - `CLAUDE.md` / `AGENTS.md` — thin runtime adapters; legacy projects may use either as the fallback guidance file
 - `refs.md` — project-level reference list: `KEY | role (core-target/support/background) | status (cited/candidate/rejected) | notes`; each KEY points to the master library INDEX — zero file duplication
 - `{topic}-conception.txt` — Conception notes from ideation (Stage 3, `phil:tutor` incubating mode). Freely overwritten. Never versioned. Consumed by `phil:write outline`.
+- `{topic}-idea-ledger.json` — Structured living registry for substantive ideas that were activated, parked, rejected, or superseded. Never versioned and never silently deletes an idea.
+- `{topic}-workflow-state.json` — Cross-session pipeline state, artifact hashes, gate decisions, overrides, and next action. Never versioned as manuscript content.
 - `{topic}-draft.txt` — Working draft. Freely overwritten. Never versioned.
 - `{topic}-v{N}.txt` — Cut version. Created from draft when a trigger fires.
 - `{topic}-review.txt` — Review report.
@@ -118,7 +120,7 @@ Each workflow file in `Framework/Workflow/Workflows/` defines its skill composit
 ```
 Private/Bibliography/
 ├── PDF/                              Original PDFs (in NO git — immutable, re-obtainable)
-├── Analysis/                         Paired analysis files ({Author}_{Year}_{Title}.analysis.txt)
+├── Analysis/                         Paired analysis text + verification metadata (`.analysis.meta.json`)
 ├── Summaries/                        Level 0.5 summaries ({Author}_{Year}_{Title}.summary.txt)
 ├── Philosopher-Queue/                 Private observations, counters, and review candidates
 └── INDEX.md                          Master inventory (KEY, analysis level, topics tags)
@@ -133,9 +135,9 @@ Private/Bibliography/
 **Three recommendation trigger points** (model-executed): (1) on ingestion — new source's topics matched against each project {{GUIDE_FILE}}'s topic keywords (executed by `/phil:ingest`); (2) during in-project work — phil:tutor scans INDEX for entries whose topics match but which are absent from this project's refs.md (skipping `rejected`); (3) on citation extraction — phil-citation-extract outputs acquisition_candidates.
 
 ### Citation Gate (Rule 2 enforcement, two-hop)
-This is a model-executed behavioral rule:
+The semantic claim-to-source judgment is model-executed; artifact verification is deterministic:
 1. **Hop 1**: the cited KEY must be registered in this project's `refs.md`
-2. **Hop 2**: If a manuscript claim depends on analysis at Level N, but the source's `.analysis.txt` is only at Level N-1 or below → **BLOCK** and require analysis completion. No citation passes without a verified analysis backing it.
+2. **Hop 2**: The paired `.analysis.meta.json` must exist, declare at least Level N, have `verification_status: verified`, and match the current PDF and analysis SHA-256 hashes. Missing, provisional, stale, hash-mismatched, or shallow analyses → **BLOCK**. The INDEX level is an inventory view, not sufficient verification evidence.
 
 ## Reusability & Token Economy
 
@@ -147,7 +149,8 @@ Distilled from live runs (v0.4.2–v0.4.5). Goal: spend tokens on philosophy, no
 4. **Read at the cheapest sufficient level**: INDEX row → `.summary.txt` (Level 0.5) → `.analysis.txt` → PDF outline / page range → full text. Never run full-text extraction to answer what a summary already answers. Full-text reads are justified only by the analysis-level escalation triggers (Citation Gate) or an explicit read request.
 5. **Validated methods are settled**: procedures marked verified in `Framework/Lessons/` (e.g. the annotation-preserving stored→linked migration) are executed, not re-tested. Check `history.txt` / changelog / Lessons before re-investigating a known problem.
 6. **Environment facts are read, not re-probed**: proxy `127.0.0.1:6789`, Zotero hybrid MCP mode, API-key location, the 50-item write-batch cap — all recorded in this file, Lessons, and memory.
-7. **Model economy**: Neutral roles declare `quality_tier: inherit | high`. Runtime adapters map that tier to host-specific settings; Codex skills do not name a provider model. Bulk ingestion and summarization should use a cost-appropriate session model without weakening citation verification.
+7. **Model economy**: Neutral roles declare `quality_tier: inherit | high`. Runtime adapters map that tier to host-specific settings; Codex skills do not name a provider model. Bulk ingestion and summarization should use a cost-appropriate session model without weakening citation verification. Reconstruction and evaluation run a deterministic preplan before loading selected skills; examples and checklists remain unloaded unless a live ambiguity or explicit request requires them.
+8. **State before rereading**: Query the compact idea-ledger/workflow-state helpers before loading full artifacts. Hash-valid persisted outputs are reused; stale outputs are reported rather than silently trusted.
 
 ## Common Operations
 
@@ -206,7 +209,7 @@ Session summaries are written to `history.txt` by the model at the end of each c
 
 **Philosopher Database**: `Shared/Philosophers-DB/` — canonical claim-level JSON profiles plus generated domain views. `source-backed` claims route to bibliography evidence; `prompt-only` claims are `[source unverified]` discovery hints and cannot bypass the Citation Gate.
 
-**Data Contracts**: `Framework/Workflow/Schemas/` contains 15 JSON schemas; `Framework/Workflow/Templates/` contains the report templates.
+**Data Contracts**: `Framework/Workflow/Schemas/` contains 18 JSON schemas; `Framework/Workflow/Templates/` contains the report templates.
 
 ## Cross-Session Memory
 
@@ -214,11 +217,11 @@ Runtime-specific memory is optional and not a cross-runtime contract. Durable sh
 
 ## Architecture
 
-The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.6.1-alpha), built atop optional academic-research skills and covering general analytic philosophy, metaphysics, and metaethics.
+The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.6.3-alpha), built atop optional academic-research skills and covering general analytic philosophy, metaphysics, and metaethics.
 
 - **30 Skills** — canonical definitions in `Framework/Workflow/Skills/`
 - **9 Workflows** — canonical orchestration in `Framework/Workflow/Workflows/`
 - **7 Roles** — canonical role prompts in `Framework/Workflow/Roles/`
-- **15 JSON Schemas + 5 Report Templates** — data contracts and output skeletons
+- **18 JSON Schemas + 5 Report Templates** — data contracts and output skeletons
 - **26 Argument Forms** — canonical definitions in `Framework/Workflow/References/argument-forms/`
 - For complete skill inventory, build roadmap, and detailed architecture — see `ARCHITECTURE.md`

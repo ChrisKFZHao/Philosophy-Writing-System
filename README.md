@@ -2,7 +2,7 @@
 
 同时支持 Claude Code 与 Codex 的分析哲学研究与写作系统。提供从文献管理、PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.6.1-alpha
+**版本**: 0.6.3-alpha
 **语言**: Chinese（写作输出）/ English（技能定义与架构文档）
 
 ---
@@ -41,7 +41,7 @@
 依赖流向概览：
 
 ```
-phil:* 命令（9）──→ 技能（30）+ agents（7）──→ JSON schemas（15，数据契约）
+phil:* 命令（9）──→ 技能（30）+ agents（7）──→ JSON schemas（18，数据契约）
       │                    │
       │                    ├──→ pdf skill（必需）
       │                    └──→ ars-*（可选，ARS 插件）
@@ -80,7 +80,7 @@ phil:tutor              # reading 模式（默认）：苏格拉底式文献对�
 phil:tutor incubating   # incubating 模式：构思孵化
 ```
 
-阅读阶段用 **reading 模式**与导师对话——检验你对核心文献的理解、暴露盲区、推荐下一步阅读。读透之后进入 **incubating 模式**孵化你自己的论点：讨论文献间关系、切入角度、候选论题，产出 `{topic}-conception.txt`（前提级论证骨架；论题必须是你本人的表述，AI 补充的前提一律以 `[AI 补全]` 显式披露）。
+阅读阶段用 **reading 模式**与导师对话——检验你对核心文献的理解、暴露盲区、推荐下一步阅读。读透之后进入 **incubating 模式**孵化你自己的论点：讨论文献间关系、切入角度、候选论题，产出 `{topic}-conception.txt`（前提级论证骨架；论题必须是你本人的表述，AI 补充的前提一律以 `[AI 补全]` 显式披露）。独立的 `{topic}-idea-ledger.json` 保留弃用观点；v0.6.3 在 Stages 3–6 按七类真实事件查询最多两条候选，再由当前专业角色判断其是否会实质改变论证。阶段边界不会周期扫描，观点状态也不会因再次提及而自动改变。
 
 ### 3. 写论文
 
@@ -125,7 +125,7 @@ Philosophical Writing/
 │   ├── Skills/ Workflows/ Roles/     #   核心定义
 │   ├── Rules/ References/ Schemas/   #   规则、知识与数据契约
 │   ├── Templates/                    #   报告、根指南和新项目模板
-│   └── Scripts/                      #   生成器、doctor、扫描器、Zotero helper
+│   └── Scripts/                      #   生成器、doctor、状态工具、扫描器、Zotero helper
 ├── .claude/                          # 生成并提交的 Claude Code 适配器
 ├── .agents/skills/                   # 生成并提交的 Codex 适配器
 ├── Framework/                        # Framework 文档层（外层仓库）
@@ -136,8 +136,8 @@ Philosophical Writing/
 │   ├── Philosophers-DB/              #   规范 JSON 档案 + 动态多领域视图
 │   └── Format/                       #   格式模板（LaTeX/Word，可分享）
 └── Private/                          # 私有内容层（gitignore；独立内层仓库）
-    ├── Projects/{topic}/             #   每个写作项目一个目录：手稿 + refs.md +
-    │                                 #   VERSIONS.md + feedback-to-framework.md
+    ├── Projects/{topic}/             #   手稿 + refs.md + conception + idea-ledger +
+    │                                 #   workflow-state + VERSIONS.md
     ├── Bibliography/                 #   文献总库（PDF/、Analysis/、Summaries/、Philosopher-Queue/、INDEX.md）
     ├── Concepts/                     #   跨项目概念笔记
     └── Style/                        #   个人写作样文（文风校准）
@@ -153,8 +153,8 @@ Philosophical Writing/
 
 | 命令 | 功能 | 编排 |
 |------|------|------|
-| `phil:reconstruct` | 全维度理解文献 | 9-20 技能（混合串并行，自动领域检测） |
-| `phil:evaluate` | 多角度同时批判 | 7 技能（全并行） |
+| `phil:reconstruct` | 渐进式理解文献 | 确定性 Level 1/2/3 规划；仅补缺失覆盖；支持 `full` / `deep` |
+| `phil:evaluate` | 定向多角度批判 | 轻量推理/谬误基线 + 按特征或意图选择维度 |
 | `phil:review` | 同行审稿 | phil-reviewer agent（8 维度 + 立场模拟） |
 | `phil:write` | 哲学写作 | phil-writer role（outline / draft / revision；draft 含 user-led / assistant-led 双协作模式） |
 | `phil:comment` | 论证细节和概念澄清 | phil-commentator agent（6 批判维度） |
@@ -165,7 +165,7 @@ Philosophical Writing/
 
 每个工作流在 `Framework/Workflow/Workflows/` 定义；生成器输出 Claude commands 与 Codex `source-command-*` 技能。修改中立源后运行 `build-adapters.py`，提交生成结果，并以 `build-adapters.py --check` 防止漂移。
 
-**模型档位**：中立角色只声明 `quality_tier: inherit | high`。Claude 适配器把 `high` 映射为当前 `opus` 配置；Codex 继承当前会话模型，不在技能中写供应商模型名。
+**模型档位**：中立角色只声明 `quality_tier: inherit | high`。Claude 适配器把 `high` 映射为当前 `opus` 配置；Codex 继承当前会话模型，不在技能中写供应商模型名。重构与评估先做便宜的确定性预规划，再只加载选中的技能；长示例和检查表仅在真实歧义或显式请求时读取。
 
 ---
 
@@ -174,7 +174,7 @@ Philosophical Writing/
 系统内置三条硬性约束及一条运行时兼容规则（详见 `Framework/Workflow/Rules/`）：
 
 1. **不谄媚——条件 Socratic 追问**：想法清晰 → 直接执行；想法模糊 → 追问澄清。不以"制造反对"冒充"严谨"。在工作流阶段门与写作分节边界另有第二触发：能指名的论证缺陷 → 挑战；其余缺口 → 补全并以 `[AI 补全]` 显式披露；阶段门永不硬阻断。
-2. **不虚构引用**：未经核实的参考文献、引文、页码一律标注 `[source unverified]` 或 `[citation needed]`。Citation Gate：分析级别不足 → 阻断引用。
+2. **不虚构引用**：未经核实的参考文献、引文、页码一律标注 `[source unverified]` 或 `[citation needed]`。Citation Gate：KEY 未登记、分析级别不足、验证状态非 `verified` 或 PDF/分析哈希失配均阻断引用。
 3. **触发式版本管理**：不自动切版本。仅在三类事件触发时切分——(a) 审稿/评论后修订，(b) 新洞见或新论证，(c) 压缩或扩展。
 
 ---
@@ -191,14 +191,15 @@ Philosophical Writing/
 | 对话 agent（3 个） | Alpha | 已完成，待更多交互验证 |
 | 写作生产（4 个 agent） | Alpha | 已完成；v0.5.0 重组为六阶段管线 + 双协作模式，验证运行待做 |
 | 行为规则（3 条 + 运行时兼容） | Alpha | 已部署；兼容规则统一项目指南、协作别名、delegation 与 Zotero 降级 |
-| 文献管理 | Alpha | Citation Gate 框架就位；ingest 已实战运行论文/专著/文集三类文档 |
+| 文献管理 | Alpha | Citation Gate 已增加 analysis metadata 与哈希验证；ingest 已实战运行论文/专著/文集三类文档 |
 | Zotero 集成 | Alpha | 注释保全迁移与自动注册均经实战验证；存量按懒迁移原则逐步转换 |
 
 **已知限制**：
 - 双端静态与脚本测试已建立；九个工作流仍需分别在 Claude Code 与 Codex 完成人工最小验收
 - 哲学家数据库覆盖不均衡（分析传统为主，大陆哲学较弱）
+- 观点台账已接入 Stage 3–6 的事件驱动召回；仍需在两个运行时分别完成真实长文写作的人工验收
 - 已有生成一致性、manifest/frontmatter、别名、Zotero 降级、文献扫描与哲学家数据库治理的标准库测试；九个工作流仍需分别在两个宿主中做人工最小验收
 
 ---
 
-*最后更新: 2026-07-19（v0.6.1：哲学家数据库逐项溯源、私有动态候选队列与多领域视图）*
+*最后更新: 2026-07-19（v0.6.3：事件驱动观点再浮现、渐进式重构、定向评估与按需技能加载）*

@@ -79,7 +79,7 @@ A parallel four-phase arc, oriented toward crystallizing your own position rathe
 | 1: Landscape recall | Asks "How do your sources relate? Where do they agree, where do they clash?" | Map the terrain in your own words, drawing on refs.md and Stage 2 analyses |
 | 2: Angle probing | Asks "Where do you disagree? What is your entry point?" — no comprehension-quizzing | Stake out a candidate thesis and entry angle |
 | 3: Argument sketching | Sketches your main line at premise level, mapping each premise to a supporting refs.md KEY | Confirm, revise, or supply missing premises |
-| 4: Conception consolidation | Writes/updates `{topic}-conception.txt` | Confirm the conception, or ask for another round |
+| 4: Conception consolidation | Writes/updates `{topic}-conception.txt`; records substantive parked, rejected, or superseded alternatives in `{topic}-idea-ledger.json` | Confirm the conception, or ask for another round |
 
 Lenient interrogation (Rule 1 §Workflow Gates) governs this dialogue throughout: a nameable defect in the candidate thesis triggers a challenge; gaps short of a defect are filled charitably with an explicit `[AI 补全]` disclosure in the conception file, never silently.
 
@@ -91,3 +91,5 @@ Lenient interrogation (Rule 1 §Workflow Gates) governs this dialogue throughout
 - If phil:reconstruct has already been run, tell the agent — it will draw on the analysis results in its probing
 - The agent's knowledge sources: Philosophers-DB v2 INDEX plus selected source-backed profiles, argument-forms/ (26 argument forms), Private/Bibliography/INDEX.md (project bibliography)
 - `{topic}-conception.txt` is freely overwritten and never versioned (Rule 3)
+- Do not silently delete a substantive candidate idea during incubation. Record it with `idea-ledger.py`; an idea may become `active` only after explicit user confirmation.
+- Cross-stage resurfacing is event-driven, never a stage-boundary scan. Only these named events may query `idea-ledger.py candidates`: `new-evidence`, `related-objection`, `scope-change`, `argument-stall`, `defect-resolved`, `alternative-failed`, and `user-request`. Supply the event's concrete keywords and bibliography KEYs; its deterministic prefilter returns at most two candidates. Parked ideas follow their declared triggers; rejected ideas are eligible only for `defect-resolved` or explicit `user-request`, and superseded ideas only for `alternative-failed` or `user-request`. The model then judges only whether a candidate would materially change the current argument. Present qualifying ideas without changing their status, run `mark-surfaced` after presenting one, and reactivate only after the user explicitly confirms.

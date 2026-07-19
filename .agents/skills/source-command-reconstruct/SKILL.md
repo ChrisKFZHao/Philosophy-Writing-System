@@ -1,6 +1,6 @@
 ---
 name: source-command-reconstruct
-description: "Full-dimensional comprehension of philosophical texts — simultaneously runs argument reconstruction, charity audit, implicit premise detection, conceptual analysis, distinction tracking, thought experiment analysis, modal analysis, and contextualization, with automatic domain detection triggering specialized metaphysics/metaethics analyses"
+description: "Progressive, verification-aware comprehension of philosophical texts — plans the minimum Level 1, 2, or 3 coverage, reuses only verified hash-current analysis, and supports explicit full or deep coverage"
 ---
 
 <!-- Generated from Framework/Workflow. Do not edit directly. -->
@@ -18,69 +18,89 @@ description: "Full-dimensional comprehension of philosophical texts — simultan
 ## Usage
 
 ```
-/phil:reconstruct <text>
+/phil:reconstruct --level <1|2|3> <text>
+/phil:reconstruct --full <text>
 ```
 
-Or provide the text first, then trigger `/phil:reconstruct`.
+`--deep` is an alias for `--full`. A standalone legacy invocation without a level keeps the former full-comprehension behaviour; report that full coverage was selected. Pipeline and Citation Gate upgrade calls must specify the lowest required `--level`.
 
 ## Role
 
-Full-dimensional comprehension of others' texts. Runs all "understanding"-level analysis skills in a single pass and outputs an integrated argument-comprehension report.
+Produce a Chinese argument-comprehension report for another author's text, with progressive coverage rather than a fixed all-skill bundle. The selected level is a minimum coverage target, not a reason to run dimensions already present in a valid artifact.
 
-## Orchestrated Skills
+## Feature Classification and Deterministic Preplan
 
-Executed in stages according to dependencies; skills within a stage may run in parallel:
+Before reading optional skill material or delegating analysis, use the current execution model once to classify only the features present in the supplied text or a valid reused reconstruction. Do not invoke an analysis skill or load examples/checklists for this classification. Pass the resulting feature flags to `workflow-policy.py reconstruction-plan`; this deterministic planner does not interpret philosophical text itself. When a feature is genuinely ambiguous, select it rather than risk omitting a relevant dimension. For `--full` / `--deep`, make this classification exhaustive.
 
-### Stage 1: Core Argument Analysis (serial, strong dependencies)
-| # | Skill | Depends on |
-|------|------|------|
-| 1 | `phil-argument-reconstruct` | None — must run first |
-| 2 | `phil-charity-check` | Output of 1 (the reconstruction is needed to audit charity) |
-| 3 | `phil-premise-detect` | Output of 2 (implicit premises can only be identified once the charitable version is fixed) |
-| 4 | `phil-modal-arg` | Output of 1 (the reconstruction is needed to assess modal structure) |
+Report the resulting preplan containing:
 
-### Stage 2: Conceptual and Experimental Analysis (parallel)
-| Skill | Depends on |
-|------|------|
-| `phil-conceptual-analysis` | Output of 1 (the reconstruction is needed to locate key concepts) |
-| `phil-distinction-track` | Output of 1 |
-| `phil-thought-experiment` | Output of 1 |
-| `phil-intuition-pump` | Output of 1 |
+1. Requested target (`1`, `2`, `3`, or `full`) and any stated purpose.
+2. Current source SHA-256, prior analysis metadata and declared coverage, when a persisted artifact exists.
+3. A feature scan of the supplied text or valid Level 1 reconstruction: explicit argument, modal claims, thought experiments, analogies/parity claims, grounding/identity/essence/natural-kind/causation claims, and moral/normative claims.
+4. For each candidate dimension, the planner's `reuse`, `run`, or `skip` decision, selector, and deterministic reason: above target level, source or analysis hash changed, verification failed, coverage missing, feature/intent absent, explicit override, or valid coverage reused.
 
-### Stage 3: Contextualization (serial)
-| Skill | Depends on |
-|------|------|
-| `phil-contextualize` | After Stages 1-2 are complete; contextual positioning based on the full understanding |
+New metadata coverage entries MUST use canonical `phil-*` skill IDs. When reading a legacy artifact, `workflow-policy.py` may normalize a documented legacy alias to its canonical ID; never write a new alias. Reuse is permitted only when the prior metadata is `verified`, both its recorded source and analysis hashes equal the current hashes, and its coverage explicitly contains the needed canonical dimension. A changed source or analysis hash invalidates the artifact for reuse; mark it `stale` and rerun only the dimensions required by the new target.
 
-### Stage 4: Automatic Domain Detection (triggered as needed)
-Automatically detect and trigger the following skills based on the text's content:
-- **Metaphysics triggers** (ontological/identity/grounding/conceivability/causation/essence/natural-kind vocabulary): run the corresponding skills
-- **Metaethics triggers** (moral/normative/reasons/obligation vocabulary): run the corresponding skills
+## Coverage Levels
 
-Domain detection logic:
-- Scan the text for keywords → list the triggered domains → report to the user for confirmation → run the corresponding skills
+### Level 1: Argument Backbone
+
+Run `phil-argument-reconstruct` only when no valid reconstruction coverage can be reused. Produce the thesis, numbered premise-conclusion chains, argument type, and unresolved textual ambiguities.
+
+### Level 2: Interpretive and Conceptual Reliability
+
+Include Level 1, then run only missing coverage among:
+
+| Skill | Trigger | Dependency |
+|---|---|---|
+| `phil-charity-check` | Always at Level 2 | Level 1 reconstruction |
+| `phil-premise-detect` | Always at Level 2 | charitable reconstruction |
+| `phil-conceptual-analysis` | a term carries argumentative weight | Level 1 reconstruction |
+| `phil-distinction-track` | the argument relies on a conceptual distinction | Level 1 reconstruction |
+
+Run charity before implicit-premise detection. The two conceptual tasks may run in parallel after Level 1. If the scan finds no material concept or distinction, record an explicit `skip` rather than generating an empty section.
+
+### Level 3: Contextual and Domain Coverage
+
+Include Levels 1-2, then run only missing coverage among:
+
+| Skill or dimension | Trigger |
+|---|---|
+| `phil-contextualize` | Always at Level 3 |
+| `phil-dialectical-map` | Always at Level 3 |
+| `phil-modal-arg` | modal operators or modal inference matters to the conclusion |
+| `phil-thought-experiment` | a hypothetical case does argumentative work |
+| `phil-intuition-pump` | the case is used to elicit a judgment supporting an inference |
+| `phil-ontological-commitment` | ontological commitment or category claims |
+| `phil-identity-persistence` | identity across time or worlds |
+| `phil-grounding-check` | grounding, realization, constitution, or supervenience |
+| `phil-conceivability-arg` | conceivability-to-possibility reasoning |
+| `phil-causation-analyze` | a substantive causal explanation or exclusion claim |
+| `phil-essence-detect` | essence, necessity, or accidental-property reasoning |
+| `phil-natural-kind-analyze` | natural-kind classification is inferentially important |
+| metaethics skills | only the corresponding moral/normative/semantic/psychological/disagreement/epistemic/supervenience feature is present |
+
+`--full` / `--deep` runs every applicable general and detected domain dimension despite a missing efficiency trigger. It only covers detected dimensions: it does not invent a domain analysis where the text contains no relevant claim, and records those dimensions as not applicable.
+
+## Skill Material Loading
+
+Load a selected skill's operational instructions before running it. Do not load its examples, extended checklists, historical surveys, or reference files during the preplan. Read those materials only when the selected dimension requires them to resolve an identified ambiguity, classify a live case, or meet a caller's explicit request. Reused coverage does not justify reopening the source or loading the corresponding skill materials.
 
 ## Output Format
 
-Generate an integrated argument-comprehension report (structure follows `analysis-report-schema.json`) containing the following sections:
+Generate an integrated Chinese report with:
 
-1. **Executive summary**: the text's core thesis, argument type, and an overview of its logical structure
-2. **Argument reconstruction**: numbered premise-conclusion chains, implicit premises flagged, logical form
-3. **Charity audit**: assessment of the reconstruction's charitableness, alternative readings
-4. **Concept map**: key concepts and their definitions, the network of relations among concepts
-5. **Distinction index**: inventory and analysis of all conceptual distinctions in the text
-6. **Thought experiments and intuition pumps**: structural deconstruction and assessment of argumentative force
-7. **Modal assessment**: analysis of the logical structure of modal claims
-8. **Contextual positioning**: the text's place within the dialectical tradition
-9. **Domain-specific analysis** (as needed): ontological commitment inventory / metaethical position analysis
-10. **Open questions**: concepts awaiting clarification, premises awaiting completion
+1. Preplan and coverage ledger: target, source/artifact status, and `reuse`/`run`/`skip` decisions.
+2. Executive summary and argument reconstruction.
+3. Only the Level 2 and Level 3 sections actually run or reused, each labeled with its coverage status.
+4. Domain-specific findings only where triggered or explicitly requested.
+5. Open questions and remaining coverage gaps.
 
-When the integrated report is persisted under `Private/Bibliography/Analysis/`, include `source_bib_key` and a compact top-level `philosopher_observations[]` block conforming to `philosopher-observation-schema.json`. Reuse already-produced contextualization results; do not reread the source. Then record the artifact with `philosopher-db.py observe --analysis-level <current INDEX level> --input <analysis-file>`. Ad-hoc reports that are not persisted do not update the queue.
+When persisting under `Private/Bibliography/Analysis/`, include `source_bib_key` and compact `philosopher_observations[]` conforming to `philosopher-observation-schema.json`. Refresh the paired `.analysis.meta.json` according to `analysis-metadata-schema.json`: record the current source and analysis hashes, target level, canonical actual-coverage IDs, workflow version, and verification status. New or partially checked reports are `provisional`; set `verified` only after the declared coverage has been checked against the current source. Reuse valid contextualization rather than rereading the source to recreate unchanged metadata. Then record the artifact with `philosopher-db.py observe --analysis-level <current INDEX level> --input <analysis-file>`. Ad-hoc reports do not update the queue.
 
 ## Notes
 
-- Write all output in Chinese (project convention)
-- Domain detection is automatic; explicitly report which domains were triggered and which skills were activated
-- This command's output is the primary input to `/phil:evaluate` and `/phil:write draft`
-- Philosopher observations create private review candidates only; they never overwrite canonical claims
-- Stage 1 cannot be parallelized (strong dependencies); Stage 2 may run in parallel internally
+- Write all output in Chinese.
+- State which features triggered each optional dimension and why absent dimensions were skipped.
+- The result is a primary input to `/phil:evaluate` and `/phil:write draft`.
+- Philosopher observations create private review candidates only; they never overwrite canonical claims.

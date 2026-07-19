@@ -594,7 +594,7 @@
                       "id":  "evaluate",
                       "kind":  "workflow",
                       "source":  "Workflows/evaluate.md",
-                      "description":  "Simultaneous multi-angle critique of philosophical texts — runs counterexample generation, dialectical mapping, analogy assessment, parity checking, intuition pump detection, methodological reflection, and fallacy analysis in parallel\r",
+                      "description":  "Cost-aware critical evaluation of philosophical texts — always runs a lightweight inference and fallacy baseline, then selects only feature- or intent-relevant dimensions unless full coverage is requested",
                       "dependencies":  [
                                            "phil-counterexample",
                                            "phil-dialectical-map",
@@ -693,7 +693,7 @@
                       "id":  "reconstruct",
                       "kind":  "workflow",
                       "source":  "Workflows/reconstruct.md",
-                      "description":  "Full-dimensional comprehension of philosophical texts — simultaneously runs argument reconstruction, charity audit, implicit premise detection, conceptual analysis, distinction tracking, thought experiment analysis, modal analysis, and contextualization, with automatic domain detection triggering specialized metaphysics/metaethics analyses\r",
+                      "description":  "Progressive, verification-aware comprehension of philosophical texts — plans the minimum Level 1, 2, or 3 coverage, reuses only verified hash-current analysis, and supports explicit full or deep coverage",
                       "dependencies":  [
                                            "phil-argument-reconstruct",
                                            "phil-charity-check",
@@ -704,6 +704,7 @@
                                            "phil-thought-experiment",
                                            "phil-intuition-pump",
                                            "phil-contextualize",
+                                           "phil-dialectical-map",
                                            "phil-ontological-commitment",
                                            "phil-identity-persistence",
                                            "phil-grounding-check",

@@ -55,6 +55,8 @@ When reviewing from a specific philosophical perspective, draw on the philosophe
 4. **Severity calibration**: Grade each finding: **Fatal** (the argument cannot succeed without addressing this), **Severe** (substantially weakens the argument), **Moderate** (a flaw that a competent opponent would exploit), **Minor** (stylistic or presentational).
 5. **Report assembly**: Compile findings into the structured review report format.
 
+**Blind review boundary**: Do not load, query, or mention the project's idea ledger. Review the manuscript and supplied evidence only. The orchestrator may later decide whether a finding creates a named event for a separate, event-driven ledger query.
+
 **Output**: A structured review report.
 
 ### Mode 2: Perspective Review

@@ -1,5 +1,25 @@
 # Framework Changelog
 
+## v0.6.3-alpha — 2026-07-19
+
+**Event-driven idea resurfacing and cost-aware analysis planning**
+
+- Enabled bounded semantic resurfacing across Stages 3–6. Only seven named events may query the idea ledger; deterministic overlap filtering returns at most two candidates, the current specialist presents only ideas that would materially change the argument, and prior status is preserved until explicit user reactivation.
+- Reworked `phil:reconstruct` into progressive Level 1/2/3 coverage. A deterministic policy plan reuses only verified source-and-analysis-hash-current coverage, invalidates stale artifacts, runs only missing applicable dimensions, and preserves explicit `full` / `deep` coverage.
+- Reworked `phil:evaluate` around an always-fresh lightweight inference/fallacy baseline plus feature- or intent-selected dimensions. Counterexample, dialectical, analogy, parity, intuition-pump, and methodology analysis no longer run merely to fill a fixed report shape.
+- Added on-demand skill-material loading: selected skills still load their complete operational instructions, while examples, long checklists, and extended references remain unloaded unless a live ambiguity or explicit request requires them.
+- Validation: 60 standard-library tests pass; `workflow-doctor.py`, the 203-file adapter freshness check, script compilation, and diff-format checks pass. A live provisional Srinivasan artifact is correctly refused for reuse and blocked by the Citation Gate. The private content doctor still reports pre-existing malformed/missing summaries, that provisional analysis, and legacy project-guidance warnings; no expensive literature work was rerun to conceal those defects.
+
+## v0.6.2-alpha — 2026-07-19
+
+**Project-state and citation-integrity foundation**
+
+- Added structured per-project idea-ledger and workflow-state contracts with standard-library helpers for stable IDs, status transitions, compact candidate queries, artifact hashing, gate decisions, and cross-session resumption.
+- Added paired analysis verification metadata. Citation Gate now blocks missing, provisional, stale, hash-mismatched, or shallow analyses instead of trusting the INDEX level alone; the existing Srinivasan analysis remains provisional until full-PDF verification.
+- Added a content doctor and corrected bibliography scanning to parse inventory rows rather than prose examples, validate PDF/INDEX/summary/analysis/refs links, and degrade cleanly when `Private/` is absent.
+- Added deterministic tests for the new schemas, helpers, scanner, doctor, and Citation Gate paths. Cross-stage semantic resurfacing of archived ideas is deliberately deferred to the next quality-sensitive work package.
+- Reserved the next safety-and-recovery work package: dependency-aware automatic rollback, stale-output fail-closed gates, direct philosopher-claim hash verification, atomic state writes, and bounded Stage 3-6 idea resurfacing. This is planned work, not a claim of current support.
+
 ## v0.6.1-alpha — 2026-07-19
 
 **Philosophers-DB v2: claim-level provenance, dynamic intake, and generated domain views**

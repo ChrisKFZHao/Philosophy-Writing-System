@@ -99,7 +99,7 @@ By document type:
 - **paper / monograph** — one row (the whole work). The monograph's chapters do **not** get their own rows; they live as segments inside the one summary file.
 - **collection** — a **volume row** plus **one row per member paper**:
   - *Volume row*: KEY = `EDITOR-TITLE`; PDF column = the volume file; owns the Zotero `book` item; Topics span the whole volume.
-  - *Member-paper rows*: KEY = `AUTHOR-TITLE` of that paper (standard convention; collision → append year). The **PDF column points at the shared volume file plus the page range and container KEY**, e.g. `PDF/Chalmers_2009_Metametaphysics.pdf, pp. 347–383, in CHALMERS-METAMETAPHYSICS`. Topics are the member paper's own. This is what makes each member independently citable — refs.md registers the member KEY, and the two-hop Citation Gate reads the member row's analysis level.
+  - *Member-paper rows*: KEY = `AUTHOR-TITLE` of that paper (standard convention; collision → append year). The **PDF column points at the shared volume file plus the page range and container KEY**, e.g. `PDF/Chalmers_2009_Metametaphysics.pdf, pp. 347–383, in CHALMERS-METAMETAPHYSICS`. Topics are the member paper's own. This is what makes each member independently citable: refs.md registers the member KEY, while the two-hop Citation Gate uses that KEY's verified analysis metadata and the shared volume hash.
 
 ### Step 6: Summarize
 

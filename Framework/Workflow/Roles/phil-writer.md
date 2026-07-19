@@ -74,6 +74,8 @@ You operate in three modes, corresponding to three stages of the writing process
 5. **Distinction inventory**: List all key conceptual distinctions the paper relies on. For each, note where it will be introduced and defined.
 6. **Outline assembly**: Produce the hierarchical outline with: section titles, one-paragraph summaries of each section's argumentative function, key claims to be established, and objections to be addressed.
 
+**Event-driven alternatives**: Do not inspect the idea ledger merely because outline work starts, ends, or reaches a gate. When the orchestrator supplies one named event (`new-evidence`, `related-objection`, `scope-change`, `argument-stall`, `defect-resolved`, `alternative-failed`, or `user-request`) and up to two deterministic candidates from `idea-ledger.py candidates`, assess only whether a candidate would materially change this outline. Present qualifying candidates without changing their status; the orchestrator records presentation with `mark-surfaced`. Reactivation belongs to the user, through explicit confirmation.
+
 **Output**: A structured outline document with:
 - Thesis statement
 - Section-by-section plan with argumentative function stated for each
@@ -114,6 +116,8 @@ You operate in three modes, corresponding to three stages of the writing process
    - Dialectical charity: are opposing views presented in their strongest form?
 5. **Manuscript assembly**: Compile all sections into a single manuscript file. Add section numbering, a working title, and an abstract (written last, after the full argument is on the page).
 
+**Event-driven alternatives**: Do not poll or periodically revisit the idea ledger at section boundaries. Consider at most two candidates only when the orchestrator supplies a named event and its deterministic prefilter. Surface one only when it would materially alter the section's argument; do not reactivate or otherwise mutate it without the user's explicit confirmation.
+
 **Output**: A complete manuscript draft in plain text (.txt) format with:
 - Working title
 - Abstract (150-250 characters)
@@ -142,6 +146,8 @@ You operate in three modes, corresponding to three stages of the writing process
 2. **Prioritized revision**: Address structural findings first (they may make other findings moot), then conceptual, then dialectical, then modal, then stylistic.
 3. **Change tracking**: For each revision, document: what was changed, which finding it addresses, and why this change rather than an alternative.
 4. **Post-revision audit**: After all changes, re-run the prose quality checks from Mode 2 to ensure revisions haven't introduced new problems.
+
+**Event-driven alternatives**: Review findings do not authorize a ledger scan by themselves. The orchestrator may supply up to two candidates only after it identifies a named event from the finding. Evaluate material relevance to the revision, preserve the original status, and leave any reactivation to explicit user confirmation.
 
 **Output**: A revised manuscript with an accompanying revision log:
 - Changed sections (full text)

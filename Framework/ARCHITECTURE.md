@@ -1,6 +1,6 @@
 # Analytic Philosophy Writing System — Architecture Document
 
-> **Version**: 0.6.1-alpha &emsp; **Status**: Alpha
+> **Version**: 0.6.3-alpha &emsp; **Status**: Alpha
 >
 > **Runtime hosts**: Claude Code and Codex
 >
@@ -133,9 +133,9 @@ Framework/Workflow/                 # Platform-neutral source of truth
 ├── Roles/{role}.md                 # quality_tier + neutral capabilities
 ├── Rules/                          # behavior + runtime compatibility
 ├── References/                     # argument forms, glossaries, taxonomies
-├── Schemas/                        # 15 JSON contracts + registry
+├── Schemas/                        # 18 JSON contracts + registry
 ├── Templates/                      # reports, generated root guides, project adapters
-├── Scripts/                        # generator, doctor, scanner, policy, Zotero helper
+├── Scripts/                        # generator, doctors, state helpers, scanner, policy, Zotero helper
 └── Tests/                          # stdlib regression tests
 
 .claude/                             # Generated and committed Claude Code adapter
@@ -166,6 +166,28 @@ Runtime mapping:
 | Delegation | `Agent` tool | Parallel agents when available; serial dependency-order fallback |
 | Project guidance | `PROJECT.md` → `AGENTS.md` → `CLAUDE.md` | Same order |
 | Zotero | MCP full backend when configured | MCP full backend; local plugin is partial fallback |
+
+### Runtime State and Integrity
+
+Two project-local JSON artifacts separate operational state from manuscript versions. `{topic}-idea-ledger.json` preserves substantive active, parked, rejected, and superseded ideas with stable IDs and compact event triggers. `{topic}-workflow-state.json` records the current stage, next action, gate decisions, and hashes of reusable artifacts. Both are validated by standard-library helpers and are never cut as manuscript versions.
+
+Resurfacing is event-driven rather than periodic: the deterministic ledger query first filters by one of seven named events plus keyword or bibliography-key overlap and returns at most two candidates. Across Stages 3-6, the current specialist then performs only the semantic judgment that cannot be deterministic: whether a candidate would materially change the present argument. Only qualifying ideas are presented and marked surfaced; their prior status remains unchanged until the user explicitly reactivates one. Stage boundaries, gates, and section boundaries never trigger a ledger scan by themselves.
+
+Reconstruction and evaluation use the same economy pattern. A deterministic preplan selects the minimum analysis level or evaluative dimensions before any optional skill material is loaded. Verified source-and-analysis-hash-current coverage is reused; stale or provisional coverage fails closed. Explicit `full` or `deep` requests preserve complete applicable coverage, while absent domains do not generate boilerplate analysis. Selected skills load their complete operational instructions, but examples, long checklists, and extended references stay unloaded unless a live ambiguity or explicit request requires them.
+
+Citation verification is fail-closed. The INDEX level is only an inventory view; a citation passes Hop 2 only when paired analysis metadata is verified, sufficiently deep, and hash-current. `content-doctor.py` checks the private INDEX/PDF/summary/analysis/refs graph without mutating it, while `workflow-doctor.py` checks the shareable framework and generated adapters.
+
+#### Planned Safety and Recovery Work Package (not implemented)
+
+The current foundation does not yet meet the strongest safety policy. The next quality-sensitive work package must close the following control gaps before the workflow is described as fail-safe:
+
+1. Add an explicit stage dependency graph and compute the earliest affected stage when an upstream artifact changes.
+2. Persist `return_to`, `invalidation_reason`, and an audit event for every rollback; mark all dependent artifacts stale without deleting prior outputs.
+3. Make stage advancement and gate recording fail closed when required inputs are stale or missing. Any override must be explicit, reasoned, and retained in the audit trail.
+4. Make philosopher claim verification perform direct source/analysis file hash checks, rather than trusting caller-supplied match flags.
+5. Use atomic writes (temporary file plus replace) for ledger and workflow state, and validate state before every mutation.
+
+Acceptance requires: all unit tests pass; `workflow-doctor.py`, `build-adapters.py --check`, and `content-doctor.py` pass for the available private content; stale upstream artifacts cannot advance a stage; and a rollback/resume test proves that old outputs remain preserved while only the affected downstream work is repeated.
 
 ---
 ## 4. Layered Architecture
@@ -1055,8 +1077,8 @@ Primer references:     <domain>-primer.md
 Format: phil:<action>  (namespace: phil)
 
 Commands (9 composite commands):
-  phil:reconstruct    Full-dimension text understanding (9-20 skills, mixed serial/parallel)
-  phil:evaluate       Multi-angle parallel critique (7 skills, fully parallel)
+  phil:reconstruct    Progressive Level 1/2/3 understanding with verified coverage reuse
+  phil:evaluate       Baseline inference scan plus targeted evaluative dimensions
   phil:review         Peer review (phil-reviewer agent, 8 dimensions)
   phil:write          Philosophy writing (phil-writer agent, outline/draft/revision)
   phil:comment        Deep commentary (phil-commentator agent, 6 critical dimensions)
@@ -1473,7 +1495,9 @@ User Input (text / PDF / question)
 
 ---
 
-*Document version 0.6.1-alpha · Last updated 2026-07-19 · claim-level philosopher provenance, private dynamic observation queue, canonical profiles, generated domain views, and the `phil:philosophers` maintenance workflow.*
+*Document version 0.6.3-alpha · Last updated 2026-07-19 · event-driven idea resurfacing, progressive reconstruction, targeted evaluation, and on-demand skill loading.*
+*Previous: 0.6.2-alpha · 2026-07-19 · project state foundations, idea-ledger and workflow-state contracts, deterministic content validation, and verification-aware Citation Gate.*
+*Previous: 0.6.1-alpha · 2026-07-19 · claim-level philosopher provenance, private dynamic observation queue, canonical profiles, generated domain views, and the `phil:philosophers` maintenance workflow.*
 *Previous: 0.6.0-alpha · 2026-07-17 · platform-neutral `Framework/Workflow/` source, manifest-driven Claude Code/Codex adapters, portable scripts, collaboration aliases, runtime capability mapping, and explicit Zotero full/partial/skipped degradation.*
 *Previous: 0.5.0-alpha · 2026-07-17 · six-stage reading-before-thesis workflow, conception incubation, lenient-interrogation gates, dual draft collaboration, and model tiers.*
 *Previous: 0.4.1-alpha · 2026-07-14 · literature ingestion — /phil:ingest command + phil-summarize skill + summary-schema.json; canonical bibliography stem {Author}_{Year}_{Title}; Summaries/ (Level 0.5) activated*

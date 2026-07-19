@@ -61,7 +61,10 @@ class PolicyTests(unittest.TestCase):
             "hop": 2,
             "reason": "analysis-level-insufficient",
         })
-        self.assertEqual(policy.citation_gate(True, 2, 2)["decision"], "pass")
+        self.assertEqual(
+            policy.citation_gate(True, 2, 2)["reason"],
+            "analysis-metadata-missing",
+        )
 
     def test_philosopher_claims_route_through_source_gate(self):
         policy = load_script("workflow-policy.py")
@@ -72,7 +75,18 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual((missing["decision"], missing["hop"]), ("block", 1))
         shallow = policy.philosopher_claim_gate("source-backed", evidence, {"LEWIS-WORLDS"}, 3)
         self.assertEqual((shallow["decision"], shallow["hop"]), ("block", 2))
-        passed = policy.philosopher_claim_gate("source-backed", evidence, {"LEWIS-WORLDS"}, 2)
+        passed = policy.philosopher_claim_gate(
+            "source-backed",
+            evidence,
+            {"LEWIS-WORLDS"},
+            2,
+            {"LEWIS-WORLDS": {
+                "analysis_level": 2,
+                "verification_status": "verified",
+                "source_hash_matches": True,
+                "analysis_hash_matches": True,
+            }},
+        )
         self.assertEqual(passed["eligible_keys"], ["LEWIS-WORLDS"])
 
 
@@ -331,14 +345,13 @@ class AdapterTests(unittest.TestCase):
     def test_key_workflow_sections(self):
         required = {
             "reconstruct": [
-                "Executive summary", "Argument reconstruction", "Charity audit", "Concept map",
-                "Distinction index", "Thought experiments and intuition pumps", "Modal assessment",
-                "Contextual positioning", "Domain-specific analysis", "Open questions",
+                "Preplan and coverage ledger", "Executive summary and argument reconstruction",
+                "Only the Level 2 and Level 3 sections", "Domain-specific findings",
+                "Open questions and remaining coverage gaps",
             ],
             "evaluate": [
-                "Executive summary", "Counterexample inventory", "Dialectical structure",
-                "Analogy assessment", "Parity check", "Intuition pump analysis",
-                "Methodological audit", "Fallacy inventory", "Improvement recommendations",
+                "Preplan", "Inference and fallacy baseline", "One labeled section",
+                "highest-priority revisions", "coverage gaps and not-applicable dimensions",
             ],
             "review": [
                 "Overall assessment", "Dimension-by-dimension scores and comments",
@@ -359,6 +372,7 @@ class AdapterTests(unittest.TestCase):
             "phil-intuition-pump", "phil-contextualize",
         ]
         self.assertEqual(reconstruct[: len(expected_prefix)], expected_prefix)
+        self.assertIn("phil-dialectical-map", reconstruct)
         evaluate = self.workflow_item("evaluate")
         self.assertEqual(evaluate["dependencies"], [
             "phil-counterexample", "phil-dialectical-map", "phil-analogy-check",

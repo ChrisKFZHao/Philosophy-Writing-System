@@ -1,6 +1,6 @@
 ---
 name: source-command-evaluate
-description: "Simultaneous multi-angle critique of philosophical texts — runs counterexample generation, dialectical mapping, analogy assessment, parity checking, intuition pump detection, methodological reflection, and fallacy analysis in parallel"
+description: "Cost-aware critical evaluation of philosophical texts — always runs a lightweight inference and fallacy baseline, then selects only feature- or intent-relevant dimensions unless full coverage is requested"
 ---
 
 <!-- Generated from Framework/Workflow. Do not edit directly. -->
@@ -19,45 +19,60 @@ description: "Simultaneous multi-angle critique of philosophical texts — runs 
 
 ```
 /phil:evaluate <text or argument>
+/phil:evaluate --full <text or argument>
 ```
 
-Or provide the text first, then trigger `/phil:evaluate`. Works best when given the output of `/phil:reconstruct` as input.
+`--deep` is an alias for `--full`. The command works best with a valid `/phil:reconstruct` artifact, but it must not require a full reconstruction merely to identify ordinary inferential defects.
 
 ## Role
 
-Simultaneous multi-angle critique of **others' existing texts**. Seven evaluative dimensions run in parallel, producing an integrated critical evaluation report.
+Critically evaluate another author's existing text in Chinese while avoiding an automatic seven-dimension critique. Produce a baseline inference/fallacy assessment first, then add only dimensions supported by the argument's features or the caller's stated evaluative purpose.
 
-## Orchestrated Skills
+## Feature Classification, Deterministic Preplan, and Reuse
 
-All 7 skills have no interdependencies and **run in parallel**:
+Before loading optional skill material, use the current execution model once to classify only the argument features needed by the evaluation table. Do not invoke an analysis skill or load examples/checklists for this classification. Pass those flags and the caller intent to `workflow-policy.py evaluation-plan`; the planner is deterministic given those inputs and does not interpret the text itself. Treat an ambiguous feature as present, and make the classification exhaustive for `--full` / `--deep`.
 
-| Skill | Function |
-|------|------|
-| `phil-counterexample` | Counterexample construction: 6 counterexample types + four-dimensional assessment + dialectical anticipation |
-| `phil-dialectical-map` | Dialectical mapping: thesis-objection-response attack-defense tree |
-| `phil-analogy-check` | Analogy assessment: source-target correspondence, relevance of shared properties, disanalogy detection |
-| `phil-parity-check` | Parity checking: inferential parity, companions-in-guilt, false parity |
-| `phil-intuition-pump` | Intuition pump analysis: intuition-to-judgment chains, framing effects, debunking susceptibility |
-| `phil-methodology` | Methodological reflection: method classification, consistency checking, alternative methods |
-| Fallacy detection | Fallacy scan based on `fallacy-catalog.md` |
+Report the planner's current input hash, current analysis-artifact hash when supplied, reconstruction coverage, detected features, caller intent, and each dimension's `reuse`, `run`, or `skip` decision, selector, and reason.
+
+Use reconstruction findings only when their recorded source hash matches the current input hash, their recorded analysis hash matches the current analysis artifact, and their declared coverage is valid. A source or analysis hash mismatch makes those findings stale: do not reuse them, and do not silently treat an old report as a substitute for current analysis. Reuse only the specific valid sections needed by the chosen dimension; never rerun a reconstruct dimension merely because evaluate was called.
+
+## Baseline: Always Run
+
+Perform a lightweight inference and fallacy scan. Use a valid argument reconstruction when available; otherwise identify only the minimum thesis, premises, and inferential links needed to assess support. Check for material logical gaps, equivocation, circular support, illicit shifts in burden, and applicable entries from `fallacy-catalog.md`. This baseline is not a substitute for `phil-counterexample` or `phil-dialectical-map`.
+
+## Targeted Dimensions
+
+After the baseline, select dimensions independently. Selected dimensions with no interdependencies may run in parallel.
+
+| Dimension | Skill | Run when |
+|---|---|---|
+| Counterexample testing | `phil-counterexample` | the caller asks for stress-testing, a contested premise is identifiable, or the baseline exposes a vulnerable generalization |
+| Dialectical mapping | `phil-dialectical-map` | the text develops objections/responses, or the caller asks for dialectical structure |
+| Analogy assessment | `phil-analogy-check` | the argument relies on a source-target analogy |
+| Parity assessment | `phil-parity-check` | it claims parity, symmetry, or a companions-in-guilt move |
+| Intuition-pump analysis | `phil-intuition-pump` | a thought experiment is intended to elicit a supporting judgment |
+| Methodological audit | `phil-methodology` | methodology is explicit, contested, or material to the inference |
+
+`--full` / `--deep` always adds counterexample stress-testing after the baseline and runs every other applicable detected dimension in the table. A dimension with no corresponding feature remains not applicable rather than receiving a generic boilerplate section.
+
+## Skill Material Loading
+
+Read a selected skill's operational instructions before use. Keep examples, long checklists, historical surveys, and reference documents unloaded unless they are necessary to assess a live feature, resolve a classification ambiguity, or were explicitly requested. Do not load a skill merely to confirm that a preplan has skipped it.
 
 ## Output Format
 
-Generate an integrated critical evaluation report containing the following sections:
+Generate an integrated Chinese evaluation report containing:
 
-1. **Executive summary**: the 3-5 most serious problems, overall assessment of argumentative force
-2. **Counterexample inventory**: ranked by severity, with type, target premise, and dialectical anticipation
-3. **Dialectical structure**: ASCII visualization of the attack-defense tree
-4. **Analogy assessment**: mapping-adequacy score for each analogical argument
-5. **Parity check**: verification results for parity claims
-6. **Intuition pump analysis**: framing bias and debunking assessment
-7. **Methodological audit**: method classification, consistency, alternatives
-8. **Fallacy inventory**: detected logical leaps and fallacies
-9. **Improvement recommendations**: the 3-5 key problems the author most needs to address
+1. Preplan: input/artifact validity, detected features, caller intent, and `reuse`/`run`/`skip` decisions.
+2. Inference and fallacy baseline, ranked by seriousness.
+3. One labeled section for each selected or reused targeted dimension.
+4. A short list of the 3-5 highest-priority revisions, tied to the relevant baseline or selected-dimension finding.
+5. Explicit coverage gaps and not-applicable dimensions.
+
+Do not emit empty analogy, parity, intuition, methodology, counterexample, or dialectical sections solely to preserve a fixed report shape.
 
 ## Notes
 
-- Write all output in Chinese
-- The 7 skills run in parallel; each produces its output independently before the results are merged
-- If output from `/phil:reconstruct` already exists, use it directly as input — no re-analysis needed. In that case do not re-run `phil-intuition-pump`; use the intuition pump analysis from reconstruct Stage 2 as input
-- Difference from `/phil:review`: evaluate targets the argumentative quality of others' texts; review is peer review of one's own papers
+- Write all output in Chinese.
+- `/phil:evaluate` assesses the argumentative quality of others' texts; `/phil:review` is peer review of one's own paper.
+- A valid reconstruct result may be reused selectively, including its intuition-pump finding; stale results may not be reused.
