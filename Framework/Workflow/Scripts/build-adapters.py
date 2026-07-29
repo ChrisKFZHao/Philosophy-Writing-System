@@ -141,13 +141,26 @@ def codex_workflow_preamble(item: dict) -> str:
             "- When delegation is available, parallelize only independent stages; otherwise execute the same "
             "dependency order serially.\n"
         )
+    economic_delegation = (
+        "- Apply the session-scoped cost-aware delegation policy in "
+        "`Framework/Workflow/Rules/runtime-compatibility.md`. On the first eligible task in this session, "
+        "ask once whether to use a lower-cost host candidate and which candidate to reuse; retain that choice "
+        "only for this session. If the user revokes it, do not ask or delegate again in this session.\n"
+        "- An eligible task is repeatable, independent, read-only, non-interactive, and returns only a "
+        "discardable candidate artifact. The parent task must validate it before any artifact write or "
+        "Citation Gate use.\n"
+        "- Never delegate writing, review, Citation Gate work, bibliography or project changes, or workflow "
+        "orchestration to the lower-cost candidate. If it is unavailable or insufficient, retain the current "
+        "session model rather than selecting another candidate automatically. Do not claim a lower-cost "
+        "candidate is optimal without host-provided evidence.\n"
+    )
     return (
         "## Codex Runtime Adapter\n\n"
         f"- Treat `phil:{item['id']}` and `$source-command-{item['id']}` as the same public workflow.\n"
         "- Resolve project guidance in this order: `PROJECT.md`, `AGENTS.md`, then `CLAUDE.md`.\n"
         "- Normalize `claude-led` and `codex-led` to `assistant-led`, report the alias as deprecated, and use "
         "`[AI 补全]` for new disclosures.\n"
-        f"{role_line}{delegation}"
+        f"{role_line}{delegation}{economic_delegation}"
         "- Apply the capability and Zotero degradation rules in `Framework/Workflow/Rules/runtime-compatibility.md`.\n"
     )
 
@@ -215,8 +228,6 @@ def render_outputs(manifest: dict) -> dict[Path, str | bytes]:
                 codex_content,
             )
         elif item["kind"] == "role":
-            quality_tier = metadata.get("quality_tier", "inherit")
-            model = "opus" if quality_tier == "high" else "inherit"
             capabilities = set(item["capabilities"])
             tools = ["Read", "Grep", "Glob"]
             if "write" in capabilities:
@@ -227,7 +238,6 @@ def render_outputs(manifest: dict) -> dict[Path, str | bytes]:
                 "---\n"
                 f"description: {yaml_string(item['description'])}\n"
                 "namespace: phil\n"
-                f"model: {model}\n"
                 f"tools: {', '.join(tools)}\n"
                 "---\n"
             )
@@ -243,7 +253,93 @@ def render_outputs(manifest: dict) -> dict[Path, str | bytes]:
     root_template = read_text(WORKFLOW_ROOT / "Templates/Root/root-guidance.md")
     add_output(outputs, Path("CLAUDE.md"), render_root_guide(root_template, "claude"))
     add_output(outputs, Path("AGENTS.md"), render_root_guide(root_template, "codex"))
+    render_project_bridges(outputs, manifest)
     return outputs
+
+
+def bridge_body(target: str, runtime: str, kind: str, name: str | None = None, description: str | None = None) -> str:
+    runtime_root = ".claude" if runtime == "claude" else ".agents/skills"
+    metadata = ""
+    if runtime == "codex":
+        metadata = frontmatter(name or "nested-project-bridge", description or "Generated bridge to the outer workflow source") + "\n"
+    return metadata + (
+        f"{GENERATED}\n"
+        "\n"
+        "## External Workflow Bridge\n\n"
+        "This is a generated bridge for a nested project repository. Do not treat the nested "
+        "repository as a separate skill source and do not copy skill content here. Locate the "
+        "nearest ancestor containing both `Framework/Workflow/` and the outer runtime adapter, "
+        "then read the corresponding authoritative file below.\n\n"
+        f"- Runtime: `{runtime}`\n"
+        f"- Authoritative path: `<outer-root>/{runtime_root}/{target}`\n"
+        f"- Artifact kind: `{kind}`\n\n"
+        "If no such ancestor can be found, stop and report that the outer workflow root is unavailable; "
+        "never silently fall back to a local copy.\n"
+    )
+
+
+def nested_root_guide(runtime: str) -> str:
+    guide = "CLAUDE.md" if runtime == "claude" else "AGENTS.md"
+    entry = "/phil:<name>" if runtime == "claude" else "$source-command-<name>"
+    return (
+        f"# Nested Project {runtime.title()} Adapter\n\n"
+        f"{GENERATED}\n\n"
+        "This repository is the private content layer and is not an independent workflow source. "
+        "Read the nearest ancestor `PROJECT.md` first, then locate the nearest ancestor containing "
+        "both `Framework/Workflow/` and the outer runtime adapters.\n\n"
+        f"Route `phil:<name>` to the outer `{entry}` entry. If the outer workflow root cannot be found, "
+        "stop with an explicit error instead of using a local copy.\n"
+    )
+
+
+def render_project_bridges(outputs: dict[Path, str | bytes], manifest: dict) -> None:
+    """Generate thin bridges in the inner private repository when it exists."""
+    private_root = REPO_ROOT / "Private"
+    if not private_root.is_dir():
+        return
+    render_bridge_set(outputs, Path("Private"), manifest, include_root_guides=True)
+    for project in sorted((private_root / "Projects").glob("*")):
+        if project.is_dir() and (project / "PROJECT.md").is_file():
+            render_bridge_set(
+                outputs,
+                project.relative_to(REPO_ROOT),
+                manifest,
+                include_root_guides=True,
+            )
+
+
+def render_bridge_set(
+    outputs: dict[Path, str | bytes],
+    prefix: Path,
+    manifest: dict,
+    include_root_guides: bool = False,
+) -> None:
+    if include_root_guides:
+        add_output(outputs, prefix / "AGENTS.md", nested_root_guide("codex"))
+        # Preserve an existing project-specific CLAUDE.md; the bridge is generated
+        # under .claude/commands and does not need to replace local guidance.
+        if prefix == Path("Private"):
+            add_output(outputs, prefix / "CLAUDE.md", nested_root_guide("claude"))
+    for item in sorted(manifest["items"], key=lambda entry: (entry["kind"], entry["id"])):
+        item_id = item["id"]
+        if item["kind"] == "skill":
+            add_output(outputs, prefix / ".agents/skills" / item_id / "SKILL.md", bridge_body(
+                f"{item_id}/SKILL.md", "codex", "skill", item_id, item["description"]
+            ))
+            add_output(outputs, prefix / ".claude/skills" / item_id / "SKILL.md", bridge_body(
+                f"{item_id}/SKILL.md", "claude", "skill", item_id, item["description"]
+            ))
+        elif item["kind"] == "workflow":
+            add_output(outputs, prefix / ".agents/skills" / f"source-command-{item_id}" / "SKILL.md", bridge_body(
+                f"source-command-{item_id}/SKILL.md", "codex", "workflow", f"source-command-{item_id}", item["description"]
+            ))
+            add_output(outputs, prefix / ".claude/commands" / f"{item_id}.md", bridge_body(
+                f"commands/{item_id}.md", "claude", "workflow", item_id, item["description"]
+            ))
+        elif item["kind"] == "role":
+            add_output(outputs, prefix / ".claude/agents" / f"{item_id}.md", bridge_body(
+                f"agents/{item_id}.md", "claude", "role", item_id, item["description"]
+            ))
 
 
 def managed_roots() -> tuple[Path, ...]:
@@ -265,6 +361,26 @@ def actual_managed_files() -> set[Path]:
     return files
 
 
+def actual_project_bridge_files() -> set[Path]:
+    private_root = REPO_ROOT / "Private"
+    if not private_root.is_dir():
+        return set()
+    files: set[Path] = set()
+    prefixes = [private_root]
+    projects = private_root / "Projects"
+    if projects.is_dir():
+        prefixes.extend(path for path in projects.iterdir() if path.is_dir() and (path / "PROJECT.md").is_file())
+    for prefix in prefixes:
+        files.add((prefix / "AGENTS.md").relative_to(REPO_ROOT))
+        if prefix == private_root:
+            files.add((prefix / "CLAUDE.md").relative_to(REPO_ROOT))
+        for root in (".claude/skills", ".claude/commands", ".claude/agents", ".agents/skills"):
+            absolute = prefix / root
+            if absolute.exists():
+                files.update(path.relative_to(REPO_ROOT) for path in absolute.rglob("*") if path.is_file())
+    return files
+
+
 def check(outputs: dict[Path, str | bytes]) -> int:
     failures: list[str] = []
     expected_files = set(outputs)
@@ -276,6 +392,8 @@ def check(outputs: dict[Path, str | bytes]) -> int:
         elif path.read_bytes().replace(b"\r\n", b"\n") != expected_bytes.replace(b"\r\n", b"\n"):
             failures.append(f"stale {relative.as_posix()}")
     for extra in sorted(actual_managed_files() - expected_files):
+        failures.append(f"unexpected {extra.as_posix()}")
+    for extra in sorted(actual_project_bridge_files() - expected_files):
         failures.append(f"unexpected {extra.as_posix()}")
     if failures:
         print("Adapter check failed:")
@@ -293,6 +411,19 @@ def write(outputs: dict[Path, str | bytes]) -> None:
             raise RuntimeError(f"refusing to remove path outside repository: {absolute}")
         if absolute.exists():
             shutil.rmtree(absolute)
+    private_root = REPO_ROOT / "Private"
+    if private_root.is_dir():
+        prefixes = [private_root]
+        projects = private_root / "Projects"
+        if projects.is_dir():
+            prefixes.extend(path for path in projects.iterdir() if path.is_dir() and (path / "PROJECT.md").is_file())
+        for prefix in prefixes:
+            for root in (".claude/skills", ".claude/commands", ".claude/agents", ".agents/skills"):
+                absolute = (prefix / root).resolve()
+                if private_root.resolve() not in absolute.parents:
+                    raise RuntimeError(f"refusing to remove path outside private repository: {absolute}")
+                if absolute.exists():
+                    shutil.rmtree(absolute)
     for relative, content in sorted(outputs.items(), key=lambda pair: pair[0].as_posix()):
         path = REPO_ROOT / relative
         path.parent.mkdir(parents=True, exist_ok=True)

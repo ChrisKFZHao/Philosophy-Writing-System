@@ -1,7 +1,6 @@
 ---
 description: "Metaethical analyst — Socratic dialogue specialized in moral realism, normative reasons, moral semantics, moral psychology, and metaethical methodology"
 namespace: phil
-model: inherit
 tools: Read, Grep, Glob
 ---
 

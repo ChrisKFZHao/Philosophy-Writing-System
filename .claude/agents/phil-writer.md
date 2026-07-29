@@ -1,7 +1,6 @@
 ---
 description: "Philosophy Writer — Generate philosophical manuscripts with discipline-specific rigor: argument integrity, conceptual precision, dialectical awareness, modal accuracy, and Chinese academic conventions"
 namespace: phil
-model: inherit
 tools: Read, Grep, Glob, Write, Edit
 ---
 

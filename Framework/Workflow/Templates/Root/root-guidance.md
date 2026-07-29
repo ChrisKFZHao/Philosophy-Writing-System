@@ -149,7 +149,7 @@ Distilled from live runs (v0.4.2–v0.4.5). Goal: spend tokens on philosophy, no
 4. **Read at the cheapest sufficient level**: INDEX row → `.summary.txt` (Level 0.5) → `.analysis.txt` → PDF outline / page range → full text. Never run full-text extraction to answer what a summary already answers. Full-text reads are justified only by the analysis-level escalation triggers (Citation Gate) or an explicit read request.
 5. **Validated methods are settled**: procedures marked verified in `Framework/Lessons/` (e.g. the annotation-preserving stored→linked migration) are executed, not re-tested. Check `history.txt` / changelog / Lessons before re-investigating a known problem.
 6. **Environment facts are read, not re-probed**: proxy `127.0.0.1:6789`, Zotero hybrid MCP mode, API-key location, the 50-item write-batch cap — all recorded in this file, Lessons, and memory.
-7. **Model economy**: Neutral roles declare `quality_tier: inherit | high`. Runtime adapters map that tier to host-specific settings; Codex skills do not name a provider model. Bulk ingestion and summarization should use a cost-appropriate session model without weakening citation verification. Reconstruction and evaluation run a deterministic preplan before loading selected skills; examples and checklists remain unloaded unless a live ambiguity or explicit request requires them.
+7. **Cost-aware delegation**: No workflow or role selects a provider or concrete model. Treat economical model use as a session-scoped prompt policy, not a static mapping or automatic router. When the first eligible task appears, ask once whether a lower-cost host candidate may be reused for this session; the user may revoke it at any time, after which no further delegation is requested in that session, and new sessions ask again. Eligible work is repeatable, independent, read-only, non-interactive, and produces only discardable candidate artifacts. The parent task must validate candidates before writing files, treating claims as verified, or using them in the Citation Gate. Writing, review, Citation Gate decisions, bibliography or project changes, user dialogue, and orchestration retain the current model. If the authorized candidate is unavailable or insufficient, retain the current model rather than choose another. Do not claim a candidate is optimal without host-provided cost, cache, latency, and quality evidence. Reconstruction and evaluation run a deterministic preplan before loading selected skills; examples and checklists remain unloaded unless a live ambiguity or explicit request requires them.
 8. **State before rereading**: Query the compact idea-ledger/workflow-state helpers before loading full artifacts. Hash-valid persisted outputs are reused; stale outputs are reported rather than silently trusted.
 
 ## Common Operations
@@ -209,7 +209,7 @@ Session summaries are written to `history.txt` by the model at the end of each c
 
 **Philosopher Database**: `Shared/Philosophers-DB/` — canonical claim-level JSON profiles plus generated domain views. `source-backed` claims route to bibliography evidence; `prompt-only` claims are `[source unverified]` discovery hints and cannot bypass the Citation Gate.
 
-**Data Contracts**: `Framework/Workflow/Schemas/` contains 18 JSON schemas; `Framework/Workflow/Templates/` contains the report templates.
+**Data Contracts**: `Framework/Workflow/Schemas/` contains 19 JSON schemas; `Framework/Workflow/Templates/` contains the report templates.
 
 ## Cross-Session Memory
 
@@ -222,6 +222,6 @@ The complete system architecture is defined in `Framework/ARCHITECTURE.md` (0.6.
 - **30 Skills** — canonical definitions in `Framework/Workflow/Skills/`
 - **9 Workflows** — canonical orchestration in `Framework/Workflow/Workflows/`
 - **7 Roles** — canonical role prompts in `Framework/Workflow/Roles/`
-- **18 JSON Schemas + 5 Report Templates** — data contracts and output skeletons
+- **19 JSON Schemas + 5 Report Templates** — data contracts and output skeletons
 - **26 Argument Forms** — canonical definitions in `Framework/Workflow/References/argument-forms/`
 - For complete skill inventory, build roadmap, and detailed architecture — see `ARCHITECTURE.md`

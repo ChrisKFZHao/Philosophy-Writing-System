@@ -4,7 +4,7 @@
 
 ## Source-backed connections
 
-- None
+- [Jonathan Schaffer](../Profiles/jonathan-schaffer.json)
 
 ## Prompt-only connections
 

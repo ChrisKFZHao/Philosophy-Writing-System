@@ -1,7 +1,6 @@
 ---
 id: phil-commentator
 description: "Philosophy Commentator — Critical engagement with philosophical works: uncovering unexamined assumptions, identifying alternative interpretations, mapping missing distinctions, and positioning work within the broader dialectical landscape"
-quality_tier: high
 capabilities: ["read","search"]
 ---
 

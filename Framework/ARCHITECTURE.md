@@ -130,10 +130,10 @@ Framework/Workflow/                 # Platform-neutral source of truth
 ├── manifest.json                   # 30 skills + 9 workflows + 7 roles
 ├── Skills/{skill}/                 # SKILL.md plus examples/checklists
 ├── Workflows/{workflow}.md         # phil:* orchestration
-├── Roles/{role}.md                 # quality_tier + neutral capabilities
+├── Roles/{role}.md                 # neutral role instructions + capabilities
 ├── Rules/                          # behavior + runtime compatibility
 ├── References/                     # argument forms, glossaries, taxonomies
-├── Schemas/                        # 18 JSON contracts + registry
+├── Schemas/                        # 19 JSON contracts + registry
 ├── Templates/                      # reports, generated root guides, project adapters
 ├── Scripts/                        # generator, doctors, state helpers, scanner, policy, Zotero helper
 └── Tests/                          # stdlib regression tests
@@ -141,7 +141,7 @@ Framework/Workflow/                 # Platform-neutral source of truth
 .claude/                             # Generated and committed Claude Code adapter
 ├── commands/                        # 9 /phil:* commands
 ├── skills/                          # 30 atomic skills
-├── agents/                          # 7 roles; high tier maps to opus
+├── agents/                          # 7 roles; no role-level model selection
 ├── rules/                           # Generated behavior rules
 └── settings.json                    # Portable tracked permissions only
 
@@ -162,10 +162,19 @@ Runtime mapping:
 | Contract | Claude Code | Codex |
 |---|---|---|
 | Composite workflow | `/phil:<name>` | `$source-command-<name>` or natural `phil:<name>` routing |
-| Role quality `high` | `quality_tier: high` | Inherit current session model |
+| Cost-aware delegation | Session-scoped prompt policy; no static model mapping or automatic routing | Same; the user confirms one lower-cost host candidate per session |
 | Delegation | `Agent` tool | Parallel agents when available; serial dependency-order fallback |
 | Project guidance | `PROJECT.md` → `AGENTS.md` → `CLAUDE.md` | Same order |
 | Zotero | MCP full backend when configured | MCP full backend; local plugin is partial fallback |
+
+Cost-aware delegation is a session-scoped prompt policy, not a workflow property or an
+automatic router. At the first eligible task, the user may authorize one lower-cost host
+candidate for the current session. Only repeatable, independent, read-only,
+non-interactive tasks that return discardable candidate artifacts may use it. The parent
+task validates every candidate before writes, verified claims, or Citation Gate use.
+Writing, review, user dialogue, artifact changes, and orchestration retain the current
+session model. Hosts do not claim that the authorized candidate is optimal without live
+cost, cache, latency, and quality evidence.
 
 ### Runtime State and Integrity
 
@@ -339,13 +348,13 @@ Metaethics Knowledge Cluster:
 **When Used**: When the user needs interactive exploration of philosophical questions.
 
 **Contents**:
-- **`agents/metaphysician.md`** — **Metaphysical analyst: Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, and other meta-metaphysical questions** (`quality_tier: inherit`)
-- **`agents/metaethicist.md`** — **Metaethical analyst: Socratic dialogue specialized in moral realism, normative reasons, moral semantics, and other metaethical questions** (`quality_tier: inherit`)
-- **`Framework/Workflow/Roles/phil-writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards; draft mode adds user-led/assistant-led collaboration sub-modes** (`quality_tier: inherit`)
-- **`Framework/Workflow/Roles/phil-reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews** (`quality_tier: high`)
-- **`Framework/Workflow/Roles/phil-commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots** (`quality_tier: high`)
-- **`Framework/Workflow/Roles/phil-orchestrator.md`** — **[Phase 6] Pipeline orchestrator: coordinates the 6-stage writing pipeline (topic orientation & reading plan → reading & analysis → conception incubation → outline → draft & iterative revision → review & final) with lenient-interrogation quality gates** (`quality_tier: high`)
-- **`Framework/Workflow/Roles/phil-tutor.md`** — **[New] Tutor agent: dialogic mentor with two modes — reading (Socratic literature dialogue: probes understanding, identifies gaps, recommends literature) and incubating (构思孵化, conception incubation for pipeline Stage 3)** (`quality_tier: inherit`)
+- **`agents/metaphysician.md`** — **Metaphysical analyst: Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, and other meta-metaphysical questions**
+- **`agents/metaethicist.md`** — **Metaethical analyst: Socratic dialogue specialized in moral realism, normative reasons, moral semantics, and other metaethical questions**
+- **`Framework/Workflow/Roles/phil-writer.md`** — **[Phase 6] Philosophy writer: generates manuscripts in three modes (outline/draft/revision) with 7 philosophy-aware prose standards; draft mode adds user-led/assistant-led collaboration sub-modes**
+- **`Framework/Workflow/Roles/phil-reviewer.md`** — **[Phase 6] Philosophy reviewer: evaluates manuscripts across 8 review dimensions; supports standard and perspective-specific reviews**
+- **`Framework/Workflow/Roles/phil-commentator.md`** — **[Phase 6] Philosophy commentator: critical engagement identifying assumptions, missing distinctions, hidden commitments, and dialectical blind spots**
+- **`Framework/Workflow/Roles/phil-orchestrator.md`** — **[Phase 6] Pipeline orchestrator: coordinates the 6-stage writing pipeline (topic orientation & reading plan → reading & analysis → conception incubation → outline → draft & iterative revision → review & final) with lenient-interrogation quality gates**
+- **`Framework/Workflow/Roles/phil-tutor.md`** — **[New] Tutor agent: dialogic mentor with two modes — reading (Socratic literature dialogue: probes understanding, identifies gaps, recommends literature) and incubating (构思孵化, conception incubation for pipeline Stage 3)**
 
 ### Layer 4: Cross-Layer Interface (ARS Bridge)
 **Rationale**: The analysis outputs of this system must flow into ARS's writing pipeline to produce papers.
@@ -366,18 +375,18 @@ Metaethics Knowledge Cluster:
 **When Used**: When transitioning from analysis to production — generating outlines, drafting manuscripts, reviewing for philosophical rigor, and managing the full writing pipeline.
 
 **Contents**:
-- `Framework/Workflow/Roles/phil-writer.md` — Philosophy writer agent (`quality_tier: inherit`) with three modes:
+- `Framework/Workflow/Roles/phil-writer.md` — Philosophy writer agent with three modes:
   - **Outline mode**: Transforms analysis outputs (argument reconstructions, concept maps, dialectical trees) into structured paper outlines with thesis, section plan, distinction inventory, and objection mapping. Preferentially consumes the Stage 3 conception file (`{topic}-conception.txt`) when present, refining — never replacing — the user's own thesis.
   - **Draft mode**: Section-by-section manuscript drafting with 7 philosophy-aware prose standards (argument transparency, conceptual precision, modal accuracy, dialectical positioning, distinction preservation, counterexample resilience, ontological explicitness) plus an 8th, Disclosure Integrity. Two collaboration sub-modes selected via the project guidance file's `collaboration:` key: **`user-led`** (严肃学术论文 — the user writes; the AI assistant gives defect-triggered Socratic feedback and disclosed suggestions, applying only user-accepted edits) and **`assistant-led`** (课程论文 — the AI assistant drafts section-by-section with default-on boundary interrogation, 1–3 ownership questions per section boundary).
   - **Revision mode**: Prioritized revision based on reviewer findings (structural → conceptual → dialectical → modal → stylistic) with change tracking; interacts with the active collaboration mode (user-led: suggested edits only; assistant-led: interrogates findings tracing to user-approved choices before rewriting).
-- `Framework/Workflow/Roles/phil-reviewer.md` — Philosophy reviewer agent (`quality_tier: high`) with two modes:
+- `Framework/Workflow/Roles/phil-reviewer.md` — Philosophy reviewer agent with two modes:
   - **Standard review**: 8-dimension evaluation (argument validity, charity, conceptual clarity, modal rigor, counterexample resilience, dialectical completeness, ontological commitment transparency, methodological consistency) with severity grading and revision priority matrix.
   - **Perspective review**: Review from a specified philosophical stance (Quinean, Lewisian, Kripkean, Finean, Mackiean, Expressivist, etc.), distinguishing perspective-dependent from perspective-neutral findings.
-- `Framework/Workflow/Roles/phil-commentator.md` — Philosophy commentator agent (`quality_tier: high`) with three modes:
+- `Framework/Workflow/Roles/phil-commentator.md` — Philosophy commentator agent with three modes:
   - **Critical commentary**: Identifies unexamined assumptions, alternative interpretations, missing distinctions, undefended inferences, hidden commitments, and dialectical blind spots.
   - **Response paper**: Writes a response from a specified philosophical position.
   - **Dialectical positioning**: Situates work within the broader debate landscape and intellectual lineage.
-- `Framework/Workflow/Roles/phil-orchestrator.md` — Pipeline orchestrator (`quality_tier: high`) coordinating the full 6-stage reading-before-thesis workflow:
+- `Framework/Workflow/Roles/phil-orchestrator.md` — Pipeline orchestrator coordinating the full 6-stage reading-before-thesis workflow:
   - Stage 0 (prerequisite, outside the pipeline): `/phil:ingest`
   - Stage 1: Topic Orientation & Reading Plan (dialogic agent Socratic scoping of the dispute, not the thesis)
   - Stage 2: Reading & Analysis (phil-tutor reading mode + phil-* analysis chain + ars-deep-research)

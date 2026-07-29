@@ -1,5 +1,13 @@
 # Framework Changelog
 
+## Unreleased
+
+**Session-scoped cost-aware delegation**
+
+- Removed static role-to-model mappings, including the former generated high-tier Claude mapping. Generated roles now inherit the host session model.
+- Replaced the unimplemented routing design with a session-scoped prompt policy. The user authorizes one lower-cost host candidate once per session; no catalog, telemetry, pricing estimate, or automatic host task creation is stored or inferred.
+- Only repeatable, independent, read-only, non-interactive candidate work may use that authorization. Parent tasks validate candidates before writes, verified claims, or Citation Gate use; writing, review, artifact changes, user dialogue, and orchestration retain the current session model.
+
 ## v0.6.3-alpha — 2026-07-19
 
 **Event-driven idea resurfacing and cost-aware analysis planning**

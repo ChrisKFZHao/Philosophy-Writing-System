@@ -134,12 +134,51 @@
   ],
   "domains": [
     {
+      "domain_id": "general",
+      "support_status": "source-backed",
+      "evidence": [
+        {
+          "bib_key": "SCHAFFER-ON-WHAT-GROUNDS-WHAT",
+          "source_type": "primary",
+          "analysis_level": 0.5,
+          "locator": "topics/domain classification",
+          "public_citation": "Jonathan Schaffer (2009), On What Grounds What",
+          "approved_at": "2026-07-19T17:01:29Z"
+        },
+        {
+          "bib_key": "RAVEN-METAPHYSICAL-GROUNDING-HANDBOOK",
+          "source_type": "secondary",
+          "analysis_level": 0.5,
+          "locator": "topics/domain classification",
+          "public_citation": "Raven, Michael J. (ed.) (2020), The Routledge Handbook of Metaphysical Grounding",
+          "approved_at": "2026-07-19T17:01:29Z"
+        }
+      ]
+    },
+    {
       "domain_id": "metaphysics",
-      "support_status": "prompt-only",
-      "evidence": []
+      "support_status": "source-backed",
+      "evidence": [
+        {
+          "bib_key": "SCHAFFER-ON-WHAT-GROUNDS-WHAT",
+          "source_type": "primary",
+          "analysis_level": 0.5,
+          "locator": "topics/domain classification",
+          "public_citation": "Jonathan Schaffer (2009), On What Grounds What",
+          "approved_at": "2026-07-19T17:01:29Z"
+        },
+        {
+          "bib_key": "RAVEN-METAPHYSICAL-GROUNDING-HANDBOOK",
+          "source_type": "secondary",
+          "analysis_level": 0.5,
+          "locator": "topics/domain classification",
+          "public_citation": "Raven, Michael J. (ed.) (2020), The Routledge Handbook of Metaphysical Grounding",
+          "approved_at": "2026-07-19T17:01:29Z"
+        }
+      ]
     }
   ],
   "relations": [],
   "created_at": "2026-07-19T07:36:23Z",
-  "updated_at": "2026-07-19T07:36:23Z"
+  "updated_at": "2026-07-19T17:01:29Z"
 }

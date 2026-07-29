@@ -4,7 +4,7 @@
 
 ## Source-backed connections
 
-- None
+- [Jonathan Schaffer](../Profiles/jonathan-schaffer.json)
 
 ## Prompt-only connections
 
@@ -18,7 +18,6 @@
 - [Eli Hirsch](../Profiles/eli-hirsch.json)
 - [Hilary Putnam](../Profiles/hilary-putnam.json)
 - [Jaegwon Kim](../Profiles/jaegwon-kim.json)
-- [Jonathan Schaffer](../Profiles/jonathan-schaffer.json)
 - [Kit Fine](../Profiles/kit-fine.json)
 - [Peter van Inwagen](../Profiles/peter-van-inwagen.json)
 - [Richard Boyd](../Profiles/richard-boyd.json)

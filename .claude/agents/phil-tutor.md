@@ -1,7 +1,6 @@
 ---
 description: "Academic mentor — Socratic dialogue across two modes: reading (literature dialogue — asks about your thinking, probes understanding, identifies gaps, and recommends literature) and incubating (conception incubation / 构思孵化 — helps crystallize your own thesis and argument sketch)"
 namespace: phil
-model: inherit
 tools: Read, Grep, Glob, Write, Edit
 ---
 

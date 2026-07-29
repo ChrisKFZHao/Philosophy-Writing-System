@@ -93,10 +93,8 @@ def check_forbidden(failures: list[str]) -> None:
             failures.append(f"machine-specific user path: {relative}")
         if re.search(r'ZOTERO_API_KEY\s*[=:]\s*["\']?[A-Za-z0-9]{16,}', text):
             failures.append(f"possible embedded Zotero secret: {relative}")
-        if re.search(r"^model:\s*(?:opus|sonnet|haiku|gpt-[A-Za-z0-9.-]+)\s*$", text, re.MULTILINE):
-            allowed_claude_role = relative.parts[:2] == (".claude", "agents")
-            if not allowed_claude_role:
-                failures.append(f"provider model in neutral or Codex content: {relative}")
+        if re.search(r"^model:\s*", text, re.MULTILINE):
+            failures.append(f"role-level model selection is forbidden: {relative}")
 
 
 def markdown_files() -> list[Path]:
@@ -172,6 +170,56 @@ def check_adapters(failures: list[str]) -> None:
         failures.append(result.stdout.strip() or result.stderr.strip())
 
 
+def check_nested_project_bridges(failures: list[str]) -> None:
+    private = REPO_ROOT / "Private"
+    if not private.is_dir():
+        return
+    prefixes = [private]
+    projects = private / "Projects"
+    if projects.is_dir():
+        prefixes.extend(path for path in projects.iterdir() if path.is_dir() and (path / "PROJECT.md").is_file())
+    for prefix in prefixes:
+        names = ("AGENTS.md", "CLAUDE.md") if prefix == private else ("AGENTS.md",)
+        for name in names:
+            path = prefix / name
+            label = path.relative_to(REPO_ROOT)
+            if not path.is_file():
+                failures.append(f"missing nested project adapter: {label}")
+            elif "not an independent workflow source" not in path.read_text(encoding="utf-8", errors="replace"):
+                failures.append(f"invalid nested project adapter: {label}")
+        _check_bridge_prefix(prefix, private, failures)
+
+
+def _check_bridge_prefix(prefix: Path, private: Path, failures: list[str]) -> None:
+    try:
+        manifest = json.loads((WORKFLOW_ROOT / "manifest.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        failures.append(f"cannot inspect nested bridge manifest: {exc}")
+        return
+    for item in manifest.get("items", []):
+        item_id = item.get("id")
+        if item.get("kind") == "skill":
+            targets = [
+                prefix / ".agents/skills" / item_id / "SKILL.md",
+                prefix / ".claude/skills" / item_id / "SKILL.md",
+            ]
+        elif item.get("kind") == "workflow":
+            targets = [
+                prefix / ".agents/skills" / f"source-command-{item_id}" / "SKILL.md",
+                prefix / ".claude/commands" / f"{item_id}.md",
+            ]
+        else:
+            targets = [prefix / ".claude/agents" / f"{item_id}.md"]
+        for path in targets:
+            label = path.relative_to(REPO_ROOT)
+            if not path.is_file():
+                failures.append(f"missing nested bridge: {label}")
+            else:
+                text = path.read_text(encoding="utf-8", errors="replace")
+                if "External Workflow Bridge" not in text or "nearest ancestor" not in text:
+                    failures.append(f"invalid nested bridge: {label}")
+
+
 def check_philosopher_database(failures: list[str]) -> None:
     result = subprocess.run(
         [sys.executable, str(WORKFLOW_ROOT / "Scripts/philosopher-db.py"), "validate"],
@@ -193,6 +241,7 @@ def main() -> int:
     check_markdown_links(failures)
     check_philosopher_database(failures)
     check_adapters(failures)
+    check_nested_project_bridges(failures)
     if failures:
         print("Workflow doctor failed:")
         for failure in failures:

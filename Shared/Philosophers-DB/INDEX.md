@@ -43,7 +43,7 @@ Profiles: 49. Domains: 3.
 | [Jaegwon Kim](Profiles/jaegwon-kim.json) | `jaegwon-kim` | 0 | 13 | metaphysics (prompt) |
 | [John Rawls](Profiles/john-rawls.json) | `john-rawls` | 0 | 13 | general (prompt) |
 | [John Stuart Mill](Profiles/john-stuart-mill.json) | `john-stuart-mill` | 0 | 13 | general (prompt) |
-| [Jonathan Schaffer](Profiles/jonathan-schaffer.json) | `jonathan-schaffer` | 0 | 13 | metaphysics (prompt) |
+| [Jonathan Schaffer](Profiles/jonathan-schaffer.json) | `jonathan-schaffer` | 0 | 13 | general (supported), metaphysics (supported) |
 | [Kit Fine](Profiles/kit-fine.json) | `kit-fine` | 0 | 13 | metaphysics (prompt) |
 | [Ludwig Wittgenstein](Profiles/ludwig-wittgenstein.json) | `ludwig-wittgenstein` | 0 | 14 | general (prompt) |
 | [Michael Smith](Profiles/michael-smith.json) | `michael-smith` | 0 | 13 | metaethics (prompt) |

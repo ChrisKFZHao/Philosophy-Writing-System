@@ -1,7 +1,6 @@
 ---
 id: metaphysician
 description: "Metaphysical analyst — Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, identity conditions, causal analysis, and essence detection"
-quality_tier: inherit
 capabilities: ["read","search"]
 ---
 

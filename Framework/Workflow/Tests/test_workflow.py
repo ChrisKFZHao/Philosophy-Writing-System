@@ -4,6 +4,7 @@ import copy
 import importlib.util
 import hashlib
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -26,6 +27,21 @@ def load_script(name: str):
 
 
 class PolicyTests(unittest.TestCase):
+    def test_nested_projects_have_outer_workflow_bridges(self):
+        projects = REPO_ROOT / "Private/Projects"
+        for project in sorted(path for path in projects.iterdir() if path.is_dir()):
+            self.assertTrue((project / "PROJECT.md").is_file(), project)
+        workflow_bridge = REPO_ROOT / "Private/.agents/skills/source-command-tutor/SKILL.md"
+        self.assertTrue(workflow_bridge.is_file())
+        bridge_text = workflow_bridge.read_text(encoding="utf-8")
+        self.assertIn("External Workflow Bridge", bridge_text)
+        self.assertIn("<outer-root>/.agents/skills/source-command-tutor/SKILL.md", bridge_text)
+        self.assertNotIn("## Usage", bridge_text)
+        for project in sorted(path for path in projects.iterdir() if path.is_dir()):
+            local_bridge = project / ".agents/skills/source-command-tutor/SKILL.md"
+            self.assertTrue(local_bridge.is_file(), project)
+            self.assertIn("name: source-command-tutor", local_bridge.read_text(encoding="utf-8"))
+
     def test_collaboration_aliases(self):
         policy = load_script("workflow-policy.py")
         self.assertEqual(policy.normalize_collaboration("assistant-led")["canonical"], "assistant-led")
@@ -387,6 +403,58 @@ class AdapterTests(unittest.TestCase):
             text = path.read_text(encoding="utf-8")
             self.assertIn("When delegation is available", text)
             self.assertIn("dependency order serially", text)
+
+    def test_core_model_selection_is_neutral(self):
+        provider_model = re.compile(r"\b(?:opus|sonnet|haiku|gpt-[A-Za-z0-9.-]+)\b", re.IGNORECASE)
+        for directory in ("Roles", "Workflows", "Rules"):
+            for path in (WORKFLOW_ROOT / directory).rglob("*.md"):
+                text = path.read_text(encoding="utf-8")
+                self.assertIsNone(provider_model.search(text), path)
+                self.assertNotRegex(text, r"^model:\s*", path)
+                self.assertNotIn("quality_tier:", text, path)
+
+    def test_codex_cost_aware_delegation_guidance_is_generated(self):
+        text = (REPO_ROOT / ".agents/skills/source-command-review/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("session-scoped cost-aware delegation policy", text)
+        self.assertIn("first eligible task", text)
+        self.assertIn("discardable candidate artifact", text)
+        self.assertIn("Never delegate writing, review, Citation Gate work", text)
+        self.assertNotRegex(text, r"^model:\s*", text)
+
+    def test_cost_aware_delegation_is_session_scoped_and_reversible(self):
+        text = (WORKFLOW_ROOT / "Rules/runtime-compatibility.md").read_text(encoding="utf-8")
+        self.assertIn("economic_delegation = unknown | enabled | disabled", text)
+        self.assertIn("ask the user once", text)
+        self.assertRegex(text, r"Never persist\s+this authorization")
+        self.assertIn("the user may revoke it", text)
+        self.assertIn("do not ask or delegate again in that session", text)
+        self.assertIn("parent task must validate", text)
+
+    def test_model_routing_experiment_is_absent(self):
+        retired_paths = [
+            WORKFLOW_ROOT / "Schemas/model-catalog-schema.json",
+            WORKFLOW_ROOT / "Schemas/model-routing-schema.json",
+            WORKFLOW_ROOT / "Schemas/model-task-schema.json",
+            SCRIPTS / "model-runtime.py",
+            WORKFLOW_ROOT / "References/model-evaluation-suite.json",
+        ]
+        for path in retired_paths:
+            self.assertFalse(path.exists(), path)
+        policy = (SCRIPTS / "workflow-policy.py").read_text(encoding="utf-8")
+        self.assertNotIn("model-route", policy)
+
+    def test_schema_count_is_restored_after_routing_experiment(self):
+        schemas = [path for path in (WORKFLOW_ROOT / "Schemas").iterdir() if path.is_file()]
+        self.assertEqual(19, len(schemas))
+        architecture = (REPO_ROOT / "Framework/ARCHITECTURE.md").read_text(encoding="utf-8")
+        self.assertIn("Schemas/                        # 19 JSON contracts + registry", architecture)
+
+    def test_generated_roles_do_not_pin_provider_models(self):
+        provider_model = re.compile(r"\b(?:opus|sonnet|haiku|gpt-[A-Za-z0-9.-]+)\b", re.IGNORECASE)
+        for path in (REPO_ROOT / ".claude/agents").glob("*.md"):
+            text = path.read_text(encoding="utf-8")
+            self.assertNotRegex(text, r"^model:\s*", path)
+            self.assertIsNone(provider_model.search(text), path)
 
     def test_rendering_is_deterministic(self):
         builder = load_script("build-adapters.py")

@@ -1,7 +1,6 @@
 ---
 id: phil-reviewer
 description: "Philosophy Reviewer — Domain-specific peer review assessing argument validity, conceptual clarity, modal rigor, dialectical charity, and counterexample resilience from configurable philosophical perspectives"
-quality_tier: high
 capabilities: ["read","search"]
 ---
 

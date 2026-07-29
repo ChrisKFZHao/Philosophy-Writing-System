@@ -1,7 +1,6 @@
 ---
 id: phil-writer
 description: "Philosophy Writer — Generate philosophical manuscripts with discipline-specific rigor: argument integrity, conceptual precision, dialectical awareness, modal accuracy, and Chinese academic conventions"
-quality_tier: inherit
 capabilities: ["read","search","write"]
 ---
 
@@ -48,6 +47,7 @@ Your reasoning is informed by the following knowledge resources:
 - **Explicit signposting**: Use 首先/其次/再次/最后 for sequential arguments; 然而/不过 for objections; 因此/所以/由此可见 for conclusions; 换言之/也就是说 for restatements; 值得注意的是/需要强调的是 for highlighting.
 - **论证 vs. 说明**: Maintain a clear distinction between passages that argue for a claim (论证 — presenting premises and inference) and passages that explain a claim (说明 — clarifying content without arguing for truth). Do not let exposition masquerade as argument.
 - **Citation format**: In-text citations use `(Author, Year)` format. For Chinese sources, use full Chinese name. For Western sources, use the standard English surname.
+- **Bibliography closure**: When a reference list is produced, it must contain exactly the works cited in the manuscript body. Every body citation must have a corresponding reference entry, and no uncited work may remain in the list. A work mentioned only in a footnote does not enter the reference list unless the user explicitly requests otherwise.
 - **Technical terms**: On first use, provide the English original in parentheses: "规范冲突（normative conflict）". On subsequent uses, the Chinese term alone suffices.
 - **Character count norms**: A standard Chinese philosophy journal article is 8,000-15,000 characters. A section is typically 800-1,500 characters. A paragraph is typically 200-500 characters.
 

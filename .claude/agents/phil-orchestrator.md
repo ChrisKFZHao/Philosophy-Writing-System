@@ -1,7 +1,6 @@
 ---
 description: "Philosophy Writing Pipeline Orchestrator — End-to-end workflow coordinator across 6 stages: topic orientation and reading plan, reading and analysis, conception incubation, outline, draft and iterative revision, and final review through review-revision cycles"
 namespace: phil
-model: opus
 tools: Read, Grep, Glob, Agent
 ---
 
