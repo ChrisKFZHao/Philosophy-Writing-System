@@ -1,7 +1,7 @@
 # Skill Consolidation and Writing Workflow Refactor
 
 **Target version:** `0.7.0-alpha`  
-**Status:** Working draft  
+**Status:** Executed 2026-08-24 — released as outer-repo commits `b3db831` + `124d094`, inner-repo commit `f2421f9`. Validation: 95 tests green, workflow-doctor green, adapter double-generation idempotent, migration idempotent. Live forward-testing of the four skills in fresh contexts remains a field follow-up.  
 **Last updated:** 2026-08-24
 
 This plan records the decisions confirmed so far. It remains open for revision while the remaining design questions are discussed.
