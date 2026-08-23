@@ -341,3 +341,7 @@ When used with `ars reviewer` or `ars rebuttal-audit`, the natural kind analysis
 **4. Cross-Skill Pipeline Integration**
 
 The natural kind analysis report occupies a bridging position in the metaphysics pipeline. It receives inputs from the argument reconstruction (foundational structure), the conceptual analysis (concept-level kind claims), and the essentialist claim analysis (essence framework for kind essences). It provides outputs to the ontological commitment analysis (kind claims as ontological commitments) and the identity-persistence analysis (kind membership constrains identity and persistence). The report also has significant interfaces with philosophy of science, philosophy of biology, and social ontology, making it one of the most cross-disciplinary skills in the metaphysics pipeline.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/natural-kind-analyze-checklist.md`, `references/natural-kind-analyze-examples.md`.

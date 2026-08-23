@@ -199,3 +199,7 @@ D3 (P/Q) ──── parallel ──── D1 (X/Y)
 - The distinction index table can be passed to ARS `academic-paper` as the paper's conceptual framing section
 - Drift detection results can serve as critical material for ARS `academic-paper-reviewer`
 - The missing-distinction list can be passed to ARS `deep-research` for retrieving standard distinction literature in the domain
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/distinction-track-checklist.md`, `references/distinction-track-examples.md`.

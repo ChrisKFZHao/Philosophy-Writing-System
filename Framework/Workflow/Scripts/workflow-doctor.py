@@ -177,10 +177,16 @@ def check_inventory(failures: list[str]) -> None:
     if leftover:
         failures.append(f"source-command-* adapters remain: {leftover}")
 
-    method_files = {p.relative_to(WORKFLOW_ROOT).as_posix() for p in (WORKFLOW_ROOT / "Methods").rglob("*.md")}
+    method_files = {p.relative_to(WORKFLOW_ROOT).as_posix() for p in (WORKFLOW_ROOT / "Methods").rglob("*.md")
+                    if "references" not in p.parts}
     expected = {i["source"] for i in methods.values()}
     if method_files != expected:
         failures.append(f"Methods/ tree does not match manifest methods: extra={sorted(method_files - expected)}, missing={sorted(expected - method_files)}")
+    method_slugs = {i["source"].rsplit("/", 1)[-1][:-3] for i in methods.values()}
+    for reference in (WORKFLOW_ROOT / "Methods").glob("*/references/*.md"):
+        stem = reference.stem
+        if not any(stem == slug or stem.startswith(slug + "-") for slug in method_slugs):
+            failures.append(f"orphan method reference: {reference.relative_to(REPO_ROOT)}")
     for service in (i for i in items if i.get("kind") == "service"):
         if not (WORKFLOW_ROOT / service["source"]).is_file():
             failures.append(f"missing service source: {service['id']}")

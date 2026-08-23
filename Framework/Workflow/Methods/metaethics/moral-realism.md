@@ -332,3 +332,7 @@ Produce the complete Moral Realism Position Analysis Report in the Output format
 - The spectrum position map can be included in a paper's introduction as a visualization of the metaethical landscape and the author's placement within it.
 - Citation formats throughout the report (Author, Year) are compatible with ARS `citation-check`.
 - When the analysis identifies significant implicit commitments, these can be incorporated into ARS `academic-paper` as methodological limitations that the author should acknowledge.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/moral-realism-checklist.md`, `references/moral-realism-examples.md`.

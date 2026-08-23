@@ -426,3 +426,7 @@ When used with `ars reviewer` or `ars rebuttal-audit`, the essentialist claim an
 **4. Cross-Skill Pipeline Integration**
 
 The essentialist claim analysis report occupies a central position in the metaphysics pipeline. It receives inputs from the argument reconstruction (foundational structure), the modal argument analysis (modal frameworks), and the conceptual analysis (concept-level essentialist claims). It provides outputs to the natural kind analysis (essence constrains kind membership), the identity-persistence analysis (essence constrains what changes a thing can survive), and the grounding analysis (essence is a candidate for grounding other metaphysical relations). The structured format supports automated cross-referencing between these reports.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/essence-detect-checklist.md`, `references/essence-detect-examples.md`.

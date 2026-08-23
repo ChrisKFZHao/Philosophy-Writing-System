@@ -24,6 +24,7 @@
 - Generator, doctor, and tests now derive every inventory from the manifest — no hard-coded counts. `workflow-doctor.py` adds a stale-phrase scan and manifest-consistency checks (core = claude = codex skills; wrappers = exposure; no `.claude/agents`; no `source-command-*`).
 - `Migration/migrate-v07.py`: deterministic 0.6→0.7 migration (dry-run default, `--apply` to write, fail-on-unknown-ID, write whitelist, `working-notes.md` never touched) — analysis metadata `workflow_id`/coverage to canonical method IDs, v1→v2 state conversion, project guidance command references. Applied to the private library: one analysis meta migrated (Srinivasan 2018); no live v1 workflow states existed; the three project guidance files needed no changes.
 - Documentation: ARCHITECTURE rewritten for 0.7.0-alpha; root guidance, both READMEs, project adapter template, and analysis-metadata schema updated; removed-entrypoint table added with old→new command mappings.
+- Completeness pass: restored the 28 v0.6 per-skill `examples.md`/`checklist.md` files (56 artifacts) from git history as conditional references under `Methods/<package>/references/` — loaded only on a live ambiguity or explicit request, named by their method files; doctor gained an orphan-reference check and the suite gained contract-text tests enforcing the plan's load-bearing clauses (identical collaboration gates, non-waivable citation closure, review read-only, routing rules, kernel invariants, evidence-unit fields).
 
 ## v0.6.3-alpha — 2026-07-19
 

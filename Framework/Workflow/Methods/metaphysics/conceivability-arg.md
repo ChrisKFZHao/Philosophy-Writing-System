@@ -384,3 +384,7 @@ When invoked in ARS mode, the output should include:
 - **Target Venue Context:** If ARS provides journal context, standards adjust. A mind-journal article arguing against Chalmers must engage the full two-dimensional framework; a general journal article may be held to a lower standard.
 - **Reviewer Expertise:** If ARS indicates specific reviewer expertise (e.g., modal skeptic), analysis can highlight issues that reviewer would press.
 - **Comparative Benchmarks:** ARS may supply benchmarks ("this journal expects conceivability arguments to engage the phenomenal concept strategy") to calibrate expectations.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/conceivability-arg-checklist.md`, `references/conceivability-arg-examples.md`.

@@ -363,3 +363,7 @@ This skill provides the **metaphysical architecture** for the methodology sectio
 - **Contextual Adjustments:** If ARS provides context about the target journal, audience, or debate, the grounding analysis may adjust its explanatory standards. A metaphysics journal (e.g., *Nous*, *Mind*) demands more rigorous grounding analysis with explicit formal property checks; a general philosophy journal may accept looser dependence language.
 - **Domain Expertise:** ARS may supply domain-specific dependence schemas (e.g., the standard grounding structure for the moral realism debate, or the canonical dependence topology for the physicalism literature) that this skill can use as comparison benchmarks.
 - **Revision Targeting:** If ARS identifies that the author's grounding claims are a key weakness, this skill can be re-run with tighter criteria to provide more detailed critique for revision. For example, if ARS flags that the author conflates supervenience with grounding in the methodology section, the re-run focuses specifically on detecting and documenting that conflation.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/grounding-check-checklist.md`, `references/grounding-check-examples.md`.

@@ -464,3 +464,7 @@ When used with `ars reviewer` or `ars rebuttal-audit`, the causal claim analysis
 **4. Inter-Skill Data Flow**
 
 The causal claim analysis report shares a data contract with the ontological commitment report (both reference `glossary-metaphysics.md` and the relatum-type taxonomy) and with the natural kind analysis report (which may use causal-claim analysis output to assess whether kind-based causal claims are well-founded). The structured format supports automated cross-referencing between reports.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/causation-analyze-checklist.md`, `references/causation-analyze-examples.md`.

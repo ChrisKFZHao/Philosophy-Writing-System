@@ -50,6 +50,9 @@ Framework/Workflow/
 │   ├── phil-write/
 │   └── phil-review/
 ├── Methods/                 Internal method packages (never registered as skills)
+│   │                        (+ references/ per package: v0.6 examples/checklists as
+│   │                        conditional references, loaded only on live ambiguity
+│   │                        or explicit request, named by their method files)
 │   ├── argument/            analogy-check, argument-reconstruct, charity-check,
 │   │                        counterexample, parity-check, premise-detect
 │   ├── concept/             conceptual-analysis, distinction-track, intuition-pump,

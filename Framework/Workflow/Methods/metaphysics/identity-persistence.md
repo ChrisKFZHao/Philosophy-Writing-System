@@ -326,3 +326,7 @@ Do not waste analysis on tautological identities. Focus on substantive identity 
 **Reviewer Integration:** When used with `ars academic-paper-reviewer`, the framework sensitivity assessment is especially valuable: if the paper's argument depends on a specific persistence framework without acknowledging it, the reviewer can flag this as a methodological gap. The reviewer can recommend that the paper either defend its framework choice or show that its argument is framework-independent.
 
 **Cross-Domain Utility:** Identity/persistence analysis is relevant beyond pure metaphysics. The same structures appear in philosophy of mind (personal identity), ethics (the identity of persons across time as a precondition for desert and responsibility), and philosophy of science (the identity of scientific entities across theory change, the persistence of species and ecosystems).
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/identity-persistence-checklist.md`, `references/identity-persistence-examples.md`.

@@ -355,3 +355,7 @@ Pump analyses for canonical philosophical thought experiments — Gettier cases,
 **Disclosure and Provenance.**
 
 All ARS-mediated research findings incorporated into the pump analysis must be disclosed in the output report with full provenance information, following `academic-research-skills:ars-disclosure` standards. This includes: source identification (author, title, venue, year, DOI or URL), retrieval date, the specific claim for which the source is cited, and any limitations, caveats, or conflicts of interest reported by the original studies. The disclosure requirement serves both epistemic transparency and dialectical fairness: the reader should be able to verify that the empirical claims in the pump analysis are genuinely supported by the cited literature, and the author of the pump should be able to assess whether the empirical evidence deployed against their intuition is sound.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/intuition-pump-checklist.md`, `references/intuition-pump-examples.md`.

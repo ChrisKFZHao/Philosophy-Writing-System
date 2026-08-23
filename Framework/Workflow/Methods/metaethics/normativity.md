@@ -383,3 +383,7 @@ This skill is part of the Academic Research Skills (ARS) metaethics pipeline. It
   - Citation formats throughout the report are compatible with ARS `citation-check` (Author-Year format with page references where available).
 
 - **Versioning**: This skill follows semantic versioning. Breaking changes to the output schema or classification taxonomy (e.g., adding a new required field, removing a source theory category) require a major version bump. Additions to the classification taxonomy (e.g., new source theory types) require a minor version bump. Clarifications, improved guidance, and bug fixes require a patch version bump.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/normativity-checklist.md`, `references/normativity-examples.md`.

@@ -183,3 +183,7 @@ Construct an equivalent case that removes a key presupposition, and test whether
 
 - Thought experiment analysis reports may be passed to ARS `academic-paper` as methodological supplement
 - Presupposition analysis of thought experiments may serve as citation-verification material for ARS `citation-check`
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/thought-experiment-checklist.md`, `references/thought-experiment-examples.md`.

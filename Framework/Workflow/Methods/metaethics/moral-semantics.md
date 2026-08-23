@@ -356,3 +356,7 @@ This skill is part of the Academic Research Skills (ARS) metaethics pipeline. It
   - Citations are compatible with ARS `citation-check`.
 
 - **Versioning**: Semantic versioning. Breaking schema changes = major bump. New semantic position types = minor bump. Clarifications and fixes = patch bump.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/moral-semantics-checklist.md`, `references/moral-semantics-examples.md`.

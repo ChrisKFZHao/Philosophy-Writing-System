@@ -261,3 +261,7 @@ Output the complete detection report in standard format:
 
 - Detection reports can be directly passed to ARS `academic-paper` for the "methodological limitations" or "implicit assumptions" section of a paper.
 - Detection findings can serve as critical grounds for ARS `academic-paper-reviewer`.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/premise-detect-checklist.md`, `references/premise-detect-examples.md`.

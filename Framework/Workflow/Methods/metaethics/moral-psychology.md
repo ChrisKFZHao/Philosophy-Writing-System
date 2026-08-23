@@ -366,3 +366,7 @@ This skill is part of the Academic Research Skills (ARS) metaethics pipeline. It
   - Citation formats throughout the report are compatible with ARS `citation-check` (Author-Year format with page references where available).
 
 - **Versioning**: This skill follows semantic versioning. Breaking changes to the output schema or classification taxonomy require a major version bump. Additions to the classification taxonomy (e.g., new internalism variants) require a minor version bump. Clarifications, improved procedural guidance, and bug fixes require a patch version bump.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/moral-psychology-checklist.md`, `references/moral-psychology-examples.md`.

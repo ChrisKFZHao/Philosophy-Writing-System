@@ -399,7 +399,8 @@ class AdapterTests(unittest.TestCase):
 
     def test_methods_tree_matches_manifest_and_headers_carry_metadata(self):
         methods = {item["id"]: item for item in self.kinds()["method"]}
-        files = {p.relative_to(WORKFLOW_ROOT).as_posix() for p in (WORKFLOW_ROOT / "Methods").rglob("*.md")}
+        files = {p.relative_to(WORKFLOW_ROOT).as_posix() for p in (WORKFLOW_ROOT / "Methods").rglob("*.md")
+                 if "references" not in p.parts}
         self.assertEqual(files, {item["source"] for item in methods.values()})
         for item in methods.values():
             text = (WORKFLOW_ROOT / item["source"]).read_text(encoding="utf-8")
@@ -407,6 +408,20 @@ class AdapterTests(unittest.TestCase):
             self.assertIn("side_effects: read-only", text)
             self.assertTrue(item["legacy_ids"])
             self.assertTrue(item["label"])
+
+    def test_conditional_references_are_preserved_and_linked(self):
+        """v0.6 examples/checklists must survive as conditional references named by their method."""
+        references = sorted((WORKFLOW_ROOT / "Methods").glob("*/references/*.md"))
+        self.assertGreaterEqual(len(references), 50)
+        for reference in references:
+            slug = reference.stem.rsplit("-", 1)[0]
+            package = reference.parent.parent.name
+            method = WORKFLOW_ROOT / "Methods" / package / f"{slug}.md"
+            self.assertTrue(method.is_file(), reference)
+            text = method.read_text(encoding="utf-8")
+            self.assertIn(f"references/{reference.name}", text, f"{method.name} must name {reference.name}")
+            header = reference.read_text(encoding="utf-8")
+            self.assertIn("conditional reference", header.lower(), reference)
 
     def test_migration_map_covers_all_30_legacy_ids_with_labels(self):
         method_map = self.migration["method_map"]
@@ -584,6 +599,101 @@ class AdapterTests(unittest.TestCase):
             ["git", "status", "--porcelain"], cwd=REPO_ROOT, capture_output=True, text=True, encoding="utf-8",
         ).stdout
         self.assertEqual(before, after, "regeneration produced a diff — adapters are not idempotent")
+
+
+class ContractTextTests(unittest.TestCase):
+    """Enforce the load-bearing clauses of the 0.7 plan inside the canonical files."""
+
+    def read(self, relative: str) -> str:
+        return (WORKFLOW_ROOT / relative).read_text(encoding="utf-8")
+
+    def test_every_command_and_mode_is_documented(self):
+        expected = {
+            "Skills/phil-research/SKILL.md": ["`ingest`", "`reconstruct`", "`evaluate`", "`comment`", "`philosophers`"],
+            "Skills/phil-tutor/SKILL.md": ["reading", "incubating"],
+            "Skills/phil-write/SKILL.md": ["outline", "draft", "revision"],
+            "Skills/phil-review/SKILL.md": ["full", "targeted", "re-review"],
+            "Commands/phil-full.md": ["`start`", "`status`", "`resume`"],
+        }
+        for relative, modes in expected.items():
+            text = self.read(relative)
+            for mode in modes:
+                self.assertIn(mode, text, f"{relative} must document mode {mode}")
+        guide = (WORKFLOW_ROOT / "Templates/Root/root-guidance.md").read_text(encoding="utf-8")
+        for command in ("phil:research", "phil:tutor", "phil:write", "phil:review", "phil:full"):
+            self.assertIn(command, guide)
+
+    def test_routing_rules_are_present_in_each_skill(self):
+        import re as re_module
+        for relative in ("Skills/phil-research/SKILL.md", "Skills/phil-tutor/SKILL.md",
+                         "Skills/phil-write/SKILL.md", "Skills/phil-review/SKILL.md"):
+            text = self.read(relative)
+            self.assertIsNotNone(
+                re_module.search(r"explicit mode( argument)? always wins|explicit mode wins", text, re_module.IGNORECASE),
+                relative,
+            )
+            self.assertIn("one focused question", text.replace("**", ""), relative)
+
+    def test_collaboration_modes_share_gates_and_split_authority(self):
+        text = self.read("Skills/phil-write/SKILL.md")
+        self.assertIn("identical quality gates", text)
+        self.assertIn("passage-level authorization", text)
+        self.assertIn("within the approved outline", text)
+        self.assertIn("[AI 补全]", text)
+        self.assertIn("user-led", text)
+        self.assertIn("assistant-led", text)
+
+    def test_writing_protocol_sequence_and_artifacts(self):
+        text = self.read("Skills/phil-write/SKILL.md")
+        plain = text.replace("**", "")
+        self.assertIn("intake -> outline -> outline approval -> section brief -> draft -> section audit -> revision -> citation closure", plain)
+        self.assertIn("{topic}-outline.txt", text)
+        self.assertIn("{topic}-conception.txt", text)
+        self.assertIn("never silently delete, collapse, or mark a finding resolved", plain.lower().replace("never silently", "never silently"))
+        self.assertIn("Never silently delete, collapse, or mark a finding resolved", plain)
+        self.assertIn("cannot be waived", plain)
+
+    def test_review_is_read_only_and_findings_drive_revision(self):
+        text = self.read("Skills/phil-review/SKILL.md")
+        self.assertIn("never edits the draft", text)
+        self.assertIn("Finding ledger", text)
+        self.assertIn("project-state.py finding", text)
+        self.assertIn("without evidence", text.replace("**", ""))
+
+    def test_research_kernel_invariants_and_write_isolation(self):
+        text = self.read("Skills/phil-research/SKILL.md")
+        self.assertIn("only `ingest`", text)
+        self.assertIn("Citation Gate boundary", text)
+        self.assertIn("two hops", text)
+        self.assertIn("never silently load an entire package", text)
+        for mode in ("ingest", "reconstruct", "evaluate", "comment", "philosophers"):
+            self.assertTrue(
+                (WORKFLOW_ROOT / "Skills/phil-research/references/modes" / f"{mode}.md").is_file(), mode
+            )
+
+    def test_full_pipeline_state_rules(self):
+        text = self.read("Commands/phil-full.md")
+        self.assertIn("intake -> research -> [incubation] -> outline -> section_brief -> draft -> section_audit -> review -> revision -> citation_closure -> complete", text)
+        self.assertIn("must not overwrite an unfinished run", text)
+        self.assertIn("earliest affected stage", text)
+        self.assertIn("**cannot be waived**", text)
+        self.assertIn("never duplicates the dialogue protocol", text)
+
+    def test_evidence_unit_contract_has_required_fields(self):
+        import json as json_module
+        contract = json_module.loads((WORKFLOW_ROOT / "Contracts/evidence-unit.schema.json").read_text(encoding="utf-8"))
+        required = set(contract["required"])
+        for field in ("locator", "text_span", "source_sha256", "extraction_version", "unit_sha256", "verification_status"):
+            self.assertIn(field, required)
+        self.assertIn("coverage_label", contract["properties"])
+        self.assertIn("neighborhood", contract["properties"])
+        self.assertIn("selection_reason", contract["properties"])
+
+    def test_services_declare_authority_boundaries(self):
+        for service in (WORKFLOW_ROOT / "Services").glob("*.md"):
+            header = service.read_text(encoding="utf-8").split("---")[1]
+            self.assertIn("authority:", header, service.name)
+            self.assertIn("consumers:", header, service.name)
 
 
 class MigrationScriptTests(unittest.TestCase):

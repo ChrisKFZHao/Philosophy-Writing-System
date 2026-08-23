@@ -17,6 +17,10 @@ phil:write draft     [collaboration: user-led|assistant-led] [sections]
 phil:write revision  [priorities]
 ```
 
+## Routing
+
+An explicit mode always wins. Natural-language intent that maps cleanly to one mode routes directly ("给我搭大纲" → `outline`; "继续写第三节" → `draft`; "按审稿意见改" → `revision`). A material ambiguity gets **one focused question** — never several modes speculatively.
+
 ## Authoritative sequence
 
 `intake -> outline -> outline approval -> section brief -> draft -> section audit -> revision -> citation closure`
@@ -52,7 +56,7 @@ Revision consumes the persisted review-finding ledger (`phil:review` output reco
 
 ### Citation closure
 
-Require every body citation to have a bibliography entry and remove uncited entries unless the user explicitly requests a broader reading list. Every cited KEY passes the two-hop Citation Gate (`Services/citation-gate.md`) — project registration plus verified, hash-current analysis at the required level. Citation existence, claim support, and bibliography closure remain three separate checks. Use `method.dialectic.citation-extract` to extract and classify citations first.
+Require every body citation to have a bibliography entry and remove uncited entries unless the user explicitly requests a broader reading list. Every cited KEY passes the two-hop Citation Gate (`Services/citation-gate.md`) — project registration plus verified, hash-current analysis at the required level. Citation existence, claim support, and bibliography closure remain three separate checks. Closure requires a machine PASS followed by user acknowledgement; it **cannot be waived** to bypass the two-hop Citation Gate. Use `method.dialectic.citation-extract` to extract and classify citations first.
 
 ## Seven standards of philosophical prose
 

@@ -172,3 +172,7 @@ For each anticipated response, provide a preliminary assessment:
 
 - Counterexample reports may be passed to ARS `academic-paper-reviewer` as critical material
 - Dialectical analysis of anticipated rebuttals may serve as input to the ARS `revision` stage
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/counterexample-checklist.md`, `references/counterexample-examples.md`.

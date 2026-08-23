@@ -179,3 +179,7 @@ Output in standard format:
 
 - Charity audit results can be passed to ARS `academic-paper-reviewer` as a fairness basis for review
 - Alternative interpretations can serve as important input for ARS `academic-paper revision` — revising a paper to respond to charitable criticism
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/charity-check-checklist.md`, `references/charity-check-examples.md`.

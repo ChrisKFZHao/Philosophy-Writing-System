@@ -307,3 +307,7 @@ When used early in an ARS pipeline — during the planning or outlining phase �
 ### Data Exchange Format
 
 For interoperability with the ARS pipeline and with other skills in the philosophical analysis suite, the contextualization report may be serialized into a structured format (JSON) conforming to a schema in `shared/` that captures: debate genealogy as a timeline of key publications with dependency relations; position map as a graph of nodes (positions) and edges (relations of compatibility, entailment, and opposition); target identification as a structured distinction of explicit, implicit, and structural targets with evidence; and stakes assessment as a three-tier dependency tree. The plain-text report remains the primary output; the structured format enables machine processing, cross-referencing with the argument-forms library and philosophers database, and integration into larger ARS workflows.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/contextualize-checklist.md`, `references/contextualize-examples.md`.

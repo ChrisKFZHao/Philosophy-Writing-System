@@ -191,3 +191,7 @@ T (survived)
 - The dialectical tree can be directly converted into the "Literature Review and Critique" section of ARS `academic-paper`
 - Unresolved debate nodes can serve as retrieval directions for ARS `deep-research`
 - The dialectical tree can serve as a review framework for ARS `academic-paper-reviewer`
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/dialectical-map-checklist.md`, `references/dialectical-map-examples.md`.

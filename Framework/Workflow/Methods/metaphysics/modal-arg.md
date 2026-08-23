@@ -199,3 +199,7 @@ For evaluating "conceivable → possible" reasoning:
 
 - Modal analysis reports can be passed to ARS `academic-paper` as a methodological appendix
 - Modal framework analysis can serve as a critical tool for ARS `academic-paper-reviewer`
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/modal-arg-checklist.md`, `references/modal-arg-examples.md`.

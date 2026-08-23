@@ -310,3 +310,7 @@ The ontological commitment report is foundational within the metaphysics analysi
 **5. Citation and Source Validation**
 
 When passed to `ars citation-check`, the commitment report's classification of commitments by category and controversiality enables targeted verification: if the argument claims that a certain ontological category (e.g., tropes, possible worlds) is uncontroversial, the citation checker can verify whether the cited sources actually support that claim, or whether the argument misrepresents the state of the literature on the controversiality of that category.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/ontological-commitment-checklist.md`, `references/ontological-commitment-examples.md`.

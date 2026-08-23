@@ -209,3 +209,7 @@ Output the complete reconstruction in standard format:
 - Reconstruction reports can be directly passed to ARS `academic-paper` in the writing workflow, serving as appendices to argument analysis.
 - Citation formats in the report are compatible with ARS `citation-check`.
 - Reconstruction reports can serve as supplementary analytical material for ARS `academic-paper-reviewer`.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/argument-reconstruct-checklist.md`, `references/argument-reconstruct-examples.md`.

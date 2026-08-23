@@ -323,3 +323,7 @@ This skill is part of the Academic Research Skills (ARS) metaethics pipeline (Ph
 **State management:**
 - This skill does not maintain persistent state between invocations.
 - Each analysis is self-contained and does not depend on previous analyses except through explicit input reports.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/moral-supervenience-checklist.md`, `references/moral-supervenience-examples.md`.

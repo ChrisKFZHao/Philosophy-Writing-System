@@ -276,3 +276,7 @@ CC1: <description> — Source: <classic / constructed> — Impact on candidate d
 
 - Conceptual analysis reports can be passed to ARS `academic-paper` during the writing phase for the concept clarification section of a paper.
 - Cases used in conceptual analysis can be passed to ARS `citation-check` to verify citation accuracy.
+
+## Conditional references
+
+Loaded only on a live ambiguity or an explicit request — never with this method by default: `references/conceptual-analysis-checklist.md`, `references/conceptual-analysis-examples.md`.
