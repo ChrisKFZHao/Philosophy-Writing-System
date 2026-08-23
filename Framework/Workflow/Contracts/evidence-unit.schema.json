@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "phil:evidence-unit-schema:1",
+  "title": "Evidence Unit",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["unit_id", "bib_key", "source_stem", "source_sha256", "locator", "text_span", "extraction_version", "unit_sha256", "verification_status"],
+  "properties": {
+    "unit_id": {"type": "string", "minLength": 1},
+    "bib_key": {"type": "string", "minLength": 1},
+    "source_stem": {"type": "string", "minLength": 1},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "locator": {"$ref": "#/$defs/locator"},
+    "text_span": {"type": "string", "minLength": 1},
+    "neighborhood": {"type": "string"},
+    "selection_reason": {"type": "string"},
+    "extraction_version": {"type": "string", "minLength": 1},
+    "unit_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "coverage_label": {"enum": ["full-reading", "partial-retrieval"], "default": "partial-retrieval"},
+    "verification_status": {"enum": ["verified", "stale", "provisional"]}
+  },
+  "$defs": {
+    "locator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": {"enum": ["page", "section", "paragraph", "page-range", "section-range"]},
+        "value": {"type": "string", "minLength": 1},
+        "container_key": {"type": "string"}
+      }
+    }
+  }
+}

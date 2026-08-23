@@ -2,7 +2,7 @@
 
 Read `PROJECT.md` completely before project work. Project-local instructions in `PROJECT.md` override repository defaults where they are more specific.
 
-Route `phil:<name>` to `$source-command-<name>`.
+Route `phil:<name>` to the outer generated skill (`phil-research`, `phil-tutor`, `phil-write`, `phil-review`); `phil:full` executes `Framework/Workflow/Commands/phil-full.md`.
 
 If this project is inside a nested repository, locate the nearest ancestor containing
 `Framework/Workflow/` and the outer `.agents/skills/` directory. The nested repository

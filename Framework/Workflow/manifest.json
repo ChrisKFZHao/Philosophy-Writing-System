@@ -1,932 +1,854 @@
 {
-    "schema_version":  1,
-    "items":  [
-                  {
-                      "id":  "phil-analogy-check",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-analogy-check/SKILL.md",
-                      "description":  "Analyze analogical arguments by mapping source–target correspondences, evaluating the relevance of shared properties, detecting disanalogies, and assessing the argumentative force of analogical inference.",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-argument-reconstruct",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-argument-reconstruct/SKILL.md",
-                      "description":  "Universal argument reconstruction framework — converting everyday language arguments into standard premise-conclusion form, supporting all argument types: deductive, inductive, reductio, abductive, inference to the best explanation, and more",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-causation-analyze",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-causation-analyze/SKILL.md",
-                      "description":  "Causal Claim Analysis — identify theoretical affiliations of causal claims; evaluate Humean vs anti-Humean readings; detect causal exclusion and overdetermination problems",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-charity-check",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-charity-check/SKILL.md",
-                      "description":  "Charity Check — verify that argument reconstruction has built the strongest version of the original text, detecting oversimplification, distortion, and uncharitable interpretation",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-citation-extract",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-citation-extract/SKILL.md",
-                      "description":  "Extracts all citations from a philosophical text, classifies by role (core-target/supporting/opposition/background/passing-mention), and cross-references against the project bibliography",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-conceivability-arg",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-conceivability-arg/SKILL.md",
-                      "description":  "Conceivability Argument Analysis — evaluate the conceivability-to-possibility chain; analyze zombie arguments and modal epistemology in philosophical reasoning",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-conceptual-analysis",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-conceptual-analysis/SKILL.md",
-                      "description":  "Conceptual analysis — extracting, clarifying, and testing the structure of philosophical concepts through necessary/sufficient condition analysis, case testing, and dimensional mapping to chart the logical geography of concepts",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-contextualize",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-contextualize/SKILL.md",
-                      "description":  "Situates a philosophical argument within its broader intellectual landscape — the debate tradition, opposing positions, historical context, and dialectical stakes — producing a structured contextualization report that maps the argument\u0027s position among rival positions, identifies its targets and ancestors, reconstructs the historical development of the debate, and assesses what turns on the argument\u0027s success or failure.",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-counterexample",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-counterexample/SKILL.md",
-                      "description":  "Counterexample generation and evaluation — using the output of argument reconstruction as a blueprint to systematically construct and assess counterexamples targeting premises, inferential chains, or conclusions",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-dialectical-map",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-dialectical-map/SKILL.md",
-                      "description":  "Dialectical mapping — constructing a structured dialectical tree of theses, objections, and responses within a philosophical debate, tracking the offensive and defensive evolution of arguments",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-distinction-track",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-distinction-track/SKILL.md",
-                      "description":  "Distinction Tracking — identify, index, and trace all key conceptual distinctions in philosophical texts; test distinctions for consistency, exhaustiveness, and argumentative function",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-essence-detect",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-essence-detect/SKILL.md",
-                      "description":  "Essentialist Claim Detection — detect and evaluate use of the essence/accident distinction; analyze modal profiles of essential properties using Finean and Kripkean frameworks",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-grounding-check",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-grounding-check/SKILL.md",
-                      "description":  "Grounding/Constitution Analysis — detect grounding, supervenience, realization, and constitution relations; map ontological dependence topology and evaluate explanatory adequacy",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-identity-persistence",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-identity-persistence/SKILL.md",
-                      "description":  "Identity and Persistence Analysis — analyze identity conditions across time and possible worlds; evaluate endurance vs perdurance frameworks and detect identity problems",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-intuition-pump",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-intuition-pump/SKILL.md",
-                      "description":  "Analyze intuition pumps — philosophical thought experiments designed to elicit specific intuitive judgments that serve as argumentative premises. Systematic analysis of pump mechanisms, cognitive architecture, debunking susceptibility, framing effects, and dialectical force.",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-methodology",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-methodology/SKILL.md",
-                      "description":  "Detect, classify, and evaluate the methodological commitments of philosophical arguments — the meta-philosophical choices about how philosophy should be done that shape and constrain reasoning",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-modal-arg",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-modal-arg/SKILL.md",
-                      "description":  "Modal Argument Analysis — evaluate the logical structure of possibility, necessity, and contingency claims; detect modal fallacies; identify hidden modal assumptions; locate possible-worlds reasoning positions",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-moral-disagreement",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-moral-disagreement/SKILL.md",
-                      "description":  "Moral Disagreement Analysis — evaluate arguments from moral disagreement and their implications for moral realism; assess conciliationist challenges and convergence responses",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-moral-epistemology",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-moral-epistemology/SKILL.md",
-                      "description":  "Moral Epistemology Analysis — evaluate the possibility of moral knowledge; analyze intuitionist, coherentist, and reliabilist justification pathways; assess evolutionary debunking challenges",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-moral-psychology",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-moral-psychology/SKILL.md",
-                      "description":  "Moral Psychology Analysis — analyze the moral judgment–motivation relation; evaluate internalism/externalism, the Humean theory of motivation, and amoralist/akrasia challenges",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-moral-realism",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-moral-realism/SKILL.md",
-                      "description":  "Moral Realism Argument Analysis — analyze arguments for/against moral realism, anti-realism, error theory, and non-cognitivism; map positions on the realism spectrum",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-moral-semantics",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-moral-semantics/SKILL.md",
-                      "description":  "Moral Semantics Analysis — analyze moral language; map cognitivism/expressivism/prescriptivism positions; evaluate Frege-Geach problem responses and truth-aptness",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-moral-supervenience",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-moral-supervenience/SKILL.md",
-                      "description":  "Moral Supervenience Analysis — analyze the supervenience of moral properties on natural properties; evaluate Blackburn\u0027s supervenience challenge and realist/expressivist responses",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-natural-kind-analyze",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-natural-kind-analyze/SKILL.md",
-                      "description":  "Natural Kind Analysis — analyze arguments concerning natural kind classification; evaluate kind essentialism, HPC theory, and conventionalist approaches",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-normativity",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-normativity/SKILL.md",
-                      "description":  "Normativity Analysis — analyze the source and structure of normativity; classify categorical/hypothetical imperatives, internal/external reasons, and constitutive vs substantive normativity",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-ontological-commitment",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-ontological-commitment/SKILL.md",
-                      "description":  "Ontological Commitment Detection — identify entity types and existence categories presupposed by arguments using Quinean criterion and category taxonomy",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-parity-check",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-parity-check/SKILL.md",
-                      "description":  "Evaluates parity arguments and relevant-similarity claims in philosophical reasoning by systematically checking whether claimed analogies hold under scrutiny.",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-premise-detect",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-premise-detect/SKILL.md",
-                      "description":  "Implicit premise detection — systematically detecting unstated assumptions, hidden conditions, and framework presuppositions in philosophical arguments; classifying and evaluating all gaps that constitute implicit obstacles to an argument\u0027s validity",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-summarize",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-summarize/SKILL.md",
-                      "description":  "Generates a Level 0.5 summary of a single philosophical source — core thesis, argument route, key concepts, interlocutors, and topic tags — as the cheapest analysis rung and the substrate for literature recommendation",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-thought-experiment",
-                      "kind":  "skill",
-                      "source":  "Skills/phil-thought-experiment/SKILL.md",
-                      "description":  "Thought experiment analysis — deconstructing the structure, intuition mechanisms, and argumentative force of philosophical thought experiments",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "skill-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "comment",
-                      "kind":  "workflow",
-                      "source":  "Workflows/comment.md",
-                      "description":  "In-depth philosophical commentary — invokes the phil-commentator agent, focusing on argumentative detail: unstated assumptions, alternative readings, missing distinctions, hidden commitments, dialectical blind spots\r",
-                      "dependencies":  [
-                                           "phil-commentator"
-                                       ],
-                      "role":  "phil-commentator",
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "commentary-report",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "evaluate",
-                      "kind":  "workflow",
-                      "source":  "Workflows/evaluate.md",
-                      "description":  "Cost-aware critical evaluation of philosophical texts — always runs a lightweight inference and fallacy baseline, then selects only feature- or intent-relevant dimensions unless full coverage is requested",
-                      "dependencies":  [
-                                           "phil-counterexample",
-                                           "phil-dialectical-map",
-                                           "phil-analogy-check",
-                                           "phil-parity-check",
-                                           "phil-intuition-pump",
-                                           "phil-methodology"
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "delegate"
-                                       ],
-                      "output_contract":  "integrated-evaluation-report",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "ingest",
-                      "kind":  "workflow",
-                      "source":  "Workflows/ingest.md",
-                      "description":  "Literature ingestion (\"scraping\") — scans the bibliography for unprocessed PDFs, renames them to the canonical stem, registers them in INDEX.md, generates Level 0.5 summaries, batch-records philosopher observations, runs recommendation trigger point 1, and auto-registers sources in Zotero as linked-file items",
-                      "dependencies":  [
-                                           "phil-summarize"
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "write",
-                                           "pdf",
-                                           "zotero-full",
-                                           "zotero-local"
-                                       ],
-                      "output_contract":  "ingestion-report-and-library-artifacts",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "philosophers",
-                      "kind":  "workflow",
-                      "source":  "Workflows/philosophers.md",
-                      "description":  "Maintain the source-backed philosopher database — inspect private observations, review and apply candidates, lazily audit held sources, validate profiles, and rebuild domain views",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "write"
-                                       ],
-                      "output_contract":  "philosopher-maintenance-report",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "pipeline",
-                      "kind":  "workflow",
-                      "source":  "Workflows/pipeline.md",
-                      "description":  "One-command full pipeline — invokes the phil-orchestrator agent, 6 stages: topic orientation \u0026 reading plan → reading \u0026 analysis → conception incubation → outline → draft \u0026 iterative revision → review \u0026 final, with a lenient-interrogation quality gate at each stage\r",
-                      "dependencies":  [
-                                           "ingest",
-                                           "reconstruct",
-                                           "evaluate",
-                                           "review",
-                                           "write",
-                                           "comment",
-                                           "tutor",
-                                           "phil-orchestrator"
-                                       ],
-                      "role":  "phil-orchestrator",
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "write",
-                                           "delegate",
-                                           "pdf",
-                                           "zotero-full",
-                                           "zotero-local"
-                                       ],
-                      "output_contract":  "pipeline-state-and-artifacts",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "reconstruct",
-                      "kind":  "workflow",
-                      "source":  "Workflows/reconstruct.md",
-                      "description":  "Progressive, verification-aware comprehension of philosophical texts — plans the minimum Level 1, 2, or 3 coverage, reuses only verified hash-current analysis, and supports explicit full or deep coverage",
-                      "dependencies":  [
-                                           "phil-argument-reconstruct",
-                                           "phil-charity-check",
-                                           "phil-premise-detect",
-                                           "phil-modal-arg",
-                                           "phil-conceptual-analysis",
-                                           "phil-distinction-track",
-                                           "phil-thought-experiment",
-                                           "phil-intuition-pump",
-                                           "phil-contextualize",
-                                           "phil-dialectical-map",
-                                           "phil-ontological-commitment",
-                                           "phil-identity-persistence",
-                                           "phil-grounding-check",
-                                           "phil-conceivability-arg",
-                                           "phil-causation-analyze",
-                                           "phil-essence-detect",
-                                           "phil-natural-kind-analyze",
-                                           "phil-moral-realism",
-                                           "phil-normativity",
-                                           "phil-moral-semantics",
-                                           "phil-moral-psychology",
-                                           "phil-moral-disagreement",
-                                           "phil-moral-epistemology",
-                                           "phil-moral-supervenience"
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "delegate"
-                                       ],
-                      "output_contract":  "integrated-analysis-report",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "review",
-                      "kind":  "workflow",
-                      "source":  "Workflows/review.md",
-                      "description":  "Peer review of philosophical papers — invokes the phil-reviewer agent, 8-dimension review + perspective simulation (Quinean/Lewisian/Kripkean etc.)\r",
-                      "dependencies":  [
-                                           "phil-reviewer"
-                                       ],
-                      "role":  "phil-reviewer",
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "review-report",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "tutor",
-                      "kind":  "workflow",
-                      "source":  "Workflows/tutor.md",
-                      "description":  "Tutor-style dialogue — two modes. reading (default): asks about your thinking, probes your understanding, surfaces blind spots, recommends readings, and plans next steps. incubating: conception incubation (构思孵化), helping you crystallize your own thesis and argument sketch\r",
-                      "dependencies":  [
-                                           "phil-tutor",
-                                           "phil-citation-extract"
-                                       ],
-                      "role":  "phil-tutor",
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "write"
-                                       ],
-                      "output_contract":  "dialogue-or-conception-file",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "write",
-                      "kind":  "workflow",
-                      "source":  "Workflows/write.md",
-                      "description":  "Philosophical writing — invokes the phil-writer agent with three modes: outline (structured outline), draft (section-by-section composition, with user-led/assistant-led collaboration modes), revision (review-driven revision)\r",
-                      "dependencies":  [
-                                           "phil-writer"
-                                       ],
-                      "role":  "phil-writer",
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "write"
-                                       ],
-                      "output_contract":  "outline-draft-or-revision",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "metaethicist",
-                      "kind":  "role",
-                      "source":  "Roles/metaethicist.md",
-                      "description":  "Metaethical analyst — Socratic dialogue specialized in moral realism, normative reasons, moral semantics, moral psychology, and metaethical methodology",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "role-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "metaphysician",
-                      "kind":  "role",
-                      "source":  "Roles/metaphysician.md",
-                      "description":  "Metaphysical analyst — Socratic dialogue specialized in ontological commitments, conceivability reasoning, grounding relations, identity conditions, causal analysis, and essence detection",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "role-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-commentator",
-                      "kind":  "role",
-                      "source":  "Roles/phil-commentator.md",
-                      "description":  "Philosophy Commentator — Critical engagement with philosophical works: uncovering unexamined assumptions, identifying alternative interpretations, mapping missing distinctions, and positioning work within the broader dialectical landscape",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "role-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-orchestrator",
-                      "kind":  "role",
-                      "source":  "Roles/phil-orchestrator.md",
-                      "description":  "Philosophy Writing Pipeline Orchestrator — End-to-end workflow coordinator across 6 stages: topic orientation and reading plan, reading and analysis, conception incubation, outline, draft and iterative revision, and final review through review-revision cycles",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "delegate"
-                                       ],
-                      "output_contract":  "role-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-reviewer",
-                      "kind":  "role",
-                      "source":  "Roles/phil-reviewer.md",
-                      "description":  "Philosophy Reviewer — Domain-specific peer review assessing argument validity, conceptual clarity, modal rigor, dialectical charity, and counterexample resilience from configurable philosophical perspectives",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search"
-                                       ],
-                      "output_contract":  "role-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-tutor",
-                      "kind":  "role",
-                      "source":  "Roles/phil-tutor.md",
-                      "description":  "Academic mentor — Socratic dialogue across two modes: reading (literature dialogue — asks about your thinking, probes understanding, identifies gaps, and recommends literature) and incubating (conception incubation / 构思孵化 — helps crystallize your own thesis and argument sketch)",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "write"
-                                       ],
-                      "output_contract":  "role-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  },
-                  {
-                      "id":  "phil-writer",
-                      "kind":  "role",
-                      "source":  "Roles/phil-writer.md",
-                      "description":  "Philosophy Writer — Generate philosophical manuscripts with discipline-specific rigor: argument integrity, conceptual precision, dialectical awareness, modal accuracy, and Chinese academic conventions",
-                      "dependencies":  [
-
-                                       ],
-                      "role":  null,
-                      "capabilities":  [
-                                           "read",
-                                           "search",
-                                           "write"
-                                       ],
-                      "output_contract":  "role-defined",
-                      "platforms":  [
-                                        "claude",
-                                        "codex"
-                                    ]
-                  }
-              ]
+  "schema_version": 2,
+  "exposure": {
+    "skills": [
+      "phil-research",
+      "phil-tutor",
+      "phil-write",
+      "phil-review"
+    ],
+    "claude_command_wrappers": [
+      "research",
+      "tutor",
+      "write",
+      "review",
+      "full"
+    ]
+  },
+  "migration_map": "Migration/migration-v0.7.json",
+  "items": [
+    {
+      "id": "phil-research",
+      "kind": "skill",
+      "source": "Skills/phil-research/SKILL.md",
+      "description": "Shared evidence and provenance kernel for philosophical research — five isolated modes: ingest (library intake), reconstruct (progressive source comprehension), evaluate (targeted critique), comment (argumentative detail), philosophers (source-backed philosopher database)",
+      "modes": [
+        "ingest",
+        "reconstruct",
+        "evaluate",
+        "comment",
+        "philosophers"
+      ],
+      "capabilities": [
+        "read",
+        "search",
+        "write",
+        "pdf",
+        "zotero-full",
+        "zotero-local",
+        "delegate"
+      ],
+      "platforms": [
+        "claude",
+        "codex"
+      ]
+    },
+    {
+      "id": "phil-tutor",
+      "kind": "skill",
+      "source": "Skills/phil-tutor/SKILL.md",
+      "description": "Tutor-style dialogue in two modes — reading (default): Socratic literature dialogue, probing understanding, recommending sources, planning next steps; incubating: conception incubation (构思孵化) helping crystallize your own thesis and argument sketch",
+      "modes": [
+        "reading",
+        "incubating"
+      ],
+      "capabilities": [
+        "read",
+        "search",
+        "write"
+      ],
+      "platforms": [
+        "claude",
+        "codex"
+      ]
+    },
+    {
+      "id": "phil-write",
+      "kind": "skill",
+      "source": "Skills/phil-write/SKILL.md",
+      "description": "Philosophical manuscript writing in three modes — outline (structured outline from your conception), draft (section-by-section composition with user-led/assistant-led collaboration), revision (review-driven revision)",
+      "modes": [
+        "outline",
+        "draft",
+        "revision"
+      ],
+      "capabilities": [
+        "read",
+        "search",
+        "write"
+      ],
+      "platforms": [
+        "claude",
+        "codex"
+      ]
+    },
+    {
+      "id": "phil-review",
+      "kind": "skill",
+      "source": "Skills/phil-review/SKILL.md",
+      "description": "Peer review of your own manuscript in three modes — full (whole-paper 8-dimension review), targeted (specific dimensions or sections), re-review (verify prior findings were resolved). Read-only unless revision is explicitly requested.",
+      "modes": [
+        "full",
+        "targeted",
+        "re-review"
+      ],
+      "capabilities": [
+        "read",
+        "search"
+      ],
+      "platforms": [
+        "claude",
+        "codex"
+      ]
+    },
+    {
+      "id": "package.argument",
+      "kind": "method_package",
+      "source": "Methods/argument/",
+      "description": "Argument-form methods: reconstruction, charity, implicit premises, counterexamples, analogy, parity.",
+      "members": [
+        "method.argument.analogy-check",
+        "method.argument.argument-reconstruct",
+        "method.argument.charity-check",
+        "method.argument.counterexample",
+        "method.argument.parity-check",
+        "method.argument.premise-detect"
+      ]
+    },
+    {
+      "id": "package.concept",
+      "kind": "method_package",
+      "source": "Methods/concept/",
+      "description": "Conceptual methods: conceptual analysis, distinction tracking, intuition pumps, thought experiments, natural kinds.",
+      "members": [
+        "method.concept.conceptual-analysis",
+        "method.concept.distinction-track",
+        "method.concept.intuition-pump",
+        "method.concept.natural-kind-analyze",
+        "method.concept.thought-experiment"
+      ]
+    },
+    {
+      "id": "package.dialectic",
+      "kind": "method_package",
+      "source": "Methods/dialectic/",
+      "description": "Dialectical methods: citation extraction, contextualization, dialectical mapping, methodology, summarization.",
+      "members": [
+        "method.dialectic.citation-extract",
+        "method.dialectic.contextualize",
+        "method.dialectic.dialectical-map",
+        "method.dialectic.methodology",
+        "method.dialectic.summarize"
+      ]
+    },
+    {
+      "id": "package.metaethics",
+      "kind": "method_package",
+      "source": "Methods/metaethics/",
+      "description": "Metaethics-domain methods: disagreement, epistemology, psychology, realism, semantics, supervenience, normativity.",
+      "members": [
+        "method.metaethics.moral-disagreement",
+        "method.metaethics.moral-epistemology",
+        "method.metaethics.moral-psychology",
+        "method.metaethics.moral-realism",
+        "method.metaethics.moral-semantics",
+        "method.metaethics.moral-supervenience",
+        "method.metaethics.normativity"
+      ]
+    },
+    {
+      "id": "package.metaphysics",
+      "kind": "method_package",
+      "source": "Methods/metaphysics/",
+      "description": "Metaphysics-domain methods: causation, conceivability, essence, grounding, identity, modality, ontological commitment.",
+      "members": [
+        "method.metaphysics.causation-analyze",
+        "method.metaphysics.conceivability-arg",
+        "method.metaphysics.essence-detect",
+        "method.metaphysics.grounding-check",
+        "method.metaphysics.identity-persistence",
+        "method.metaphysics.modal-arg",
+        "method.metaphysics.ontological-commitment"
+      ]
+    },
+    {
+      "id": "method.argument.analogy-check",
+      "kind": "method",
+      "package": "package.argument",
+      "source": "Methods/argument/analogy-check.md",
+      "description": "Analogy Check — internal method; input: argument containing an analogy; output: analogy assessment report.",
+      "legacy_ids": [
+        "phil-analogy-check"
+      ],
+      "label": "Analogy Check",
+      "consumers": [
+        "phil-research/evaluate",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature-detected",
+      "inputs": "argument containing an analogy",
+      "outputs": "analogy assessment report",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.argument.argument-reconstruct",
+      "kind": "method",
+      "package": "package.argument",
+      "source": "Methods/argument/argument-reconstruct.md",
+      "description": "Argument Reconstruction — internal method; input: text or source excerpt; output: standard-form reconstruction report.",
+      "legacy_ids": [
+        "phil-argument-reconstruct"
+      ],
+      "label": "Argument Reconstruction",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "level:1 baseline",
+      "inputs": "text or source excerpt",
+      "outputs": "standard-form reconstruction report",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.argument.charity-check",
+      "kind": "method",
+      "package": "package.argument",
+      "source": "Methods/argument/charity-check.md",
+      "description": "Charity Check — internal method; input: reconstruction report + original text; output: charity audit report.",
+      "legacy_ids": [
+        "phil-charity-check"
+      ],
+      "label": "Charity Check",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "level:2 mandatory",
+      "inputs": "reconstruction report + original text",
+      "outputs": "charity audit report",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.argument.counterexample",
+      "kind": "method",
+      "package": "package.argument",
+      "source": "Methods/argument/counterexample.md",
+      "description": "Counterexample Generation and Evaluation — internal method; input: reconstruction report; output: counterexample set with evaluation.",
+      "legacy_ids": [
+        "phil-counterexample"
+      ],
+      "label": "Counterexample Generation and Evaluation",
+      "consumers": [
+        "phil-research/evaluate",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature-detected",
+      "inputs": "reconstruction report",
+      "outputs": "counterexample set with evaluation",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.argument.parity-check",
+      "kind": "method",
+      "package": "package.argument",
+      "source": "Methods/argument/parity-check.md",
+      "description": "Parity Check — internal method; input: argument containing a parity claim; output: parity assessment report.",
+      "legacy_ids": [
+        "phil-parity-check"
+      ],
+      "label": "Parity Check",
+      "consumers": [
+        "phil-research/evaluate",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature-detected",
+      "inputs": "argument containing a parity claim",
+      "outputs": "parity assessment report",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.argument.premise-detect",
+      "kind": "method",
+      "package": "package.argument",
+      "source": "Methods/argument/premise-detect.md",
+      "description": "Implicit Premise Detection — internal method; input: charitable reconstruction; output: implicit-premise audit report.",
+      "legacy_ids": [
+        "phil-premise-detect"
+      ],
+      "label": "Implicit Premise Detection",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-research/comment",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "level:2 mandatory",
+      "inputs": "charitable reconstruction",
+      "outputs": "implicit-premise audit report",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.concept.conceptual-analysis",
+      "kind": "method",
+      "package": "package.concept",
+      "source": "Methods/concept/conceptual-analysis.md",
+      "description": "Conceptual Analysis — internal method; input: text or reconstruction; output: concept map / N-S condition analysis.",
+      "legacy_ids": [
+        "phil-conceptual-analysis"
+      ],
+      "label": "Conceptual Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature:conceptual / level:2",
+      "inputs": "text or reconstruction",
+      "outputs": "concept map / N-S condition analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.concept.distinction-track",
+      "kind": "method",
+      "package": "package.concept",
+      "source": "Methods/concept/distinction-track.md",
+      "description": "Distinction Tracking — internal method; input: text or reconstruction; output: distinction index and function test.",
+      "legacy_ids": [
+        "phil-distinction-track"
+      ],
+      "label": "Distinction Tracking",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-research/comment",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature:distinction / level:2",
+      "inputs": "text or reconstruction",
+      "outputs": "distinction index and function test",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.concept.intuition-pump",
+      "kind": "method",
+      "package": "package.concept",
+      "source": "Methods/concept/intuition-pump.md",
+      "description": "Intuition Pump Analysis — internal method; input: thought-experiment passage; output: intuition-pump analysis.",
+      "legacy_ids": [
+        "phil-intuition-pump"
+      ],
+      "label": "Intuition Pump Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-research/evaluate",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature-detected",
+      "inputs": "thought-experiment passage",
+      "outputs": "intuition-pump analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.concept.natural-kind-analyze",
+      "kind": "method",
+      "package": "package.concept",
+      "source": "Methods/concept/natural-kind-analyze.md",
+      "description": "Natural Kind Analysis — internal method; input: kind-classification claims; output: natural kind analysis.",
+      "legacy_ids": [
+        "phil-natural-kind-analyze"
+      ],
+      "label": "Natural Kind Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "kind-classification claims",
+      "outputs": "natural kind analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.concept.thought-experiment",
+      "kind": "method",
+      "package": "package.concept",
+      "source": "Methods/concept/thought-experiment.md",
+      "description": "Thought Experiment Analysis — internal method; input: thought-experiment passage; output: thought-experiment deconstruction.",
+      "legacy_ids": [
+        "phil-thought-experiment"
+      ],
+      "label": "Thought Experiment Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature-detected",
+      "inputs": "thought-experiment passage",
+      "outputs": "thought-experiment deconstruction",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.dialectic.citation-extract",
+      "kind": "method",
+      "package": "package.dialectic",
+      "source": "Methods/dialectic/citation-extract.md",
+      "description": "Citation Extraction — internal method; input: manuscript or text; output: citation table with roles and cross-reference (citation-extract-schema.json).",
+      "legacy_ids": [
+        "phil-citation-extract"
+      ],
+      "label": "Citation Extraction",
+      "consumers": [
+        "phil-tutor",
+        "phil-write",
+        "phil-full"
+      ],
+      "selector": "feature-detected",
+      "inputs": "manuscript or text",
+      "outputs": "citation table with roles and cross-reference (citation-extract-schema.json)",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.dialectic.contextualize",
+      "kind": "method",
+      "package": "package.dialectic",
+      "source": "Methods/dialectic/contextualize.md",
+      "description": "Contextualization — internal method; input: argument + source; output: contextualization report.",
+      "legacy_ids": [
+        "phil-contextualize"
+      ],
+      "label": "Contextualization",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "argument + source",
+      "outputs": "contextualization report",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.dialectic.dialectical-map",
+      "kind": "method",
+      "package": "package.dialectic",
+      "source": "Methods/dialectic/dialectical-map.md",
+      "description": "Dialectical Mapping — internal method; input: text or debate corpus; output: dialectical tree (dialectical-tree-schema.json).",
+      "legacy_ids": [
+        "phil-dialectical-map"
+      ],
+      "label": "Dialectical Mapping",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-research/evaluate",
+        "phil-research/comment",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature-detected",
+      "inputs": "text or debate corpus",
+      "outputs": "dialectical tree (dialectical-tree-schema.json)",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.dialectic.methodology",
+      "kind": "method",
+      "package": "package.dialectic",
+      "source": "Methods/dialectic/methodology.md",
+      "description": "Methodological Analysis — internal method; input: argument; output: methodological-commitment analysis.",
+      "legacy_ids": [
+        "phil-methodology"
+      ],
+      "label": "Methodological Analysis",
+      "consumers": [
+        "phil-research/evaluate",
+        "phil-research/comment",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature-detected",
+      "inputs": "argument",
+      "outputs": "methodological-commitment analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.dialectic.summarize",
+      "kind": "method",
+      "package": "package.dialectic",
+      "source": "Methods/dialectic/summarize.md",
+      "description": "Level 0.5 Summary — internal method; input: extracted source text + verified metadata; output: Level 0.5 summary file (summary-schema.json).",
+      "legacy_ids": [
+        "phil-summarize"
+      ],
+      "label": "Level 0.5 Summary",
+      "consumers": [
+        "phil-research/ingest"
+      ],
+      "selector": "feature-detected",
+      "inputs": "extracted source text + verified metadata",
+      "outputs": "Level 0.5 summary file (summary-schema.json)",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaethics.moral-disagreement",
+      "kind": "method",
+      "package": "package.metaethics",
+      "source": "Methods/metaethics/moral-disagreement.md",
+      "description": "Moral Disagreement Analysis — internal method; input: disagreement-based argument; output: moral disagreement analysis.",
+      "legacy_ids": [
+        "phil-moral-disagreement"
+      ],
+      "label": "Moral Disagreement Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "disagreement-based argument",
+      "outputs": "moral disagreement analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaethics.moral-epistemology",
+      "kind": "method",
+      "package": "package.metaethics",
+      "source": "Methods/metaethics/moral-epistemology.md",
+      "description": "Moral Epistemology Analysis — internal method; input: moral-knowledge claims; output: moral epistemology analysis.",
+      "legacy_ids": [
+        "phil-moral-epistemology"
+      ],
+      "label": "Moral Epistemology Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "moral-knowledge claims",
+      "outputs": "moral epistemology analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaethics.moral-psychology",
+      "kind": "method",
+      "package": "package.metaethics",
+      "source": "Methods/metaethics/moral-psychology.md",
+      "description": "Moral Psychology Analysis — internal method; input: judgment-motivation claims; output: moral psychology analysis (moral-psychology-schema.json).",
+      "legacy_ids": [
+        "phil-moral-psychology"
+      ],
+      "label": "Moral Psychology Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "judgment-motivation claims",
+      "outputs": "moral psychology analysis (moral-psychology-schema.json)",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaethics.moral-realism",
+      "kind": "method",
+      "package": "package.metaethics",
+      "source": "Methods/metaethics/moral-realism.md",
+      "description": "Moral Realism Argument Analysis — internal method; input: realism-spectrum argument; output: moral realism analysis (moral-realism-schema.json).",
+      "legacy_ids": [
+        "phil-moral-realism"
+      ],
+      "label": "Moral Realism Argument Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "realism-spectrum argument",
+      "outputs": "moral realism analysis (moral-realism-schema.json)",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaethics.moral-semantics",
+      "kind": "method",
+      "package": "package.metaethics",
+      "source": "Methods/metaethics/moral-semantics.md",
+      "description": "Moral Semantics Analysis — internal method; input: moral-language claims; output: moral semantics analysis (moral-semantics-schema.json).",
+      "legacy_ids": [
+        "phil-moral-semantics"
+      ],
+      "label": "Moral Semantics Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "moral-language claims",
+      "outputs": "moral semantics analysis (moral-semantics-schema.json)",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaethics.moral-supervenience",
+      "kind": "method",
+      "package": "package.metaethics",
+      "source": "Methods/metaethics/moral-supervenience.md",
+      "description": "Moral Supervenience Analysis — internal method; input: supervenience claims; output: moral supervenience analysis.",
+      "legacy_ids": [
+        "phil-moral-supervenience"
+      ],
+      "label": "Moral Supervenience Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "supervenience claims",
+      "outputs": "moral supervenience analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaethics.normativity",
+      "kind": "method",
+      "package": "package.metaethics",
+      "source": "Methods/metaethics/normativity.md",
+      "description": "Normativity Analysis — internal method; input: normative-source claims; output: normativity analysis (normativity-schema.json).",
+      "legacy_ids": [
+        "phil-normativity"
+      ],
+      "label": "Normativity Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "normative-source claims",
+      "outputs": "normativity analysis (normativity-schema.json)",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaphysics.causation-analyze",
+      "kind": "method",
+      "package": "package.metaphysics",
+      "source": "Methods/metaphysics/causation-analyze.md",
+      "description": "Causal Claim Analysis — internal method; input: causal claims; output: causal affiliation and exclusion analysis.",
+      "legacy_ids": [
+        "phil-causation-analyze"
+      ],
+      "label": "Causal Claim Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "causal claims",
+      "outputs": "causal affiliation and exclusion analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaphysics.conceivability-arg",
+      "kind": "method",
+      "package": "package.metaphysics",
+      "source": "Methods/metaphysics/conceivability-arg.md",
+      "description": "Conceivability Argument Analysis — internal method; input: conceivability reasoning; output: conceivability-chain analysis.",
+      "legacy_ids": [
+        "phil-conceivability-arg"
+      ],
+      "label": "Conceivability Argument Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "conceivability reasoning",
+      "outputs": "conceivability-chain analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaphysics.essence-detect",
+      "kind": "method",
+      "package": "package.metaphysics",
+      "source": "Methods/metaphysics/essence-detect.md",
+      "description": "Essentialist Claim Detection — internal method; input: essence/accident usage; output: essentialist-claim analysis.",
+      "legacy_ids": [
+        "phil-essence-detect"
+      ],
+      "label": "Essentialist Claim Detection",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "essence/accident usage",
+      "outputs": "essentialist-claim analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaphysics.grounding-check",
+      "kind": "method",
+      "package": "package.metaphysics",
+      "source": "Methods/metaphysics/grounding-check.md",
+      "description": "Grounding/Constitution Analysis — internal method; input: dependence claims; output: grounding topology analysis.",
+      "legacy_ids": [
+        "phil-grounding-check"
+      ],
+      "label": "Grounding/Constitution Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "dependence claims",
+      "outputs": "grounding topology analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaphysics.identity-persistence",
+      "kind": "method",
+      "package": "package.metaphysics",
+      "source": "Methods/metaphysics/identity-persistence.md",
+      "description": "Identity and Persistence Analysis — internal method; input: identity claims; output: identity-conditions analysis.",
+      "legacy_ids": [
+        "phil-identity-persistence"
+      ],
+      "label": "Identity and Persistence Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write"
+      ],
+      "selector": "feature-detected",
+      "inputs": "identity claims",
+      "outputs": "identity-conditions analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaphysics.modal-arg",
+      "kind": "method",
+      "package": "package.metaphysics",
+      "source": "Methods/metaphysics/modal-arg.md",
+      "description": "Modal Argument Analysis — internal method; input: modal claims in text; output: modal argument analysis.",
+      "legacy_ids": [
+        "phil-modal-arg"
+      ],
+      "label": "Modal Argument Analysis",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature-detected",
+      "inputs": "modal claims in text",
+      "outputs": "modal argument analysis",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "method.metaphysics.ontological-commitment",
+      "kind": "method",
+      "package": "package.metaphysics",
+      "source": "Methods/metaphysics/ontological-commitment.md",
+      "description": "Ontological Commitment Detection — internal method; input: quantified claims; output: commitment inventory (ontological-commitment-schema.json).",
+      "legacy_ids": [
+        "phil-ontological-commitment"
+      ],
+      "label": "Ontological Commitment Detection",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-research/comment",
+        "phil-write",
+        "phil-review"
+      ],
+      "selector": "feature-detected",
+      "inputs": "quantified claims",
+      "outputs": "commitment inventory (ontological-commitment-schema.json)",
+      "side_effect_policy": "read-only"
+    },
+    {
+      "id": "service.source-intake",
+      "kind": "service",
+      "source": "Services/source-intake.md",
+      "description": "Library intake pipeline: deterministic scan, title-page extraction, canonical rename, INDEX registration, Level 0.5 summaries, philosopher observations, recommendation trigger 1.",
+      "consumers": [
+        "phil-research/ingest"
+      ],
+      "authority": "write (library, queue; never projects)"
+    },
+    {
+      "id": "service.zotero-registration",
+      "kind": "service",
+      "source": "Services/zotero-registration.md",
+      "description": "Identifier-gated Zotero registration with linked-file attachment (DOI to ISBN to bibtex cascade).",
+      "consumers": [
+        "phil-research/ingest"
+      ],
+      "authority": "write (external cloud; identifier-gated)"
+    },
+    {
+      "id": "service.citation-gate",
+      "kind": "service",
+      "source": "Services/citation-gate.md",
+      "description": "Two-hop Citation Gate: refs.md registration + verified hash-current analysis verification.",
+      "consumers": [
+        "phil-write",
+        "phil-review",
+        "phil-full",
+        "phil-research/reconstruct"
+      ],
+      "authority": "read + block"
+    },
+    {
+      "id": "service.philosopher-db",
+      "kind": "service",
+      "source": "Services/philosopher-db.md",
+      "description": "Philosopher database maintenance: queue, review, explicit approval, lazy audit, rebuild.",
+      "consumers": [
+        "phil-research/philosophers",
+        "phil-research/ingest"
+      ],
+      "authority": "write (queue, profiles; approval explicit)"
+    },
+    {
+      "id": "service.evidence-retrieval",
+      "kind": "service",
+      "source": "Services/evidence-retrieval.md",
+      "description": "Evidence-unit location, quotation, and hash-current reuse without full-PDF context loads (0.7.0: local deterministic + cache contract).",
+      "consumers": [
+        "phil-research/reconstruct",
+        "phil-research/evaluate",
+        "phil-tutor",
+        "phil-write",
+        "phil-review"
+      ],
+      "authority": "read"
+    },
+    {
+      "id": "phil-full",
+      "kind": "command",
+      "source": "Commands/phil-full.md",
+      "description": "Full-pipeline state machine — start, status, resume; orchestrates the four skills through persisted v2 workflow state.",
+      "modes": [
+        "start",
+        "status",
+        "resume"
+      ],
+      "stages": [
+        "intake",
+        "research",
+        "incubation",
+        "outline",
+        "section_brief",
+        "draft",
+        "section_audit",
+        "review",
+        "revision",
+        "citation_closure",
+        "complete"
+      ],
+      "consumers": [
+        "phil-research",
+        "phil-tutor",
+        "phil-write",
+        "phil-review"
+      ]
+    }
+  ]
 }

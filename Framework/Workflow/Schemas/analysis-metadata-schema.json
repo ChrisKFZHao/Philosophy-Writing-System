@@ -29,8 +29,8 @@
     "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "analysis_path": {"type": "string", "minLength": 1},
     "analysis_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-    "coverage": {"type": "array", "items": {"type": "string", "minLength": 1}},
-    "workflow_id": {"type": "string", "minLength": 1},
+    "coverage": {"type": "array", "items": {"type": "string", "minLength": 1}, "description": "Canonical method IDs (method.<package>.<slug>); legacy labels and phil-* skill IDs normalize on read and are never written new."},
+    "workflow_id": {"type": "string", "minLength": 1}, 
     "workflow_version": {"type": "string", "minLength": 1},
     "generated_at": {"type": "string", "format": "date-time"},
     "verified_at": {"type": ["string", "null"], "format": "date-time"}

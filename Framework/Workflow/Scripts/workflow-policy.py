@@ -17,48 +17,48 @@ COLLABORATION_ALIASES = {
 }
 ANALYSIS_LEVELS = {0.5, 1, 2, 3}
 RECONSTRUCTION_LEVELS = {
-    1: ("phil-argument-reconstruct",),
+    1: ("method.argument.argument-reconstruct",),
     2: (
-        "phil-argument-reconstruct",
-        "phil-charity-check",
-        "phil-premise-detect",
+        "method.argument.argument-reconstruct",
+        "method.argument.charity-check",
+        "method.argument.premise-detect",
     ),
     3: (
-        "phil-argument-reconstruct",
-        "phil-charity-check",
-        "phil-premise-detect",
-        "phil-contextualize",
-        "phil-dialectical-map",
+        "method.argument.argument-reconstruct",
+        "method.argument.charity-check",
+        "method.argument.premise-detect",
+        "method.dialectic.contextualize",
+        "method.dialectic.dialectical-map",
     ),
 }
 RECONSTRUCTION_FEATURES = {
-    "conceptual": "phil-conceptual-analysis",
-    "distinction": "phil-distinction-track",
-    "modal": "phil-modal-arg",
-    "thought-experiment": "phil-thought-experiment",
-    "intuition": "phil-intuition-pump",
-    "ontology": "phil-ontological-commitment",
-    "identity": "phil-identity-persistence",
-    "grounding": "phil-grounding-check",
-    "conceivability": "phil-conceivability-arg",
-    "causation": "phil-causation-analyze",
-    "essence": "phil-essence-detect",
-    "natural-kind": "phil-natural-kind-analyze",
-    "moral-disagreement": "phil-moral-disagreement",
-    "moral-epistemology": "phil-moral-epistemology",
-    "moral-psychology": "phil-moral-psychology",
-    "moral-realism": "phil-moral-realism",
-    "moral-semantics": "phil-moral-semantics",
-    "moral-supervenience": "phil-moral-supervenience",
-    "normativity": "phil-normativity",
+    "conceptual": "method.concept.conceptual-analysis",
+    "distinction": "method.concept.distinction-track",
+    "modal": "method.metaphysics.modal-arg",
+    "thought-experiment": "method.concept.thought-experiment",
+    "intuition": "method.concept.intuition-pump",
+    "ontology": "method.metaphysics.ontological-commitment",
+    "identity": "method.metaphysics.identity-persistence",
+    "grounding": "method.metaphysics.grounding-check",
+    "conceivability": "method.metaphysics.conceivability-arg",
+    "causation": "method.metaphysics.causation-analyze",
+    "essence": "method.metaphysics.essence-detect",
+    "natural-kind": "method.concept.natural-kind-analyze",
+    "moral-disagreement": "method.metaethics.moral-disagreement",
+    "moral-epistemology": "method.metaethics.moral-epistemology",
+    "moral-psychology": "method.metaethics.moral-psychology",
+    "moral-realism": "method.metaethics.moral-realism",
+    "moral-semantics": "method.metaethics.moral-semantics",
+    "moral-supervenience": "method.metaethics.moral-supervenience",
+    "normativity": "method.metaethics.normativity",
 }
 EVALUATION_FEATURES = {
-    "counterexample": "phil-counterexample",
-    "dialectical": "phil-dialectical-map",
-    "analogy": "phil-analogy-check",
-    "parity": "phil-parity-check",
-    "intuition": "phil-intuition-pump",
-    "methodology": "phil-methodology",
+    "counterexample": "method.argument.counterexample",
+    "dialectical": "method.dialectic.dialectical-map",
+    "analogy": "method.argument.analogy-check",
+    "parity": "method.argument.parity-check",
+    "intuition": "method.concept.intuition-pump",
+    "methodology": "method.dialectic.methodology",
 }
 EVALUATION_INTENTS = {
     "targeted": (),
@@ -69,27 +69,60 @@ EVALUATION_INTENTS = {
 }
 LIGHTWEIGHT_EVALUATION = ("inference-scan", "fallacy-scan")
 COVERAGE_ALIASES = {
-    "argument reconstruction": "phil-argument-reconstruct",
-    "argument-reconstruct": "phil-argument-reconstruct",
-    "charity audit": "phil-charity-check",
-    "charity-check": "phil-charity-check",
-    "implicit premises": "phil-premise-detect",
-    "premise-detect": "phil-premise-detect",
-    "conceptual analysis": "phil-conceptual-analysis",
-    "conceptual-analysis": "phil-conceptual-analysis",
-    "distinction tracking": "phil-distinction-track",
-    "distinction-track": "phil-distinction-track",
-    "modal-arg": "phil-modal-arg",
-    "thought-experiment": "phil-thought-experiment",
-    "intuition-pump": "phil-intuition-pump",
-    "ontological-commitment": "phil-ontological-commitment",
-    "contextualize": "phil-contextualize",
-    "dialectical mapping": "phil-dialectical-map",
-    "dialectical-map": "phil-dialectical-map",
-    "counterexample": "phil-counterexample",
-    "analogy-check": "phil-analogy-check",
-    "parity-check": "phil-parity-check",
-    "methodology": "phil-methodology",
+    "phil-analogy-check": "method.argument.analogy-check",
+    "phil-argument-reconstruct": "method.argument.argument-reconstruct",
+    "phil-causation-analyze": "method.metaphysics.causation-analyze",
+    "phil-charity-check": "method.argument.charity-check",
+    "phil-citation-extract": "method.dialectic.citation-extract",
+    "phil-conceivability-arg": "method.metaphysics.conceivability-arg",
+    "phil-conceptual-analysis": "method.concept.conceptual-analysis",
+    "phil-contextualize": "method.dialectic.contextualize",
+    "phil-counterexample": "method.argument.counterexample",
+    "phil-dialectical-map": "method.dialectic.dialectical-map",
+    "phil-distinction-track": "method.concept.distinction-track",
+    "phil-essence-detect": "method.metaphysics.essence-detect",
+    "phil-grounding-check": "method.metaphysics.grounding-check",
+    "phil-identity-persistence": "method.metaphysics.identity-persistence",
+    "phil-intuition-pump": "method.concept.intuition-pump",
+    "phil-methodology": "method.dialectic.methodology",
+    "phil-modal-arg": "method.metaphysics.modal-arg",
+    "phil-moral-disagreement": "method.metaethics.moral-disagreement",
+    "phil-moral-epistemology": "method.metaethics.moral-epistemology",
+    "phil-moral-psychology": "method.metaethics.moral-psychology",
+    "phil-moral-realism": "method.metaethics.moral-realism",
+    "phil-moral-semantics": "method.metaethics.moral-semantics",
+    "phil-moral-supervenience": "method.metaethics.moral-supervenience",
+    "phil-natural-kind-analyze": "method.concept.natural-kind-analyze",
+    "phil-normativity": "method.metaethics.normativity",
+    "phil-ontological-commitment": "method.metaphysics.ontological-commitment",
+    "phil-parity-check": "method.argument.parity-check",
+    "phil-premise-detect": "method.argument.premise-detect",
+    "phil-summarize": "method.dialectic.summarize",
+    "phil-thought-experiment": "method.concept.thought-experiment",
+    "contextualization": "method.dialectic.contextualize",
+    "modal argument": "method.metaphysics.modal-arg",
+    "ontological commitment": "method.metaphysics.ontological-commitment",
+    "argument reconstruction": "method.argument.argument-reconstruct",
+    "argument-reconstruct": "method.argument.argument-reconstruct",
+    "charity audit": "method.argument.charity-check",
+    "charity-check": "method.argument.charity-check",
+    "implicit premises": "method.argument.premise-detect",
+    "premise-detect": "method.argument.premise-detect",
+    "conceptual analysis": "method.concept.conceptual-analysis",
+    "conceptual-analysis": "method.concept.conceptual-analysis",
+    "distinction tracking": "method.concept.distinction-track",
+    "distinction-track": "method.concept.distinction-track",
+    "modal-arg": "method.metaphysics.modal-arg",
+    "thought-experiment": "method.concept.thought-experiment",
+    "intuition-pump": "method.concept.intuition-pump",
+    "ontological-commitment": "method.metaphysics.ontological-commitment",
+    "contextualize": "method.dialectic.contextualize",
+    "dialectical mapping": "method.dialectic.dialectical-map",
+    "dialectical-map": "method.dialectic.dialectical-map",
+    "counterexample": "method.argument.counterexample",
+    "analogy-check": "method.argument.analogy-check",
+    "parity-check": "method.argument.parity-check",
+    "methodology": "method.dialectic.methodology",
 }
 
 
@@ -393,7 +426,7 @@ def evaluation_plan(
     selectors.update({EVALUATION_FEATURES[item]: f"intent:{intent}" for item in EVALUATION_INTENTS[intent]})
     selectors.update({EVALUATION_FEATURES[item]: f"feature:{item}" for item in features})
     if full or deep:
-        selectors["phil-counterexample"] = "explicit-override"
+        selectors["method.argument.counterexample"] = "explicit-override"
     plan["intent"] = intent
     plan["features"] = sorted(set(features))
     universe = (*LIGHTWEIGHT_EVALUATION, *EVALUATION_FEATURES.values())
@@ -471,6 +504,27 @@ def philosopher_claim_gate(
     return {"decision": "block", "hop": 2, "reason": "analysis-level-insufficient"}
 
 
+def removed_entrypoint(command: str) -> dict:
+    """Resolve a removed v0.6 command to its v0.7 replacement with an explicit message."""
+    migration = json.loads(
+        (Path(__file__).resolve().parent.parent / "Migration" / "migration-v0.7.json").read_text(encoding="utf-8")
+    )
+    table = migration["command_map"]
+    entry = table.get(command)
+    if entry is None:
+        known = ", ".join(sorted(table))
+        raise ValueError(f"unknown command: {command} (known: {known})")
+    if entry["status"] == "retained":
+        return {"command": command, "status": "retained", "message": f"{command} is unchanged in v0.7"}
+    return {
+        "command": command,
+        "status": "removed",
+        "replacement": entry["replacement"],
+        "message": f"{command} was removed in 0.7.0-alpha. Use `{entry['replacement']}` instead. "
+        "No alias or deprecation shim is retained.",
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -507,9 +561,13 @@ def main() -> int:
     evaluation.add_argument("--feature", action="append", default=[])
     evaluation.add_argument("--full", action="store_true")
     evaluation.add_argument("--deep", action="store_true")
+    removed = subparsers.add_parser("removed-entrypoint")
+    removed.add_argument("name")
     args = parser.parse_args()
     try:
-        if args.command == "collaboration":
+        if args.command == "removed-entrypoint":
+            result = removed_entrypoint(args.name)
+        elif args.command == "collaboration":
             result = normalize_collaboration(args.value)
         elif args.command == "zotero":
             result = zotero_plan(args.mcp, args.local, args.dry_run)

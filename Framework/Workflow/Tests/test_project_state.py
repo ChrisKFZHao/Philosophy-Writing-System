@@ -120,53 +120,154 @@ class IdeaLedgerTests(unittest.TestCase):
                 self.ledger.save(project, data)
 
 
-class WorkflowStateTests(unittest.TestCase):
+class WorkflowStateV2Tests(unittest.TestCase):
     def setUp(self): self.state = load("project-state.py")
 
-    def test_changed_artifact_becomes_stale(self):
-        with tempfile.TemporaryDirectory() as temp:
-            project = Path(temp) / "topic"; project.mkdir(); artifact = project / "draft.txt"; artifact.write_text("one", encoding="utf-8")
-            state = self.state.empty_state(project)
-            state["artifacts"].append({"path": "draft.txt", "hash": self.state.sha256(artifact), "workflow": "write", "version": "1", "level": 1, "stale": False})
-            self.assertFalse(self.state.refresh_artifacts(project, state))
-            artifact.write_text("two", encoding="utf-8")
-            self.assertTrue(self.state.refresh_artifacts(project, state)); self.assertTrue(state["artifacts"][0]["stale"])
+    def args(self, command, **kwargs):
+        namespace = type("Args", (), {"command": command})()
+        defaults = {
+            "collaboration": None, "kind": None, "path": None, "stage": None,
+            "gate": None, "decision": None, "reason": "", "artifact_path": None,
+            "id": None, "severity": None, "target": None, "status": None,
+            "review_sha256": "", "note": "", "report": None, "verdict": None,
+            "unresolved_high": None, "entrypoint": "phil-full",
+        }
+        for key, value in defaults.items():
+            setattr(namespace, key, kwargs.get(key, value))
+        return namespace
 
-    def test_validation_rejects_stage_outside_range(self):
-        with tempfile.TemporaryDirectory() as temp:
-            state = self.state.empty_state(Path(temp) / "topic"); state["current_stage"] = 7
-            self.assertIn("current_stage must be 0 through 6", self.state.validate(state))
+    def project(self, temp) -> Path:
+        project = Path(temp) / "topic"
+        project.mkdir()
+        return project
 
-    def test_validate_command_reports_corrupt_state_without_refreshing(self):
+    def test_init_refuses_to_overwrite_unfinished_run_and_allows_after_complete(self):
         with tempfile.TemporaryDirectory() as temp:
-            project = Path(temp) / "topic"
-            project.mkdir()
-            path = self.state.state_path(project)
-            path.write_text(json.dumps({"artifacts": "invalid"}), encoding="utf-8")
-            result = subprocess.run(
-                [sys.executable, str(ROOT / "Scripts/project-state.py"), "--project-dir", str(project), "validate"],
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-            )
-            self.assertEqual(result.returncode, 1)
-            self.assertIn('"valid": false', result.stdout)
+            project = self.project(temp)
+            first = self.state.cmd_init(project, self.args("init", entrypoint="phil-full", collaboration="user-led"))
+            self.assertEqual(first["action"], "started")
+            refused = self.state.cmd_init(project, self.args("init", entrypoint="phil-full"))
+            self.assertEqual(refused["action"], "refused")
+            self.assertIn("resume", refused["reason"])
+            state = self.state.load(project)
+            state["status"] = "completed"
+            self.state.save(project, state)
+            second = self.state.cmd_init(project, self.args("init", entrypoint="phil-write"))
+            self.assertEqual(second["action"], "started")
+            self.assertNotEqual(second["run_id"], first["run_id"])
 
-    def test_state_rejects_unsafe_artifact_path_and_invalid_save(self):
+    def test_artifact_paths_must_be_posix_relative(self):
         with tempfile.TemporaryDirectory() as temp:
-            project = Path(temp) / "topic"
-            state = self.state.empty_state(project)
-            state["artifacts"].append({
-                "path": "../outside.txt",
-                "hash": "0" * 64,
-                "workflow": "write",
-                "version": "1",
-                "level": None,
-                "stale": False,
-            })
-            self.assertIn("invalid artifact path", self.state.validate(state))
+            project = self.project(temp)
+            (project / "a.txt").write_text("x", encoding="utf-8")
             with self.assertRaises(ValueError):
-                self.state.save(project, state)
+                self.state.cmd_artifact(project, self.args("artifact", kind="draft-section", path="..\\outside.txt"))
+            with self.assertRaises(ValueError):
+                self.state.cmd_artifact(project, self.args("artifact", kind="draft-section", path="sub\\a.txt"))
+            recorded = self.state.cmd_artifact(project, self.args("artifact", kind="draft-section", path="a.txt"))
+            self.assertEqual(recorded["action"], "recorded")
+
+    def test_resume_rewinds_to_earliest_affected_stage(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            (project / "c.txt").write_text("conception", encoding="utf-8")
+            (project / "o.txt").write_text("outline", encoding="utf-8")
+            self.state.cmd_init(project, self.args("init"))
+            self.state.cmd_artifact(project, self.args("artifact", kind="conception", path="c.txt"))
+            self.state.cmd_artifact(project, self.args("artifact", kind="outline", path="o.txt"))
+            state = self.state.load(project)
+            state["stage"] = "draft"
+            self.state.save(project, state)
+            (project / "c.txt").write_text("changed", encoding="utf-8")
+            resumed = self.state.cmd_resume(project, self.args("resume"))
+            self.assertEqual(resumed["action"], "stale")
+            self.assertEqual(resumed["rewound_to"], "incubation")
+            self.assertTrue(resumed["stale_artifacts"])
+            self.assertIn("renewed user confirmation", resumed["request"])
+
+    def test_completion_is_blocked_until_gates_close(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            (project / "review.txt").write_text("r", encoding="utf-8")
+            self.state.cmd_init(project, self.args("init"))
+            blocked = self.state.cmd_advance(project, self.args("advance", stage="complete"))
+            self.assertEqual(blocked["action"], "refused")
+            self.assertIn("outline", blocked["reason"])
+            self.state.cmd_approve(project, self.args("approve", gate="outline", decision="waived", reason="user skip instruction"))
+            blocked = self.state.cmd_advance(project, self.args("advance", stage="complete"))
+            self.assertIn("citation closure", blocked["reason"])
+            review_sha = self.state.sha256(project / "review.txt")
+            self.state.cmd_finding(project, self.args("finding", id="F1", severity="high", target="s2", status="open", review_sha256=review_sha))
+            self.state.cmd_approve(project, self.args("approve", gate="citation_closure", decision="pass", artifact_path="review.txt"))
+            self.state.cmd_approve(project, self.args("approve", gate="citation_closure", decision="acknowledge"))
+            blocked = self.state.cmd_advance(project, self.args("advance", stage="complete"))
+            self.assertIn("F1", blocked["reason"])
+            self.state.cmd_finding(project, self.args("finding", id="F1", severity="high", target="s2", status="resolved", review_sha256=review_sha, note="passage rewritten"))
+            done = self.state.cmd_advance(project, self.args("advance", stage="complete"))
+            self.assertEqual(done["status"], "completed")
+
+    def test_closure_acknowledgement_requires_machine_pass(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            self.state.cmd_init(project, self.args("init"))
+            with self.assertRaises(ValueError):
+                self.state.cmd_approve(project, self.args("approve", gate="citation_closure", decision="acknowledge"))
+
+    def test_outline_waiver_requires_reason_and_deferral_requires_note(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            self.state.cmd_init(project, self.args("init"))
+            with self.assertRaises(ValueError):
+                self.state.cmd_approve(project, self.args("approve", gate="outline", decision="waived"))
+            self.state.cmd_finding(project, self.args("finding", id="F1", severity="low", target="s1", status="open", review_sha256="0" * 64))
+            with self.assertRaises(ValueError):
+                self.state.cmd_finding(project, self.args("finding", id="F1", severity="low", target="s1", status="deferred"))
+
+    def test_section_audit_blocks_on_unresolved_high(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            (project / "audit.txt").write_text("audit", encoding="utf-8")
+            self.state.cmd_init(project, self.args("init"))
+            recorded = self.state.cmd_audit(project, self.args("audit", report="audit.txt", verdict="block", unresolved_high=2))
+            self.assertEqual(recorded["action"], "recorded")
+            state = self.state.load(project)
+            state["stage"] = "section_audit"
+            self.state.save(project, state)
+            self.state.cmd_audit(project, self.args("audit", report="audit.txt", verdict="pass", unresolved_high=0))
+            status = self.state.cmd_status(project, self.args("status"))
+            self.assertEqual(status["next_action"], "advance to review")
+
+    def test_validation_rejects_bad_enums_and_duplicate_findings(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            state = self.state.empty_state(project)
+            state["stage"] = "not-a-stage"
+            self.assertIn("invalid stage", self.state.validate(state))
+            state = self.state.empty_state(project)
+            state["review_findings"] = [
+                {"id": "F1", "severity": "high", "target": "s1", "status": "open", "source_review_sha256": "0" * 64},
+                {"id": "F1", "severity": "low", "target": "s2", "status": "open", "source_review_sha256": "0" * 64},
+            ]
+            self.assertIn("duplicate finding id: F1", self.state.validate(state))
+
+    def test_advance_refuses_backwards_movement(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            self.state.cmd_init(project, self.args("init"))
+            state = self.state.load(project)
+            state["stage"] = "review"
+            self.state.save(project, state)
+            result = self.state.cmd_advance(project, self.args("advance", stage="draft"))
+            self.assertEqual(result["action"], "refused")
+            self.assertIn("backwards", result["reason"])
+
+    def test_status_reports_derived_next_action(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            self.state.cmd_init(project, self.args("init"))
+            status = self.state.cmd_status(project, self.args("status"))
+            self.assertEqual(status["outline_decision"], "pending")
+            self.assertTrue(status["next_action"])
 
 
 if __name__ == "__main__": unittest.main()

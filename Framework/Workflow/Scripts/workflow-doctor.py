@@ -22,6 +22,8 @@ def check_json(failures: list[str]) -> None:
     paths = [
         WORKFLOW_ROOT / "manifest.json",
         *(WORKFLOW_ROOT / "Schemas").glob("*.json"),
+        *(WORKFLOW_ROOT / "Contracts").glob("*.json"),
+        *(WORKFLOW_ROOT / "Migration").glob("*.json"),
         *(philosopher_root / "Profiles").glob("*.json"),
         philosopher_root / "Domains/registry.json",
     ]
@@ -135,27 +137,84 @@ def check_markdown_links(failures: list[str]) -> None:
                 )
 
 
+def load_manifest(failures: list[str]) -> dict:
+    try:
+        return json.loads((WORKFLOW_ROOT / "manifest.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        failures.append(f"cannot read manifest: {exc}")
+        return {}
+
+
 def check_inventory(failures: list[str]) -> None:
-    counts = {
-        "core_skills": len(list((WORKFLOW_ROOT / "Skills").glob("*/SKILL.md"))),
-        "claude_skills": len(list((REPO_ROOT / ".claude/skills").glob("*/SKILL.md"))),
-        "codex_atomic": len(
-            [path for path in (REPO_ROOT / ".agents/skills").glob("*/SKILL.md") if not path.parent.name.startswith("source-command-")]
-        ),
-        "claude_workflows": len(list((REPO_ROOT / ".claude/commands").glob("*.md"))),
-        "codex_workflows": len(list((REPO_ROOT / ".agents/skills").glob("source-command-*/SKILL.md"))),
-        "claude_roles": len(list((REPO_ROOT / ".claude/agents").glob("*.md"))),
-    }
-    expected = {
-        "core_skills": 30,
-        "claude_skills": 30,
-        "codex_atomic": 30,
-        "claude_workflows": 9,
-        "codex_workflows": 9,
-        "claude_roles": 7,
-    }
-    if counts != expected:
-        failures.append(f"inventory mismatch: expected={expected}, actual={counts}")
+    """Derive every inventory expectation from the manifest; no hard-coded counts."""
+    manifest = load_manifest(failures)
+    if not manifest:
+        return
+    items = manifest.get("items", [])
+    skills = sorted(i["id"] for i in items if i.get("kind") == "skill")
+    methods = {i["id"]: i for i in items if i.get("kind") == "method"}
+    services = sorted(i["id"] for i in items if i.get("kind") == "service")
+    commands = sorted(i["id"] for i in items if i.get("kind") == "command")
+
+    core_skills = sorted(p.parent.name for p in (WORKFLOW_ROOT / "Skills").glob("*/SKILL.md"))
+    claude_skills = sorted(p.parent.name for p in (REPO_ROOT / ".claude/skills").glob("*/SKILL.md"))
+    codex_skills = sorted(p.parent.name for p in (REPO_ROOT / ".agents/skills").glob("*/SKILL.md"))
+    if core_skills != skills:
+        failures.append(f"core skill dirs {core_skills} do not match manifest skills {skills}")
+    if claude_skills != skills:
+        failures.append(f"claude skills {claude_skills} do not match manifest skills {skills}")
+    if codex_skills != skills:
+        failures.append(f"codex skills {codex_skills} do not match manifest skills {skills}")
+
+    exposure = manifest.get("exposure", {})
+    wrappers = sorted(p.stem for p in (REPO_ROOT / ".claude/commands").glob("*.md"))
+    if wrappers != sorted(exposure.get("claude_command_wrappers", [])):
+        failures.append(f"claude wrappers {wrappers} do not match exposure {exposure.get('claude_command_wrappers')}")
+
+    if (REPO_ROOT / ".claude/agents").exists():
+        failures.append(".claude/agents still exists; roles were removed in 0.7.0-alpha")
+    leftover = sorted(p.parent.name for p in (REPO_ROOT / ".agents/skills").glob("source-command-*/SKILL.md"))
+    if leftover:
+        failures.append(f"source-command-* adapters remain: {leftover}")
+
+    method_files = {p.relative_to(WORKFLOW_ROOT).as_posix() for p in (WORKFLOW_ROOT / "Methods").rglob("*.md")}
+    expected = {i["source"] for i in methods.values()}
+    if method_files != expected:
+        failures.append(f"Methods/ tree does not match manifest methods: extra={sorted(method_files - expected)}, missing={sorted(expected - method_files)}")
+    for service in (i for i in items if i.get("kind") == "service"):
+        if not (WORKFLOW_ROOT / service["source"]).is_file():
+            failures.append(f"missing service source: {service['id']}")
+    for command in commands:
+        if not (WORKFLOW_ROOT / "Commands").is_dir():
+            failures.append("missing Commands/ directory")
+    if sorted(exposure.get("skills", [])) != skills:
+        failures.append("exposure.skills must list exactly the skill items")
+
+
+STALE_PHRASES = (
+    "30 skills", "9 workflows", "7 roles", "39 skills", "28 skills",
+    "source-command-", "28 phil-*",
+)
+
+
+def check_stale_phrases(failures: list[str]) -> None:
+    """Historical records (changelog, Lessons, Plans) are exempt; living definitions are not."""
+    roots = [WORKFLOW_ROOT / "Skills", WORKFLOW_ROOT / "Methods", WORKFLOW_ROOT / "Services",
+             WORKFLOW_ROOT / "Contracts", WORKFLOW_ROOT / "Commands", WORKFLOW_ROOT / "Rules",
+             WORKFLOW_ROOT / "Templates", REPO_ROOT / ".claude", REPO_ROOT / ".agents",
+             REPO_ROOT / "AGENTS.md", REPO_ROOT / "CLAUDE.md", REPO_ROOT / "README.md"]
+    for root in roots:
+        paths = [root] if root.is_file() else sorted(root.rglob("*.md")) if root.is_dir() else []
+        for path in paths:
+            if "worktrees" in path.parts:
+                continue
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for phrase in STALE_PHRASES:
+                if phrase in text:
+                    failures.append(
+                        f"stale phrase '{phrase}' in {path.relative_to(REPO_ROOT)}"
+                    )
+                    break
 
 
 def check_adapters(failures: list[str]) -> None:
@@ -191,10 +250,8 @@ def check_nested_project_bridges(failures: list[str]) -> None:
 
 
 def _check_bridge_prefix(prefix: Path, private: Path, failures: list[str]) -> None:
-    try:
-        manifest = json.loads((WORKFLOW_ROOT / "manifest.json").read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
-        failures.append(f"cannot inspect nested bridge manifest: {exc}")
+    manifest = load_manifest(failures)
+    if not manifest:
         return
     for item in manifest.get("items", []):
         item_id = item.get("id")
@@ -203,13 +260,10 @@ def _check_bridge_prefix(prefix: Path, private: Path, failures: list[str]) -> No
                 prefix / ".agents/skills" / item_id / "SKILL.md",
                 prefix / ".claude/skills" / item_id / "SKILL.md",
             ]
-        elif item.get("kind") == "workflow":
-            targets = [
-                prefix / ".agents/skills" / f"source-command-{item_id}" / "SKILL.md",
-                prefix / ".claude/commands" / f"{item_id}.md",
-            ]
+        elif item.get("kind") == "command":
+            targets = [prefix / ".claude/commands" / "full.md"]
         else:
-            targets = [prefix / ".claude/agents" / f"{item_id}.md"]
+            continue  # methods, packages, and services are never bridged
         for path in targets:
             label = path.relative_to(REPO_ROOT)
             if not path.is_file():
@@ -237,6 +291,7 @@ def main() -> int:
     check_json(failures)
     check_skill_frontmatter(failures)
     check_inventory(failures)
+    check_stale_phrases(failures)
     check_forbidden(failures)
     check_markdown_links(failures)
     check_philosopher_database(failures)

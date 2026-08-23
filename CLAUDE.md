@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 <!-- Generated from Framework/Workflow. Do not edit directly. -->
-> Claude adapter: use `/phil:<name>` commands from `.claude/commands/`; generated skills and roles live under `.claude/`.
+> Claude adapter: `/phil:<name>` maps to the thin command wrappers in `.claude/commands/` (research, tutor, write, review, full), which delegate to the four generated skills under `.claude/skills/`.
 
 > **Project Status: Alpha** — All modules, agents, and skills are functional but have not undergone extensive field testing. Behavioral rules, workflows, and knowledge bases are subject to refinement.
 
@@ -55,13 +55,17 @@ Resolve project guidance, collaboration aliases, capability degradation, delegat
 
 ```
 Framework/Workflow/       Platform-neutral single source of truth
-  ├── manifest.json       30 skills + 9 workflows + 7 roles and dependencies
-  ├── Skills/             Atomic philosophy skills
-  ├── Workflows/          Composite phil:* workflows
-  ├── Roles/              Runtime-neutral role prompts
+  ├── manifest.json       v2 registry: 4 public skills, 5 method packages, 30 internal
+  │                       methods, 5 services, 1 command — the authoritative resolver
+  ├── Skills/             4 canonical SKILL.md entrypoints (+ phil-research mode contracts)
+  ├── Methods/            Internal method packages (argument/concept/dialectic/metaphysics/metaethics)
+  ├── Services/           Permissioned shared operations (intake, Zotero, Citation Gate, …)
+  ├── Contracts/          Cross-layer data contracts (workflow-state v2, evidence-unit)
+  ├── Commands/           phil-full state-machine command specification
+  ├── Migration/          Committed ID migration maps and migration tooling
   ├── Rules/              Behavioral and runtime compatibility rules
   ├── References/         Glossaries, argument forms, and taxonomies
-  ├── Schemas/            Data contracts
+  ├── Schemas/            Method output data contracts
   ├── Templates/          Report, root-guide, and project templates
   └── Scripts/            Generator, doctors, state helpers, scanners, and Zotero helper
 .claude/                  Generated Claude Code adapter (committed)
@@ -80,19 +84,28 @@ Private/       Private content layer (outer gitignore; independent inner repo, P
 
 ## Commands Reference
 
-| Command | Function | Runs |
-|---------|----------|------|
-| `phil:reconstruct` | Progressive understanding of a source | Deterministic Level 1/2/3 plan; reuse verified hash-current coverage; `full`/`deep` override |
-| `phil:evaluate` | Targeted multi-angle critique | Lightweight inference/fallacy baseline + feature/intent-selected dimensions |
-| `phil:review` | Peer review | phil-reviewer agent (8 dimensions + perspective simulation) |
-| `phil:write` | Philosophical writing | phil-writer agent (outline / draft / revision; draft mode has dual collaboration modes user-led/assistant-led) |
-| `phil:comment` | Argument detail and conceptual clarification | phil-commentator agent (6 critical dimensions) |
-| `phil:pipeline` | One-command full pipeline | phil-orchestrator agent (6 stages with lenient-interrogation gates) |
-| `phil:tutor` | Tutor-style literature dialogue — probe ideas, test understanding, recommend sources | phil-tutor agent (two modes: reading — Socratic dialogue + 4-phase arc; incubating — Stage 3 conception incubation producing the conception file) |
-| `phil:ingest` | Literature ingestion ("scraping") — scan library, rename to canonical stem, register in INDEX, Level 0.5 summary, recommendation trigger 1 | shell scan + pdf skill + phil-summarize |
-| `phil:philosophers` | Review source-grounded philosopher candidates, lazily audit held sources, and rebuild domain views | private queue + deterministic philosopher-db helper |
+| Command | Skill / Spec | Modes |
+|---------|--------------|-------|
+| `phil:research` | `phil-research` | `ingest` (library intake), `reconstruct` (progressive source comprehension), `evaluate` (targeted critique), `comment` (argumentative detail), `philosophers` (source-backed philosopher database) |
+| `phil:tutor` | `phil-tutor` | `reading` (Socratic literature dialogue, 4-phase arc), `incubating` (conception incubation producing the conception file) |
+| `phil:write` | `phil-write` | `outline` / `draft` / `revision`; draft has dual collaboration modes `user-led`/`assistant-led` with identical quality gates |
+| `phil:review` | `phil-review` | `full` (8 dimensions + perspective simulation), `targeted`, `re-review`; read-only unless revision is explicitly requested |
+| `phil:full` | `Commands/phil-full.md` (non-skill command) | `start` / `status` / `resume`; state machine over persisted v2 workflow state |
 
-Each workflow file in `Framework/Workflow/Workflows/` defines its skill composition, execution order, and output format.
+An explicit mode always wins; clean natural-language intent routes automatically; a material ambiguity gets one focused question. Only `skill` items are exposed as runtime skills; methods, packages, and services stay internal and load on demand through the manifest resolver.
+
+**Removed entrypoints (0.7.0-alpha, no aliases retained):**
+
+| Removed command | Use instead |
+|---|---|
+| `phil:reconstruct` | `phil:research reconstruct` |
+| `phil:evaluate` | `phil:research evaluate` |
+| `phil:comment` | `phil:research comment` |
+| `phil:ingest` | `phil:research ingest` |
+| `phil:philosophers` | `phil:research philosophers` |
+| `phil:pipeline` | `phil:full start` |
+
+`phil:tutor`, `phil:write`, and `phil:review` keep their names, now bound directly to the canonical skills. The deterministic resolver: `workflow-policy.py removed-entrypoint <command>`.
 
 ## Workflow Conventions
 
@@ -108,8 +121,9 @@ Each workflow file in `Framework/Workflow/Workflows/` defines its skill composit
 - `CLAUDE.md` / `AGENTS.md` — thin runtime adapters; legacy projects may use either as the fallback guidance file
 - `refs.md` — project-level reference list: `KEY | role (core-target/support/background) | status (cited/candidate/rejected) | notes`; each KEY points to the master library INDEX — zero file duplication
 - `{topic}-conception.txt` — Conception notes from ideation (Stage 3, `phil:tutor` incubating mode). Freely overwritten. Never versioned. Consumed by `phil:write outline`.
+- `{topic}-outline.txt` — Human-readable outline produced by `phil:write outline` and consumed by draft mode; the approval gate hashes this artifact.
 - `{topic}-idea-ledger.json` — Structured living registry for substantive ideas that were activated, parked, rejected, or superseded. Never versioned and never silently deletes an idea.
-- `{topic}-workflow-state.json` — Cross-session pipeline state, artifact hashes, gate decisions, overrides, and next action. Never versioned as manuscript content.
+- `{topic}-workflow-state.json` — Cross-session pipeline state (schema v2): run, stage, status, collaboration mode, artifact hashes, approvals (conception/outline/review/citation-closure), review-finding ledger, section audit, and derived next action. Maintained via `Scripts/project-state.py`. Never versioned as manuscript content.
 - `{topic}-draft.txt` — Working draft. Freely overwritten. Never versioned.
 - `{topic}-v{N}.txt` — Cut version. Created from draft when a trigger fires.
 - `{topic}-review.txt` — Review report.
@@ -130,12 +144,12 @@ Private/Bibliography/
 ```
 
 **Analysis levels (progressive, append-only):**
-- Level 0.5: Summary — core thesis + argument route + key concepts + interlocutors + topics — *trigger: PDF ingestion (`/phil:ingest` → phil-summarize)*. A monograph's summary carries per-chapter segments; an edited collection yields a volume summary plus one independent summary per member paper.
+- Level 0.5: Summary — core thesis + argument route + key concepts + interlocutors + topics — *trigger: PDF ingestion (`phil:research ingest` → `method.dialectic.summarize`)*. A monograph's summary carries per-chapter segments; an edited collection yields a volume summary plus one independent summary per member paper.
 - Level 1: Argument reconstruction — *trigger: selected as a paper dependency*
 - Level 2: + Implicit premises, charity audit, conceptual analysis, distinction tracking — *trigger: first citation in a manuscript*
 - Level 3: + Dialectical mapping, ontological commitment, modal analysis, domain-specific skills — *trigger: source becomes core target/dependency*
 
-**Three recommendation trigger points** (model-executed): (1) on ingestion — new source's topics matched against each project CLAUDE.md's topic keywords (executed by `/phil:ingest`); (2) during in-project work — phil:tutor scans INDEX for entries whose topics match but which are absent from this project's refs.md (skipping `rejected`); (3) on citation extraction — phil-citation-extract outputs acquisition_candidates.
+**Three recommendation trigger points** (model-executed): (1) on ingestion — new source's topics matched against each project CLAUDE.md's topic keywords (executed by `phil:research ingest`); (2) during in-project work — phil:tutor scans INDEX for entries whose topics match but which are absent from this project's refs.md (skipping `rejected`); (3) on citation extraction — `method.dialectic.citation-extract` outputs acquisition_candidates.
 
 ### Citation Gate (Rule 2 enforcement, two-hop)
 The semantic claim-to-source judgment is model-executed; artifact verification is deterministic:
@@ -166,8 +180,8 @@ Prefix with `!` to run in-session:
 
 ### PDF Processing Workflow
 1. Place PDF in `Private/Bibliography/PDF/`
-2. Run `/phil:ingest` — extracts text via the `pdf` skill (**not** direct `pdftotext` CLI), renames to the canonical stem, registers in INDEX.md, generates the Level 0.5 summary, and runs recommendation trigger 1
-3. When the source becomes a paper dependency, run `phil:reconstruct` → `Private/Bibliography/Analysis/{Author}_{Year}_{Title}.analysis.txt` (Level 1)
+2. Run `phil:research ingest` — extracts text via the `pdf` skill (**not** direct `pdftotext` CLI), renames to the canonical stem, registers in INDEX.md, generates the Level 0.5 summary, and runs recommendation trigger 1
+3. When the source becomes a paper dependency, run `phil:research reconstruct` → `Private/Bibliography/Analysis/{Author}_{Year}_{Title}.analysis.txt` (Level 1)
 4. Escalate analysis level as needed per Citation Gate rules
 
 ### Zotero Integration
@@ -182,7 +196,8 @@ Prefix with `!` to run in-session:
 - **MCP mode**: hybrid — reads on local SQLite (`ZOTERO_LOCAL=true`), writes via user-level credentials; cloud writes land locally only after a desktop sync. Zotero-imported metadata is unreliable, so title-page verification applies on this inflow path too.
 
 ### Manuscript Work Cycle
-1. **Incubate**: `/phil:tutor incubating` → `{topic}-conception.txt` (thesis + argument sketch in the user's own words)
+0. **Orchestrate end-to-end**: `phil:full start` — state machine from intake to citation closure (`start` / `status` / `resume`)
+1. **Incubate**: `phil:tutor incubating` → `{topic}-conception.txt` (thesis + argument sketch in the user's own words)
 2. **Draft** in `Private/Projects/{topic}/{topic}-draft.txt`
 3. **Review** with `phil:review` → review report
 4. **Revise** draft → cut version when trigger fires

@@ -17,8 +17,8 @@ SCRIPTS = WORKFLOW_ROOT / "Scripts"
 REPO_ROOT = WORKFLOW_ROOT.parent.parent
 
 
-def load_script(name: str):
-    path = SCRIPTS / name
+def load_script(name: str, directory: Path | None = None):
+    path = (directory or SCRIPTS) / name
     spec = importlib.util.spec_from_file_location(name.replace("-", "_"), path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
@@ -31,16 +31,16 @@ class PolicyTests(unittest.TestCase):
         projects = REPO_ROOT / "Private/Projects"
         for project in sorted(path for path in projects.iterdir() if path.is_dir()):
             self.assertTrue((project / "PROJECT.md").is_file(), project)
-        workflow_bridge = REPO_ROOT / "Private/.agents/skills/source-command-tutor/SKILL.md"
+        workflow_bridge = REPO_ROOT / "Private/.agents/skills/phil-tutor/SKILL.md"
         self.assertTrue(workflow_bridge.is_file())
         bridge_text = workflow_bridge.read_text(encoding="utf-8")
         self.assertIn("External Workflow Bridge", bridge_text)
-        self.assertIn("<outer-root>/.agents/skills/source-command-tutor/SKILL.md", bridge_text)
+        self.assertIn("<outer-root>/.agents/skills/phil-tutor/SKILL.md", bridge_text)
         self.assertNotIn("## Usage", bridge_text)
         for project in sorted(path for path in projects.iterdir() if path.is_dir()):
-            local_bridge = project / ".agents/skills/source-command-tutor/SKILL.md"
+            local_bridge = project / ".agents/skills/phil-tutor/SKILL.md"
             self.assertTrue(local_bridge.is_file(), project)
-            self.assertIn("name: source-command-tutor", local_bridge.read_text(encoding="utf-8"))
+            self.assertIn("name: phil-tutor", local_bridge.read_text(encoding="utf-8"))
 
     def test_collaboration_aliases(self):
         policy = load_script("workflow-policy.py")
@@ -343,83 +343,137 @@ class AdapterTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.manifest = json.loads((WORKFLOW_ROOT / "manifest.json").read_text(encoding="utf-8"))
+        cls.migration = json.loads(
+            (WORKFLOW_ROOT / "Migration/migration-v0.7.json").read_text(encoding="utf-8")
+        )
 
-    def test_manifest_inventory(self):
-        counts = {kind: 0 for kind in ("skill", "workflow", "role")}
+    def kinds(self):
+        kinds: dict[str, list[dict]] = {}
         for item in self.manifest["items"]:
-            counts[item["kind"]] += 1
-        self.assertEqual(counts, {"skill": 30, "workflow": 9, "role": 7})
+            kinds.setdefault(item["kind"], []).append(item)
+        return kinds
 
-    def test_philosopher_workflow_is_registered(self):
-        item = self.workflow_item("philosophers")
-        self.assertEqual(item["dependencies"], [])
-        self.assertEqual(item["capabilities"], ["read", "search", "write"])
+    def test_manifest_inventory_matches_plan(self):
+        kinds = self.kinds()
+        self.assertEqual(len(kinds.get("skill", [])), 4)
+        self.assertEqual(len(kinds.get("method_package", [])), 5)
+        self.assertEqual(len(kinds.get("method", [])), 30)
+        self.assertEqual(len(kinds.get("service", [])), 5)
+        self.assertEqual(len(kinds.get("command", [])), 1)
+        self.assertEqual(
+            sorted(item["id"] for item in kinds["skill"]),
+            ["phil-research", "phil-review", "phil-tutor", "phil-write"],
+        )
 
-    def workflow_item(self, workflow_id: str) -> dict:
-        return next(item for item in self.manifest["items"] if item["id"] == workflow_id)
+    def test_exposure_lists_exactly_the_skills(self):
+        self.assertEqual(
+            sorted(self.manifest["exposure"]["skills"]),
+            sorted(item["id"] for item in self.kinds()["skill"]),
+        )
 
-    def test_key_workflow_sections(self):
-        required = {
-            "reconstruct": [
-                "Preplan and coverage ledger", "Executive summary and argument reconstruction",
-                "Only the Level 2 and Level 3 sections", "Domain-specific findings",
-                "Open questions and remaining coverage gaps",
-            ],
-            "evaluate": [
-                "Preplan", "Inference and fallacy baseline", "One labeled section",
-                "highest-priority revisions", "coverage gaps and not-applicable dimensions",
-            ],
-            "review": [
-                "Overall assessment", "Dimension-by-dimension scores and comments",
-                "Major issues", "Minor issues", "Revision recommendations",
-            ],
+    def test_each_runtime_exposes_exactly_four_skills(self):
+        for root in (REPO_ROOT / ".claude/skills", REPO_ROOT / ".agents/skills"):
+            names = sorted(path.parent.name for path in root.glob("*/SKILL.md"))
+            self.assertEqual(names, ["phil-research", "phil-review", "phil-tutor", "phil-write"], root)
+        self.assertFalse((REPO_ROOT / ".claude/agents").exists())
+        leftovers = sorted((REPO_ROOT / ".agents/skills").glob("source-command-*"))
+        self.assertEqual(leftovers, [])
+
+    def test_claude_wrappers_delegate_and_are_not_canonical(self):
+        wrappers = sorted(path.stem for path in (REPO_ROOT / ".claude/commands").glob("*.md"))
+        self.assertEqual(wrappers, sorted(self.manifest["exposure"]["claude_command_wrappers"]))
+        for wrapper in (REPO_ROOT / ".claude/commands").glob("*.md"):
+            text = wrapper.read_text(encoding="utf-8")
+            self.assertIn("Delegation only", text)
+            self.assertIn("not a canonical definition", text)
+
+    def test_research_mode_contracts_exist_and_are_isolated(self):
+        modes_dir = WORKFLOW_ROOT / "Skills/phil-research/references/modes"
+        self.assertEqual(
+            sorted(path.stem for path in modes_dir.glob("*.md")),
+            ["comment", "evaluate", "ingest", "philosophers", "reconstruct"],
+        )
+        generated = REPO_ROOT / ".claude/skills/phil-research/references/modes/reconstruct.md"
+        self.assertTrue(generated.is_file())
+        self.assertIn("Generated from Framework/Workflow", generated.read_text(encoding="utf-8"))
+
+    def test_methods_tree_matches_manifest_and_headers_carry_metadata(self):
+        methods = {item["id"]: item for item in self.kinds()["method"]}
+        files = {p.relative_to(WORKFLOW_ROOT).as_posix() for p in (WORKFLOW_ROOT / "Methods").rglob("*.md")}
+        self.assertEqual(files, {item["source"] for item in methods.values()})
+        for item in methods.values():
+            text = (WORKFLOW_ROOT / item["source"]).read_text(encoding="utf-8")
+            self.assertIn(f"id: {item['id']}", text)
+            self.assertIn("side_effects: read-only", text)
+            self.assertTrue(item["legacy_ids"])
+            self.assertTrue(item["label"])
+
+    def test_migration_map_covers_all_30_legacy_ids_with_labels(self):
+        method_map = self.migration["method_map"]
+        self.assertEqual(len(method_map), 30)
+        manifest_legacy = {
+            legacy
+            for item in self.kinds()["method"]
+            for legacy in item["legacy_ids"]
         }
-        for workflow_id, headings in required.items():
-            text = (WORKFLOW_ROOT / "Workflows" / f"{workflow_id}.md").read_text(encoding="utf-8")
-            output_format = text.split("## Output Format", 1)[1]
-            positions = [output_format.index(heading) for heading in headings]
-            self.assertEqual(positions, sorted(positions), workflow_id)
+        self.assertEqual(manifest_legacy, set(method_map))
+        for old, entry in method_map.items():
+            self.assertIn("label", entry, old)
+            self.assertRegex(entry["method_id"], r"^method\.[a-z-]+\.[a-z-]+$")
 
-    def test_dependency_order_and_role_contracts(self):
-        reconstruct = self.workflow_item("reconstruct")["dependencies"]
-        expected_prefix = [
-            "phil-argument-reconstruct", "phil-charity-check", "phil-premise-detect", "phil-modal-arg",
-            "phil-conceptual-analysis", "phil-distinction-track", "phil-thought-experiment",
-            "phil-intuition-pump", "phil-contextualize",
-        ]
-        self.assertEqual(reconstruct[: len(expected_prefix)], expected_prefix)
-        self.assertIn("phil-dialectical-map", reconstruct)
-        evaluate = self.workflow_item("evaluate")
-        self.assertEqual(evaluate["dependencies"], [
-            "phil-counterexample", "phil-dialectical-map", "phil-analogy-check",
-            "phil-parity-check", "phil-intuition-pump", "phil-methodology",
-        ])
-        review = self.workflow_item("review")
-        self.assertEqual((review["role"], review["dependencies"]), ("phil-reviewer", ["phil-reviewer"]))
+    def test_removed_entrypoints_resolve_with_replacement_and_mode(self):
+        policy = load_script("workflow-policy.py")
+        replaced = {
+            "phil:reconstruct": "phil:research reconstruct",
+            "phil:evaluate": "phil:research evaluate",
+            "phil:comment": "phil:research comment",
+            "phil:ingest": "phil:research ingest",
+            "phil:philosophers": "phil:research philosophers",
+            "phil:pipeline": "phil:full start",
+        }
+        for old, new in replaced.items():
+            result = policy.removed_entrypoint(old)
+            self.assertEqual(result["replacement"], new, old)
+            self.assertIn(old, result["message"])
+            self.assertIn(new, result["message"])
+            self.assertNotIn("silently", result["message"].replace("No alias or deprecation shim is retained.", ""))
 
-    def test_codex_delegation_fallback_is_generated(self):
-        for workflow_id in ("reconstruct", "evaluate"):
-            path = REPO_ROOT / ".agents/skills" / f"source-command-{workflow_id}" / "SKILL.md"
-            text = path.read_text(encoding="utf-8")
-            self.assertIn("When delegation is available", text)
-            self.assertIn("dependency order serially", text)
+    def test_doctor_inventory_passes(self):
+        result = subprocess.run(
+            [sys.executable, str(SCRIPTS / "workflow-doctor.py")],
+            cwd=REPO_ROOT, capture_output=True, text=True, encoding="utf-8",
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_stale_phrase_scan_detects_obsolete_counts(self):
+        doctor = load_script("workflow-doctor.py")
+        failures: list[str] = []
+        doctor.check_stale_phrases(failures)
+        self.assertEqual(failures, [])
+        with tempfile.TemporaryDirectory() as temp:
+            probe_root = Path(temp) / ".claude"
+            probe_root.mkdir()
+            (probe_root / "probe.md").write_text("we had 39 skills back then", encoding="utf-8")
+            original_phrases = list(doctor.STALE_PHRASES)
+            original_repo = doctor.REPO_ROOT
+            doctor.STALE_PHRASES = ("39 skills",)
+            doctor.REPO_ROOT = Path(temp)
+            try:
+                failures2: list[str] = []
+                doctor.check_stale_phrases(failures2)
+            finally:
+                doctor.STALE_PHRASES = original_phrases
+                doctor.REPO_ROOT = original_repo
+        self.assertTrue(any("39 skills" in failure for failure in failures2))
 
     def test_core_model_selection_is_neutral(self):
         provider_model = re.compile(r"\b(?:opus|sonnet|haiku|gpt-[A-Za-z0-9.-]+)\b", re.IGNORECASE)
-        for directory in ("Roles", "Workflows", "Rules"):
+        for directory in ("Skills", "Methods", "Services", "Commands", "Rules"):
             for path in (WORKFLOW_ROOT / directory).rglob("*.md"):
                 text = path.read_text(encoding="utf-8")
                 self.assertIsNone(provider_model.search(text), path)
                 self.assertNotRegex(text, r"^model:\s*", path)
                 self.assertNotIn("quality_tier:", text, path)
-
-    def test_codex_cost_aware_delegation_guidance_is_generated(self):
-        text = (REPO_ROOT / ".agents/skills/source-command-review/SKILL.md").read_text(encoding="utf-8")
-        self.assertIn("session-scoped cost-aware delegation policy", text)
-        self.assertIn("first eligible task", text)
-        self.assertIn("discardable candidate artifact", text)
-        self.assertIn("Never delegate writing, review, Citation Gate work", text)
-        self.assertNotRegex(text, r"^model:\s*", text)
 
     def test_cost_aware_delegation_is_session_scoped_and_reversible(self):
         text = (WORKFLOW_ROOT / "Rules/runtime-compatibility.md").read_text(encoding="utf-8")
@@ -430,42 +484,29 @@ class AdapterTests(unittest.TestCase):
         self.assertIn("do not ask or delegate again in that session", text)
         self.assertIn("parent task must validate", text)
 
-    def test_model_routing_experiment_is_absent(self):
-        retired_paths = [
-            WORKFLOW_ROOT / "Schemas/model-catalog-schema.json",
-            WORKFLOW_ROOT / "Schemas/model-routing-schema.json",
-            WORKFLOW_ROOT / "Schemas/model-task-schema.json",
-            SCRIPTS / "model-runtime.py",
-            WORKFLOW_ROOT / "References/model-evaluation-suite.json",
-        ]
-        for path in retired_paths:
-            self.assertFalse(path.exists(), path)
-        policy = (SCRIPTS / "workflow-policy.py").read_text(encoding="utf-8")
-        self.assertNotIn("model-route", policy)
+    def test_delegation_guidance_is_generated_into_each_runtime(self):
+        for root in (REPO_ROOT / ".claude/skills/phil-research", REPO_ROOT / ".agents/skills/phil-research"):
+            text = (root / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn("session-scoped policy", text)
+            self.assertIn("lower-cost host candidate", text)
 
-    def test_schema_count_is_restored_after_routing_experiment(self):
-        schemas = [path for path in (WORKFLOW_ROOT / "Schemas").iterdir() if path.is_file()]
-        self.assertEqual(19, len(schemas))
-        architecture = (REPO_ROOT / "Framework/ARCHITECTURE.md").read_text(encoding="utf-8")
-        self.assertIn("Schemas/                        # 19 JSON contracts + registry", architecture)
-
-    def test_generated_roles_do_not_pin_provider_models(self):
-        provider_model = re.compile(r"\b(?:opus|sonnet|haiku|gpt-[A-Za-z0-9.-]+)\b", re.IGNORECASE)
-        for path in (REPO_ROOT / ".claude/agents").glob("*.md"):
-            text = path.read_text(encoding="utf-8")
-            self.assertNotRegex(text, r"^model:\s*", path)
-            self.assertIsNone(provider_model.search(text), path)
+    def test_skill_entrypoints_stay_under_the_line_ceiling(self):
+        for skill in self.kinds()["skill"]:
+            text = (WORKFLOW_ROOT / skill["source"]).read_text(encoding="utf-8")
+            self.assertLess(len(text.splitlines()), 500, skill["id"])
 
     def test_rendering_is_deterministic(self):
         builder = load_script("build-adapters.py")
         first = builder.render_outputs(builder.load_manifest())
         second = builder.render_outputs(builder.load_manifest())
+
         def digest(outputs):
             hasher = hashlib.sha256()
             for path, content in sorted(outputs.items(), key=lambda pair: pair[0].as_posix()):
                 hasher.update(path.as_posix().encode())
                 hasher.update(content if isinstance(content, bytes) else content.encode())
             return hasher.hexdigest()
+
         self.assertEqual(digest(first), digest(second))
 
     def assert_manifest_rejected(self, mutate):
@@ -489,12 +530,30 @@ class AdapterTests(unittest.TestCase):
     def test_manifest_rejects_duplicate_ids(self):
         self.assert_manifest_rejected(lambda data: data["items"][1].__setitem__("id", data["items"][0]["id"]))
 
-    def test_manifest_rejects_missing_dependencies(self):
-        workflow = next(item for item in self.manifest["items"] if item["kind"] == "workflow")
-        workflow_id = workflow["id"]
-        self.assert_manifest_rejected(
-            lambda data: next(item for item in data["items"] if item["id"] == workflow_id)["dependencies"].append("missing-item")
-        )
+    def test_manifest_rejects_exposure_mismatch(self):
+        skills = [item for item in self.manifest["items"] if item["kind"] == "skill"]
+
+        def mutate(data):
+            next(item for item in data["items"] if item["id"] == skills[0]["id"]).__setitem__("id", "phil-extra")
+
+        self.assert_manifest_rejected(mutate)
+
+    def test_manifest_rejects_unknown_package_member(self):
+        package = next(item for item in self.manifest["items"] if item["kind"] == "method_package")
+
+        def mutate(data):
+            next(item for item in data["items"] if item["id"] == package["id"])["members"].append("method.nope.nope")
+
+        self.assert_manifest_rejected(mutate)
+
+    def test_manifest_rejects_unknown_consumer(self):
+        method = next(item for item in self.manifest["items"] if item["kind"] == "method")
+
+        def mutate(data):
+            target = next(item for item in data["items"] if item["id"] == method["id"])
+            target["consumers"].append("phil-nonsense/mode")
+
+        self.assert_manifest_rejected(mutate)
 
     def test_output_collisions_are_rejected(self):
         builder = load_script("build-adapters.py")
@@ -512,6 +571,86 @@ class AdapterTests(unittest.TestCase):
             encoding="utf-8",
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+    def test_second_generation_leaves_no_diff(self):
+        before = subprocess.run(
+            ["git", "status", "--porcelain"], cwd=REPO_ROOT, capture_output=True, text=True, encoding="utf-8",
+        ).stdout
+        subprocess.run(
+            [sys.executable, str(SCRIPTS / "build-adapters.py")], cwd=REPO_ROOT,
+            capture_output=True, text=True, encoding="utf-8", check=True,
+        )
+        after = subprocess.run(
+            ["git", "status", "--porcelain"], cwd=REPO_ROOT, capture_output=True, text=True, encoding="utf-8",
+        ).stdout
+        self.assertEqual(before, after, "regeneration produced a diff — adapters are not idempotent")
+
+
+class MigrationScriptTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.migration = json.loads(
+            (WORKFLOW_ROOT / "Migration/migration-v0.7.json").read_text(encoding="utf-8")
+        )
+
+    def test_canonical_coverage_fails_on_unknown_ids(self):
+        script = load_script("migrate-v07.py", WORKFLOW_ROOT / "Migration")
+        with self.assertRaises(script.MigrationError):
+            script.canonical_coverage("not-a-known-coverage", self.migration)
+        self.assertEqual(
+            script.canonical_coverage("charity audit", self.migration),
+            "method.argument.charity-check",
+        )
+        self.assertEqual(
+            script.canonical_coverage("phil-charity-check", self.migration),
+            "method.argument.charity-check",
+        )
+        self.assertEqual(
+            script.canonical_coverage("method.argument.charity-check", self.migration),
+            "method.argument.charity-check",
+        )
+
+    def test_v1_state_migration_maps_stages_and_gates(self):
+        script = load_script("migrate-v07.py", WORKFLOW_ROOT / "Migration")
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp) / "topic"
+            project.mkdir()
+            state_path = project / "topic-workflow-state.json"
+            state_path.write_text(json.dumps({
+                "schema_version": 1,
+                "project": "topic",
+                "current_stage": 4,
+                "status": "paused",
+                "artifacts": [{
+                    "path": "topic-draft.txt", "hash": "a" * 64,
+                    "workflow": "write", "version": "1", "level": None, "stale": False,
+                }],
+                "gates": [{"stage": 4, "decision": "pass", "reason": "ok", "recorded_at": "2026-01-01T00:00:00Z"}],
+                "next_action": None,
+            }), encoding="utf-8")
+            changes = script.migrate_workflow_state(state_path, self.migration)
+            self.assertTrue(changes)
+            migrated = json.loads(state_path.read_text(encoding="utf-8"))
+            self.assertEqual(migrated["schema_version"], 2)
+            self.assertEqual(migrated["stage"], "outline")
+            self.assertEqual(migrated["status"], "awaiting_user")
+            self.assertEqual(migrated["approvals"]["outline"]["decision"], "approved")
+            self.assertEqual(migrated["artifacts"][0]["path"], "topic-draft.txt")
+
+    def test_writable_whitelist_and_protection(self):
+        script = load_script("migrate-v07.py", WORKFLOW_ROOT / "Migration")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            meta = root / "Private/Bibliography/Analysis/X_2000_T.analysis.meta.json"
+            meta.parent.mkdir(parents=True)
+            meta.write_text("{}", encoding="utf-8")
+            script.check_writable(meta, root)
+            notes = root / "Private/Projects/p/working-notes.md"
+            with self.assertRaises(script.MigrationError):
+                script.check_writable(notes, root)
+            stray = root / "Private/Projects/p/evil.txt"
+            with self.assertRaises(script.MigrationError):
+                script.check_writable(stray, root)
 
 
 if __name__ == "__main__":

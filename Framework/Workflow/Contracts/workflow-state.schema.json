@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "phil:workflow-state-schema:2",
+  "title": "Project Workflow State v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project", "run_id", "entrypoint", "stage", "status", "collaboration_mode", "artifacts", "approvals", "review_findings", "next_action", "updated_at"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "project": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string", "minLength": 1},
+    "entrypoint": {"enum": ["phil-research", "phil-tutor", "phil-write", "phil-review", "phil-full"]},
+    "stage": {"$ref": "#/$defs/stage"},
+    "status": {"enum": ["not_started", "in_progress", "awaiting_user", "blocked", "stale", "completed"]},
+    "collaboration_mode": {"enum": ["user-led", "assistant-led"]},
+    "artifacts": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+    "approvals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outline"],
+      "properties": {
+        "conception": {"$ref": "#/$defs/conception_approval"},
+        "outline": {"$ref": "#/$defs/outline_approval"},
+        "review": {"$ref": "#/$defs/review_approval"},
+        "citation_closure": {"$ref": "#/$defs/citation_closure_approval"}
+      }
+    },
+    "review_findings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "section_audit": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["report_sha256", "unresolved_high", "verdict"],
+      "properties": {
+        "report_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "unresolved_high": {"type": "integer", "minimum": 0},
+        "verdict": {"enum": ["pass", "advisory", "block"]}
+      }
+    },
+    "next_action": {"type": ["string", "null"]},
+    "updated_at": {"type": "string", "format": "date-time"}
+  },
+  "$defs": {
+    "stage": {"enum": ["intake", "research", "incubation", "outline", "section_brief", "draft", "section_audit", "review", "revision", "citation_closure", "complete"]},
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "path", "sha256", "status"],
+      "properties": {
+        "kind": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "pattern": "^[^/].*/?[^/]*$", "description": "POSIX-style path relative to the project directory; never absolute, never '..'"},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "status": {"enum": ["current", "stale"]}
+      }
+    },
+    "conception_approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "artifact_sha256", "recorded_at"],
+      "properties": {
+        "decision": {"enum": ["pending", "accepted", "waived"]},
+        "artifact_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "recorded_at": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string"}
+      }
+    },
+    "outline_approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "artifact_sha256", "recorded_at", "reason"],
+      "properties": {
+        "decision": {"enum": ["pending", "approved", "rejected", "waived"]},
+        "artifact_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "recorded_at": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "review_approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision", "review_sha256", "recorded_at"],
+      "properties": {
+        "decision": {"enum": ["pending", "accept", "minor", "major", "reject"]},
+        "review_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "recorded_at": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string"}
+      }
+    },
+    "citation_closure_approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["integrity_result", "recorded_at"],
+      "properties": {
+        "integrity_result": {"enum": ["pending", "pass"]},
+        "report_sha256": {"type": ["string", "null"], "pattern": "^[a-f0-9]{64}$"},
+        "acknowledged_at": {"type": ["string", "null"], "format": "date-time"},
+        "recorded_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "severity", "target", "status", "source_review_sha256"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "severity": {"enum": ["high", "medium", "low"]},
+        "target": {"type": "string", "minLength": 1},
+        "status": {"enum": ["open", "accepted", "rejected", "resolved", "deferred"]},
+        "source_review_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "note": {"type": "string"}
+      }
+    }
+  }
+}

@@ -1,0 +1,5051 @@
+{
+  "captured_from": "0.6.3-alpha",
+  "cases": [
+    {
+      "kind": "reconstruction",
+      "tag": "L1-f0-noart-0",
+      "call": {
+        "level": 1,
+        "features": [],
+        "artifacts": null,
+        "source_sha256": null,
+        "analysis_sha256": null
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-argument-reconstruct"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct"
+        ],
+        "level": 1,
+        "features": [],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:1"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L1-f0-verified-1",
+      "call": {
+        "level": 1,
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [],
+        "reuse": [
+          "phil-argument-reconstruct"
+        ],
+        "required_coverage": [
+          "phil-argument-reconstruct"
+        ],
+        "level": 1,
+        "features": [],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:1"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L1-f0-stale-2",
+      "call": {
+        "level": 1,
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": true,
+        "invalidation": [
+          "source-hash-changed"
+        ],
+        "run": [
+          "phil-argument-reconstruct"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct"
+        ],
+        "level": 1,
+        "features": [],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:1"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L1-f2-noart-3",
+      "call": {
+        "level": 1,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "artifacts": null,
+        "source_sha256": null,
+        "analysis_sha256": null
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "level": 1,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:1"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:modal"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L1-f2-verified-4",
+      "call": {
+        "level": 1,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-modal-arg"
+        ],
+        "reuse": [
+          "phil-argument-reconstruct",
+          "phil-conceptual-analysis"
+        ],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "level": 1,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:1"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:modal"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L1-f2-stale-5",
+      "call": {
+        "level": 1,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": true,
+        "invalidation": [
+          "source-hash-changed"
+        ],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "level": 1,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:1"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "feature:modal"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L2-f0-noart-6",
+      "call": {
+        "level": 2,
+        "features": [],
+        "artifacts": null,
+        "source_sha256": null,
+        "analysis_sha256": null
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect"
+        ],
+        "level": 2,
+        "features": [],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L2-f0-verified-7",
+      "call": {
+        "level": 2,
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [],
+        "reuse": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect"
+        ],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect"
+        ],
+        "level": 2,
+        "features": [],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L2-f0-stale-8",
+      "call": {
+        "level": 2,
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": true,
+        "invalidation": [
+          "source-hash-changed"
+        ],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect"
+        ],
+        "level": 2,
+        "features": [],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L2-f2-noart-9",
+      "call": {
+        "level": 2,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "artifacts": null,
+        "source_sha256": null,
+        "analysis_sha256": null
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "level": 2,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:modal"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L2-f2-verified-10",
+      "call": {
+        "level": 2,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-modal-arg"
+        ],
+        "reuse": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-conceptual-analysis"
+        ],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "level": 2,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:modal"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L2-f2-stale-11",
+      "call": {
+        "level": 2,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": true,
+        "invalidation": [
+          "source-hash-changed"
+        ],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "level": 2,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:2"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "above-target-level",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "feature:modal"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L3-f0-noart-12",
+      "call": {
+        "level": 3,
+        "features": [],
+        "artifacts": null,
+        "source_sha256": null,
+        "analysis_sha256": null
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map"
+        ],
+        "level": 3,
+        "features": [],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L3-f0-verified-13",
+      "call": {
+        "level": 3,
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-contextualize",
+          "phil-dialectical-map"
+        ],
+        "reuse": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect"
+        ],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map"
+        ],
+        "level": 3,
+        "features": [],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L3-f0-stale-14",
+      "call": {
+        "level": 3,
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": true,
+        "invalidation": [
+          "source-hash-changed"
+        ],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map"
+        ],
+        "level": 3,
+        "features": [],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L3-f2-noart-15",
+      "call": {
+        "level": 3,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "artifacts": null,
+        "source_sha256": null,
+        "analysis_sha256": null
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "level": 3,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:modal"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L3-f2-verified-16",
+      "call": {
+        "level": 3,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-modal-arg"
+        ],
+        "reuse": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-conceptual-analysis"
+        ],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "level": 3,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:modal"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L3-f2-stale-17",
+      "call": {
+        "level": 3,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": true,
+        "invalidation": [
+          "source-hash-changed"
+        ],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-conceptual-analysis",
+          "phil-modal-arg"
+        ],
+        "level": 3,
+        "features": [
+          "conceptual",
+          "modal"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "run",
+            "reason": "source-hash-changed",
+            "selector": "feature:modal"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L3-f4-verified-18",
+      "call": {
+        "level": 3,
+        "features": [
+          "thought-experiment",
+          "intuition",
+          "grounding",
+          "identity"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-thought-experiment",
+          "phil-intuition-pump",
+          "phil-grounding-check",
+          "phil-identity-persistence"
+        ],
+        "reuse": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect"
+        ],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-thought-experiment",
+          "phil-intuition-pump",
+          "phil-grounding-check",
+          "phil-identity-persistence"
+        ],
+        "level": 3,
+        "features": [
+          "grounding",
+          "identity",
+          "intuition",
+          "thought-experiment"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:thought-experiment"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:intuition"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:identity"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:grounding"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "L3-f5-verified-19",
+      "call": {
+        "level": 3,
+        "features": [
+          "ontology",
+          "conceivability",
+          "causation",
+          "essence",
+          "natural-kind"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-ontological-commitment",
+          "phil-conceivability-arg",
+          "phil-causation-analyze",
+          "phil-essence-detect",
+          "phil-natural-kind-analyze"
+        ],
+        "reuse": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect"
+        ],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-ontological-commitment",
+          "phil-conceivability-arg",
+          "phil-causation-analyze",
+          "phil-essence-detect",
+          "phil-natural-kind-analyze"
+        ],
+        "level": 3,
+        "features": [
+          "causation",
+          "conceivability",
+          "essence",
+          "natural-kind",
+          "ontology"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "reuse",
+            "reason": "verified-hash-current",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:ontology"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:conceivability"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:causation"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:essence"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:natural-kind"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "reconstruction",
+      "tag": "full-override-20",
+      "call": {
+        "level": 1,
+        "features": [
+          "conceptual"
+        ],
+        "full": true
+      },
+      "expected": {
+        "workflow": "reconstruct",
+        "override": "full",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-conceptual-analysis"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "phil-argument-reconstruct",
+          "phil-charity-check",
+          "phil-premise-detect",
+          "phil-contextualize",
+          "phil-dialectical-map",
+          "phil-conceptual-analysis"
+        ],
+        "level": 3,
+        "features": [
+          "conceptual"
+        ],
+        "decisions": [
+          {
+            "module": "phil-argument-reconstruct",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-charity-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-premise-detect",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-contextualize",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "level:3"
+          },
+          {
+            "module": "phil-conceptual-analysis",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:conceptual"
+          },
+          {
+            "module": "phil-distinction-track",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-modal-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-thought-experiment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-ontological-commitment",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-identity-persistence",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-grounding-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-conceivability-arg",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-causation-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-essence-detect",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-natural-kind-analyze",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-disagreement",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-epistemology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-psychology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-realism",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-semantics",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-moral-supervenience",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-normativity",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "targeted-f0-verified-21",
+      "call": {
+        "intent": "targeted",
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan"
+        ],
+        "intent": "targeted",
+        "features": [],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "targeted-f1-verified-22",
+      "call": {
+        "intent": "targeted",
+        "features": [
+          "counterexample"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-counterexample"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-counterexample"
+        ],
+        "intent": "targeted",
+        "features": [
+          "counterexample"
+        ],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:counterexample"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "stress-test-f0-verified-23",
+      "call": {
+        "intent": "stress-test",
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-counterexample",
+          "phil-dialectical-map"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-counterexample",
+          "phil-dialectical-map"
+        ],
+        "intent": "stress-test",
+        "features": [],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:stress-test"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:stress-test"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "stress-test-f1-verified-24",
+      "call": {
+        "intent": "stress-test",
+        "features": [
+          "counterexample"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-counterexample",
+          "phil-dialectical-map"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-counterexample",
+          "phil-dialectical-map"
+        ],
+        "intent": "stress-test",
+        "features": [
+          "counterexample"
+        ],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:counterexample"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:stress-test"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "comparison-f0-verified-25",
+      "call": {
+        "intent": "comparison",
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-analogy-check",
+          "phil-parity-check"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-analogy-check",
+          "phil-parity-check"
+        ],
+        "intent": "comparison",
+        "features": [],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:comparison"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:comparison"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "comparison-f1-verified-26",
+      "call": {
+        "intent": "comparison",
+        "features": [
+          "counterexample"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-analogy-check",
+          "phil-parity-check",
+          "phil-counterexample"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-analogy-check",
+          "phil-parity-check",
+          "phil-counterexample"
+        ],
+        "intent": "comparison",
+        "features": [
+          "counterexample"
+        ],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:counterexample"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:comparison"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:comparison"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "framing-f0-verified-27",
+      "call": {
+        "intent": "framing",
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-intuition-pump"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-intuition-pump"
+        ],
+        "intent": "framing",
+        "features": [],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:framing"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "framing-f1-verified-28",
+      "call": {
+        "intent": "framing",
+        "features": [
+          "counterexample"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-intuition-pump",
+          "phil-counterexample"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-intuition-pump",
+          "phil-counterexample"
+        ],
+        "intent": "framing",
+        "features": [
+          "counterexample"
+        ],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:counterexample"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:framing"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "method-f0-verified-29",
+      "call": {
+        "intent": "method",
+        "features": [],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-methodology"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-methodology"
+        ],
+        "intent": "method",
+        "features": [],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:method"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "method-f1-verified-30",
+      "call": {
+        "intent": "method",
+        "features": [
+          "counterexample"
+        ],
+        "artifacts": [
+          {
+            "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "verification_status": "verified",
+            "coverage": [
+              "argument reconstruction",
+              "charity audit",
+              "implicit premises",
+              "conceptual analysis"
+            ]
+          }
+        ],
+        "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "analysis_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "none",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-methodology",
+          "phil-counterexample"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-methodology",
+          "phil-counterexample"
+        ],
+        "intent": "method",
+        "features": [
+          "counterexample"
+        ],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:counterexample"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "intent:method"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "evaluation",
+      "tag": "full-override-31",
+      "call": {
+        "intent": "targeted",
+        "features": [
+          "analogy"
+        ],
+        "full": true
+      },
+      "expected": {
+        "workflow": "evaluate",
+        "override": "full",
+        "source_changed": false,
+        "invalidation": [],
+        "run": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-analogy-check",
+          "phil-counterexample"
+        ],
+        "reuse": [],
+        "required_coverage": [
+          "inference-scan",
+          "fallacy-scan",
+          "phil-analogy-check",
+          "phil-counterexample"
+        ],
+        "intent": "targeted",
+        "features": [
+          "analogy"
+        ],
+        "decisions": [
+          {
+            "module": "inference-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "fallacy-scan",
+            "action": "run",
+            "reason": "mandatory-baseline",
+            "selector": "mandatory-baseline"
+          },
+          {
+            "module": "phil-counterexample",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "explicit-override"
+          },
+          {
+            "module": "phil-dialectical-map",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-analogy-check",
+            "action": "run",
+            "reason": "coverage-missing",
+            "selector": "feature:analogy"
+          },
+          {
+            "module": "phil-parity-check",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-intuition-pump",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          },
+          {
+            "module": "phil-methodology",
+            "action": "skip",
+            "reason": "feature-or-intent-absent",
+            "selector": "not-selected"
+          }
+        ]
+      }
+    }
+  ]
+}
