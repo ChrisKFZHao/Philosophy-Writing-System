@@ -457,7 +457,8 @@ class AdapterTests(unittest.TestCase):
         modes_dir = PLUGIN / "skills/research/references/modes"
         self.assertEqual(
             sorted(path.stem for path in modes_dir.glob("*.md")),
-            ["comment", "evaluate", "ingest", "philosophers", "reconstruct"],
+            ["comment", "evaluate", "ingest", "philosophers", "reconstruct",
+             "translate"],
         )
 
     def test_methods_tree_matches_manifest_and_headers_carry_metadata(self):

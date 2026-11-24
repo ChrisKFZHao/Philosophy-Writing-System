@@ -14,13 +14,29 @@
 - Doctor and tests: the stale-phrase scan is case-insensitive, unknown `method.*` IDs in live contracts fail, and private-layer tests skip on a clean clone.
 - Contracts and docs: corrected a wrong method ID, `idea-ledger.py` invocations, write-authority wording, removed-command references, and stale counts and versions. `phil-write` no longer mandates stacked connectives and forbids revision by accretion; `phil-review` perspectives must route attributions to source-backed claims.
 
+**Translation (`phil:research translate`)**
+
+- New mode `phil:research translate <KEY> --pages A-B` and script `translate.py`, with subcommands `plan`, `terms`, `run`, and `check`.
+  - It calls the user's model gateway directly (deepseek-flash, thinking on with a 2,000-token budget), one evidence unit at a time.
+  - Each request carries the previous and next source paragraphs, the previous translation, and the glossary terms in the unit. Only terms that occur here for the first time in the document get the English in parentheses.
+  - Rules and glossary form a cached system prompt (`Templates/Translate/system.md`).
+  - Units are cached by hash, so re-runs cost nothing. A selection of more than 60 uncached units needs `--yes`, and the whole document needs `--all`.
+- Glossaries are Markdown tables: per source (`Reader/{stem}/glossary.md`), per project (`--project`), and shared (`Shared/Glossary/`). `terms` proposes recurring terms before the first run, marked 自动提议，待确认.
+- Deterministic QA after every unit. An error triggers one repair call.
+  - Errors: page markers, and glossary renderings.
+  - Warnings: note markers, numbers, leftover English, negation counts, added hedges (可能, 也许), lost "only/alone", and length ratio. Thresholds are calibrated on the hand-reviewed demo.
+  - Ligatures such as ﬁ are mapped before matching. Footnote numbers follow the demo convention.
+- Trial on five units of Srinivasan 2018 section II: the first version over-applied English parentheses and added a word the source lacks. After fixing the prompt and adding a clause-by-clause self-check, the second run had no errors, consistent terms, and one warning. Cost was about 4,300 output tokens per unit including thinking.
+- Without gateway credentials, or on Codex, a subagent follows the same prompt file and `translate.py check` validates the result.
+
 **Reading page (bilingual reader)**
 
 - New `reader-build.py` builds a self-contained `reader.html` from a source's evidence units, translations, agent notes, and user notes in `Private/Bibliography/Reader/{stem}/`. It reports stale translations, page-marker mismatches between original and translation, note anchors that do not match the text, and unmapped PDF glyphs.
 - Template `Framework/Workflow/Templates/Reader/reader.html`: translation first with the original one click away or side by side; printed page numbers in the margin; margin notes beside their anchors (term notes, collapsed argument notes, context notes); a night mode; and user highlights, comments, and `idea` / `cite` tags stored as W3C Web Annotations, exportable as `user-notes.json`. Minimalist serif design.
+- `reader-serve.py STEM` serves the page on 127.0.0.1 (port 8411, or the next free one up to 8420), rebuilding it on each load, and saves annotations straight to `user-notes.json` with atomic writes and an ETag check. The page merges notes on a conflict. A note deleted from the file is not restored from the browser cache, and cancelling a new empty note leaves nothing behind. The server checks the Host and Origin headers and requires a custom header for writes, so other websites cannot write to it. Opened as a file, the page still keeps notes in the browser and exports them.
 - Footnotes: `reader-build.py` splits footnote units into single notes by their running numbers and classifies each as substantive, citation-only, acknowledgement, or other (author–year references, `see`/`cf.` pointers, and stock phrases do not count as content; `reader.json` can override). The page shows only substantive note markers and previews a note on hover; a 引注 switch reveals the rest.
 - `pdf-extract.py` (version 4): a small-type box at the foot of a page that follows a body line ending in a colon (or an introducing “as”) and is at least two lines or 80 characters long is a block quotation, not a footnote.
-- Piloted on section I of Srinivasan 2018 (pp. 123–127): 26 units translated by deepseek-flash with the project glossary, 13 notes drawn from the existing analysis. Two translators rendered *anger* differently, so a cross-unit term check is needed before `translate.py` ships.
+- Piloted on section I of Srinivasan 2018 (pp. 123–127): 26 units translated by deepseek-flash with the project glossary, 13 notes drawn from the existing analysis. Two translators rendered *anger* differently, which is why `translate.py` proposes terms before the first run and checks every unit against the glossary.
 
 **Export: talk handouts and slides**
 
@@ -41,6 +57,7 @@
 
 - Source PDFs in `Private/Bibliography/PDF/` are now tracked in the private repository (`!Bibliography/PDF/*.pdf` in `Private/.gitignore`). Extraction caches, compiled LaTeX, and rendered exports stay ignored. `source-intake` renames tracked PDFs with `git mv` and commits new PDFs with their INDEX rows.
 - Intermediate and generated files are Markdown. New conception notes, outlines, review reports, pipeline prose, summaries, and analyses use `.md`. Manuscripts (`-draft.txt`, `-v{N}.txt`) stay plain text. `bibliography-scan.py` and `content-doctor.py` still accept legacy `.summary.txt` files.
+- The 31 legacy intermediates in the private library were renamed to `.md` with their content unchanged: 27 summaries, one analysis (its metadata now points to the new path; the hash still matches), one conception note, and two review reports. Pilot material under `Private/Style/` keeps its names.
 
 **Method execution cards (pilot)**
 

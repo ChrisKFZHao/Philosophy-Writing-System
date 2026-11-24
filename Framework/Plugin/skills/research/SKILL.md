@@ -1,13 +1,13 @@
 ---
 name: research
-description: "Work on philosophical sources: ingest PDFs, reconstruct or evaluate an argument, comment on a text, or maintain the philosopher database. Use for 文献入库、论证重构、批判性评估、文本评注、哲学家数据库."
+description: "Work on philosophical sources: ingest PDFs, reconstruct or evaluate an argument, comment on a text, translate a reading passage, or maintain the philosopher database. Use for 文献入库、论证重构、批判性评估、文本评注、对照翻译、哲学家数据库."
 ---
 
 # phil-research
 
 > **Paths.** `<root>` is the nearest ancestor of the working directory containing `Framework/Workflow/manifest.json`; if there is none, stop and report it. `Framework/…` and `Private/…` paths resolve from `<root>`. Bare `Methods/`, `Services/`, `Rules/`, `Schemas/`, `Scripts/`, `Contracts/`, `Commands/`, `References/`, and `Templates/` paths resolve from `<root>/Framework/Workflow/`. Run scripts with `<root>` as the working directory.
 
-One public skill because its five modes share one **research kernel**: source identity, title-page provenance, current source hashes, evidence locators, coverage planning with hash-current reuse, bibliography registration, and the Citation Gate boundary. The modes are otherwise isolated — each has its own contract file, method selection, and side-effect policy. This is a kernel share, not a claim that the modes are the same cognitive task.
+One public skill because its six modes share one **research kernel**: source identity, title-page provenance, current source hashes, evidence locators, coverage planning with hash-current reuse, bibliography registration, and the Citation Gate boundary. The modes are otherwise isolated — each has its own contract file, method selection, and side-effect policy. This is a kernel share, not a claim that the modes are the same cognitive task.
 
 ## Modes
 
@@ -17,12 +17,13 @@ One public skill because its five modes share one **research kernel**: source id
 | `reconstruct` | [references/modes/reconstruct.md](references/modes/reconstruct.md) | read-only analysis; persists analysis artifacts under `Private/Bibliography/Analysis/` | `phil:research reconstruct --level <1|2|3> [--full] <text>` |
 | `evaluate` | [references/modes/evaluate.md](references/modes/evaluate.md) | read-only critique of a source or analysis artifact | `phil:research evaluate [--full] <text>` |
 | `comment` | [references/modes/comment.md](references/modes/comment.md) | read-only qualitative commentary; no bibliography or project mutation | `phil:research comment <argument or text>` |
+| `translate` | [references/modes/translate.md](references/modes/translate.md) | **write** — translations and glossaries under `Private/Bibliography/Reader/{stem}/` | `phil:research translate <KEY> --pages 12-40` |
 | `philosophers` | [references/modes/philosophers.md](references/modes/philosophers.md) | queue maintenance; semantic approval always explicit and source-backed | `phil:research philosophers <op>` |
 
 ## Routing
 
 1. An explicit mode argument always wins.
-2. Natural-language intent that maps cleanly to one mode routes automatically ("帮我消化这篇文献" → `reconstruct`; "扫描库里新 PDF" → `ingest`).
+2. Natural-language intent that maps cleanly to one mode routes automatically ("帮我消化这篇文献" → `reconstruct`; "扫描库里新 PDF" → `ingest`; "把这篇翻成中文对照读" → `translate`).
 3. If a material ambiguity remains, ask **one focused question** instead of invoking several modes. Never run multiple modes speculatively.
 4. Old command names are recognized and translated with an explicit notice: `phil:reconstruct/evaluate/comment/ingest/philosophers` → `phil:research <mode>`. A legacy name never silently selects a different mode than its replacement.
 
@@ -34,7 +35,7 @@ One public skill because its five modes share one **research kernel**: source id
 - **Citation Gate boundary**: no manuscript-facing claim bypasses `Services/citation-gate.md` (two hops: refs.md registration + verified hash-current analysis).
 - **Status vocabulary**: `full` / `partial` / `skipped` for Zotero; `verified` / `provisional` / `stale` for analyses; decisions `run` / `reuse` / `skip` in every preplan.
 - **Disclosure**: new AI-authored completions carry `[AI 补全]` per the shared runtime policy.
-- **External writes**: only `ingest` (via its services) registers sources in the library or writes to Zotero. `reconstruct` persists only its paired analysis artifacts under `Private/Bibliography/Analysis/` and their philosopher observations. `philosophers` writes only through the philosopher-db service. `evaluate` and `comment` write nothing. No mode edits manuscripts or `refs.md`.
+- **External writes**: only `ingest` (via its services) registers sources in the library or writes to Zotero. `reconstruct` persists only its paired analysis artifacts under `Private/Bibliography/Analysis/` and their philosopher observations. `translate` writes only translations and glossaries under `Private/Bibliography/Reader/{stem}/` (plus a project glossary only when asked). `philosophers` writes only through the philosopher-db service. `evaluate` and `comment` write nothing. No mode edits manuscripts or `refs.md`.
 
 ## Method and service loading contract
 
@@ -57,6 +58,7 @@ Apply the session-scoped policy in `Rules/runtime-compatibility.md`: on the firs
 - **Missing method/service ID in the manifest** → stop with `missing-ID <id>`; do not substitute.
 - **Source hash changed** → affected coverage is `stale`; report and rerun only the dimensions the new target requires.
 - **Zotero backend degraded** → `ingest` Steps 1–7 complete; Step 8 reports `partial`/`skipped` with a manual follow-up.
+- **No translation gateway** → `translate` falls back to a subagent that follows `Templates/Translate/system.md` and writes the same records, then runs `translate.py check`. Credentials are never printed.
 - **Ambiguous mode** → one focused question; never a multi-mode sweep.
 
 ## State behavior

@@ -28,6 +28,8 @@ body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--size
 .bar button { font: inherit; letter-spacing: inherit; color: var(--faint); background: none; border: 0; padding: 0 0 .25rem; cursor: pointer; border-bottom: 1px solid transparent; transition: color .2s; }
 .bar button:hover { color: var(--ink); }
 .bar button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.bar .status { font: inherit; letter-spacing: inherit; color: var(--faint); cursor: default; }
+.bar .status.warn { color: var(--mine); }
 
 /* Grid: page numbers | text | sidenotes */
 .page { display: grid; grid-template-columns: var(--left) minmax(0, var(--measure)) var(--right); column-gap: var(--gap); justify-content: center; padding: 0 2rem 8rem; }
@@ -166,6 +168,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
   <button id="b-smaller" title="缩小字号">A−</button>
   <button id="b-larger" title="放大字号">A+</button>
   <span class="sep"></span>
+  <span id="b-status" class="status" hidden></span>
   <button id="b-export" title="导出我的批注（W3C Web Annotation JSON）">导出批注</button>
 </div>
 <main class="page" id="page">
@@ -218,7 +221,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
       <div class="en-title">${esc(m.title)}</div>
       <div class="byline"><b>${esc(m.author_zh || m.author)}</b>${m.author_zh ? "（" + esc(m.author) + "）" : ""}</div>
       <div class="colophon">${esc(m.colophon || "")}</div>
-      <div class="howto">点一段，展开原文；点下划线，看对应的旁注；鼠标停在注号上，可读原注（只注出处的注号默认隐藏，点“引注”显示）。选中文字可以高亮、批注或标为想法；鼠标移到段落上，点右侧的 ＋ 可给整段写批注。批注存在本机浏览器里，用“导出批注”存成 user-notes.json。</div>
+      <div class="howto">点一段，展开原文；点下划线，看对应的旁注；鼠标停在注号上，可读原注（只注出处的注号默认隐藏，点“引注”显示）。选中文字可以高亮、批注或标为想法；鼠标移到段落上，点右侧的 ＋ 可给整段写批注。<span id="howto-store">批注存在本机浏览器里，用“导出批注”存成 user-notes.json。</span></div>
     </div>`;
   document.title = (m.title_zh || m.title) + " · 阅读页";
 
@@ -280,7 +283,71 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
   // ---- user annotations (靛批), stored as W3C Web Annotations ----
   let userNotes = [];
   try { userNotes = JSON.parse(localStorage.getItem(storeKey) || "null") || data.user_notes || []; } catch { userNotes = data.user_notes || []; }
-  const save = () => localStorage.setItem(storeKey, JSON.stringify(userNotes));
+  const COLL = "http://www.w3.org/ns/anno.jsonld";
+  const dirtyKey = storeKey + ":dirty";
+  let serverOn = false, etag = null, saveTimer = null;
+  const stampOf = a => Date.parse((a && (a.modified || a.created)) || "") || 0;
+  // Union by id; when both carry an id, the later modified||created wins.
+  function mergeNotes(base, extra) {
+    const byId = new Map();
+    for (const a of base || []) if (a && typeof a.id === "string") byId.set(a.id, a);
+    for (const a of extra || []) {
+      if (!a || typeof a.id !== "string") continue;
+      const cur = byId.get(a.id);
+      if (!cur || stampOf(a) > stampOf(cur)) byId.set(a.id, a);
+    }
+    const items = [...byId.values()];
+    return { items, changed: JSON.stringify(items) !== JSON.stringify(base || []) };
+  }
+  function setStatus(ok, reason) {
+    const el = $("#b-status"); if (!el) return;
+    el.hidden = false;
+    el.textContent = ok ? "已存入文件" : "未存入文件";
+    el.classList.toggle("warn", !ok);
+    el.title = ok ? "批注已写入 user-notes.json" : "保存失败：" + (reason || "未知错误");
+  }
+  function notesBody() {
+    return JSON.stringify({ "@context": COLL, type: "AnnotationCollection", source: m.key, items: userNotes });
+  }
+  function sendNotes(keepalive) {
+    return fetch("/api/notes", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "X-Phil-Reader": "1", "If-Match": etag == null ? "" : etag },
+      body: notesBody(),
+      keepalive: !!keepalive
+    });
+  }
+  async function pushNotes(opts) {
+    if (!serverOn) return;
+    if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
+    const keepalive = !!(opts && opts.keepalive);
+    try {
+      let res = await sendNotes(keepalive);
+      if (res.status === 409) {
+        const cur = await res.json();
+        if (typeof cur.etag === "string") etag = cur.etag;
+        const merged = mergeNotes(cur.items || [], userNotes);
+        userNotes = merged.items;
+        localStorage.setItem(storeKey, JSON.stringify(userNotes));
+        rebuildUser();
+        res = await sendNotes(keepalive);
+      }
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const out = await res.json();
+      if (out && typeof out.etag === "string") etag = out.etag;
+      if (!saveTimer) localStorage.removeItem(dirtyKey);  // a newer save keeps it dirty
+      setStatus(true);
+    } catch (err) {
+      setStatus(false, (err && err.message) || String(err));
+    }
+  }
+  const save = () => {
+    localStorage.setItem(storeKey, JSON.stringify(userNotes));
+    localStorage.setItem(dirtyKey, "1");
+    if (!serverOn) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => pushNotes(), 600);
+  };
   const quoteOf = a => (a.target.selector || []).find(s => s.type === "TextQuoteSelector");
   const posOf = a => (a.target.selector || []).find(s => s.type === "TextPositionSelector");
 
@@ -339,7 +406,9 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
     });
     return card;
   }
-  function editCard(card, a) {
+  // A note carries content through a comment or a tag; a bare highlight/new card does not.
+  const hasContent = a => (a.body || []).some(b => b.purpose === "commenting" || b.purpose === "tagging");
+  function editCard(card, a, isNew) {
     const body = (a.body ||= []);
     let comment = body.find(b => b.purpose === "commenting");
     card.innerHTML = `<div class="t"><span class="k">批注</span></div><textarea placeholder="写下你的想法……"></textarea><div class="acts"><button data-do="ok">保存</button><button data-do="cancel">取消</button></div>`;
@@ -349,9 +418,15 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
       if (act === "ok") {
         const v = ta.value.trim();
         if (v) { if (!comment) body.push(comment = { type: "TextualBody", purpose: "commenting", format: "text/plain", value: v }); else comment.value = v; a.motivation = "commenting"; }
+        if (!v && isNew && !hasContent(a)) {  // an empty new note is not worth keeping
+          userNotes = userNotes.filter(x => x.id !== a.id); save(); rebuildUser(); return;
+        }
         a.modified = new Date().toISOString(); save(); rebuildUser();
       }
-      if (act === "cancel") rebuildUser();
+      if (act === "cancel") {
+        if (isNew && !hasContent(a)) { userNotes = userNotes.filter(x => x.id !== a.id); save(); }
+        rebuildUser();
+      }
     };
     layout();
   }
@@ -404,7 +479,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
         { type: "TextPositionSelector", start: pending.start, end: pending.end }] }
     };
     userNotes.push(a); save(); getSelection().removeAllRanges(); pop.classList.remove("show"); rebuildUser();
-    if (act === "comment") { const card = layer.querySelector(`.note.user[data-note="${a.id}"]`); if (card) editCard(card, a); }
+    if (act === "comment") { const card = layer.querySelector(`.note.user[data-note="${a.id}"]`); if (card) editCard(card, a, true); }
   });
 
   // ---- footnotes: hover a marker to read its note ----
@@ -514,7 +589,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
       created: new Date().toISOString(), motivation: "commenting", body: [], target: { source: hoverUnit.id, layer: "zh" } };
     userNotes.push(a); save(); rebuildUser();
     const card = document.querySelector(`.note.user[data-note="${CSS.escape(a.id)}"]`);
-    if (card) editCard(card, a);
+    if (card) editCard(card, a, true);
   });
 
   // ---- margin layout: each note beside its anchor, never overlapping ----
@@ -583,7 +658,33 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
   };
   addEventListener("resize", () => requestAnimationFrame(layout));
   document.fonts && document.fonts.ready.then(layout);
+
+  // ---- server mode: notes live in user-notes.json through GET/PUT /api/notes ----
+  async function initServer() {
+    if (!(location.protocol === "http:" || location.protocol === "https:")) return;
+    let res;
+    try { res = await fetch("/api/notes", { cache: "no-store" }); } catch { return; }
+    if (!res.ok) return;
+    let payload;
+    try { payload = await res.json(); } catch { return; }
+    if (!payload || typeof payload.etag !== "string" || !Array.isArray(payload.items)) return;
+    serverOn = true; etag = payload.etag;
+    // Once the cache has been synced, the file is the source of truth; only an
+    // unsynced local change (dirty) may be merged back in.
+    const dirty = localStorage.getItem(dirtyKey) === "1";
+    userNotes = dirty ? mergeNotes(payload.items, userNotes).items : payload.items;
+    localStorage.setItem(storeKey, JSON.stringify(userNotes));
+    rebuildUser();
+    const note = $("#howto-store");
+    if (note) note.textContent = "批注自动存入 user-notes.json。";
+    if (dirty) await pushNotes();
+  }
+  addEventListener("pagehide", () => {
+    if (serverOn && (saveTimer || localStorage.getItem(dirtyKey) === "1")) pushNotes({ keepalive: true });
+  });
+
   apply(); rebuildUser();
+  initServer();
   const linked = [...wanted].find(w => w.startsWith("note="));
   if (linked) requestAnimationFrame(() => activate(linked.slice(5), "card"));
 })();

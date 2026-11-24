@@ -175,7 +175,7 @@ Philosophical Writing/
 
 | 命令 | 功能 | 编排 |
 |------|------|------|
-| `phil:research` | 共享证据/溯源内核，五个隔离模式 | `ingest`（文献入库刮削：重命名、登记 INDEX、0.5 级摘要、Zotero 自动注册、入库推荐）/ `reconstruct`（渐进式理解，确定性 Level 1/2/3 规划，仅补缺失覆盖）/ `evaluate`（定向批判）/ `comment`（论证细节）/ `philosophers`（哲学家数据库维护） |
+| `phil:research` | 共享证据/溯源内核，六个隔离模式 | `ingest`（文献入库刮削：重命名、登记 INDEX、0.5 级摘要、Zotero 自动注册、入库推荐）/ `reconstruct`（渐进式理解，确定性 Level 1/2/3 规划，仅补缺失覆盖）/ `evaluate`（定向批判）/ `comment`（论证细节）/ `translate`（按证据单元对照翻译，术语表与确定性质检）/ `philosophers`（哲学家数据库维护） |
 | `phil:tutor` | 导师式对话 | reading 文献对话 / incubating 构思孵化（产出 conception 文件） |
 | `phil:write` | 哲学写作 | outline / draft / revision；draft 含 user-led / assistant-led 双协作模式（质量门槛完全一致） |
 | `phil:review` | 同行审稿 | full（8 维度 + 立场模拟）/ targeted / re-review；只读，不直接改稿 |

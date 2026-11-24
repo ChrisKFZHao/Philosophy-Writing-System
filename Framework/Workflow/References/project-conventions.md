@@ -67,7 +67,8 @@ Private/Bibliography/
 ├── Summaries/                        Level 0.5 summaries ({Author}_{Year}_{Title}.summary.md)
 ├── Extract/{stem}/                   Evidence units from pdf-extract.py (derived, not tracked)
 ├── Reader/{stem}/                    Reading page: translation*.jsonl, agent-notes.json, user-notes.json, reader.json (tracked);
-│                                     reader.html built by reader-build.py (derived, not tracked)
+│                                     reader.html built by reader-build.py (derived, not tracked);
+│                                     reader-serve.py serves it locally and saves annotations to user-notes.json
 ├── Philosopher-Queue/                 Private observations, counters, and review candidates
 └── INDEX.md                          Master inventory (KEY, analysis level, topics tags)
 ```

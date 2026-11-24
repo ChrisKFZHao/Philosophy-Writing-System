@@ -199,11 +199,19 @@ PDF ──pdf-extract.py──> Extract/{stem}/blocks.jsonl ──┬─> ingest
 - 按段落哈希缓存，只译用户打开的章节。
 - 译后做确定性质检：占位符、数字和引文标记、残留英文、术语、否定词和模态词。
 - 只把被标出的段落交给强模型修改。是否让修改时开思考，看盲评结果再定。
+- **已实现（2026-11-24，Sonnet 实现，主会话审读）：** `translate.py`，有 `plan`、`terms`、`run`、`check` 四个子命令。
+  - 试译 Srinivasan 第二节开头五段，第一轮发现五处问题：待译原文误标“不要翻译”；英文括注滥用；PDF 连字导致术语匹配不上；脚注注号写法不一致；凭空添加了一个词。
+  - 修复后第二轮无错误，术语一致。剩下“explains away”的语义削弱和一处“fitting”译名不一，确定性质检抓不到。
+  - 成本：每段约 3 千输入 token（含缓存）、4 千多输出 token（含思考）。
+  - 滚动摘要没做，改为给上一段原文和译文、下一段原文；强模型返修也没做，出错时只用原模型返修一次。
 
 **第三步：阅读页（已完成第一版，2026-11-24）**
 
 - 已实现：`Scripts/reader-build.py` 与模板 `Templates/Reader/reader.html`，在 Srinivasan 2018 第一节上试做。数据放在 `Private/Bibliography/Reader/{stem}/`：译文、批注、阅读页配置进私有库；`reader.html` 是派生文件，不进 git。
-- 设计按用户要求走极简人文风：衬线字体，页边页码，页边注。`reader-serve.py` 尚未实现，用户批注暂存在浏览器本地，可导出为 `user-notes.json`。
+- 设计按用户要求走极简人文风：衬线字体，页边页码，页边注。
+- `reader-serve.py` 已实现（2026-11-24，Sonnet 实现，主会话用无头 Edge 实测）：
+  - 在本机起服务，批注直接写入 `user-notes.json`。
+  - 首测发现三处问题，已修复：在文件里删掉的批注会从浏览器缓存复活；新建批注点取消会留下空条目；端口随机，导致缓存不能跨次保留。
 - 试做中发现：两位译者把 anger 分别译成“愤怒”和“怒气”。`translate.py` 需要在全部段落译完后做一次跨段译名检查。
 
 - `Scripts/reader-build.py` 生成静态 HTML。
@@ -212,7 +220,7 @@ PDF ──pdf-extract.py──> Extract/{stem}/blocks.jsonl ──┬─> ingest
 
 **第四步：接入流程**
 
-- 新增 `phil:research translate` 模式。
+- 新增 `phil:research translate` 模式（已完成，2026-11-24）。
 - `phil:tutor reading` 先读用户批注。
 - 用户批注回流到想法台账和 `refs.md` 候选行。
 - 术语表与 `phil:write` 的术语检查共用。

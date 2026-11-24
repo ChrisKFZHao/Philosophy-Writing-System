@@ -19,7 +19,7 @@ The `phil` plugin in `Framework/Plugin/` provides these skills to Claude Code (`
 
 | Entry | Purpose | Modes |
 |---|---|---|
-| `phil:research` | Work on sources | `ingest`, `reconstruct`, `evaluate`, `comment`, `philosophers` |
+| `phil:research` | Work on sources | `ingest`, `reconstruct`, `evaluate`, `comment`, `translate`, `philosophers` |
 | `phil:tutor` | Dialogue with the user | `reading`, `incubating` |
 | `phil:write` | Write a manuscript, or export it as a handout or slides | `outline`, `draft`, `revision`, `export` |
 | `phil:review` | Read-only peer review | `full`, `targeted`, `re-review` |

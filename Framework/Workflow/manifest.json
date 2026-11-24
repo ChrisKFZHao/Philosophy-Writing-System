@@ -26,12 +26,13 @@
       "id": "phil-research",
       "kind": "skill",
       "source": "../Plugin/skills/research/SKILL.md",
-      "description": "Work on philosophical sources: ingest PDFs, reconstruct or evaluate an argument, comment on a text, or maintain the philosopher database. Use for 文献入库、论证重构、批判性评估、文本评注、哲学家数据库.",
+      "description": "Work on philosophical sources: ingest PDFs, reconstruct or evaluate an argument, comment on a text, translate a reading passage, or maintain the philosopher database. Use for 文献入库、论证重构、批判性评估、文本评注、对照翻译、哲学家数据库.",
       "modes": [
         "ingest",
         "reconstruct",
         "evaluate",
         "comment",
+        "translate",
         "philosophers"
       ],
       "capabilities": [

@@ -25,7 +25,7 @@
 
 The removal is intentionally breaking with no deprecation period. The deterministic resolver is `workflow-policy.py removed-entrypoint <command>`; the committed mapping table is `Migration/migration-v0.7.json`.
 
-**Why one `phil-research`**: its five modes share one evidence/provenance kernel (source identity, title-page provenance, hash-current reuse, coverage ledger, Citation Gate boundary) — the share removes duplicated protocol. The modes themselves are isolated: separate contract files, separate method selection, separate side-effect policy (only `ingest` writes; approval in `philosophers` is always explicit and source-backed).
+**Why one `phil-research`**: its six modes share one evidence/provenance kernel (source identity, title-page provenance, hash-current reuse, coverage ledger, Citation Gate boundary) — the share removes duplicated protocol. The modes themselves are isolated: separate contract files, separate method selection, separate side-effect policy (only `ingest` and `translate` write — `translate` only under `Private/Bibliography/Reader/`; approval in `philosophers` is always explicit and source-backed).
 
 ## 2. Design Principles
 
@@ -113,7 +113,7 @@ One authoritative sequence (see `Framework/Plugin/skills/write/SKILL.md`):
 `intake -> outline -> outline approval -> section brief -> draft -> section audit -> revision -> citation closure`
 
 - **Intake**: deliverable, argument maturity, constraints, sources, citation readiness, collaboration mode; confirmed facts vs user commitments vs provisional inferences vs open questions.
-- **Outline**: `{topic}-outline.txt` — thesis, section functions, argument dependencies, anticipated objections, evidence requirements, citation slots. Consumes `{topic}-conception.txt` preferentially; substantive deviation is flagged and justified, never silent.
+- **Outline**: `{topic}-outline.md` — thesis, section functions, argument dependencies, anticipated objections, evidence requirements, citation slots. Consumes `{topic}-conception.md` preferentially; substantive deviation is flagged and justified, never silent.
 - **Section brief**: purpose, central claim, premises/evidence, incoming/outgoing transitions, source function, prohibited conceptual drift.
 - **Section audit**: conceptual economy, definition-before-use, explicit transitions, analytical source introduction, argumentative contribution, citation readiness. Machine/advisory — unresolved high-severity findings block `complete` until resolved or explicitly deferred with reason.
 - **Citation closure**: every body citation has a bibliography entry; uncited entries removed unless a broader reading list is requested; two-hop gate on every cited KEY; existence, claim support, and closure are separate checks. Machine PASS + user acknowledgement; **cannot be waived**.
