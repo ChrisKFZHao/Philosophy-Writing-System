@@ -257,6 +257,12 @@ PDF ──pdf-extract.py──> Extract/{stem}/blocks.jsonl ──┬─> ingest
 - **建议：** `pdf-extract.py` 增加 `ocr` 子命令。识别结果写入 `Extract/{stem}/ocr.jsonl`，记录逐页文字和词框，不改原 PDF，原 PDF 的哈希因此不变。没有文字层的页改读这份结果。
 - **安装：** 在 `%LOCALAPPDATA%\phil-ocr` 下用 npm 安装，不需管理员权限。
 - **分工（用户 2026-11-24）：** OCR 由 Sonnet 实现，主会话负责测试。
+- **已实现并测试（2026-11-24）：**
+  - 新增 `ocr-setup` 和 `ocr` 两个子命令，以及 `pdf-render.ps1`、`ocr-pages.js` 两个脚本。
+  - 只在 Rawls 第 50–55 页上测试。用户明确说明只做案例，不跑全书。
+  - 测试中发现 5 个问题，已交回修复：`--out` 读不到 OCR 结果；段落不分；页码和噪点被当成脚注；长脚注被判为正文；罗马数字被误读。
+  - 修复时引入一处回归：节号“V.”被当作页码删掉，也已修复。
+  - 有文字层的 PDF 输出与修改前逐字一致。
 
 ## 四、决定记录
 

@@ -5,10 +5,13 @@ import hashlib
 import importlib.util
 import io
 import json
+import os
+import shutil
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 
 WORKFLOW_ROOT = Path(__file__).resolve().parent.parent
@@ -22,6 +25,27 @@ try:
     HAVE_PDFMINER = True
 except ImportError:
     HAVE_PDFMINER = False
+
+
+def ocr_runtime_home() -> Path:
+    override = os.environ.get("PHIL_OCR_HOME")
+    if override:
+        return Path(override)
+    local = os.environ.get("LOCALAPPDATA")
+    if local:
+        return Path(local) / "phil-ocr"
+    return Path.home() / ".phil-ocr"
+
+
+OCR_HOME = ocr_runtime_home()
+HAVE_NODE = bool(shutil.which("node"))
+HAVE_POWERSHELL = bool(
+    shutil.which("powershell.exe") or shutil.which("powershell")
+)
+HAVE_TESSERACT = (
+    (OCR_HOME / "node_modules" / "tesseract.js" / "package.json").is_file()
+    and (OCR_HOME / "tessdata" / "eng.traineddata").is_file()
+)
 
 
 def load_script(name: str):
@@ -252,6 +276,44 @@ class PdfExtractTests(unittest.TestCase):
         self.assertEqual(result["status"], "written")
         lines = (out / "blocks.jsonl").read_text(encoding="utf-8").splitlines()
         return [json.loads(line) for line in lines]
+
+    def ocr_record(
+        self,
+        pdf: Path,
+        page: int,
+        lines: list[tuple[str, list[float]]],
+        *,
+        source_sha256: str | None = None,
+        version: str | None = None,
+    ) -> dict:
+        """Build one ocr.jsonl record whose bboxes are already in points."""
+        return {
+            "pdf_page": page,
+            "source_sha256": source_sha256
+            or hashlib.sha256(pdf.read_bytes()).hexdigest(),
+            "ocr_version": version or EXTRACT.OCR_VERSION,
+            "engine": "tesseract.js 7.0.0 eng fast",
+            "width": 612,
+            "height": 792,
+            "confidence": 90,
+            "text": " ".join(text for text, _bbox in lines),
+            "lines": [
+                {"text": text, "bbox": bbox, "confidence": 90}
+                for text, bbox in lines
+            ],
+        }
+
+    def write_ocr(self, out: Path, records: list[dict]) -> Path:
+        out.mkdir(parents=True, exist_ok=True)
+        path = out / "ocr.jsonl"
+        path.write_text(
+            "".join(
+                json.dumps(record, ensure_ascii=False) + "\n"
+                for record in records
+            ),
+            encoding="utf-8",
+        )
+        return path
 
     def test_meta_reports_hash_info_and_first_page_text(self) -> None:
         pdf = self.fixture(
@@ -526,6 +588,396 @@ class PdfExtractTests(unittest.TestCase):
         self.assertEqual(data["page_count"], 2)
         self.assertEqual(data["pages_without_text"], [2])
         self.assertFalse(data["needs_ocr"])
+
+    def test_ocr_bbox_converts_pixels_to_points(self) -> None:
+        # 1000x2000 px maps onto a 500x1000 pt page; y flips at the top edge.
+        self.assertEqual(
+            EXTRACT.ocr_bbox_to_points(
+                [100, 100, 300, 200], 1000, 2000, 0, 0, 500, 1000
+            ),
+            (50.0, 900.0, 150.0, 950.0),
+        )
+        self.assertEqual(
+            EXTRACT.ocr_bbox_to_points(
+                [0, 0, 500, 1000], 500, 1000, 10, 20, 510, 1020
+            ),
+            (10.0, 20.0, 510.0, 1020.0),
+        )
+        with self.assertRaises(ValueError):
+            EXTRACT.ocr_bbox_to_points([1, 2, 3], 10, 10, 0, 0, 10, 10)
+
+    def test_ocr_lines_group_into_boxes(self) -> None:
+        record = {
+            "lines": [
+                {"text": "First line", "bbox": [100, 700, 400, 710]},
+                {"text": "Second line", "bbox": [100, 688, 390, 698]},
+                {"text": "New paragraph", "bbox": [100, 650, 390, 660]},
+                {"text": "A smaller note line", "bbox": [100, 100, 300, 108]},
+                {"text": "Indented line", "bbox": [200, 84, 300, 94]},
+            ]
+        }
+        boxes = EXTRACT.boxes_from_ocr_lines(record)
+        self.assertEqual(len(boxes), 4)
+        self.assertEqual(boxes[0].lines, ["First line", "Second line"])
+        self.assertEqual(boxes[0].text, "First lineSecond line")
+        self.assertEqual(
+            (boxes[0].x0, boxes[0].y0, boxes[0].x1, boxes[0].y1),
+            (100, 688, 400, 710),
+        )
+        self.assertEqual(boxes[0].dominant_size, 7.5)
+        self.assertEqual(boxes[1].text, "New paragraph")
+        self.assertEqual(boxes[2].text, "A smaller note line")
+        self.assertEqual(boxes[2].dominant_size, 6.0)
+        # The same height and a near line, but a far left edge, splits the box.
+        self.assertEqual(boxes[3].text, "Indented line")
+        self.assertEqual(boxes[3].x0, 200)
+
+    def test_ocr_lines_split_paragraphs(self) -> None:
+        record = {
+            "lines": [
+                {"text": "First paragraph line one runs to the right margin", "bbox": [100, 700, 500, 710]},
+                {"text": "and this line also reaches the margin", "bbox": [100, 688, 500, 698]},
+                {"text": "Second paragraph starts here", "bbox": [115, 676, 500, 686]},
+                {"text": "second line reaches margin", "bbox": [100, 664, 500, 674]},
+                {"text": "A short closing sentence.", "bbox": [100, 650, 300, 660]},
+                {"text": "Next paragraph without an indent", "bbox": [100, 636, 500, 646]},
+            ]
+        }
+        boxes = EXTRACT.boxes_from_ocr_lines(record)
+        self.assertEqual(len(boxes), 3)
+        self.assertEqual(
+            boxes[0].lines,
+            ["First paragraph line one runs to the right margin", "and this line also reaches the margin"],
+        )
+        self.assertEqual(
+            boxes[1].lines,
+            [
+                "Second paragraph starts here",
+                "second line reaches margin",
+                "A short closing sentence.",
+            ],
+        )
+        # The short terminal line ends the paragraph even without an indent.
+        self.assertEqual(boxes[2].text, "Next paragraph without an indent")
+
+    def test_blocks_read_ocr_from_default_dir_not_out(self) -> None:
+        # --out redirects units and the manifest, never the OCR lookup.
+        pdf = self.fixture(
+            pages=[
+                [text_box("The first page has ordinary extractable text.", y=400)],
+                [],
+            ]
+        )
+        extract_dir = self.temp / "default-extract"
+        out = self.temp / "other-out"
+        self.write_ocr(
+            extract_dir,
+            [
+                self.ocr_record(
+                    pdf,
+                    2,
+                    [
+                        ("OCR recovered the second page text.", [72, 690, 400, 703.333]),
+                        ("It continues on a second line.", [72, 672, 380, 685.333]),
+                    ],
+                )
+            ],
+        )
+        with mock.patch.object(
+            EXTRACT, "default_out_dir", return_value=extract_dir
+        ):
+            result = self.json_main(
+                "blocks", pdf, "--key", "OCR", "--out", out
+            )
+        self.assertEqual(result["status"], "written")
+        self.assertFalse((out / "ocr.jsonl").exists())
+        units = [
+            json.loads(line)
+            for line in (out / "blocks.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
+        ]
+        ocr_units = [unit for unit in units if unit["layout"].get("ocr")]
+        self.assertEqual(len(ocr_units), 1)
+        self.assertEqual(ocr_units[0]["layout"]["pdf_pages"], [2])
+        self.assertIn(
+            "OCR recovered the second page text.", ocr_units[0]["text_span"]
+        )
+        self.assertTrue(
+            all(
+                not unit["layout"].get("ocr")
+                for unit in units
+                if unit["layout"]["pdf_pages"] == [1]
+            )
+        )
+
+    def test_ocr_skips_pages_already_done(self) -> None:
+        pdf = self.fixture(
+            pages=[[text_box("First page text.")], [text_box("Second page text.")]]
+        )
+        out = self.temp / "skip-out"
+        self.write_ocr(
+            out,
+            [
+                self.ocr_record(pdf, 1, [("one", [72, 700, 300, 712])]),
+                self.ocr_record(pdf, 2, [("two", [72, 700, 300, 712])]),
+            ],
+        )
+        data = self.json_main("ocr", pdf, "--pages", "1-2", "--out", out)
+        self.assertEqual(data["pages_done"], 0)
+        self.assertEqual(data["pages_skipped"], 2)
+        self.assertIsNone(data["mean_confidence"])
+
+    def test_ocr_record_with_wrong_hash_is_ignored(self) -> None:
+        pdf = self.fixture(
+            pages=[[text_box("First page text.")], []]
+        )
+        extract_dir = self.temp / "mismatch-extract"
+        out = self.temp / "mismatch-out"
+        self.write_ocr(
+            extract_dir,
+            [
+                self.ocr_record(
+                    pdf,
+                    2,
+                    [("Wrong hash OCR text.", [72, 700, 300, 714])],
+                    source_sha256="0" * 64,
+                )
+            ],
+        )
+        digest = hashlib.sha256(pdf.read_bytes()).hexdigest()
+        self.assertEqual(
+            EXTRACT.load_ocr_records(extract_dir / "ocr.jsonl", digest), {}
+        )
+        with mock.patch.object(
+            EXTRACT, "default_out_dir", return_value=extract_dir
+        ):
+            result = self.json_main(
+                "blocks", pdf, "--key", "MISMATCH", "--out", out
+            )
+        self.assertEqual(result["status"], "written")
+        units = [
+            json.loads(line)
+            for line in (out / "blocks.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
+        ]
+        self.assertFalse(any(unit["layout"].get("ocr") for unit in units))
+        self.assertFalse(
+            any(unit["layout"]["pdf_pages"] == [2] for unit in units)
+        )
+
+    def test_blocks_cache_invalidated_when_ocr_is_added(self) -> None:
+        pdf = self.fixture(
+            pages=[[text_box("First page text.")], []]
+        )
+        extract_dir = self.temp / "cache-extract"
+        out = self.temp / "cache-ocr"
+        with mock.patch.object(
+            EXTRACT, "default_out_dir", return_value=extract_dir
+        ):
+            first = self.json_main(
+                "blocks", pdf, "--key", "CACHEOCR", "--out", out
+            )
+            self.assertEqual(first["status"], "written")
+            self.assertEqual(first["unit_count"], 1)
+            self.write_ocr(
+                extract_dir,
+                [
+                    self.ocr_record(
+                        pdf,
+                        2,
+                        [("Later OCR text.", [72, 690, 400, 703.333])],
+                    )
+                ],
+            )
+            second = self.json_main(
+                "blocks", pdf, "--key", "CACHEOCR", "--out", out
+            )
+            self.assertEqual(second["status"], "written")
+            units = [
+                json.loads(line)
+                for line in (out / "blocks.jsonl")
+                .read_text(encoding="utf-8")
+                .splitlines()
+            ]
+            self.assertTrue(
+                any(unit["layout"].get("ocr") for unit in units)
+            )
+            third = self.json_main(
+                "blocks", pdf, "--key", "CACHEOCR", "--out", out
+            )
+            self.assertEqual(third["status"], "cached")
+
+    def test_folios_in_fifteen_percent_band_are_dropped(self) -> None:
+        bodies = [
+            "Alpha body sentence ends here.",
+            "Beta body sentence ends here.",
+            "Gamma body sentence ends here.",
+        ]
+        pages = [
+            [
+                text_box(body, y=400),
+                text_box(str(number), x=300, y=100, size=8),
+            ]
+            for body, number in zip(bodies, (41, 42, 43))
+        ]
+        pages.append(
+            [
+                text_box("Roman folio page ends here.", y=400),
+                text_box("xlv", x=300, y=100, size=8),
+            ]
+        )
+        pdf = self.fixture(pages=pages)
+        units = self.write_blocks(pdf, key="FOLIO")
+        self.assertEqual(len(units), 4)
+        self.assertEqual(
+            [unit["text_span"] for unit in units],
+            bodies + ["Roman folio page ends here."],
+        )
+        self.assertEqual(
+            [unit["locator"]["value"] for unit in units],
+            ["41", "42", "43", "44"],
+        )
+
+    def test_section_numeral_with_period_in_bottom_band_survives(self) -> None:
+        pdf = self.fixture(
+            pages=[
+                [
+                    text_box(
+                        "A body paragraph with enough characters to dominate the page.",
+                        y=400,
+                    ),
+                    text_box("V.", x=300, y=60, size=10),
+                ]
+            ]
+        )
+        units = self.write_blocks(pdf, key="SECTION")
+        self.assertIn("V.", [unit["text_span"] for unit in units])
+        self.assertFalse(EXTRACT.is_page_number("V."))
+        self.assertTrue(EXTRACT.is_page_number("V"))
+
+    def test_ocr_folio_and_noise_are_dropped(self) -> None:
+        pdf = self.fixture(
+            pages=[[text_box("First page text.", y=400)], []]
+        )
+        extract_dir = self.temp / "noise-extract"
+        out = self.temp / "noise-out"
+        self.write_ocr(
+            extract_dir,
+            [
+                self.ocr_record(
+                    pdf,
+                    2,
+                    [
+                        ("Body line one on the OCR page.", [72, 690, 500, 703.333]),
+                        ("Body line two on the OCR page.", [72, 676, 500, 689.333]),
+                        ("liii", [300, 70, 330, 80]),
+                        ("|", [300, 50, 305, 60]),
+                    ],
+                )
+            ],
+        )
+        with mock.patch.object(
+            EXTRACT, "default_out_dir", return_value=extract_dir
+        ):
+            self.json_main(
+                "blocks", pdf, "--key", "NOISE", "--out", out
+            )
+        units = [
+            json.loads(line)
+            for line in (out / "blocks.jsonl")
+            .read_text(encoding="utf-8")
+            .splitlines()
+        ]
+        ocr_units = [unit for unit in units if unit["layout"].get("ocr")]
+        self.assertEqual(len(ocr_units), 1)
+        self.assertEqual(ocr_units[0]["layout"]["kind"], "body")
+        self.assertIn("Body line one", ocr_units[0]["text_span"])
+        self.assertNotIn("liii", ocr_units[0]["text_span"])
+        self.assertNotIn("|", ocr_units[0]["text_span"])
+        self.assertTrue(
+            EXTRACT.looks_like_page_label("litt", "liii")
+        )
+        self.assertTrue(
+            EXTRACT.looks_like_page_label("xlix", "xlix")
+        )
+        self.assertFalse(EXTRACT.looks_like_page_label("litt", "2"))
+
+    def test_ocr_footnote_kinds_by_page_size_and_note_number(self) -> None:
+        def box(text: str, size: float, y0: float) -> object:
+            return EXTRACT.BoxInfo(
+                0.0,
+                y0,
+                500.0,
+                y0 + 10.0,
+                [text],
+                text,
+                {size: len(text)},
+                size,
+                False,
+                1,
+            )
+
+        body_one = box("Main body text that fills the page.", 10.0, 600)
+        body_two = box("Main body text continued down the page.", 10.0, 580)
+        small = box("A smaller note without a number.", 8.0, 200)
+        numbered = box("30. Same-size note below the text.", 10.0, 100)
+        above = box("A small line above the main text.", 8.0, 700)
+        EXTRACT.apply_ocr_footnote_kinds(
+            [body_one, body_two, small, numbered, above]
+        )
+        self.assertEqual(small.kind, "footnote")
+        self.assertEqual(numbered.kind, "footnote")
+        self.assertEqual(body_one.kind, "body")
+        self.assertEqual(body_two.kind, "body")
+        self.assertEqual(above.kind, "body")
+
+    def test_ocr_roman_digit_correction(self) -> None:
+        cases = [
+            ("(1V:5)", "(IV:5)", 1),
+            ("V1:7.1—2", "VI:7.1—2", 1),
+            ("see 1V and X1 here", "see IV and XI here", 2),
+            ("11 and 1965 stay", "11 and 1965 stay", 0),
+            ("IV:5", "IV:5", 0),
+            ("A1V stays", "A1V stays", 0),
+        ]
+        for source, expected, fixes in cases:
+            self.assertEqual(EXTRACT.fix_ocr_roman(source), (expected, fixes))
+
+    @unittest.skipUnless(
+        HAVE_NODE and HAVE_POWERSHELL and HAVE_TESSERACT,
+        "node, tesseract.js, and PowerShell are required for real OCR",
+    )
+    def test_rendered_page_is_ocrd(self) -> None:
+        pdf = self.fixture(
+            pages=[[text_box("Hello OCR world", y=600, size=24)]]
+        )
+        batch = self.temp / "render-batch"
+        rendered = EXTRACT.run_renderer(pdf, [1], batch, 1200)
+        results = EXTRACT.run_ocr([1], rendered, "eng")
+        self.assertEqual(rendered[1]["width"], 1200)
+        self.assertIn("Hello", results[1]["text"])
+        self.assertTrue(results[1]["lines"])
+
+    @unittest.skipUnless(
+        HAVE_NODE and HAVE_POWERSHELL and HAVE_TESSERACT,
+        "node, tesseract.js, and PowerShell are required for real OCR",
+    )
+    def test_ocr_command_records_roman_fixes(self) -> None:
+        pdf = self.fixture(
+            pages=[[text_box("Hello OCR world", y=600, size=24)]]
+        )
+        out = self.temp / "ocr-command"
+        data = self.json_main(
+            "ocr", pdf, "--pages", "1", "--out", out
+        )
+        self.assertEqual(data["pages_done"], 1)
+        record = json.loads(
+            (out / "ocr.jsonl").read_text(encoding="utf-8").splitlines()[0]
+        )
+        self.assertIsInstance(record["roman_fixes"], int)
+        self.assertIn("Hello", record["text"])
 
     def test_page_labels_drive_text_headers_and_locators(self) -> None:
         pages = [

@@ -21,21 +21,63 @@ import datetime
 import hashlib
 import json
 import logging
+import os
 import re
+import shutil
 import statistics
+import subprocess
 import sys
+import tempfile
+import time
 import unicodedata
+import urllib.request
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Iterable
 
-EXTRACTION_VERSION = "pdf-extract/2"
+EXTRACTION_VERSION = "pdf-extract/3"
 # Justified text with wide word gaps splits lines at pdfminer's default of 2.0
 # character widths; 3.0 keeps such lines whole without joining column gutters
 # or marginal Stephanus/Bekker numbers to the text.
 CHAR_MARGIN = 3.0
 MISSING_PDFMINER = "pdfminer.six is required: py -3 -m pip install --user pdfminer.six"
+
+OCR_VERSION = "ocr/1"
+OCR_ENGINE_VERSION = "tesseract.js 7.0.0"
+OCR_TESSDATA_URL = (
+    "https://raw.githubusercontent.com/tesseract-ocr/tessdata_fast/main/"
+    "{lang}.traineddata"
+)
+OCR_PROXY = "http://ss.deepseek.com:3129"
+OCR_BATCH_SIZE = 10
+OCR_DEFAULT_WIDTH = 1800
+OCR_DEFAULT_LANG = "eng"
+# Two OCR lines join when the vertical gap is below this share of the page's
+# median line height and their left edges differ by less than the tolerance.
+OCR_GAP_RATIO = 0.8
+OCR_HEIGHT_TOLERANCE = 0.35
+OCR_LEFT_TOLERANCE_FACTOR = 2.0
+OCR_MIN_LEFT_TOLERANCE = 4.0
+# A box's uniform type size is its median line height times this factor, which
+# puts body lines near their nominal point size for rule K.
+OCR_SIZE_FACTOR = 0.75
+# A line indented this far beyond the column's left edge starts a paragraph.
+OCR_PARAGRAPH_INDENT = 0.8
+# A short terminal line (under this share of the column width) ends a paragraph.
+OCR_SHORT_LINE_RATIO = 0.75
+# On OCR pages, smaller type below the main text is a footnote.
+OCR_SMALL_LINE_RATIO = 0.85
+# Page numbers beyond the 10% head band still count as folios.
+PAGE_NUMBER_BAND = 0.15
+OCR_NOISE_BAND = 0.15
+NOTE_NUMBER_RE = re.compile(r"^\d{1,3}\.\s")
+# OCR often reads I as 1 inside roman numerals: (1V:5) for (IV:5).
+ROMAN_OCR_TOKEN_RE = re.compile(
+    r"(?<![A-Za-z0-9])([IVXLC1]+)(?:([:.][0-9]+))?(?![A-Za-z0-9])"
+)
+ROMAN_PREFIX_RE = re.compile(r"[VXLC]")
+OCR_LABEL_TRANS = str.maketrans({"1": "i", "t": "i"})
 
 PAGE_NUMBER_RE = re.compile(r"^\W*\d+\W*$")
 ROMAN_PAGE_RE = re.compile(
@@ -140,7 +182,27 @@ def page_fingerprint(text: str) -> str:
 
 def is_page_number(text: str) -> bool:
     stripped = collapse_ws(text)
+    # A trailing period marks a section numeral ("V."), not a folio.
+    if stripped.endswith("."):
+        return False
     return bool(PAGE_NUMBER_RE.match(stripped) or ROMAN_PAGE_RE.match(stripped))
+
+
+def looks_like_page_label(text: str, label: str) -> bool:
+    """Whether OCR text is this page's folio, allowing i/1/t confusions.
+
+    Used only for OCR pages, where a folio such as ``liii`` is sometimes read
+    as ``litt``. The expected label must itself be a page number.
+    """
+    if not is_page_number(label):
+        return False
+    token = "".join(char for char in text if char.isalnum()).lower()
+    expected = "".join(char for char in label if char.isalnum()).lower()
+    if not token or not expected:
+        return False
+    if expected.isdigit():
+        return token == expected
+    return token.translate(OCR_LABEL_TRANS) == expected
 
 
 def _should_dehyphenate(left: str, right: str) -> bool:
@@ -298,6 +360,7 @@ class Block:
     labels: list[str]
     page_breaks: list[dict[str, Any]] = field(default_factory=list)
     margin_refs: list[str] = field(default_factory=list)
+    ocr: bool = False
 
 
 @dataclass
@@ -312,6 +375,7 @@ class PageInfo:
     y1: float
     boxes: list[BoxInfo]
     printed: int | None = None
+    ocr: bool = False
 
 
 def make_box(lt_box: Any, pm: dict[str, Any]) -> BoxInfo:
@@ -349,13 +413,254 @@ def make_box(lt_box: Any, pm: dict[str, Any]) -> BoxInfo:
     )
 
 
+def default_ocr_path(pdf_path: Path, out_dir: Path | None = None) -> Path:
+    return (out_dir or default_out_dir(pdf_path)) / "ocr.jsonl"
+
+
+def non_space_characters(boxes: list[BoxInfo]) -> int:
+    raw = "".join(box.text for box in boxes)
+    return sum(1 for char in raw if not char.isspace())
+
+
+def count_alphanumeric(text: str) -> int:
+    return sum(1 for char in text if char.isalnum())
+
+
+def fix_ocr_roman(text: str) -> tuple[str, int]:
+    """Correct OCR's 1-for-I reading inside roman numerals.
+
+    Only a whole token of ``IVXLC1`` (optionally followed by ``:``/``.`` and
+    digits) is touched, and only when it contains both ``1`` and one of
+    ``V X L C``. All-digit tokens such as ``11`` or ``1965`` are left alone.
+    Returns the corrected text and the number of tokens changed.
+    """
+    fixes = 0
+
+    def replace(match: re.Match[str]) -> str:
+        nonlocal fixes
+        token = match.group(1)
+        if "1" not in token or not ROMAN_PREFIX_RE.search(token):
+            return match.group(0)
+        fixes += 1
+        suffix = match.group(2) or ""
+        return token.replace("1", "I") + suffix
+
+    return ROMAN_OCR_TOKEN_RE.sub(replace, text), fixes
+
+
+def load_ocr_records(
+    path: Path, source_sha256: str, version: str = OCR_VERSION
+) -> dict[int, dict[str, Any]]:
+    """Read the last usable OCR record per page for one source and version.
+
+    Records written for another PDF hash or another ``ocr_version`` are
+    ignored, so a changed source silently falls back to pdfminer text.
+    """
+    records: dict[int, dict[str, Any]] = {}
+    if not path.is_file():
+        return records
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return records
+    for line in text.splitlines():
+        if not line.strip():
+            continue
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(record, dict):
+            continue
+        if record.get("source_sha256") != source_sha256:
+            continue
+        if record.get("ocr_version") != version:
+            continue
+        try:
+            page = int(record.get("pdf_page"))
+        except (TypeError, ValueError):
+            continue
+        if page < 1 or not isinstance(record.get("lines"), list):
+            continue
+        records[page] = record
+    return records
+
+
+def ocr_bbox_to_points(
+    bbox: Iterable[float],
+    image_width: float,
+    image_height: float,
+    page_x0: float,
+    page_y0: float,
+    page_x1: float,
+    page_y1: float,
+) -> tuple[float, float, float, float]:
+    """Convert a pixel bbox (origin top-left) to points (origin bottom-left)."""
+    values = [float(value) for value in bbox]
+    if len(values) != 4:
+        raise ValueError(f"OCR bbox needs four numbers, got {bbox!r}")
+    if image_width <= 0 or image_height <= 0:
+        raise ValueError("OCR image dimensions must be positive")
+    scale_x = (page_x1 - page_x0) / image_width
+    scale_y = (page_y1 - page_y0) / image_height
+    x0 = page_x0 + values[0] * scale_x
+    x1 = page_x0 + values[2] * scale_x
+    y1 = page_y1 - values[1] * scale_y
+    y0 = page_y1 - values[3] * scale_y
+    return x0, y0, x1, y1
+
+
+def boxes_from_ocr_lines(record: dict[str, Any]) -> list[BoxInfo]:
+    """Group OCR lines into paragraph-like boxes with one size per box.
+
+    Consecutive lines join when the vertical gap is below OCR_GAP_RATIO of the
+    page's median line height, the two lines are set at about the same height,
+    and their left edges are close. A line indented beyond the column's left
+    edge starts a new paragraph, as does a line following a short terminal
+    line. Each box gets a uniform type size so rule K can still separate body
+    text from smaller footnotes.
+    """
+    lines: list[dict[str, Any]] = []
+    for item in record.get("lines") or []:
+        if not isinstance(item, dict):
+            continue
+        text = item.get("text")
+        bbox = item.get("bbox")
+        if not isinstance(text, str) or not text.strip():
+            continue
+        if not isinstance(bbox, (list, tuple)) or len(bbox) != 4:
+            continue
+        try:
+            x0, y0, x1, y1 = (float(value) for value in bbox)
+        except (TypeError, ValueError):
+            continue
+        if x1 <= x0 or y1 <= y0:
+            continue
+        lines.append(
+            {
+                "text": text.strip(),
+                "x0": x0,
+                "y0": y0,
+                "x1": x1,
+                "y1": y1,
+            }
+        )
+    if not lines:
+        return []
+    lines.sort(key=lambda line: (-line["y1"], line["x0"]))
+    median_height = statistics.median(
+        line["y1"] - line["y0"] for line in lines
+    )
+    if median_height <= 0:
+        return []
+    gap_limit = OCR_GAP_RATIO * median_height
+    height_limit = OCR_HEIGHT_TOLERANCE * median_height
+    left_tolerance = max(
+        OCR_MIN_LEFT_TOLERANCE, OCR_LEFT_TOLERANCE_FACTOR * median_height
+    )
+    column_left = statistics.median(line["x0"] for line in lines)
+    column_right = statistics.median(line["x1"] for line in lines)
+    column_width = max(column_right - column_left, median_height)
+    indent_limit = column_left + OCR_PARAGRAPH_INDENT * median_height
+    short_limit = column_left + OCR_SHORT_LINE_RATIO * column_width
+    groups: list[list[dict[str, Any]]] = [[lines[0]]]
+    for line in lines[1:]:
+        group = groups[-1]
+        previous = group[-1]
+        gap = previous["y0"] - line["y1"]
+        line_height = line["y1"] - line["y0"]
+        previous_height = previous["y1"] - previous["y0"]
+        indented = line["x0"] > indent_limit
+        previous_short_terminal = (
+            previous["x1"] < short_limit and ends_terminal(previous["text"])
+        )
+        if (
+            not indented
+            and not previous_short_terminal
+            and gap < gap_limit
+            and abs(line_height - previous_height) <= height_limit
+            and abs(line["x0"] - group[0]["x0"]) <= left_tolerance
+        ):
+            group.append(line)
+        else:
+            groups.append([line])
+
+    boxes: list[BoxInfo] = []
+    for group in groups:
+        size = round(
+            statistics.median(
+                line["y1"] - line["y0"] for line in group
+            )
+            * OCR_SIZE_FACTOR
+            * 2
+        ) / 2
+        texts = [line["text"] for line in group]
+        text = "".join(texts)
+        characters = sum(1 for char in text if not char.isspace()) or 1
+        boxes.append(
+            BoxInfo(
+                x0=min(line["x0"] for line in group),
+                y0=min(line["y0"] for line in group),
+                x1=max(line["x1"] for line in group),
+                y1=max(line["y1"] for line in group),
+                lines=texts,
+                text=text,
+                size_counts={size: characters},
+                dominant_size=size,
+                all_bold=False,
+                line_count=len(group),
+            )
+        )
+    return boxes
+
+
+def apply_ocr_footnote_kinds(boxes: list[BoxInfo]) -> None:
+    """Mark notes on one OCR page relative to that page's main text size.
+
+    The main text is the character-weighted dominant size. A smaller box below
+    the main text is a footnote, as is any box below it that starts with a note
+    number, even when its type matches the body.
+    """
+    if not boxes:
+        return
+    weight: dict[float, int] = {}
+    for box in boxes:
+        size = box.dominant_size
+        weight[size] = weight.get(size, 0) + (
+            count_alphanumeric(box.text) or 1
+        )
+    if not weight:
+        return
+    main_size = max(weight, key=lambda size: (weight[size], size))
+    small_limit = OCR_SMALL_LINE_RATIO * main_size
+    main_boxes = [
+        box
+        for box in boxes
+        if box.dominant_size >= main_size - 0.5
+        and not NOTE_NUMBER_RE.match(box.text)
+    ]
+    if not main_boxes:
+        return
+    main_bottom = min(box.y0 for box in main_boxes)
+    for box in boxes:
+        if box.y1 > main_bottom:
+            continue
+        if box.dominant_size <= small_limit or NOTE_NUMBER_RE.match(box.text):
+            box.kind = "footnote"
+
+
 def extract_page_layouts(
     pdf_path: Path,
     numbers: list[int],
     labels: list[str],
     pm: dict[str, Any],
+    ocr_records: dict[int, dict[str, Any]] | None = None,
 ) -> list[PageInfo]:
-    """Extract the requested 1-based pages in ascending document order."""
+    """Extract the requested 1-based pages in ascending document order.
+
+    A page whose pdfminer text is too sparse uses its OCR lines as boxes when
+    ``ocr_records`` holds a usable record for it.
+    """
     ordered = sorted(numbers)
     layouts = pm["extract_pages"](
         str(pdf_path),
@@ -369,9 +674,27 @@ def extract_page_layouts(
             for item in layout
             if isinstance(item, pm["LTTextBox"]) and item.get_text().strip()
         ]
+        used_ocr = False
+        record = ocr_records.get(number) if ocr_records else None
+        if record is not None and non_space_characters(boxes) < MIN_TEXT_CHARACTERS:
+            ocr_boxes = boxes_from_ocr_lines(record)
+            if ocr_boxes:
+                boxes = ocr_boxes
+                used_ocr = True
         label = labels[number - 1] if number - 1 < len(labels) else str(number)
         x0, y0, x1, y1 = layout.bbox
-        pages.append(PageInfo(number, label, x0, y0, x1, y1, boxes))
+        pages.append(
+            PageInfo(
+                number,
+                label,
+                x0,
+                y0,
+                x1,
+                y1,
+                boxes,
+                ocr=used_ocr,
+            )
+        )
     return pages
 
 
@@ -387,13 +710,15 @@ def body_font_size(pages: list[PageInfo]) -> float:
     return max(counts, key=lambda size: (counts[size], size))
 
 
-def _in_header_band(box: BoxInfo, page: PageInfo) -> bool:
+def _in_header_band(
+    box: BoxInfo, page: PageInfo, band: float = HEADER_BAND
+) -> bool:
     height = page.y1 - page.y0
     if height <= 0:
         return False
     top = (box.y1 - page.y0) / height
     bottom = (box.y0 - page.y0) / height
-    return top >= 1.0 - HEADER_BAND or bottom <= HEADER_BAND
+    return top >= 1.0 - band or bottom <= band
 
 
 def mark_running_headers(pages: list[PageInfo]) -> None:
@@ -433,10 +758,22 @@ def mark_running_headers(pages: list[PageInfo]) -> None:
 
     for page in pages:
         for box in page.boxes:
-            if not _in_header_band(box, page):
+            numbered = is_page_number(box.text)
+            folio_like = page.ocr and looks_like_page_label(
+                box.text, page.label
+            )
+            band = PAGE_NUMBER_BAND if (numbered or folio_like) else HEADER_BAND
+            # OCR sometimes turns a folio into one or two stray marks, or into
+            # a near misspelling such as "litt" for "liii".
+            if (
+                page.ocr
+                and _in_header_band(box, page, OCR_NOISE_BAND)
+                and (folio_like or count_alphanumeric(box.text) < 3)
+            ):
+                box.dropped = True
+            if not _in_header_band(box, page, band):
                 continue
             fingerprint = page_fingerprint(box.text)
-            numbered = is_page_number(box.text)
             repeats = len(pages) >= MIN_REPEAT_PAGES and fingerprint in repeated
             if numbered or repeats:
                 box.dropped = True
@@ -555,6 +892,8 @@ def build_page_blocks(page: PageInfo, body_size: float) -> list[Block]:
     page_mid = (page.y0 + page.y1) / 2
     for box in boxes:
         box.kind = classify_box(box, body_size, page_mid)
+    if page.ocr:
+        apply_ocr_footnote_kinds(boxes)
     # Footnotes sit below all body text. Small type with body text below it is
     # a quotation set in smaller type, not a note.
     body_bottoms = [box.y0 for box in boxes if box.kind == "body"]
@@ -602,6 +941,7 @@ def build_page_blocks(page: PageInfo, body_size: float) -> list[Block]:
                 y1=box.y1,
                 pdf_pages=[page.number],
                 labels=[page.label],
+                ocr=page.ocr,
             )
         )
 
@@ -669,6 +1009,7 @@ def merge_blocks(left: Block, right: Block) -> Block:
         labels=left.labels + right.labels,
         page_breaks=left.page_breaks + breaks,
         margin_refs=left.margin_refs + right.margin_refs,
+        ocr=left.ocr or right.ocr,
     )
 
 
@@ -707,15 +1048,25 @@ def analyze_pages(
     numbers: list[int],
     labels: list[str],
     pm: dict[str, Any],
+    ocr_dir: Path | None = None,
+    source_sha256: str | None = None,
 ) -> tuple[list[PageInfo], list[list[Block]]]:
     """Extract pages, apply running-head removal, and build page blocks.
 
     Running heads and the body font size are judged on at least CONTEXT_PAGES
     neighbouring pages, so a one-page request still drops repeated heads.
+    Sparse pages reuse OCR records from the same directory as ``blocks``.
     """
     wanted = set(numbers)
     context = detection_pages(wanted, len(labels))
-    pages = extract_page_layouts(pdf_path, sorted(context), labels, pm)
+    if source_sha256 is None:
+        source_sha256 = sha256_file(pdf_path)
+    ocr_records = load_ocr_records(
+        default_ocr_path(pdf_path, ocr_dir), source_sha256
+    )
+    pages = extract_page_layouts(
+        pdf_path, sorted(context), labels, pm, ocr_records
+    )
     mark_running_headers(pages)
     infer_printed_labels(pages, labels)
     body_size = body_font_size(pages)
@@ -764,6 +1115,8 @@ def block_to_unit(
         "order": order,
         "pdf_pages": block.pdf_pages,
     }
+    if block.ocr:
+        layout["ocr"] = True
     if block.page_breaks:
         layout["page_breaks"] = block.page_breaks
     if block.margin_refs:
@@ -955,21 +1308,427 @@ def command_find(args: argparse.Namespace, pm: dict[str, Any]) -> int:
     return 0
 
 
+def pages_without_text(
+    path: Path, numbers: list[int], labels: list[str], pm: dict[str, Any]
+) -> list[int]:
+    pages = extract_page_layouts(path, numbers, labels, pm)
+    return [
+        page.number
+        for page in pages
+        if non_space_characters(page.boxes) < MIN_TEXT_CHARACTERS
+    ]
+
+
 def command_ocr_needed(args: argparse.Namespace, pm: dict[str, Any]) -> int:
     path = Path(args.pdf)
     count, labels = page_count_and_labels(path, pm)
-    pages = extract_page_layouts(path, list(range(1, count + 1)), labels, pm)
-    without_text: list[int] = []
-    for page in pages:
-        raw = "".join(box.text for box in page.boxes)
-        non_space = sum(1 for char in raw if not char.isspace())
-        if non_space < MIN_TEXT_CHARACTERS:
-            without_text.append(page.number)
+    without_text = pages_without_text(
+        path, list(range(1, count + 1)), labels, pm
+    )
     json_output(
         {
             "page_count": count,
             "pages_without_text": without_text,
             "needs_ocr": bool(count) and len(without_text) * 2 > count,
+        }
+    )
+    return 0
+
+
+def ocr_home() -> Path:
+    """The per-user OCR runtime, overridable with PHIL_OCR_HOME."""
+    override = os.environ.get("PHIL_OCR_HOME")
+    if override:
+        return Path(override)
+    local = os.environ.get("LOCALAPPDATA")
+    if local:
+        return Path(local) / "phil-ocr"
+    return Path.home() / ".phil-ocr"
+
+
+def ocr_languages(value: str) -> list[str]:
+    languages = [part.strip() for part in re.split(r"[,+]", value) if part.strip()]
+    if not languages:
+        raise ValueError("--lang must name at least one language")
+    for language in languages:
+        if not re.match(r"^[A-Za-z0-9_]+$", language):
+            raise ValueError(f"invalid language code: {language!r}")
+    return languages
+
+
+def download_ocr_language(language: str, tessdata: Path) -> Path:
+    """Download one tessdata_fast file, retrying through the proxy."""
+    destination = tessdata / f"{language}.traineddata"
+    if destination.is_file() and destination.stat().st_size > 1000:
+        return destination
+    url = OCR_TESSDATA_URL.format(lang=language)
+    errors: list[str] = []
+    for proxies in ({}, {"http": OCR_PROXY, "https": OCR_PROXY}):
+        try:
+            opener = urllib.request.build_opener(
+                urllib.request.ProxyHandler(proxies)
+            )
+            with opener.open(url, timeout=60) as response:
+                data = response.read()
+            if len(data) < 1000:
+                raise ValueError(f"short download ({len(data)} bytes)")
+            temporary = destination.with_suffix(".tmp")
+            temporary.write_bytes(data)
+            temporary.replace(destination)
+            return destination
+        except Exception as error:  # noqa: BLE001 - retry via the proxy
+            errors.append(f"{type(error).__name__}: {error}")
+    raise ValueError(
+        f"could not download {url} directly or through {OCR_PROXY}: "
+        f"{errors[-1]}"
+    )
+
+
+def npm_command() -> list[str]:
+    """Return an invocable npm command, preferring node + npm-cli.js."""
+    node = shutil.which("node")
+    npm = shutil.which("npm")
+    if npm:
+        cli = Path(npm).parent / "node_modules/npm/bin/npm-cli.js"
+        if node and cli.is_file():
+            return [node, str(cli)]
+        return [npm]
+    raise ValueError("npm was not found on PATH")
+
+
+def npm_install(home: Path, package: str) -> None:
+    base = npm_command() + ["install", package, "--no-fund", "--no-audit"]
+    attempts = [
+        base,
+        base + ["--proxy", OCR_PROXY, "--https-proxy", OCR_PROXY],
+    ]
+    detail = ""
+    for command in attempts:
+        process = subprocess.run(command, cwd=str(home), capture_output=True)
+        if process.returncode == 0:
+            return
+        detail = (process.stderr or process.stdout).decode("utf-8", "replace")
+    raise ValueError(f"npm install failed: {detail.strip()[-400:]}")
+
+
+def installed_tesseract_version(home: Path) -> str | None:
+    marker = home / "node_modules/tesseract.js/package.json"
+    if not marker.is_file():
+        return None
+    try:
+        data = json.loads(marker.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    version = data.get("version") if isinstance(data, dict) else None
+    return version if isinstance(version, str) else None
+
+
+def command_ocr_setup(args: argparse.Namespace, _pm: Any = None) -> int:
+    """Install tesseract.js and the requested language files, idempotently."""
+    home = ocr_home()
+    home.mkdir(parents=True, exist_ok=True)
+    package_json = home / "package.json"
+    if not package_json.is_file():
+        package_json.write_text(
+            json.dumps(
+                {"name": "phil-ocr", "private": True, "version": "1.0.0"},
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+            newline="\n",
+        )
+    version = installed_tesseract_version(home)
+    if version != "7.0.0":
+        npm_install(home, "tesseract.js@7.0.0")
+        version = installed_tesseract_version(home)
+    if version != "7.0.0":
+        raise ValueError("tesseract.js 7.0.0 is not installed after npm install")
+    tessdata = home / "tessdata"
+    tessdata.mkdir(parents=True, exist_ok=True)
+    languages: dict[str, Any] = {}
+    for language in ocr_languages(args.lang):
+        path = download_ocr_language(language, tessdata)
+        languages[language] = {
+            "path": str(path),
+            "bytes": path.stat().st_size,
+        }
+    json_output(
+        {
+            "runtime": str(home),
+            "node": shutil.which("node"),
+            "node_modules": str(home / "node_modules"),
+            "tesseract_js": version,
+            "installed": True,
+            "tessdata": str(tessdata),
+            "languages": languages,
+        }
+    )
+    return 0
+
+
+def chunked(items: list[int], size: int) -> list[list[int]]:
+    return [items[index : index + size] for index in range(0, len(items), size)]
+
+
+def run_renderer(
+    pdf_path: Path, pages: list[int], out_dir: Path, width: int
+) -> dict[int, dict[str, Any]]:
+    """Render pages through pdf-render.ps1 and return one entry per page."""
+    script = Path(__file__).resolve().parent / "pdf-render.ps1"
+    if not script.is_file():
+        raise ValueError(f"renderer script not found: {script}")
+    powershell = shutil.which("powershell.exe") or shutil.which("powershell")
+    if not powershell:
+        raise ValueError("Windows PowerShell 5.1 was not found")
+    command = [
+        powershell,
+        "-NoProfile",
+        "-NonInteractive",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        str(script),
+        "-Pdf",
+        str(pdf_path),
+        "-Pages",
+        ",".join(str(number) for number in pages),
+        "-OutDir",
+        str(out_dir),
+        "-Width",
+        str(width),
+    ]
+    process = subprocess.run(command, capture_output=True)
+    if process.returncode != 0:
+        detail = (process.stderr or process.stdout).decode(
+            "utf-8", "replace"
+        )
+        raise ValueError(f"pdf-render.ps1 failed: {detail.strip()[-500:]}")
+    rendered: dict[int, dict[str, Any]] = {}
+    for line in process.stdout.decode("utf-8-sig").splitlines():
+        if not line.strip():
+            continue
+        try:
+            item = json.loads(line)
+            number = int(item["page"])
+            rendered[number] = {
+                "png": str(item["png"]),
+                "width": int(item["width"]),
+                "height": int(item["height"]),
+            }
+        except (json.JSONDecodeError, KeyError, TypeError, ValueError) as error:
+            raise ValueError(
+                f"unreadable renderer output: {line!r}"
+            ) from error
+    missing = [number for number in pages if number not in rendered]
+    if missing:
+        raise ValueError(f"renderer did not report pages {missing}")
+    return rendered
+
+
+def run_ocr(
+    pages: list[int],
+    rendered: dict[int, dict[str, Any]],
+    language: str,
+) -> dict[int, dict[str, Any]]:
+    """OCR rendered pages through ocr-pages.js, keyed by page number."""
+    script = Path(__file__).resolve().parent / "ocr-pages.js"
+    if not script.is_file():
+        raise ValueError(f"OCR script not found: {script}")
+    node = shutil.which("node")
+    if not node:
+        raise ValueError("node was not found on PATH")
+    home = ocr_home()
+    tessdata = home / "tessdata"
+    for part in ocr_languages(language):
+        if not (tessdata / f"{part}.traineddata").is_file():
+            raise ValueError(
+                f"OCR language data for {part!r} is missing; "
+                f"run ocr-setup --lang {part}"
+            )
+    pngs = [rendered[number]["png"] for number in pages]
+    environment = os.environ.copy()
+    environment["PHIL_OCR_HOME"] = str(home)
+    command = [
+        node,
+        str(script),
+        "--lang",
+        language,
+        "--tessdata",
+        str(tessdata),
+        *pngs,
+    ]
+    process = subprocess.run(command, capture_output=True, env=environment)
+    if process.returncode != 0:
+        detail = (process.stderr or process.stdout).decode(
+            "utf-8", "replace"
+        )
+        raise ValueError(f"ocr-pages.js failed: {detail.strip()[-500:]}")
+    by_png: dict[str, dict[str, Any]] = {}
+    for line in process.stdout.decode("utf-8-sig").splitlines():
+        if not line.strip():
+            continue
+        try:
+            item = json.loads(line)
+            key = os.path.normcase(os.path.abspath(str(item["png"])))
+        except (json.JSONDecodeError, KeyError, TypeError) as error:
+            raise ValueError(f"unreadable OCR output: {line!r}") from error
+        by_png[key] = item
+    results: dict[int, dict[str, Any]] = {}
+    for number in pages:
+        key = os.path.normcase(os.path.abspath(rendered[number]["png"]))
+        if key not in by_png:
+            raise ValueError(f"OCR produced no result for page {number}")
+        results[number] = by_png[key]
+    return results
+
+
+def append_ocr_record(path: Path, record: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8", newline="\n") as handle:
+        handle.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def compact_ocr_records(path: Path) -> None:
+    """Rewrite ocr.jsonl keeping the last record per source/version/page."""
+    if not path.is_file():
+        return
+    records: dict[tuple[str, str, int], dict[str, Any]] = {}
+    order: list[tuple[str, str, int]] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if not isinstance(record, dict):
+            continue
+        try:
+            page = int(record.get("pdf_page"))
+        except (TypeError, ValueError):
+            continue
+        key = (
+            str(record.get("source_sha256")),
+            str(record.get("ocr_version")),
+            page,
+        )
+        if key not in records:
+            order.append(key)
+        records[key] = record
+    payload = "".join(
+        json.dumps(records[key], ensure_ascii=False) + "\n" for key in order
+    )
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(payload, encoding="utf-8", newline="\n")
+    temporary.replace(path)
+
+
+def command_ocr(args: argparse.Namespace, pm: dict[str, Any]) -> int:
+    """OCR pages and append one record per page to ``ocr.jsonl``."""
+    path = Path(args.pdf)
+    count, labels = page_count_and_labels(path, pm)
+    if args.pages:
+        numbers = parse_page_spec(args.pages, count)
+    else:
+        numbers = pages_without_text(
+            path, list(range(1, count + 1)), labels, pm
+        )
+    source_sha256 = sha256_file(path)
+    out_dir = Path(args.out) if args.out else default_out_dir(path)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    ocr_path = out_dir / "ocr.jsonl"
+    existing = load_ocr_records(ocr_path, source_sha256)
+    todo = [
+        number
+        for number in numbers
+        if args.force or number not in existing
+    ]
+    skipped = len(numbers) - len(todo)
+    started = time.monotonic()
+    done = 0
+    confidences: list[float] = []
+    for batch in chunked(todo, OCR_BATCH_SIZE):
+        # One temporary directory per batch keeps at most ten PNGs on disk.
+        with tempfile.TemporaryDirectory(
+            prefix=f"phil-ocr-{batch[0]:05d}-"
+        ) as temporary:
+            batch_dir = Path(temporary)
+            rendered = run_renderer(path, batch, batch_dir, args.width)
+            page_info = {
+                page.number: page
+                for page in extract_page_layouts(path, batch, labels, pm)
+            }
+            results = run_ocr(batch, rendered, args.lang)
+            for number in batch:
+                page = page_info[number]
+                image = rendered[number]
+                lines: list[dict[str, Any]] = []
+                roman_fixes = 0
+                for line in results[number].get("lines") or []:
+                    if not isinstance(line, dict):
+                        continue
+                    text = line.get("text")
+                    bbox = line.get("bbox")
+                    if not isinstance(text, str) or not text.strip():
+                        continue
+                    if not isinstance(bbox, (list, tuple)) or len(bbox) != 4:
+                        continue
+                    text, fixes = fix_ocr_roman(text.strip())
+                    roman_fixes += fixes
+                    x0, y0, x1, y1 = ocr_bbox_to_points(
+                        bbox,
+                        image["width"],
+                        image["height"],
+                        page.x0,
+                        page.y0,
+                        page.x1,
+                        page.y1,
+                    )
+                    lines.append(
+                        {
+                            "text": text,
+                            "bbox": [x0, y0, x1, y1],
+                            "confidence": line.get("confidence"),
+                        }
+                    )
+                confidence = results[number].get("confidence")
+                record_text, _ = fix_ocr_roman(
+                    results[number].get("text") or ""
+                )
+                record = {
+                    "pdf_page": number,
+                    "source_sha256": source_sha256,
+                    "ocr_version": OCR_VERSION,
+                    "engine": f"{OCR_ENGINE_VERSION} {args.lang} fast",
+                    "width": image["width"],
+                    "height": image["height"],
+                    "confidence": confidence,
+                    "text": record_text,
+                    "roman_fixes": roman_fixes,
+                    "lines": lines,
+                }
+                append_ocr_record(ocr_path, record)
+                done += 1
+                if isinstance(confidence, (int, float)):
+                    confidences.append(float(confidence))
+    if args.force:
+        compact_ocr_records(ocr_path)
+    json_output(
+        {
+            "pdf": str(path),
+            "source_sha256": source_sha256,
+            "pages_requested": len(numbers),
+            "pages_done": done,
+            "pages_skipped": skipped,
+            "mean_confidence": (
+                round(statistics.mean(confidences), 1)
+                if confidences
+                else None
+            ),
+            "seconds": round(time.monotonic() - started, 2),
+            "out": str(ocr_path),
+            "runtime": str(ocr_home()),
         }
     )
     return 0
@@ -985,9 +1744,14 @@ def command_blocks(args: argparse.Namespace, pm: dict[str, Any]) -> int:
     source_sha256 = sha256_file(path)
     version = f"{EXTRACTION_VERSION}+pdfminer-{pm['pdfminer'].__version__}"
 
-    # Check the cache before extracting: a hit must cost only a hash.
+    # Check the cache before extracting: a hit must cost only a hash. The OCR
+    # file is part of the key, so running `ocr` later invalidates stale units.
+    # OCR always comes from the source's default Extract directory: --out only
+    # redirects units and the manifest.
     out_dir = Path(args.out) if args.out else default_out_dir(path)
     manifest_path = out_dir / "manifest.json"
+    ocr_path = default_ocr_path(path)
+    ocr_fingerprint = sha256_file(ocr_path) if ocr_path.is_file() else ""
     if manifest_path.exists() and not args.force:
         try:
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -998,6 +1762,7 @@ def command_blocks(args: argparse.Namespace, pm: dict[str, Any]) -> int:
             and manifest.get("source_sha256") == source_sha256
             and manifest.get("extraction_version") == version
             and manifest.get("pages") == numbers
+            and manifest.get("ocr_fingerprint", "") == ocr_fingerprint
         ):
             json_output(
                 {
@@ -1008,7 +1773,9 @@ def command_blocks(args: argparse.Namespace, pm: dict[str, Any]) -> int:
             )
             return 0
 
-    pages, page_blocks = analyze_pages(path, numbers, labels, pm)
+    pages, page_blocks = analyze_pages(
+        path, numbers, labels, pm, source_sha256=source_sha256
+    )
     merged = merge_across_pages(page_blocks)
     flat = [block for blocks in merged for block in blocks]
     complete = set(numbers) == set(range(1, count + 1))
@@ -1030,6 +1797,7 @@ def command_blocks(args: argparse.Namespace, pm: dict[str, Any]) -> int:
         "source_sha256": source_sha256,
         "extraction_version": version,
         "pages": numbers,
+        "ocr_fingerprint": ocr_fingerprint,
         "unit_count": len(units),
         "created": datetime.datetime.now(
             datetime.timezone.utc
@@ -1081,9 +1849,26 @@ def build_parser() -> argparse.ArgumentParser:
     find.add_argument("--limit", type=int, default=20)
     find.set_defaults(handler=command_find)
 
-    ocr = subparsers.add_parser("ocr-needed", help="pages without extractable text")
+    ocr_needed = subparsers.add_parser(
+        "ocr-needed", help="pages without extractable text"
+    )
+    ocr_needed.add_argument("pdf")
+    ocr_needed.set_defaults(handler=command_ocr_needed)
+
+    ocr_setup = subparsers.add_parser(
+        "ocr-setup", help="install tesseract.js and language data"
+    )
+    ocr_setup.add_argument("--lang", default=OCR_DEFAULT_LANG)
+    ocr_setup.set_defaults(handler=command_ocr_setup)
+
+    ocr = subparsers.add_parser("ocr", help="OCR pages without extractable text")
     ocr.add_argument("pdf")
-    ocr.set_defaults(handler=command_ocr_needed)
+    ocr.add_argument("--pages")
+    ocr.add_argument("--lang", default=OCR_DEFAULT_LANG)
+    ocr.add_argument("--width", type=int, default=OCR_DEFAULT_WIDTH)
+    ocr.add_argument("--force", action="store_true")
+    ocr.add_argument("--out")
+    ocr.set_defaults(handler=command_ocr)
 
     return parser
 

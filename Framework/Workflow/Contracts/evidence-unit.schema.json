@@ -41,7 +41,8 @@
             }
           }
         },
-        "margin_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        "margin_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "ocr": {"type": "boolean"}
       }
     },
     "locator": {
