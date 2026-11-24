@@ -58,7 +58,7 @@ Rules:
 
 ## Event-driven idea resurfacing
 
-Do not scan the idea ledger at stage entry, exit, or gates. A named event (`new-evidence`, `related-objection`, `scope-change`, `argument-stall`, `defect-resolved`, `alternative-failed`, `user-request`) may call `idea-ledger.py candidates` with the event's keywords and bibliography KEYs; treat the at-most-two results as a deterministic prefilter, present only ideas a specialist judge would materially alter the present argument with, then `mark-surfaced`. Preserve each idea's status; reactivation requires explicit user confirmation. Parked ideas follow their declared triggers; rejected resurface only on `defect-resolved`/`user-request`; superseded only on `alternative-failed`/`user-request`.
+Do not scan the idea ledger at stage entry, exit, or gates. A named event (`new-evidence`, `related-objection`, `scope-change`, `argument-stall`, `defect-resolved`, `alternative-failed`, `user-request`) may call `idea-ledger.py --project-dir <project> candidates --event <event> [--keyword <word>] [--bib-key <KEY>]`; treat the at-most-two results as a deterministic prefilter, present only ideas a specialist judge would materially alter the present argument with, then run `idea-ledger.py --project-dir <project> mark-surfaced <id> --reason <reason>`. Preserve each idea's status; reactivation requires explicit user confirmation. Parked ideas follow their declared triggers; rejected resurface only on `defect-resolved`/`user-request`; superseded only on `alternative-failed`/`user-request`.
 
 ## Cost-aware delegation
 

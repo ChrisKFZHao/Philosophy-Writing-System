@@ -17,9 +17,33 @@
     "extraction_version": {"type": "string", "minLength": 1},
     "unit_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "coverage_label": {"enum": ["full-reading", "partial-retrieval"], "default": "partial-retrieval"},
-    "verification_status": {"enum": ["verified", "stale", "provisional"]}
+    "verification_status": {"enum": ["verified", "stale", "provisional"]},
+    "layout": {"$ref": "#/$defs/layout"}
   },
   "$defs": {
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional layout facts recorded by pdf-extract.py. Offsets are character offsets into text_span.",
+      "properties": {
+        "kind": {"enum": ["body", "heading", "footnote", "blockquote", "other"]},
+        "order": {"type": "integer", "minimum": 0},
+        "pdf_pages": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 1}},
+        "page_breaks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["offset", "page_label"],
+            "properties": {
+              "offset": {"type": "integer", "minimum": 0},
+              "page_label": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "margin_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
     "locator": {
       "type": "object",
       "additionalProperties": false,

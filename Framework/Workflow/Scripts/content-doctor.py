@@ -39,6 +39,10 @@ REF_KEY = re.compile(r"^\s*([A-Z0-9][A-Z0-9-]*)\s*\|", re.MULTILINE)
 
 
 def sha256(path: Path) -> str:
+    if path.suffix.lower() in {".txt", ".md", ".json", ".tex", ".bib"}:
+        # Normalize line endings so a CRLF checkout keeps a recorded text hash valid.
+        data = path.read_bytes().replace(b"\r\n", b"\n")
+        return hashlib.sha256(data).hexdigest()
     digest = hashlib.sha256()
     with path.open("rb") as source:
         for block in iter(lambda: source.read(1024 * 1024), b""):
@@ -65,7 +69,7 @@ def summary_keys(summary_dir: Path) -> tuple[dict[str, Path], list[str]]:
     errors: list[str] = []
     if not summary_dir.is_dir():
         return found, errors
-    for path in summary_dir.glob("*.summary.txt"):
+    for path in sorted(p for suffix in (".md", ".txt") for p in summary_dir.glob(f"*.summary{suffix}")):
         matches = FENCED_JSON.findall(path.read_text(encoding="utf-8"))
         if not matches:
             errors.append(f"summary-json-missing:{path.name}")
@@ -122,6 +126,9 @@ def check(root: Path) -> dict:
     rows = SCAN.inventory_rows(index.read_text(encoding="utf-8") if index.is_file() else "")
     if not index.is_file():
         failures.append("index-missing")
+    for row in rows:
+        if row.get("malformed"):
+            failures.append(f"index-malformed-row:{row['key']}")
     pdf_dir = bibliography / "PDF"
     disk_pdfs = {path.name: path for path in pdf_dir.glob("*.pdf")} if pdf_dir.is_dir() else {}
     indexed_pdfs = {pdf for row in rows for pdf in row["pdfs"]}

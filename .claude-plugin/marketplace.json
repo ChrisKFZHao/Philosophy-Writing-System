@@ -1,0 +1,13 @@
+{
+  "name": "phil-local",
+  "owner": {
+    "name": "Philosophical Writing"
+  },
+  "plugins": [
+    {
+      "name": "phil",
+      "source": "./Framework/Plugin",
+      "description": "Philosophical reading and writing workflow: research, tutor, write, review, and a full paper pipeline."
+    }
+  ]
+}

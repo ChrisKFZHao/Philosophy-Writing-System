@@ -4,7 +4,9 @@
       "Bash(pdflatex *)",
       "Bash(python3 Framework/Workflow/Scripts/*.py *)",
       "Bash(zotero-cli *)",
-      "Bash(zotero-mcp *)"
+      "Bash(zotero-mcp *)",
+      "Bash(python Framework/Workflow/Scripts/content-doctor.py)",
+      "WebSearch"
     ]
   }
 }

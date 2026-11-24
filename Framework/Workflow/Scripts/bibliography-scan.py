@@ -16,6 +16,7 @@ from pathlib import Path
 
 CANONICAL = re.compile(r"^[^_]+_(?:\d{4}|nd)_.+\.pdf$")
 PDF_REFERENCE = re.compile(r"(?:^|\s)PDF/([^\s|,]+\.pdf)", re.IGNORECASE)
+SUMMARY_SUFFIXES = (".md", ".txt")  # .md is current; .txt is accepted for older libraries
 
 
 def inventory_rows(index_text: str) -> list[dict[str, object]]:
@@ -38,15 +39,51 @@ def inventory_rows(index_text: str) -> list[dict[str, object]]:
     header = next((i for i in range(start + 1, len(lines)) if lines[i].lstrip().startswith("| KEY |")), None)
     if header is None or header + 1 >= len(lines):
         return []
-    return _table_rows(lines[header + 2:])
+    return _table_rows(lines[header + 2:], len(_split_cells(lines[header])))
 
 
-def _table_rows(lines: list[str]) -> list[dict[str, object]]:
+def _split_cells(line: str) -> list[str]:
+    """Split a table row on unescaped pipes; ``\\|`` is a literal pipe."""
+    text = line.strip()
+    if text.startswith("|"):
+        text = text[1:]
+    if text.endswith("|") and not text.endswith("\\|"):
+        text = text[:-1]
+    cells: list[str] = []
+    current: list[str] = []
+    index = 0
+    while index < len(text):
+        character = text[index]
+        if character == "\\" and index + 1 < len(text) and text[index + 1] == "|":
+            current.append("|")
+            index += 2
+            continue
+        if character == "|":
+            cells.append("".join(current).strip())
+            current = []
+        else:
+            current.append(character)
+        index += 1
+    cells.append("".join(current).strip())
+    return cells
+
+
+def _table_rows(lines: list[str], expected_columns: int) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for line in lines:
         if not line.lstrip().startswith("|"):
             break
-        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        cells = _split_cells(line)
+        if len(cells) != expected_columns:
+            # Never read a shifted row by position; report it instead.
+            rows.append({
+                "key": cells[0] if cells else "",
+                "pdfs": [],
+                "analysis_level": None,
+                "cells": cells,
+                "malformed": True,
+            })
+            continue
         if len(cells) < 6:
             continue
         pdfs = PDF_REFERENCE.findall(cells[3])
@@ -76,7 +113,8 @@ def scan(root: Path) -> dict:
             reasons.append("noncanonical-name")
         if pdf not in registered:
             reasons.append("missing-index-row")
-        if not (summary_dir / f"{Path(pdf).stem}.summary.txt").is_file():
+        stem = Path(pdf).stem
+        if not any((summary_dir / f"{stem}.summary{suffix}").is_file() for suffix in SUMMARY_SUFFIXES):
             reasons.append("missing-summary")
         if reasons:
             unprocessed.append({"file": pdf, "reasons": reasons})

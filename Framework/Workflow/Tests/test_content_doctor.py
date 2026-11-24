@@ -55,6 +55,48 @@ class BibliographyScanTests(unittest.TestCase):
             self.assertEqual(result["dangling_index_pdfs"], [])
             self.assertEqual(result["unprocessed_count"], 0)
 
+    def test_escaped_pipe_in_title_is_one_cell(self):
+        scan = load_script("bibliography-scan.py")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            bibliography = root / "Private/Bibliography"
+            (bibliography / "PDF").mkdir(parents=True)
+            (bibliography / "Summaries").mkdir()
+            (bibliography / "PDF/Author_2020_Title.pdf").write_bytes(b"pdf")
+            (bibliography / "Summaries/Author_2020_Title.summary.txt").write_text("x")
+            text = index([
+                "| KEY | A | Title with \\| pipe | PDF/Author_2020_Title.pdf | - | Level 0.5 | x | - |",
+            ])
+            (bibliography / "INDEX.md").write_text(text, encoding="utf-8")
+            rows = scan.inventory_rows(text)
+            self.assertEqual(rows[0]["cells"][2], "Title with | pipe")
+            self.assertFalse(rows[0].get("malformed", False))
+            result = scan.scan(root)
+            self.assertEqual(result["registered_pdf_count"], 1)
+            self.assertEqual(result["unprocessed_count"], 0)
+
+    def test_markdown_summary_counts_as_processed(self):
+        scan = load_script("bibliography-scan.py")
+        doctor = load_script("content-doctor.py")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            bibliography = root / "Private/Bibliography"
+            (bibliography / "PDF").mkdir(parents=True)
+            (bibliography / "Summaries").mkdir()
+            (bibliography / "PDF/Author_2020_Title.pdf").write_bytes(b"pdf")
+            (bibliography / "INDEX.md").write_text(index([
+                "| KEY | A | T | PDF/Author_2020_Title.pdf | - | Level 0.5 | x | - |",
+            ]), encoding="utf-8")
+            self.assertEqual(scan.scan(root)["unprocessed"][0]["reasons"], ["missing-summary"])
+            body = "```json\n" + json.dumps({"bib_key": "KEY"}) + "\n```"
+            (bibliography / "Summaries/Author_2020_Title.summary.md").write_text(body, encoding="utf-8")
+            self.assertEqual(scan.scan(root)["unprocessed_count"], 0)
+            keys, errors = doctor.summary_keys(bibliography / "Summaries")
+            self.assertEqual((set(keys), errors), ({"KEY"}, []))
+            (bibliography / "Summaries/Other_2020_Title.summary.txt").write_text(body, encoding="utf-8")
+            _, errors = doctor.summary_keys(bibliography / "Summaries")
+            self.assertTrue(any(item.startswith("summary-bib-key-duplicate:KEY:") for item in errors))
+
     def test_strict_fails_for_dangling_index_pdf(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -69,6 +111,39 @@ class BibliographyScanTests(unittest.TestCase):
 
 
 class ContentDoctorTests(unittest.TestCase):
+    def test_sha256_normalizes_line_endings_for_text_but_not_pdf(self):
+        doctor = load_script("content-doctor.py")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            lf_text = root / "lf.txt"
+            crlf_text = root / "crlf.txt"
+            lf_text.write_bytes(b"first\nsecond\n")
+            crlf_text.write_bytes(b"first\r\nsecond\r\n")
+            self.assertEqual(doctor.sha256(lf_text), doctor.sha256(crlf_text))
+            self.assertEqual(
+                doctor.sha256(crlf_text),
+                hashlib.sha256(b"first\nsecond\n").hexdigest(),
+            )
+            lf_pdf = root / "lf.pdf"
+            crlf_pdf = root / "crlf.pdf"
+            lf_pdf.write_bytes(b"first\nsecond\n")
+            crlf_pdf.write_bytes(b"first\r\nsecond\r\n")
+            self.assertNotEqual(doctor.sha256(lf_pdf), doctor.sha256(crlf_pdf))
+
+    def test_malformed_index_row_is_reported(self):
+        doctor = load_script("content-doctor.py")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            bibliography = root / "Private/Bibliography"
+            (bibliography / "PDF").mkdir(parents=True)
+            (bibliography / "Summaries").mkdir()
+            (bibliography / "INDEX.md").write_text(index([
+                "| BROKEN | A | Title | PDF/Broken_2020_Title.pdf | - | Level 0.5 |",
+            ]), encoding="utf-8")
+            result = doctor.check(root)
+            self.assertEqual(result["status"], "fail")
+            self.assertIn("index-malformed-row:BROKEN", result["failures"])
+
     def test_no_private_is_cleanly_skipped(self):
         doctor = load_script("content-doctor.py")
         with tempfile.TemporaryDirectory() as temp:

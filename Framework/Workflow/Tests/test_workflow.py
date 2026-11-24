@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import contextlib
 import copy
 import importlib.util
 import hashlib
+import io
 import json
 import re
 import subprocess
@@ -15,6 +17,14 @@ from pathlib import Path
 WORKFLOW_ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS = WORKFLOW_ROOT / "Scripts"
 REPO_ROOT = WORKFLOW_ROOT.parent.parent
+PLUGIN = REPO_ROOT / "Framework/Plugin"
+PATHS_BLOCK = (
+    "> **Paths.** `<root>` is the nearest ancestor of the working directory containing "
+    "`Framework/Workflow/manifest.json`; if there is none, stop and report it. `Framework/…` "
+    "and `Private/…` paths resolve from `<root>`. Bare `Methods/`, `Services/`, `Rules/`, "
+    "`Schemas/`, `Scripts/`, `Contracts/`, `Commands/`, `References/`, and `Templates/` paths "
+    "resolve from `<root>/Framework/Workflow/`. Run scripts with `<root>` as the working directory."
+)
 
 
 def load_script(name: str, directory: Path | None = None):
@@ -27,21 +37,6 @@ def load_script(name: str, directory: Path | None = None):
 
 
 class PolicyTests(unittest.TestCase):
-    def test_nested_projects_have_outer_workflow_bridges(self):
-        projects = REPO_ROOT / "Private/Projects"
-        for project in sorted(path for path in projects.iterdir() if path.is_dir()):
-            self.assertTrue((project / "PROJECT.md").is_file(), project)
-        workflow_bridge = REPO_ROOT / "Private/.agents/skills/phil-tutor/SKILL.md"
-        self.assertTrue(workflow_bridge.is_file())
-        bridge_text = workflow_bridge.read_text(encoding="utf-8")
-        self.assertIn("External Workflow Bridge", bridge_text)
-        self.assertIn("<outer-root>/.agents/skills/phil-tutor/SKILL.md", bridge_text)
-        self.assertNotIn("## Usage", bridge_text)
-        for project in sorted(path for path in projects.iterdir() if path.is_dir()):
-            local_bridge = project / ".agents/skills/phil-tutor/SKILL.md"
-            self.assertTrue(local_bridge.is_file(), project)
-            self.assertIn("name: phil-tutor", local_bridge.read_text(encoding="utf-8"))
-
     def test_collaboration_aliases(self):
         policy = load_script("workflow-policy.py")
         self.assertEqual(policy.normalize_collaboration("assistant-led")["canonical"], "assistant-led")
@@ -156,6 +151,14 @@ class PhilosopherDatabaseTests(unittest.TestCase):
             self.database.write_json(paths["profiles"] / "test-philosopher.json", profile)
         return paths
 
+    def write_index(self, root: Path, keys):
+        index = root / "Private/Bibliography/INDEX.md"
+        index.parent.mkdir(parents=True, exist_ok=True)
+        lines = ["| KEY | Title |", "|---|---|"]
+        lines.extend(f"| {key} | {key} |" for key in keys)
+        index.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        return index
+
     def observation(self, artifact, bib_key, role, substantive, statement="", topics=None, person="New Thinker"):
         claims = []
         if statement:
@@ -263,7 +266,8 @@ class PhilosopherDatabaseTests(unittest.TestCase):
             state, _ = self.database.rebuild_queue(paths, self.database.empty_state())
             self.database.write_json(paths["state"], state)
             cid = next(iter(state["candidates"]))
-            self.database.approve_candidate(paths, cid)
+            index = self.write_index(root, ["KEY-1"])
+            self.database.approve_candidate(paths, cid, bibliography_index=index)
             profile = self.database.load_profiles(paths["profiles"])["test-philosopher"]
             self.assertEqual(profile["claims"][0]["support_status"], "source-backed")
             self.assertIn("approved_at", profile["claims"][0]["evidence"][0])
@@ -331,7 +335,10 @@ class PhilosopherDatabaseTests(unittest.TestCase):
             state, _ = self.database.rebuild_queue(paths, self.database.empty_state())
             self.database.write_json(paths["state"], state)
             cid = next(iter(state["candidates"]))
-            self.database.approve_candidate(paths, cid, merge_claim_id="P-test-philosopher-C0001")
+            index = self.write_index(root, ["KEY-1"])
+            self.database.approve_candidate(
+                paths, cid, merge_claim_id="P-test-philosopher-C0001", bibliography_index=index
+            )
             claim = self.database.read_json(profile_path)["claims"][0]
             self.assertEqual(claim["statement"], "Original wording")
             self.assertEqual(claim["dispute_status"], "contested")
@@ -371,31 +378,87 @@ class AdapterTests(unittest.TestCase):
             sorted(item["id"] for item in self.kinds()["skill"]),
         )
 
-    def test_each_runtime_exposes_exactly_four_skills(self):
-        for root in (REPO_ROOT / ".claude/skills", REPO_ROOT / ".agents/skills"):
-            names = sorted(path.parent.name for path in root.glob("*/SKILL.md"))
-            self.assertEqual(names, ["phil-research", "phil-review", "phil-tutor", "phil-write"], root)
-        self.assertFalse((REPO_ROOT / ".claude/agents").exists())
-        leftovers = sorted((REPO_ROOT / ".agents/skills").glob("source-command-*"))
-        self.assertEqual(leftovers, [])
+    def read_json(self, relative: str):
+        return json.loads((REPO_ROOT / relative).read_text(encoding="utf-8"))
 
-    def test_claude_wrappers_delegate_and_are_not_canonical(self):
-        wrappers = sorted(path.stem for path in (REPO_ROOT / ".claude/commands").glob("*.md"))
-        self.assertEqual(wrappers, sorted(self.manifest["exposure"]["claude_command_wrappers"]))
-        for wrapper in (REPO_ROOT / ".claude/commands").glob("*.md"):
-            text = wrapper.read_text(encoding="utf-8")
-            self.assertIn("Delegation only", text)
-            self.assertIn("not a canonical definition", text)
+    def test_plugin_skills_match_entrypoints(self):
+        entrypoints = self.manifest["exposure"]["plugin"]["entrypoints"]
+        names = sorted(path.parent.name for path in (PLUGIN / "skills").glob("*/SKILL.md"))
+        self.assertEqual(names, sorted(entrypoints))
+
+    def test_every_entrypoint_has_a_valid_skill(self):
+        entrypoints = self.manifest["exposure"]["plugin"]["entrypoints"]
+        for name in entrypoints:
+            path = PLUGIN / "skills" / name / "SKILL.md"
+            self.assertTrue(path.is_file(), name)
+            text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+            match = re.match(r"^---\n(.*?)\n---", text, re.DOTALL)
+            self.assertIsNotNone(match, name)
+            metadata = dict(
+                line.split(":", 1) for line in match.group(1).splitlines() if ":" in line
+            )
+            self.assertEqual(metadata["name"].strip(), name)
+
+    def test_generated_json_matches_manifest(self):
+        builder = load_script("build-adapters.py")
+        outputs = builder.render_outputs(builder.load_manifest())
+        for relative, content in outputs.items():
+            if relative.suffix == ".json":
+                self.assertEqual(
+                    self.read_json(relative.as_posix()), json.loads(content), relative
+                )
+        plugin = self.manifest["exposure"]["plugin"]
+        claude = self.read_json("Framework/Plugin/.claude-plugin/plugin.json")
+        self.assertEqual(claude, {
+            "name": plugin["name"],
+            "version": plugin["version"],
+            "description": plugin["description"],
+        })
+        portable = self.read_json("Framework/Plugin/plugin.json")
+        self.assertEqual(portable["$schema"], "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json")
+        self.assertEqual(
+            {key: portable[key] for key in ("name", "version", "description")}, claude
+        )
+
+    def test_marketplaces_point_at_the_plugin(self):
+        claude = self.read_json(".claude-plugin/marketplace.json")
+        self.assertEqual(claude["owner"], {"name": "Philosophical Writing"})
+        self.assertEqual(claude["plugins"][0]["source"], "./Framework/Plugin")
+        codex = self.read_json(".agents/plugins/marketplace.json")
+        self.assertEqual(codex["plugins"][0]["source"], {"source": "local", "path": "./Framework/Plugin"})
+
+    def test_full_skill_disables_implicit_invocation(self):
+        text = (PLUGIN / "skills/full/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("disable-model-invocation: true", text)
+        policy = (PLUGIN / "skills/full/agents/openai.yaml").read_text(encoding="utf-8")
+        self.assertEqual(policy.replace("\r\n", "\n"), "policy:\n  allow_implicit_invocation: false\n")
+
+    def test_all_skills_carry_the_paths_block(self):
+        for path in sorted((PLUGIN / "skills").glob("*/SKILL.md")):
+            self.assertIn(PATHS_BLOCK, path.read_text(encoding="utf-8").replace("\r\n", "\n"), path)
+
+    def test_check_reports_planted_legacy_directory(self):
+        builder = load_script("build-adapters.py")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / ".claude/skills").mkdir(parents=True)
+            original = builder.REPO_ROOT
+            builder.REPO_ROOT = root
+            try:
+                output = io.StringIO()
+                with contextlib.redirect_stdout(output):
+                    code = builder.check({})
+            finally:
+                builder.REPO_ROOT = original
+        self.assertEqual(code, 1)
+        self.assertIn("legacy .claude/skills", output.getvalue())
 
     def test_research_mode_contracts_exist_and_are_isolated(self):
-        modes_dir = WORKFLOW_ROOT / "Skills/phil-research/references/modes"
+        modes_dir = PLUGIN / "skills/research/references/modes"
         self.assertEqual(
             sorted(path.stem for path in modes_dir.glob("*.md")),
             ["comment", "evaluate", "ingest", "philosophers", "reconstruct"],
         )
-        generated = REPO_ROOT / ".claude/skills/phil-research/references/modes/reconstruct.md"
-        self.assertTrue(generated.is_file())
-        self.assertIn("Generated from Framework/Workflow", generated.read_text(encoding="utf-8"))
 
     def test_methods_tree_matches_manifest_and_headers_carry_metadata(self):
         methods = {item["id"]: item for item in self.kinds()["method"]}
@@ -466,8 +529,8 @@ class AdapterTests(unittest.TestCase):
         doctor.check_stale_phrases(failures)
         self.assertEqual(failures, [])
         with tempfile.TemporaryDirectory() as temp:
-            probe_root = Path(temp) / ".claude"
-            probe_root.mkdir()
+            probe_root = Path(temp) / "Framework/Plugin"
+            probe_root.mkdir(parents=True)
             (probe_root / "probe.md").write_text("we had 39 skills back then", encoding="utf-8")
             original_phrases = list(doctor.STALE_PHRASES)
             original_repo = doctor.REPO_ROOT
@@ -481,10 +544,38 @@ class AdapterTests(unittest.TestCase):
                 doctor.REPO_ROOT = original_repo
         self.assertTrue(any("39 skills" in failure for failure in failures2))
 
+    def test_method_reference_scan_detects_unknown_ids(self):
+        doctor = load_script("workflow-doctor.py")
+        failures: list[str] = []
+        doctor.check_method_references(failures)
+        self.assertEqual(failures, [])
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            workflow = root / "Framework/Workflow"
+            workflow.mkdir(parents=True)
+            (root / "Framework/Plugin/skills/demo").mkdir(parents=True)
+            (workflow / "manifest.json").write_text(
+                '{"items": [{"id": "method.a.real", "kind": "method"}]}', encoding="utf-8"
+            )
+            (root / "Framework/Plugin/skills/demo/SKILL.md").write_text(
+                "Use `method.a.real` and `method.b.missing`.", encoding="utf-8"
+            )
+            original = (doctor.WORKFLOW_ROOT, doctor.REPO_ROOT)
+            doctor.WORKFLOW_ROOT, doctor.REPO_ROOT = workflow, root
+            try:
+                probe: list[str] = []
+                doctor.check_method_references(probe)
+            finally:
+                doctor.WORKFLOW_ROOT, doctor.REPO_ROOT = original
+        self.assertEqual(len(probe), 1)
+        self.assertIn("method.b.missing", probe[0])
+
     def test_core_model_selection_is_neutral(self):
         provider_model = re.compile(r"\b(?:opus|sonnet|haiku|gpt-[A-Za-z0-9.-]+)\b", re.IGNORECASE)
-        for directory in ("Skills", "Methods", "Services", "Commands", "Rules"):
-            for path in (WORKFLOW_ROOT / directory).rglob("*.md"):
+        roots = [PLUGIN, WORKFLOW_ROOT / "Methods", WORKFLOW_ROOT / "Services",
+                 WORKFLOW_ROOT / "Commands", WORKFLOW_ROOT / "Rules"]
+        for root in roots:
+            for path in root.rglob("*.md"):
                 text = path.read_text(encoding="utf-8")
                 self.assertIsNone(provider_model.search(text), path)
                 self.assertNotRegex(text, r"^model:\s*", path)
@@ -499,11 +590,10 @@ class AdapterTests(unittest.TestCase):
         self.assertIn("do not ask or delegate again in that session", text)
         self.assertIn("parent task must validate", text)
 
-    def test_delegation_guidance_is_generated_into_each_runtime(self):
-        for root in (REPO_ROOT / ".claude/skills/phil-research", REPO_ROOT / ".agents/skills/phil-research"):
-            text = (root / "SKILL.md").read_text(encoding="utf-8")
-            self.assertIn("session-scoped policy", text)
-            self.assertIn("lower-cost host candidate", text)
+    def test_delegation_guidance_is_present_in_the_plugin_skill(self):
+        text = (PLUGIN / "skills/research/SKILL.md").read_text(encoding="utf-8")
+        self.assertIn("session-scoped policy", text)
+        self.assertIn("lower-cost host candidate", text)
 
     def test_skill_entrypoints_stay_under_the_line_ceiling(self):
         for skill in self.kinds()["skill"]:
@@ -609,24 +699,21 @@ class ContractTextTests(unittest.TestCase):
 
     def test_every_command_and_mode_is_documented(self):
         expected = {
-            "Skills/phil-research/SKILL.md": ["`ingest`", "`reconstruct`", "`evaluate`", "`comment`", "`philosophers`"],
-            "Skills/phil-tutor/SKILL.md": ["reading", "incubating"],
-            "Skills/phil-write/SKILL.md": ["outline", "draft", "revision"],
-            "Skills/phil-review/SKILL.md": ["full", "targeted", "re-review"],
+            "../Plugin/skills/research/SKILL.md": ["`ingest`", "`reconstruct`", "`evaluate`", "`comment`", "`philosophers`"],
+            "../Plugin/skills/tutor/SKILL.md": ["reading", "incubating"],
+            "../Plugin/skills/write/SKILL.md": ["outline", "draft", "revision", "export"],
+            "../Plugin/skills/review/SKILL.md": ["full", "targeted", "re-review"],
             "Commands/phil-full.md": ["`start`", "`status`", "`resume`"],
         }
         for relative, modes in expected.items():
             text = self.read(relative)
             for mode in modes:
                 self.assertIn(mode, text, f"{relative} must document mode {mode}")
-        guide = (WORKFLOW_ROOT / "Templates/Root/root-guidance.md").read_text(encoding="utf-8")
-        for command in ("phil:research", "phil:tutor", "phil:write", "phil:review", "phil:full"):
-            self.assertIn(command, guide)
 
     def test_routing_rules_are_present_in_each_skill(self):
         import re as re_module
-        for relative in ("Skills/phil-research/SKILL.md", "Skills/phil-tutor/SKILL.md",
-                         "Skills/phil-write/SKILL.md", "Skills/phil-review/SKILL.md"):
+        for relative in ("../Plugin/skills/research/SKILL.md", "../Plugin/skills/tutor/SKILL.md",
+                         "../Plugin/skills/write/SKILL.md", "../Plugin/skills/review/SKILL.md"):
             text = self.read(relative)
             self.assertIsNotNone(
                 re_module.search(r"explicit mode( argument)? always wins|explicit mode wins", text, re_module.IGNORECASE),
@@ -635,7 +722,7 @@ class ContractTextTests(unittest.TestCase):
             self.assertIn("one focused question", text.replace("**", ""), relative)
 
     def test_collaboration_modes_share_gates_and_split_authority(self):
-        text = self.read("Skills/phil-write/SKILL.md")
+        text = self.read("../Plugin/skills/write/SKILL.md")
         self.assertIn("identical quality gates", text)
         self.assertIn("passage-level authorization", text)
         self.assertIn("within the approved outline", text)
@@ -644,31 +731,31 @@ class ContractTextTests(unittest.TestCase):
         self.assertIn("assistant-led", text)
 
     def test_writing_protocol_sequence_and_artifacts(self):
-        text = self.read("Skills/phil-write/SKILL.md")
+        text = self.read("../Plugin/skills/write/SKILL.md")
         plain = text.replace("**", "")
         self.assertIn("intake -> outline -> outline approval -> section brief -> draft -> section audit -> revision -> citation closure", plain)
-        self.assertIn("{topic}-outline.txt", text)
-        self.assertIn("{topic}-conception.txt", text)
+        self.assertIn("{topic}-outline.md", text)
+        self.assertIn("{topic}-conception.md", text)
         self.assertIn("never silently delete, collapse, or mark a finding resolved", plain.lower().replace("never silently", "never silently"))
         self.assertIn("Never silently delete, collapse, or mark a finding resolved", plain)
         self.assertIn("cannot be waived", plain)
 
     def test_review_is_read_only_and_findings_drive_revision(self):
-        text = self.read("Skills/phil-review/SKILL.md")
+        text = self.read("../Plugin/skills/review/SKILL.md")
         self.assertIn("never edits the draft", text)
         self.assertIn("Finding ledger", text)
         self.assertIn("project-state.py finding", text)
         self.assertIn("without evidence", text.replace("**", ""))
 
     def test_research_kernel_invariants_and_write_isolation(self):
-        text = self.read("Skills/phil-research/SKILL.md")
+        text = self.read("../Plugin/skills/research/SKILL.md")
         self.assertIn("only `ingest`", text)
         self.assertIn("Citation Gate boundary", text)
         self.assertIn("two hops", text)
         self.assertIn("never silently load an entire package", text)
         for mode in ("ingest", "reconstruct", "evaluate", "comment", "philosophers"):
             self.assertTrue(
-                (WORKFLOW_ROOT / "Skills/phil-research/references/modes" / f"{mode}.md").is_file(), mode
+                (PLUGIN / "skills/research/references/modes" / f"{mode}.md").is_file(), mode
             )
 
     def test_full_pipeline_state_rules(self):

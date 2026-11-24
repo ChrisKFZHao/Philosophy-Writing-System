@@ -2,7 +2,7 @@
 
 同时支持 Claude Code 与 Codex 的分析哲学研究与写作系统。提供从文献管理、PDF 阅读、论证重构、概念分析到论文写作、审稿、修订的完整工具链。
 
-**版本**: 0.6.3-alpha
+**版本**: 0.7.0-alpha
 **语言**: Chinese（写作输出）/ English（技能定义与架构文档）
 
 ---
@@ -16,14 +16,14 @@
 | 依赖 | 角色 |
 |------|------|
 | **Claude Code 或 Codex** | 运行时宿主；两端消费同一套平台中立工作流 |
-| **pdf skill** | PDF 文本与元数据提取。框架规则明确禁止直接调用 `pdftotext` 等 CLI |
-| **Python 3.11+** | 生成/校验适配器以及运行可移植的文献扫描与 Zotero helper |
+| **pdfminer.six** | PDF 文本与元数据提取，由 `Scripts/pdf-extract.py` 调用（`py -3 -m pip install --user pdfminer.six`）。纯 Python，不受 Windows 智能应用控制拦截 |
+| **Python 3.11+** | 生成/校验插件清单与市场文件、项目指针，以及运行可移植的文献扫描与 Zotero helper |
 
 ### 可选 — 学术基础设施
 
 | 依赖 | 角色 | 缺失时 |
 |------|------|--------|
-| **academic-research-skills** v3.15.0（ARS 插件） | 文献检索、格式转换、引用验证等 `ars-*` 能力 | 30 个哲学分析技能不受影响；仅 ARS 相关能力不可用 |
+| **academic-research-skills** v3.15.0（ARS 插件） | 文献检索、格式转换、引用验证等 `ars-*` 能力 | 30 个内部分析方法不受影响；仅 ARS 相关能力不可用 |
 
 ### 可选 — Zotero 集成
 
@@ -41,9 +41,9 @@
 依赖流向概览：
 
 ```
-phil:* 命令（5）──→ 技能（4）+ 内部方法包（5 包 30 方法）+ 服务（5）──→ 数据契约（Schemas 18 + Contracts 2）
+phil:* 命令（5）──→ 技能（4）+ 内部方法包（5 包 30 方法）+ 服务（5）──→ 数据契约（Schemas 17 + Contracts 2）
       │                    │
-      │                    ├──→ pdf skill（必需）
+      │                    ├──→ pdf-extract.py + pdfminer.six（必需）
       │                    └──→ ars-*（可选，ARS 插件）
       │
       └─ phil:research ingest 注册步骤 ──→ zotero MCP（读本地 / 写云端）
@@ -54,7 +54,26 @@ phil:* 命令（5）──→ 技能（4）+ 内部方法包（5 包 30 方法�
 
 ## 快速开始
 
-Claude Code 使用 `.claude/commands/` 中的薄包装命令（research、tutor、write、review、full，仅委托）；Codex 将 `phil:<name>` 路由到 `.agents/skills/` 下的四个生成技能（phil-research、phil-tutor、phil-write、phil-review），`phil:full` 执行 `Framework/Workflow/Commands/phil-full.md` 状态机规格。两端唯一事实源位于 `Framework/Workflow/`。
+两个宿主都通过 `Framework/Plugin/` 中的 `phil` 插件调用公开入口：Claude Code 使用 `/phil:<name>`，Codex 将 `phil:<name>` 路由到同一插件。`phil:full` 是插件里的一个薄入口技能，执行 `Framework/Workflow/Commands/phil-full.md` 的状态机规格。未加载插件的宿主可直接读取 `Framework/Plugin/skills/<name>/SKILL.md` 并照做。两端唯一事实源位于 `Framework/Workflow/`。
+
+### 安装插件
+
+Claude Code（每台机器一次）：
+
+```
+claude plugin marketplace add <repository root>
+claude plugin install phil@phil-local
+```
+
+插件从仓库原地加载，修改技能后在下次会话或执行 `/reload-plugins` 后生效。
+
+Codex：
+
+```
+codex plugin marketplace add <repository root>
+```
+
+然后在插件浏览器中安装 `phil`。Codex 从缓存加载已安装的副本，因此修改技能后需要重新安装。此路由遵循官方文档，但尚未在本项目实测。
 
 ### 1. 放入参考文献
 
@@ -80,7 +99,7 @@ phil:tutor              # reading 模式（默认）：苏格拉底式文献对�
 phil:tutor incubating   # incubating 模式：构思孵化
 ```
 
-阅读阶段用 **reading 模式**与导师对话——检验你对核心文献的理解、暴露盲区、推荐下一步阅读。读透之后进入 **incubating 模式**孵化你自己的论点：讨论文献间关系、切入角度、候选论题，产出 `{topic}-conception.txt`（前提级论证骨架；论题必须是你本人的表述，AI 补充的前提一律以 `[AI 补全]` 显式披露）。独立的 `{topic}-idea-ledger.json` 保留弃用观点；v0.6.3 在 Stages 3–6 按七类真实事件查询最多两条候选，再由当前专业角色判断其是否会实质改变论证。阶段边界不会周期扫描，观点状态也不会因再次提及而自动改变。
+阅读阶段用 **reading 模式**与导师对话——检验你对核心文献的理解、暴露盲区、推荐下一步阅读。读透之后进入 **incubating 模式**孵化你自己的论点：讨论文献间关系、切入角度、候选论题，产出 `{topic}-conception.md`（前提级论证骨架；论题必须是你本人的表述，AI 补充的前提一律以 `[AI 补全]` 显式披露）。独立的 `{topic}-idea-ledger.json` 保留弃用观点；v0.6.3 在 Stages 3–6 按七类真实事件查询最多两条候选，再由当前专业角色判断其是否会实质改变论证。阶段边界不会周期扫描，观点状态也不会因再次提及而自动改变。
 
 ### 3. 写论文
 
@@ -122,15 +141,16 @@ Philosophical Writing/
 ├── README.md                         # 本文件（外层仓库）
 ├── Framework/Workflow/               # 平台中立唯一事实源
 │   ├── manifest.json                 #   v2 注册表：4 技能 + 5 方法包 + 30 方法 + 5 服务 + 1 命令
-│   ├── Skills/                       #   4 个权威 SKILL.md 入口（含 phil-research 模式契约）
 │   ├── Methods/ Services/ Contracts/ #   内部方法包、权限化服务、跨层数据契约
 │   ├── Commands/                     #   phil-full 状态机命令规格
 │   ├── Rules/ References/ Schemas/   #   规则、知识与数据契约
-│   ├── Templates/                    #   报告、根指南和新项目模板
+│   ├── Templates/                    #   报告与新项目模板
 │   └── Scripts/                      #   生成器、doctor、状态工具、扫描器、Zotero helper
-├── .claude/                          # 生成并提交的 Claude Code 适配器
-├── .agents/skills/                   # 生成并提交的 Codex 适配器
+├── .claude/                          # 仅含 Claude Code 设置（settings.json）
+├── .claude-plugin/marketplace.json   # Claude Code 市场文件（指向 ./Framework/Plugin）
+├── .agents/plugins/marketplace.json  # Codex 市场文件（指向 ./Framework/Plugin）
 ├── Framework/                        # Framework 文档层（外层仓库）
+│   ├── Plugin/                       #   phil 插件：两份清单 + skills/
 │   ├── ARCHITECTURE.md               #   系统架构文档
 │   ├── changelog.md                  #   框架版本历史
 │   └── Lessons/                      #   论文反馈蒸馏（如 zotero-integration.md）
@@ -145,7 +165,7 @@ Philosophical Writing/
     └── Style/                        #   个人写作样文（文风校准）
 ```
 
-**命名规范**：非隐藏目录大写开头；`.claude/` 与 `.agents/` 是运行时发现机制的例外。写作项目条目目录使用小写 kebab-case。新项目以 `PROJECT.md` 为中立配置，并配套薄 `CLAUDE.md`、`AGENTS.md`；旧项目按 `PROJECT.md → AGENTS.md → CLAUDE.md` 回退。
+**命名规范**：非隐藏目录大写开头；`.claude/`、`.agents/`、`.claude-plugin/` 等宿主隐藏目录与插件的 `skills/` 目录是命名例外。写作项目条目目录使用小写 kebab-case。新项目以 `PROJECT.md` 为中立配置，并配一个生成的 `AGENTS.md` 指针；旧项目按 `PROJECT.md → AGENTS.md → CLAUDE.md` 回退（`CLAUDE.md` 只作旧项目回退）。
 
 **语言规范**：定义层为英文；写作输出为中文；两个 README 与 `Framework/Workflow/Templates/` 的 5 个报告模板为刻意保留的中文。
 
@@ -163,7 +183,7 @@ Philosophical Writing/
 
 v0.7 移除的入口：`phil:reconstruct`→`phil:research reconstruct`、`phil:evaluate`→`phil:research evaluate`、`phil:comment`→`phil:research comment`、`phil:ingest`→`phil:research ingest`、`phil:philosophers`→`phil:research philosophers`、`phil:pipeline`→`phil:full start`。不保留别名或弃用垫片；确定性解析器 `workflow-policy.py removed-entrypoint <命令>`。原 30 个原子技能降级为 `Framework/Workflow/Methods/` 内部方法包，按需经 manifest 解析加载，不再注册为运行时技能。
 
-四个技能与命令规格在 `Framework/Workflow/`（Skills/Methods/Services/Contracts/Commands）定义；生成器输出两端的 4 个技能与 Claude 薄命令包装。修改中立源后运行 `build-adapters.py`，提交生成结果，并以 `build-adapters.py --check` 防止漂移。
+四个公开技能位于 `Framework/Plugin/skills/`，命令规格在 `Framework/Workflow/Commands/`，方法与服务在 `Framework/Workflow/`（Methods/Services/Contracts）定义。生成器只输出两份插件清单、两个市场文件与 `Private/**/AGENTS.md` 指针；`--check` 还会因遗留适配器路径而失败。修改中立源后运行 `build-adapters.py`，提交生成结果，并以 `build-adapters.py --check` 防止漂移。
 
 **经济性委派**：工作流和角色均不写供应商或具体模型名，也不把任务类别硬绑到模型。当前以会话级提示词政策识别可降档的重复性子任务：首次合格任务出现时只确认一次；其后仅可将独立、只读、无交互且只产生候选工件的任务交给已确认的低成本候选。主任务必须在写入、采纳或进入 Citation Gate 前复核结果；写作、评审、引用验证、资料库或项目修改、用户对话和编排始终保留当前模型。候选不可用或能力不足时不自动换选，且没有宿主提供的成本、缓存、时延和质量数据时不宣称最优。重构与评估先做便宜的确定性预规划，再只加载选中的技能；长示例和检查表仅在真实歧义或显式请求时读取。
 
@@ -185,21 +205,21 @@ v0.7 移除的入口：`phil:reconstruct`→`phil:research reconstruct`、`phil:
 
 | 模块 | 状态 | 说明 |
 |------|------|------|
-| 分析技能（30 个） | Alpha | 全部完成，已内部测试 |
-| 命令（9 个） | Alpha | 全部完成 |
+| 内部分析方法（30 个，5 个方法包） | Alpha | 全部完成，已内部测试 |
+| 公开入口（research / tutor / write / review / full） | Alpha | 全部完成 |
 | 知识库（87 个参考文件） | Alpha | 术语表、论证形式、哲学家数据库均已填充 |
-| 对话 agent（3 个） | Alpha | 已完成，待更多交互验证 |
-| 写作生产（4 个 agent） | Alpha | 已完成；v0.5.0 重组为六阶段管线 + 双协作模式，验证运行待做 |
+| 对话模式（phil:tutor 的 reading / incubating） | Alpha | 已完成，待更多交互验证 |
+| 写作生产（phil:write + phil:review） | Alpha | 已完成；由 phil:full 状态机编排，含双协作模式，验证运行待做 |
 | 行为规则（3 条 + 运行时兼容） | Alpha | 已部署；兼容规则统一项目指南、协作别名、delegation 与 Zotero 降级 |
 | 文献管理 | Alpha | Citation Gate 已增加 analysis metadata 与哈希验证；ingest 已实战运行论文/专著/文集三类文档 |
 | Zotero 集成 | Alpha | 注释保全迁移与自动注册均经实战验证；存量按懒迁移原则逐步转换 |
 
 **已知限制**：
-- 双端静态与脚本测试已建立；九个工作流仍需分别在 Claude Code 与 Codex 完成人工最小验收
+- 双端静态与脚本测试已建立；五个公开入口仍需分别在 Claude Code 与 Codex 完成人工最小验收
 - 哲学家数据库覆盖不均衡（分析传统为主，大陆哲学较弱）
 - 观点台账已接入 Stage 3–6 的事件驱动召回；仍需在两个运行时分别完成真实长文写作的人工验收
-- 已有生成一致性、manifest/frontmatter、别名、Zotero 降级、文献扫描与哲学家数据库治理的标准库测试；九个工作流仍需分别在两个宿主中做人工最小验收
+- 已有生成一致性、manifest/frontmatter、别名、Zotero 降级、文献扫描与哲学家数据库治理的标准库测试；五个公开入口仍需分别在两个宿主中做人工最小验收
 
 ---
 
-*最后更新: 2026-07-19（v0.6.3：事件驱动观点再浮现、渐进式重构、定向评估与按需技能加载）*
+*最后更新: 2026-11-22（按 v0.7.0-alpha 校正）*

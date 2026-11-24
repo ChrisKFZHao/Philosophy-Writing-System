@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
+import subprocess
+import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -111,6 +116,161 @@ class CitationGateVerificationTests(unittest.TestCase):
             }},
         )
         self.assertEqual(passed["eligible_keys"], ["SOURCE-ONE"])
+
+    def _run_gate(self, *arguments):
+        return subprocess.run(
+            [
+                sys.executable,
+                str(SCRIPTS / "workflow-policy.py"),
+                "citation-gate",
+                "--required-level",
+                "2",
+                *arguments,
+            ],
+            capture_output=True,
+            text=True,
+        )
+
+    def test_sha256_file_normalizes_line_endings_for_text_but_not_pdf(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            lf_text = root / "lf.txt"
+            crlf_text = root / "crlf.txt"
+            lf_text.write_bytes(b"first\nsecond\n")
+            crlf_text.write_bytes(b"first\r\nsecond\r\n")
+            self.assertEqual(self.policy.sha256_file(lf_text), self.policy.sha256_file(crlf_text))
+            self.assertEqual(
+                self.policy.sha256_file(crlf_text),
+                hashlib.sha256(b"first\nsecond\n").hexdigest(),
+            )
+            lf_pdf = root / "lf.pdf"
+            crlf_pdf = root / "crlf.pdf"
+            lf_pdf.write_bytes(b"first\nsecond\n")
+            crlf_pdf.write_bytes(b"first\r\nsecond\r\n")
+            self.assertNotEqual(self.policy.sha256_file(lf_pdf), self.policy.sha256_file(crlf_pdf))
+
+    def test_cli_exit_code_follows_decision(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = root / "source.pdf"
+            analysis = root / "analysis.txt"
+            source.write_bytes(b"%PDF-1.4\n")
+            analysis.write_bytes(b"analysis\n")
+            metadata = root / "analysis.meta.json"
+            metadata.write_text(json.dumps({
+                "bib_key": "SMITH-A",
+                "analysis_level": 2,
+                "verification_status": "verified",
+                "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
+                "analysis_sha256": hashlib.sha256(analysis.read_bytes()).hexdigest(),
+            }), encoding="utf-8")
+            common = [
+                "--metadata", str(metadata),
+                "--source-path", str(source),
+                "--analysis-path", str(analysis),
+            ]
+            passed = self._run_gate("--registered", *common)
+            self.assertEqual(passed.returncode, 0)
+            self.assertEqual(json.loads(passed.stdout)["decision"], "pass")
+            blocked = self._run_gate(*common)
+            self.assertEqual(blocked.returncode, 1)
+            self.assertEqual(json.loads(blocked.stdout)["reason"], "key-not-in-refs")
+
+    def test_refs_status_fails_closed_on_any_rejected_row(self):
+        with tempfile.TemporaryDirectory() as temp:
+            refs = Path(temp) / "refs.md"
+            refs.write_text(
+                "| KEY | role | status | notes |\n"
+                "|---|---|---|---|\n"
+                "| DOUBLE | support | cited | first row |\n"
+                "| DOUBLE | support | rejected | later row |\n"
+                "| NOTED | support | rejected (out of scope) | annotated |\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(self.policy.refs_status(refs, "DOUBLE"), "rejected")
+            self.assertEqual(self.policy.refs_status(refs, "NOTED"), "rejected")
+
+    def test_refs_status_reads_first_cell_exactly(self):
+        with tempfile.TemporaryDirectory() as temp:
+            refs = Path(temp) / "refs.md"
+            refs.write_text(
+                "| KEY | role | status | notes |\n"
+                "|---|---|---|---|\n"
+                "| SMITH-AB | support | cited | longer key |\n"
+                "| GONE | support | Rejected | removed |\n"
+                "| NOTEONLY | support | candidate | see KANT-1781 |\n"
+                "PLAIN | support | cited | no leading pipe |\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(self.policy.refs_status(refs, "SMITH-AB"), "registered")
+            self.assertEqual(self.policy.refs_status(refs, "NOTEONLY"), "registered")
+            self.assertEqual(self.policy.refs_status(refs, "PLAIN"), "registered")
+            self.assertEqual(self.policy.refs_status(refs, "GONE"), "rejected")
+            self.assertEqual(self.policy.refs_status(refs, "SMITH"), "absent")
+            self.assertEqual(self.policy.refs_status(refs, "KANT-1781"), "absent")
+            self.assertEqual(self.policy.refs_status(Path(temp) / "missing.md", "SMITH-AB"), "absent")
+
+    def test_cli_refs_blocks_rejected_and_absent_keys(self):
+        with tempfile.TemporaryDirectory() as temp:
+            refs = Path(temp) / "refs.md"
+            refs.write_text(
+                "| KEY | role | status | notes |\n"
+                "|---|---|---|---|\n"
+                "| GONE | support | rejected | removed |\n"
+                "| KEPT | support | cited | active |\n",
+                encoding="utf-8",
+            )
+            rejected = self._run_gate("--key", "GONE", "--refs", str(refs))
+            self.assertEqual(rejected.returncode, 1)
+            self.assertEqual(
+                json.loads(rejected.stdout),
+                {"decision": "block", "hop": 1, "reason": "key-rejected"},
+            )
+            absent = self._run_gate("--key", "MISSING", "--refs", str(refs))
+            self.assertEqual(
+                json.loads(absent.stdout),
+                {"decision": "block", "hop": 1, "reason": "key-not-in-refs"},
+            )
+            kept = self._run_gate("--key", "KEPT", "--refs", str(refs))
+            self.assertEqual(json.loads(kept.stdout)["reason"], "analysis-metadata-missing")
+            self.assertEqual(self._run_gate("--refs", str(refs)).returncode, 2)
+
+    def test_blocks_metadata_key_mismatch(self):
+        mismatch = self.policy.citation_gate(
+            True, 2, None,
+            self.metadata | {"bib_key": "SMITH-B"},
+            self.source_hash, self.analysis_hash,
+            cited_key="SMITH-A",
+        )
+        self.assertEqual(mismatch, {"decision": "block", "hop": 2, "reason": "analysis-key-mismatch"})
+        matched = self.policy.citation_gate(
+            True, 2, None,
+            self.metadata | {"bib_key": "SMITH-A"},
+            self.source_hash, self.analysis_hash,
+            cited_key="SMITH-A",
+        )
+        self.assertEqual(matched["decision"], "pass")
+        no_field = self.policy.citation_gate(
+            True, 2, None,
+            self.metadata,
+            self.source_hash, self.analysis_hash,
+            cited_key="SMITH-A",
+        )
+        self.assertEqual(no_field["decision"], "pass")
+
+    def test_philosopher_claim_requires_strict_boolean_hashes(self):
+        arguments = ("source-backed", [{"bib_key": "SOURCE-ONE", "analysis_level": 2}], {"SOURCE-ONE"}, 2)
+        for source_flag, analysis_flag in (("false", True), (True, "false"), ("true", True)):
+            result = self.policy.philosopher_claim_gate(
+                *arguments,
+                {"SOURCE-ONE": {
+                    "analysis_level": 2,
+                    "verification_status": "verified",
+                    "source_hash_matches": source_flag,
+                    "analysis_hash_matches": analysis_flag,
+                }},
+            )
+            self.assertEqual(result["reason"], "analysis-stale")
 
     def test_philosopher_claim_blocks_malformed_levels_without_raising(self):
         arguments = ("source-backed", [{"bib_key": "SOURCE-ONE", "analysis_level": "two"}], {"SOURCE-ONE"}, 2)

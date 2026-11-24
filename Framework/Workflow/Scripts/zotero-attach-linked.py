@@ -35,9 +35,11 @@ so more than 50 parents are split across several POSTs automatically.
 import argparse
 import json
 import os
+import socket
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -97,20 +99,37 @@ def load_env():
     )
 
 
+def resolve_proxy():
+    for name in ("HTTPS_PROXY", "https_proxy", "HTTP_PROXY", "http_proxy"):
+        if name in os.environ:
+            return os.environ[name]
+    proxies = urllib.request.getproxies()
+    proxy = proxies.get("https") or proxies.get("http")
+    if proxy:
+        return proxy
+    parsed = urllib.parse.urlparse(DEFAULT_PROXY)
+    try:
+        with socket.create_connection((parsed.hostname, parsed.port or 80), timeout=0.3):
+            return DEFAULT_PROXY
+    except OSError:
+        return ""
+
+
 def opener():
-    proxy = os.environ.get("HTTPS_PROXY") or os.environ.get("HTTP_PROXY") or DEFAULT_PROXY
-    return urllib.request.build_opener(
-        urllib.request.ProxyHandler({"http": proxy, "https": proxy})
-    )
+    proxy = resolve_proxy()
+    handlers = {"http": proxy, "https": proxy} if proxy else {}
+    return urllib.request.build_opener(urllib.request.ProxyHandler(handlers))
 
 
-def request(op, url, api_key, method, data=None, retries=6):
+def request(op, url, api_key, method, data=None, retries=6, write_token=None):
     """One retried request. HTTP 4xx errors are non-transient and stop immediately."""
     last = None
     for attempt in range(1, retries + 1):
         req = urllib.request.Request(url, data=data, method=method)
         req.add_header("Zotero-API-Key", api_key)
         req.add_header("Zotero-API-Version", "3")
+        if write_token:
+            req.add_header("Zotero-Write-Token", write_token)
         if data is not None:
             req.add_header("Content-Type", "application/json")
         try:
@@ -119,7 +138,7 @@ def request(op, url, api_key, method, data=None, retries=6):
         except urllib.error.HTTPError as e:
             body = e.read().decode("utf-8", "replace")
             print(f"HTTP_ERROR {e.code} {body[:300]}")
-            return None, None
+            return e.code, None
         except Exception as e:  # URLError / SSL / timeout — transient
             last = e
             print(f"attempt {attempt} transient error: {type(e).__name__}", file=sys.stderr)
@@ -140,18 +159,19 @@ def attachment_payload(parent, stem, content_type):
 
 
 def post_batch(op, base, api_key, parents, stem, content_type, retries):
-    """POST one batch of attachments (<=50 parents). Returns list of (parent, att_key)
-    on success, or None on failure (message already printed)."""
+    """POST one batch of attachments (<=50 parents). Returns (results, failed),
+    where failed is the API's failed map; or None on failure (message printed)."""
     payload = [attachment_payload(p, stem, content_type) for p in parents]
-    _, body = request(op, base, api_key, "POST",
-                      data=json.dumps(payload).encode("utf-8"), retries=retries)
+    token = os.urandom(16).hex()
+    status, body = request(op, base, api_key, "POST",
+                           data=json.dumps(payload).encode("utf-8"),
+                           retries=retries, write_token=token)
+    if status == 412:
+        print("WRITE_TOKEN_CONFLICT batch may already have been created; verify it before retrying")
+        return None
     if body is None:
         return None
     obj = json.loads(body)
-    failed = obj.get("failed") or {}
-    if failed:
-        print("FAILED", json.dumps(failed))
-        return None
     succ = obj.get("successful") or {}
     # Response keys are batch indices ("0", "1", ...); correlate back to parents by index.
     results = []
@@ -159,7 +179,7 @@ def post_batch(op, base, api_key, parents, stem, content_type, retries):
         att_key = item.get("key") if isinstance(item, dict) else None
         parent = parents[int(idx_str)] if idx_str.isdigit() and int(idx_str) < len(parents) else None
         results.append((parent, att_key))
-    return results
+    return results, (obj.get("failed") or {})
 
 
 def main():
@@ -173,6 +193,9 @@ def main():
     ap.add_argument("--verify", action="store_true", help="GET each new attachment back and print linkMode/path")
     args = ap.parse_args()
 
+    if any(marker in args.stem for marker in ("/", "\\", "..")):
+        print("ERROR invalid --stem: must not contain '/', '\\', or '..'")
+        sys.exit(2)
     parents = [args.parent] if args.parent else [p.strip() for p in args.parents.split(",") if p.strip()]
     if not parents:
         print("ERROR no parent keys given")
@@ -192,13 +215,16 @@ def main():
     all_results = []
     for i in range(0, len(parents), 50):  # Zotero write batch cap = 50 items
         batch = parents[i:i + 50]
-        results = post_batch(op, base, api_key, batch, args.stem, args.content_type, args.retries)
-        if results is None:
+        outcome = post_batch(op, base, api_key, batch, args.stem, args.content_type, args.retries)
+        if outcome is None:
             sys.exit(1)
+        results, failed = outcome
+        for parent, att_key in results:
+            print("ATTACHMENT_KEY", parent, att_key)
         all_results.extend(results)
-
-    for parent, att_key in all_results:
-        print("ATTACHMENT_KEY", parent, att_key)
+        if failed:
+            print("FAILED", json.dumps(failed))
+            sys.exit(1)
 
     if args.verify:
         for _, att_key in all_results:

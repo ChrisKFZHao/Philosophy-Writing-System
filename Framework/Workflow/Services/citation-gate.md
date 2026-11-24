@@ -15,14 +15,17 @@ The semantic claim-to-source judgment is model-executed; artifact verification i
 
 ```bash
 python "Framework/Workflow/Scripts/workflow-policy.py" citation-gate \
-  --registered --required-level <N> \
-  [--metadata <analysis.meta.json>] [--source-path <pdf>] [--analysis-path <analysis.txt>]
+  --key <KEY> --refs <project>/refs.md \
+  --required-level <N> \
+  [--metadata <analysis.meta.json>] [--source-path <pdf>] [--analysis-path <analysis.md>]
 ```
+
+`--registered` is a legacy boolean flag that asserts Hop 1 without reading the project file; when `--refs` is given it is ignored.
 
 ## The two hops
 
-1. **Hop 1 — project registration**: the cited KEY must appear in this project's `refs.md` (any status counts for presence; `rejected` keys are flagged, never silently cited). Failure → `block, key-not-in-refs`.
-2. **Hop 2 — verified, hash-current analysis**: the paired `.analysis.meta.json` must exist, declare at least the required level, carry `verification_status: verified`, and match the current PDF and analysis SHA-256 hashes. Failure modes: `analysis-metadata-missing`, `analysis-level-insufficient`, `analysis-unverified`, `analysis-stale`.
+1. **Hop 1 — project registration**: the cited KEY must appear as the first cell of a row in this project's `refs.md`. A KEY that is absent (or appears only in another column) → `block, key-not-in-refs`; a KEY whose status is `rejected` → `block, key-rejected`.
+2. **Hop 2 — verified, hash-current analysis**: the paired `.analysis.meta.json` must exist, declare at least the required level, carry `verification_status: verified`, and match the current PDF and analysis SHA-256 hashes. When `--key` is given and the metadata carries a `bib_key`, it must equal that KEY. Failure modes: `analysis-metadata-missing`, `analysis-level-insufficient`, `analysis-unverified`, `analysis-stale`, `analysis-key-mismatch`.
 
 The INDEX level is an inventory view, **not** sufficient verification evidence.
 

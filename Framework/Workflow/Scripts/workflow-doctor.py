@@ -15,6 +15,7 @@ WORKFLOW_ROOT = Path(__file__).resolve().parent.parent
 REPO_ROOT = WORKFLOW_ROOT.parent.parent
 FRONTMATTER = re.compile(r"^---\n(.*?)\n---", re.DOTALL)
 MARKDOWN_LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
+METHOD_ID = re.compile(r"\bmethod\.[a-z0-9-]+\.[a-z0-9-]+")
 
 
 def check_json(failures: list[str]) -> None:
@@ -34,37 +35,40 @@ def check_json(failures: list[str]) -> None:
             failures.append(f"invalid JSON {path.relative_to(REPO_ROOT)}: {exc}")
 
 
+def plugin_root() -> Path:
+    return REPO_ROOT / "Framework/Plugin"
+
+
 def check_skill_frontmatter(failures: list[str]) -> None:
-    for root in (
-        WORKFLOW_ROOT / "Skills",
-        REPO_ROOT / ".claude/skills",
-        REPO_ROOT / ".agents/skills",
-    ):
-        for path in sorted(root.glob("*/SKILL.md")):
-            text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
-            match = FRONTMATTER.match(text)
-            if not match:
-                failures.append(f"missing frontmatter: {path.relative_to(REPO_ROOT)}")
-                continue
-            keys = {
-                line.split(":", 1)[0].strip()
-                for line in match.group(1).splitlines()
-                if ":" in line
-            }
-            if keys != {"name", "description"}:
-                failures.append(f"invalid skill metadata {path.relative_to(REPO_ROOT)}: {sorted(keys)}")
-                continue
-            metadata = {}
-            for line in match.group(1).splitlines():
-                if ":" in line:
-                    key, value = line.split(":", 1)
-                    metadata[key.strip()] = value.strip().strip('"')
-            name = metadata["name"]
-            description = metadata["description"]
-            if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name) or len(name) > 64:
-                failures.append(f"invalid skill name {path.relative_to(REPO_ROOT)}: {name}")
-            if not description or len(description) > 1024 or "<" in description or ">" in description:
-                failures.append(f"invalid skill description {path.relative_to(REPO_ROOT)}")
+    for path in sorted((plugin_root() / "skills").glob("*/SKILL.md")):
+        text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        relative = path.relative_to(REPO_ROOT)
+        match = FRONTMATTER.match(text)
+        if not match:
+            failures.append(f"missing frontmatter: {relative}")
+            continue
+        metadata = {}
+        for line in match.group(1).splitlines():
+            if ":" in line:
+                key, value = line.split(":", 1)
+                metadata[key.strip()] = value.strip().strip('"')
+        directory = path.parent.name
+        allowed = {"name", "description"}
+        if directory == "full":
+            allowed.add("disable-model-invocation")
+            if metadata.get("disable-model-invocation") != "true":
+                failures.append(f"full must disable model invocation: {relative}")
+        if set(metadata) != allowed:
+            failures.append(f"invalid skill metadata {relative}: {sorted(metadata)}")
+            continue
+        if metadata.get("name") != directory:
+            failures.append(f"skill name must match directory: {relative}")
+        name = metadata.get("name", "")
+        description = metadata.get("description", "")
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name) or len(name) > 64:
+            failures.append(f"invalid skill name {relative}: {name}")
+        if not description or len(description) > 1024 or "<" in description or ">" in description:
+            failures.append(f"invalid skill description {relative}")
 
 
 def check_forbidden(failures: list[str]) -> None:
@@ -102,13 +106,11 @@ def check_forbidden(failures: list[str]) -> None:
 def markdown_files() -> list[Path]:
     roots = [
         WORKFLOW_ROOT,
-        REPO_ROOT / ".claude",
-        REPO_ROOT / ".agents",
+        plugin_root(),
         REPO_ROOT / "Framework/Lessons",
         REPO_ROOT / "Shared/Philosophers-DB",
         REPO_ROOT / "README.md",
         REPO_ROOT / "AGENTS.md",
-        REPO_ROOT / "CLAUDE.md",
     ]
     files: list[Path] = []
     for root in roots:
@@ -153,29 +155,13 @@ def check_inventory(failures: list[str]) -> None:
     items = manifest.get("items", [])
     skills = sorted(i["id"] for i in items if i.get("kind") == "skill")
     methods = {i["id"]: i for i in items if i.get("kind") == "method"}
-    services = sorted(i["id"] for i in items if i.get("kind") == "service")
     commands = sorted(i["id"] for i in items if i.get("kind") == "command")
 
-    core_skills = sorted(p.parent.name for p in (WORKFLOW_ROOT / "Skills").glob("*/SKILL.md"))
-    claude_skills = sorted(p.parent.name for p in (REPO_ROOT / ".claude/skills").glob("*/SKILL.md"))
-    codex_skills = sorted(p.parent.name for p in (REPO_ROOT / ".agents/skills").glob("*/SKILL.md"))
-    if core_skills != skills:
-        failures.append(f"core skill dirs {core_skills} do not match manifest skills {skills}")
-    if claude_skills != skills:
-        failures.append(f"claude skills {claude_skills} do not match manifest skills {skills}")
-    if codex_skills != skills:
-        failures.append(f"codex skills {codex_skills} do not match manifest skills {skills}")
-
     exposure = manifest.get("exposure", {})
-    wrappers = sorted(p.stem for p in (REPO_ROOT / ".claude/commands").glob("*.md"))
-    if wrappers != sorted(exposure.get("claude_command_wrappers", [])):
-        failures.append(f"claude wrappers {wrappers} do not match exposure {exposure.get('claude_command_wrappers')}")
-
-    if (REPO_ROOT / ".claude/agents").exists():
-        failures.append(".claude/agents still exists; roles were removed in 0.7.0-alpha")
-    leftover = sorted(p.parent.name for p in (REPO_ROOT / ".agents/skills").glob("source-command-*/SKILL.md"))
-    if leftover:
-        failures.append(f"source-command-* adapters remain: {leftover}")
+    entrypoints = sorted(exposure.get("plugin", {}).get("entrypoints", {}))
+    plugin_skills = sorted(p.parent.name for p in (plugin_root() / "skills").glob("*/SKILL.md"))
+    if plugin_skills != entrypoints:
+        failures.append(f"plugin skill dirs {plugin_skills} do not match entrypoints {entrypoints}")
 
     method_files = {p.relative_to(WORKFLOW_ROOT).as_posix() for p in (WORKFLOW_ROOT / "Methods").rglob("*.md")
                     if "references" not in p.parts}
@@ -205,22 +191,35 @@ STALE_PHRASES = (
 
 def check_stale_phrases(failures: list[str]) -> None:
     """Historical records (changelog, Lessons, Plans) are exempt; living definitions are not."""
-    roots = [WORKFLOW_ROOT / "Skills", WORKFLOW_ROOT / "Methods", WORKFLOW_ROOT / "Services",
+    roots = [plugin_root(), WORKFLOW_ROOT / "Methods", WORKFLOW_ROOT / "Services",
              WORKFLOW_ROOT / "Contracts", WORKFLOW_ROOT / "Commands", WORKFLOW_ROOT / "Rules",
-             WORKFLOW_ROOT / "Templates", REPO_ROOT / ".claude", REPO_ROOT / ".agents",
-             REPO_ROOT / "AGENTS.md", REPO_ROOT / "CLAUDE.md", REPO_ROOT / "README.md"]
+             WORKFLOW_ROOT / "Templates", REPO_ROOT / "AGENTS.md", REPO_ROOT / "README.md"]
     for root in roots:
         paths = [root] if root.is_file() else sorted(root.rglob("*.md")) if root.is_dir() else []
         for path in paths:
             if "worktrees" in path.parts:
                 continue
-            text = path.read_text(encoding="utf-8", errors="replace")
+            text = path.read_text(encoding="utf-8", errors="replace").lower()
             for phrase in STALE_PHRASES:
                 if phrase in text:
                     failures.append(
                         f"stale phrase '{phrase}' in {path.relative_to(REPO_ROOT)}"
                     )
                     break
+
+
+def check_method_references(failures: list[str]) -> None:
+    """Every canonical method ID named in a live contract must exist in the manifest."""
+    manifest = load_manifest(failures)
+    if not manifest:
+        return
+    known = {item["id"] for item in manifest.get("items", []) if item.get("kind") == "method"}
+    roots = [plugin_root(), WORKFLOW_ROOT / "Commands", WORKFLOW_ROOT / "Services", WORKFLOW_ROOT / "Rules"]
+    for root in roots:
+        for path in sorted(root.rglob("*.md")):
+            text = path.read_text(encoding="utf-8", errors="replace")
+            for method_id in sorted(set(METHOD_ID.findall(text)) - known):
+                failures.append(f"unknown method id {method_id} in {path.relative_to(REPO_ROOT)}")
 
 
 def check_adapters(failures: list[str]) -> None:
@@ -233,51 +232,6 @@ def check_adapters(failures: list[str]) -> None:
     )
     if result.returncode:
         failures.append(result.stdout.strip() or result.stderr.strip())
-
-
-def check_nested_project_bridges(failures: list[str]) -> None:
-    private = REPO_ROOT / "Private"
-    if not private.is_dir():
-        return
-    prefixes = [private]
-    projects = private / "Projects"
-    if projects.is_dir():
-        prefixes.extend(path for path in projects.iterdir() if path.is_dir() and (path / "PROJECT.md").is_file())
-    for prefix in prefixes:
-        names = ("AGENTS.md", "CLAUDE.md") if prefix == private else ("AGENTS.md",)
-        for name in names:
-            path = prefix / name
-            label = path.relative_to(REPO_ROOT)
-            if not path.is_file():
-                failures.append(f"missing nested project adapter: {label}")
-            elif "not an independent workflow source" not in path.read_text(encoding="utf-8", errors="replace"):
-                failures.append(f"invalid nested project adapter: {label}")
-        _check_bridge_prefix(prefix, private, failures)
-
-
-def _check_bridge_prefix(prefix: Path, private: Path, failures: list[str]) -> None:
-    manifest = load_manifest(failures)
-    if not manifest:
-        return
-    for item in manifest.get("items", []):
-        item_id = item.get("id")
-        if item.get("kind") == "skill":
-            targets = [
-                prefix / ".agents/skills" / item_id / "SKILL.md",
-                prefix / ".claude/skills" / item_id / "SKILL.md",
-            ]
-        elif item.get("kind") == "command":
-            targets = [prefix / ".claude/commands" / "full.md"]
-        else:
-            continue  # methods, packages, and services are never bridged
-        for path in targets:
-            label = path.relative_to(REPO_ROOT)
-            if not path.is_file():
-                failures.append(f"missing nested bridge: {label}")
-            else:
-                text = path.read_text(encoding="utf-8", errors="replace")
-                if "External Workflow Bridge" not in text or "nearest ancestor" not in text:
-                    failures.append(f"invalid nested bridge: {label}")
 
 
 def check_philosopher_database(failures: list[str]) -> None:
@@ -298,11 +252,11 @@ def main() -> int:
     check_skill_frontmatter(failures)
     check_inventory(failures)
     check_stale_phrases(failures)
+    check_method_references(failures)
     check_forbidden(failures)
     check_markdown_links(failures)
     check_philosopher_database(failures)
     check_adapters(failures)
-    check_nested_project_bridges(failures)
     if failures:
         print("Workflow doctor failed:")
         for failure in failures:

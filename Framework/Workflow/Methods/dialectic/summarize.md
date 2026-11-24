@@ -18,13 +18,13 @@ side_effects: read-only
 
 Produces the Level 0.5 summary of a single document: core thesis + argument route + key concepts + interlocutors + topics, rendered as a ~300–500 character Chinese summary plus structured JSON. This is the cheapest rung of the analysis ladder (below Level 1 argument reconstruction) and the substrate for the three recommendation trigger points.
 
-This skill is a **pure function**: (extracted text + verified metadata) in → one summary out. It does not touch the filesystem, INDEX.md, or any project files — the caller (normally `/phil:ingest`) writes `Private/Bibliography/Summaries/{stem}.summary.txt` and updates the INDEX row.
+This skill is a **pure function**: (extracted text + verified metadata) in → one summary out. It does not touch the filesystem, INDEX.md, or any project files — the caller (normally `/phil:ingest`) writes `Private/Bibliography/Summaries/{stem}.summary.md` and updates the INDEX row.
 
 Output conforms to `summary-schema.json` (`Framework/Workflow/Schemas/summary-schema.json`).
 
 ## 2. Input
 
-- **Required**: Full extracted text of the source (from the `pdf` skill).
+- **Required**: Full extracted text of the source (from `Scripts/pdf-extract.py`, normally its cached evidence units).
 - **Required**: Verified source metadata (author, year, complete title, **source type**, canonical PDF path). Metadata must have been read from the document itself, not recalled (Rule 2). `source_type` (paper / monograph / collection / chapter) selects the summarizing mode in Step 6.
 - **For a monograph**: the table of contents (chapter numbers + titles) so the volume summary can carry per-chapter segments.
 - **For a collection member (chapter)**: that single paper's text, its container metadata (volume KEY, page range), and the volume's own title — each member paper is summarized as its own standard single-paper run, not folded into the volume file.
@@ -83,7 +83,7 @@ Assemble the structured output with a `SUM-` prefixed `summary_id`, per `report-
 
 ## 7. Relations to Other Skills
 
-- **Upstream**: `pdf` skill (text extraction); `/phil:ingest` (orchestration, metadata verification)
+- **Upstream**: `Scripts/pdf-extract.py` (text extraction); `/phil:ingest` (orchestration, metadata verification)
 - **Downstream**: recommendation trigger point 1 (ingest-time matching); phil:tutor trigger point 2 (INDEX scanning); `method.argument.argument-reconstruct` (Level 1 escalation)
 - **References**: `Private/Bibliography/INDEX.md` (topics vocabulary); `Private/Projects/*/PROJECT.md (falling back to AGENTS.md or CLAUDE.md)` (project keyword lists)
 

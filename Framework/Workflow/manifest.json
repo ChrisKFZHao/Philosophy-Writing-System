@@ -7,21 +7,26 @@
       "phil-write",
       "phil-review"
     ],
-    "claude_command_wrappers": [
-      "research",
-      "tutor",
-      "write",
-      "review",
-      "full"
-    ]
+    "plugin": {
+      "name": "phil",
+      "version": "0.7.0-alpha",
+      "description": "Philosophical reading and writing workflow: research, tutor, write, review, and a full paper pipeline.",
+      "entrypoints": {
+        "research": "phil-research",
+        "tutor": "phil-tutor",
+        "write": "phil-write",
+        "review": "phil-review",
+        "full": "phil-full"
+      }
+    }
   },
   "migration_map": "Migration/migration-v0.7.json",
   "items": [
     {
       "id": "phil-research",
       "kind": "skill",
-      "source": "Skills/phil-research/SKILL.md",
-      "description": "Shared evidence and provenance kernel for philosophical research — five isolated modes: ingest (library intake), reconstruct (progressive source comprehension), evaluate (targeted critique), comment (argumentative detail), philosophers (source-backed philosopher database)",
+      "source": "../Plugin/skills/research/SKILL.md",
+      "description": "Work on philosophical sources: ingest PDFs, reconstruct or evaluate an argument, comment on a text, or maintain the philosopher database. Use for 文献入库、论证重构、批判性评估、文本评注、哲学家数据库.",
       "modes": [
         "ingest",
         "reconstruct",
@@ -46,8 +51,8 @@
     {
       "id": "phil-tutor",
       "kind": "skill",
-      "source": "Skills/phil-tutor/SKILL.md",
-      "description": "Tutor-style dialogue in two modes — reading (default): Socratic literature dialogue, probing understanding, recommending sources, planning next steps; incubating: conception incubation (构思孵化) helping crystallize your own thesis and argument sketch",
+      "source": "../Plugin/skills/tutor/SKILL.md",
+      "description": "Think through a philosophical text or your own thesis in Socratic dialogue. Reading mode probes understanding and suggests what to read next; incubating mode builds a thesis and argument sketch. Use for 读文献讨论、检验理解、构思孵化.",
       "modes": [
         "reading",
         "incubating"
@@ -65,12 +70,13 @@
     {
       "id": "phil-write",
       "kind": "skill",
-      "source": "Skills/phil-write/SKILL.md",
-      "description": "Philosophical manuscript writing in three modes — outline (structured outline from your conception), draft (section-by-section composition with user-led/assistant-led collaboration), revision (review-driven revision)",
+      "source": "../Plugin/skills/write/SKILL.md",
+      "description": "Write a philosophy manuscript: build an outline from a conception, draft section by section, revise from review findings, or export a talk handout and slides. Use for 写提纲、起草、按审稿意见修改、讲义、幻灯片.",
       "modes": [
         "outline",
         "draft",
-        "revision"
+        "revision",
+        "export"
       ],
       "capabilities": [
         "read",
@@ -85,8 +91,8 @@
     {
       "id": "phil-review",
       "kind": "skill",
-      "source": "Skills/phil-review/SKILL.md",
-      "description": "Peer review of your own manuscript in three modes — full (whole-paper 8-dimension review), targeted (specific dimensions or sections), re-review (verify prior findings were resolved). Read-only unless revision is explicitly requested.",
+      "source": "../Plugin/skills/review/SKILL.md",
+      "description": "Peer review your own philosophy manuscript: a full eight-dimension review, a targeted review, or a re-review of earlier findings. Read-only; revision is handed to phil:write revision. Use for 审稿、复审.",
       "modes": [
         "full",
         "targeted",

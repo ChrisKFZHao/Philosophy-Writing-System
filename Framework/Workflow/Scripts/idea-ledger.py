@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -12,6 +13,7 @@ from pathlib import Path
 EVENTS = {"new-evidence", "related-objection", "scope-change", "argument-stall", "defect-resolved", "alternative-failed", "user-request"}
 STATUSES = {"active", "parked", "rejected", "superseded"}
 PROVENANCE = {"user", "ai-completion", "joint"}
+HISTORY_FIELDS = {"from_status", "to_status", "from_reason", "superseded_by", "at"}
 
 
 def now() -> str:
@@ -40,7 +42,14 @@ def save(project_dir: Path, ledger: dict) -> None:
     if errors:
         raise ValueError("invalid idea ledger: " + "; ".join(errors))
     project_dir.mkdir(parents=True, exist_ok=True)
-    ledger_path(project_dir).write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    target = ledger_path(project_dir)
+    temp = target.with_name(target.name + ".tmp")
+    try:
+        temp.write_text(json.dumps(ledger, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        os.replace(temp, target)
+    except BaseException:
+        temp.unlink(missing_ok=True)
+        raise
 
 
 def normalized(statement: str) -> str:
@@ -92,11 +101,12 @@ def validate(ledger: dict, expected_project: str | None = None) -> list[str]:
         "revival_triggers", "keywords", "related_bib_keys", "superseded_by",
         "created_at", "updated_at", "last_surfaced_at", "last_surfaced_reason",
     }
+    allowed_idea = required_idea | {"status_history"}
     for idea in ideas:
         if not isinstance(idea, dict):
             errors.append("idea must be an object")
             continue
-        if set(idea) != required_idea:
+        if not required_idea <= set(idea) or not set(idea) <= allowed_idea:
             errors.append("invalid idea fields")
         identifier = idea.get("id", "")
         if (
@@ -130,6 +140,23 @@ def validate(ledger: dict, expected_project: str | None = None) -> list[str]:
         for field in ("last_surfaced_at", "last_surfaced_reason"):
             if idea.get(field) is not None and not isinstance(idea[field], str):
                 errors.append(f"{identifier}: invalid {field}")
+        history = idea.get("status_history")
+        if history is not None:
+            if not isinstance(history, list):
+                errors.append(f"{identifier}: invalid status_history")
+            else:
+                for entry in history:
+                    if not isinstance(entry, dict) or set(entry) != HISTORY_FIELDS:
+                        errors.append(f"{identifier}: invalid status_history entry")
+                        continue
+                    if entry["from_status"] not in STATUSES or entry["to_status"] not in STATUSES:
+                        errors.append(f"{identifier}: invalid status_history entry")
+                    if not isinstance(entry["from_reason"], str):
+                        errors.append(f"{identifier}: invalid status_history entry")
+                    if entry["superseded_by"] is not None and not isinstance(entry["superseded_by"], str):
+                        errors.append(f"{identifier}: invalid status_history entry")
+                    if not isinstance(entry["at"], str) or not entry["at"]:
+                        errors.append(f"{identifier}: invalid status_history entry")
     # Permit a valid reference to an idea defined later in the ledger.
     for idea in ideas:
         if not isinstance(idea, dict):
@@ -202,10 +229,18 @@ def transition(ledger: dict, identifier: str, status: str, reason: str, user_con
             raise ValueError("superseded_by must name a different existing idea")
     elif superseded_by is not None:
         raise ValueError("superseded_by is only valid for superseded status")
+    timestamp = now()
+    idea.setdefault("status_history", []).append({
+        "from_status": idea["status"],
+        "to_status": status,
+        "from_reason": idea["status_reason"],
+        "superseded_by": idea["superseded_by"],
+        "at": timestamp,
+    })
     idea["status"] = status
     idea["status_reason"] = reason
     idea["superseded_by"] = superseded_by if status == "superseded" else None
-    idea["updated_at"] = now()
+    idea["updated_at"] = timestamp
     return idea
 
 
@@ -277,7 +312,11 @@ def main() -> int:
     surfaced_parser.add_argument("--reason", required=True)
     sub.add_parser("validate")
     args = parser.parse_args()
-    ledger = load(args.project_dir)
+    try:
+        ledger = load(args.project_dir)
+    except (OSError, json.JSONDecodeError, UnicodeDecodeError) as exc:
+        print(json.dumps({"error": str(exc)}, ensure_ascii=False))
+        return 2
     try:
         if args.command == "validate":
             errors = validate(ledger, project_name(args.project_dir))

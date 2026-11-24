@@ -1,0 +1,6 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "phil",
+  "version": "0.7.0-alpha",
+  "description": "Philosophical reading and writing workflow: research, tutor, write, review, and a full paper pipeline."
+}

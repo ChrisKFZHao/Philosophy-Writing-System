@@ -6,13 +6,15 @@ Apply these rules in both Claude Code and Codex.
 
 Resolve project guidance in this order: `PROJECT.md`, `AGENTS.md`, then `CLAUDE.md`.
 Use the first file found as authoritative. A new project should use `PROJECT.md` plus
-the two thin runtime adapters from `Framework/Workflow/Templates/Project/`.
+the `AGENTS.md` pointer from `Framework/Workflow/Templates/Project/`; `CLAUDE.md` is only a
+legacy fallback.
 
-When a project is inside a nested repository (for example `Private/Projects/<topic>`),
-the nested repository is a content boundary, not a second workflow source. Resolve the
-nearest ancestor containing both `Framework/Workflow/` and the outer runtime adapter
-directories (`.agents/skills/` or `.claude/`). Use the generated bridge in the nested
-repository only to reach that outer source; never copy or silently substitute skill text.
+When a project is inside a nested repository (for example `Private/Projects/<topic>`), the
+nested repository is a content boundary, not a second workflow source. Resolve `<root>`,
+the nearest ancestor containing `Framework/Workflow/manifest.json`, and read
+`<root>/AGENTS.md`. Public skills come from the `phil` plugin; when a host has not loaded
+it, read `<root>/Framework/Plugin/skills/<name>/SKILL.md` directly. Never copy or silently
+substitute skill text.
 
 ## Collaboration Modes
 
@@ -53,7 +55,7 @@ required inputs, output sections, or Citation Gate decision because of runtime l
 
 ## Zotero
 
-Classify the available backend before `/phil:ingest` Step 8:
+Classify the available backend before `phil:research ingest` Step 8:
 
 - `full`: Zotero MCP write tools and the linked-file helper are available. Run Step 8.
 - `partial`: only a local Zotero plugin/API is available. Permit local search, export,

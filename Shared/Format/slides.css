@@ -1,0 +1,79 @@
+/* 16:9 slide deck as PDF. Rendered by render-output.py with --section-divs: each level-1 section is one page. */
+
+@page { size: 254mm 142.875mm; margin: 0; }
+
+/* Chinese quotation marks, dashes, and ellipses take the full-width CJK glyphs, not the Latin font's. */
+@font-face { font-family: "CJK Punct Sans"; src: local("Microsoft YaHei"), local("PingFang SC"), local("Noto Sans CJK SC"); unicode-range: U+2014-2015, U+2018-2019, U+201C-201D, U+2026, U+00B7; }
+
+:root {
+  --ink: #1b1b1b;
+  --accent: #1f3a5f;
+  --accent-soft: #eef2f6;
+  --muted: #5f6b76;
+  --rule: #c9d1d9;
+  --sans: "CJK Punct Sans", "Segoe UI", "Microsoft YaHei", "Noto Sans CJK SC", "PingFang SC", sans-serif;
+  --w: 254mm;
+  --h: 142.875mm;
+}
+
+html { font-size: 19pt; }
+body {
+  margin: 0 !important; padding: 0 !important; max-width: none !important;
+  font-family: var(--sans); color: var(--ink); line-height: 1.45;
+  text-spacing-trim: trim-start;
+  counter-reset: slide;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+
+/* Title slide */
+header#title-block-header {
+  box-sizing: border-box; width: var(--w); height: var(--h);
+  padding: 0 22mm; margin: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  border-left: 6mm solid var(--accent);
+  break-after: page; page-break-after: always;
+}
+header .title { text-wrap: balance; border: none; padding: 0; font-size: 28pt; font-weight: 700; line-height: 1.25; color: var(--accent); margin: 0 0 5mm; text-align: left; }
+header .subtitle { font-size: 16pt; color: var(--ink); margin: 0 0 9mm; }
+header .author, header .date { font-size: 12pt; color: var(--muted); margin: 0 0 1.5mm; }
+
+/* Content slides */
+section.level1 {
+  box-sizing: border-box; width: var(--w); height: var(--h);
+  padding: 13mm 18mm 12mm; position: relative; overflow: hidden;
+  break-after: page; page-break-after: always;
+  counter-increment: slide;
+}
+section.level1:last-of-type { break-after: auto; page-break-after: auto; }
+section.level1::before { content: ""; position: absolute; left: 0; top: 0; width: 100%; height: 2.2mm; background: var(--accent); }
+section.level1::after {
+  content: counter(slide); position: absolute; right: 10mm; bottom: 6mm;
+  font-size: 9pt; color: var(--muted);
+}
+section.level1 > h1 {
+  font-size: 22pt; font-weight: 700; color: var(--accent); line-height: 1.25; text-wrap: balance;
+  margin: 0 0 7mm; padding-bottom: 2.5mm; border-bottom: 0.6pt solid var(--rule);
+}
+
+p { margin: 0 0 3.5mm; }
+ul, ol { margin: 0; padding-left: 8mm; }
+li { margin: 0 0 3mm; }
+li > p { margin: 0; }
+ul > li::marker { color: var(--accent); }
+ol.example { list-style: none; padding-left: 13mm; }
+ol.example > li { position: relative; }
+ol.example > li::before {
+  content: "(" counter(list-item) ")"; position: absolute; left: -13mm; width: 11mm; text-align: right;
+  font-weight: 700; color: var(--accent);
+}
+
+div.thesis { background: var(--accent-soft); border-left: 2mm solid var(--accent); padding: 4mm 6mm; font-weight: 600; margin: 0 0 5mm; }
+div.thesis p { margin: 0; }
+
+blockquote { margin: 0 0 4mm; padding-left: 5mm; border-left: 1pt solid var(--rule); color: #333; }
+table { border-collapse: collapse; width: 100%; font-size: 13pt; }
+th { text-align: left; color: var(--accent); border-bottom: 1pt solid var(--accent); padding: 1.5mm 3mm; }
+td { border-bottom: 0.5pt solid var(--rule); padding: 1.5mm 3mm; vertical-align: top; }
+strong { color: var(--accent); }
+
+.notes { display: none; }

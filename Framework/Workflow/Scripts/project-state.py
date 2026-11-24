@@ -7,9 +7,10 @@ import argparse
 import hashlib
 import itertools
 import json
+import os
 import re
 from datetime import datetime, timezone
-from pathlib import Path
+from pathlib import Path, PurePosixPath, PureWindowsPath
 
 SCHEMA_VERSION = 2
 STATUSES = {"not_started", "in_progress", "awaiting_user", "blocked", "stale", "completed"}
@@ -33,13 +34,23 @@ STAGE_OF_KIND = {
     "analysis": "research",
     "outline": "outline",
     "section-brief": "section_brief",
+    "argument-sheet": "section_brief",
     "draft-section": "draft",
+    "cold-read-report": "draft",
     "section-audit-report": "section_audit",
     "review-report": "review",
     "revision-log": "revision",
     "closure-report": "citation_closure",
 }
 SHA_PATTERN = re.compile(r"^[a-f0-9]{64}$")
+TEXT_SUFFIXES = {".txt", ".md", ".json", ".tex", ".bib"}
+# gate -> (recorded relative path field, recorded hash field)
+APPROVAL_GATES = {
+    "outline": ("artifact_path", "artifact_sha256"),
+    "conception": ("artifact_path", "artifact_sha256"),
+    "review": ("review_path", "review_sha256"),
+    "citation_closure": ("report_path", "report_sha256"),
+}
 
 
 def now() -> str:
@@ -55,6 +66,9 @@ def state_path(project_dir: Path) -> Path:
 
 
 def sha256(path: Path) -> str:
+    if path.suffix.lower() in TEXT_SUFFIXES:
+        # Normalize CRLF so an autocrlf checkout does not invalidate a recorded hash.
+        return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
     digest = hashlib.sha256()
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(65536), b""):
@@ -107,14 +121,24 @@ def save(project_dir: Path, state: dict) -> None:
         raise ValueError("invalid workflow state: " + "; ".join(errors))
     project_dir.mkdir(parents=True, exist_ok=True)
     state["updated_at"] = now()
-    state_path(project_dir).write_text(
-        json.dumps(state, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    target = state_path(project_dir)
+    temp = target.with_name(target.name + ".tmp")
+    try:
+        temp.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        os.replace(temp, target)
+    except BaseException:
+        temp.unlink(missing_ok=True)
+        raise
 
 
 def is_safe_relative_path(value: object) -> bool:
     if not isinstance(value, str) or not value:
+        return False
+    # Reject POSIX-absolute, Windows-absolute/UNC, and drive-prefixed forms on every OS.
+    if PurePosixPath(value).is_absolute() or PureWindowsPath(value).is_absolute():
+        return False
+    windows_drive = PureWindowsPath(value).drive
+    if len(windows_drive) == 2 and windows_drive[1] == ":":
         return False
     path = Path(value)
     return (
@@ -194,6 +218,14 @@ def validate(state: dict, expected_project: str | None = None) -> list[str]:
         if closure is not None and (not isinstance(closure, dict)
                                     or closure.get("integrity_result") not in CLOSURE_RESULTS):
             errors.append("invalid citation_closure integrity result")
+        # Path fields are optional (older state files omit them); when present they must be safe.
+        for gate, field in (("outline", "artifact_path"), ("conception", "artifact_path"),
+                            ("review", "review_path"), ("citation_closure", "report_path")):
+            approval = approvals.get(gate)
+            if isinstance(approval, dict) and field in approval:
+                value = approval[field]
+                if value is not None and not is_safe_relative_path(value):
+                    errors.append(f"{gate} {field} must be a safe relative path")
 
     seen_ids: set[str] = set()
     for finding in state.get("review_findings") or []:
@@ -212,6 +244,8 @@ def validate(state: dict, expected_project: str | None = None) -> list[str]:
             errors.append("invalid finding severity")
         if finding.get("status") not in FINDING_STATUSES:
             errors.append("invalid finding status")
+        if not isinstance(finding.get("target"), str):
+            errors.append("finding target required")
         if not isinstance(finding.get("source_review_sha256"), str) or not SHA_PATTERN.match(finding["source_review_sha256"]):
             errors.append("finding source_review_sha256 malformed")
 
@@ -244,6 +278,26 @@ def refresh_artifacts(project_dir: Path, state: dict) -> bool:
             artifact["status"] = fresh_status
             changed = True
     return changed
+
+
+def stale_approvals(project_dir: Path, state: dict) -> list[str]:
+    stale: list[str] = []
+    approvals = state.get("approvals") or {}
+    for gate, (path_field, hash_field) in APPROVAL_GATES.items():
+        approval = approvals.get(gate)
+        # A pending or rejected decision approves nothing, so it cannot go stale.
+        if not isinstance(approval, dict) or approval.get("decision") in {"pending", "rejected"}:
+            continue
+        relative = approval.get(path_field)
+        if not relative:
+            continue
+        if not is_safe_relative_path(relative):
+            stale.append(gate)
+            continue
+        target = project_dir / relative
+        if not target.is_file() or sha256(target) != approval.get(hash_field):
+            stale.append(gate)
+    return stale
 
 
 def earliest_affected_stage(state: dict) -> str | None:
@@ -340,12 +394,13 @@ def cmd_init(project_dir: Path, args: argparse.Namespace) -> dict:
 def cmd_status(project_dir: Path, args: argparse.Namespace) -> dict:
     state = load(project_dir)
     changed = refresh_artifacts(project_dir, state)
-    if changed and state_path(project_dir).exists():
-        if any(a["status"] == "stale" for a in state["artifacts"]) and state["status"] != "completed":
+    if changed and state["status"] != "completed":
+        if any(a["status"] == "stale" for a in state["artifacts"]):
             state["status"] = "stale"
-        state["next_action"] = derive_next_action(state)
-        save(project_dir, state)
+    stale_gates = stale_approvals(project_dir, state)
     derived = derive_next_action(state)
+    if stale_gates and state["status"] != "completed":
+        derived = f"approval stale: {', '.join(stale_gates)}; renewed confirmation required"
     return {
         "run_id": state["run_id"], "entrypoint": state["entrypoint"], "stage": state["stage"],
         "status": state["status"], "collaboration_mode": state["collaboration_mode"],
@@ -353,6 +408,7 @@ def cmd_status(project_dir: Path, args: argparse.Namespace) -> dict:
         "outline_decision": state["approvals"]["outline"]["decision"],
         "open_high_findings": [f["id"] for f in state["review_findings"]
                                if f["severity"] == "high" and f["status"] in {"open", "accepted"}],
+        "stale_approvals": stale_gates,
         "next_action": derived,
         "refreshed": changed,
     }
@@ -364,6 +420,15 @@ def cmd_resume(project_dir: Path, args: argparse.Namespace) -> dict:
         return {"action": "none", "reason": "no state file; use init"}
     refresh_artifacts(project_dir, state)
     stale = [a for a in state["artifacts"] if a["status"] == "stale"]
+    stale_gates = stale_approvals(project_dir, state)
+    if stale_gates and state["status"] != "completed":
+        state["status"] = "stale"
+        state["next_action"] = f"approval stale: {', '.join(stale_gates)}; renewed confirmation required"
+        save(project_dir, state)
+        return {
+            "action": "stale", "stale_approvals": stale_gates,
+            "request": "renewed user confirmation required before reusing outputs",
+        }
     if stale and state["status"] != "completed":
         state["status"] = "stale"
         rewind = earliest_affected_stage(state)
@@ -408,6 +473,9 @@ def cmd_advance(project_dir: Path, args: argparse.Namespace) -> dict:
     if args.stage not in STAGES:
         raise ValueError(f"unknown stage: {args.stage}")
     if args.stage == "complete":
+        stale_gates = stale_approvals(project_dir, state)
+        if stale_gates:
+            return {"action": "refused", "reason": f"stale approval: {', '.join(stale_gates)}"}
         blocked = completion_blocked(state)
         if blocked:
             return {"action": "refused", "reason": f"completion blocked: {blocked}"}
@@ -447,6 +515,7 @@ def cmd_approve(project_dir: Path, args: argparse.Namespace) -> dict:
         state["approvals"]["outline"] = {
             "decision": decision,
             "artifact_sha256": _gate_artifact_sha(project_dir, args.artifact_path),
+            "artifact_path": args.artifact_path,
             "recorded_at": now(),
             "reason": args.reason or "",
         }
@@ -458,6 +527,7 @@ def cmd_approve(project_dir: Path, args: argparse.Namespace) -> dict:
         state["approvals"]["conception"] = {
             "decision": decision,
             "artifact_sha256": _gate_artifact_sha(project_dir, args.artifact_path),
+            "artifact_path": args.artifact_path,
             "recorded_at": now(),
             "reason": args.reason or "",
         }
@@ -467,6 +537,7 @@ def cmd_approve(project_dir: Path, args: argparse.Namespace) -> dict:
         state["approvals"]["review"] = {
             "decision": decision,
             "review_sha256": _gate_artifact_sha(project_dir, args.artifact_path),
+            "review_path": args.artifact_path,
             "recorded_at": now(),
             "reason": args.reason or "",
         }
@@ -477,9 +548,12 @@ def cmd_approve(project_dir: Path, args: argparse.Namespace) -> dict:
                 raise ValueError("citation closure cannot be acknowledged before a machine PASS")
             closure["acknowledged_at"] = now()
         elif decision == "pass":
+            if not args.artifact_path:
+                raise ValueError("citation closure PASS requires --artifact-path")
             state["approvals"]["citation_closure"] = {
                 "integrity_result": "pass",
                 "report_sha256": _gate_artifact_sha(project_dir, args.artifact_path),
+                "report_path": args.artifact_path,
                 "acknowledged_at": None,
                 "recorded_at": now(),
             }
@@ -505,6 +579,9 @@ def cmd_finding(project_dir: Path, args: argparse.Namespace) -> dict:
         raise ValueError("review_sha256 malformed")
     for finding in state["review_findings"]:
         if finding["id"] == args.id:
+            if finding["severity"] == "high" and (args.severity != "high" or args.status == "rejected") \
+                    and not (args.note or "").strip():
+                raise ValueError("neutralizing a high-severity finding requires a reason in --note")
             finding.update(severity=args.severity, target=args.target, status=args.status,
                            source_review_sha256=review_sha or finding["source_review_sha256"],
                            note=args.note or finding.get("note", ""))

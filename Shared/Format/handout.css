@@ -1,0 +1,85 @@
+/* A4 talk handout. Rendered by render-output.py: Pandoc HTML, printed to PDF by a headless browser. */
+
+@page {
+  size: A4;
+  margin: 15mm 17mm 16mm;
+  @bottom-right { content: counter(page) " / " counter(pages); font: 7.5pt "Microsoft YaHei", sans-serif; color: #888; }
+}
+
+/* Chinese quotation marks, dashes, and ellipses take the full-width CJK glyphs, not the Latin font's. */
+@font-face { font-family: "CJK Punct Serif"; src: local("SimSun"), local("Songti SC"), local("Noto Serif CJK SC"); unicode-range: U+2014-2015, U+2018-2019, U+201C-201D, U+2026, U+00B7; }
+@font-face { font-family: "CJK Punct Sans"; src: local("Microsoft YaHei"), local("PingFang SC"), local("Noto Sans CJK SC"); unicode-range: U+2014-2015, U+2018-2019, U+201C-201D, U+2026, U+00B7; }
+
+:root {
+  --ink: #1b1b1b;
+  --accent: #1f3a5f;
+  --muted: #5f6b76;
+  --rule: #c9d1d9;
+  --serif: "CJK Punct Serif", Georgia, "Times New Roman", "Noto Serif CJK SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
+  --sans: "CJK Punct Sans", "Segoe UI", "Microsoft YaHei", "Noto Sans CJK SC", "PingFang SC", sans-serif;
+}
+
+html { font-size: 10pt; }
+body {
+  margin: 0 !important; padding: 0 !important; max-width: none !important;
+  font-family: var(--serif); color: var(--ink);
+  line-height: 1.6; text-align: justify; hyphens: auto;
+  font-variant-numeric: lining-nums;
+  text-spacing-trim: trim-start;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+
+/* Title block */
+header#title-block-header { margin: 0 0 4.5mm; padding-bottom: 3mm; border-bottom: 1.2pt solid var(--accent); }
+header .title { font-family: var(--sans); font-size: 15pt; font-weight: 700; line-height: 1.3; margin: 0; padding: 0; border: none; color: var(--accent); text-align: left; }
+header .subtitle { font-family: var(--sans); font-size: 10.5pt; margin: 1mm 0 0; color: var(--ink); }
+header .author, header .date { display: inline; font-family: var(--sans); font-size: 8.5pt; color: var(--muted); margin: 0; }
+header .author::after { content: "　·　"; }
+header p.date { margin-top: 1.5mm; }
+
+/* Sections */
+h1, h2, h3 { font-family: var(--sans); color: var(--accent); line-height: 1.3; break-after: avoid; text-align: left; text-wrap: balance; }
+h1 { font-size: 11.5pt; margin: 4.5mm 0 1.5mm; padding-bottom: 0.8mm; border-bottom: 0.5pt solid var(--rule); }
+h2 { font-size: 10.5pt; margin: 3.5mm 0 1mm; }
+h3 { font-size: 10pt; margin: 3mm 0 1mm; color: var(--ink); }
+p { margin: 0 0 1.6mm; orphans: 2; widows: 2; }
+
+/* Thesis box */
+div.thesis { margin: 0 0 3.5mm; padding: 2.2mm 3.5mm; background: #eef2f6; border-left: 2.5pt solid var(--accent); font-family: var(--sans); font-size: 9.8pt; }
+div.thesis p { margin: 0; }
+
+/* Lists: numbered items run on across sections via Pandoc example lists */
+ol, ul { margin: 0 0 1.8mm; padding-left: 7mm; }
+li { margin: 0 0 0.9mm; }
+li > p { margin: 0; }
+ol.example { list-style: none; padding-left: 8.5mm; }
+ol.example > li { position: relative; }
+ol.example > li::before {
+  content: "(" counter(list-item) ")";
+  position: absolute; left: -8.5mm; width: 7.5mm; text-align: right;
+  font-family: var(--sans); font-size: 8.5pt; font-weight: 600; color: var(--accent); top: 0.35mm;
+}
+
+/* Quotations */
+blockquote { margin: 1.5mm 0 2.5mm 4mm; padding: 0.5mm 0 0.5mm 3mm; border-left: 1pt solid var(--rule); color: #333; font-size: 9.3pt; }
+blockquote p { margin: 0; }
+
+/* Tables */
+table { border-collapse: collapse; width: 100%; margin: 1.5mm 0 3mm; font-size: 8.8pt; break-inside: avoid; }
+th { font-family: var(--sans); font-weight: 600; color: var(--accent); border-bottom: 0.8pt solid var(--accent); text-align: left; padding: 1mm 2mm; }
+td { border-bottom: 0.4pt solid var(--rule); padding: 1mm 2mm; vertical-align: top; }
+
+strong { font-family: var(--sans); font-weight: 600; }
+em { font-style: italic; }
+code { font-size: 8.5pt; }
+
+/* Objection and reply labels, discussion marker */
+.label { font-family: var(--sans); font-size: 8.5pt; font-weight: 600; color: var(--accent); }
+.open { font-family: var(--sans); font-size: 8pt; color: var(--muted); }
+
+/* References: the list render-output.py appends under 参考文献 */
+h1#参考文献 { font-size: 10pt; }
+h1#参考文献 + ul { font-size: 8.3pt; line-height: 1.45; padding-left: 0; list-style: none; text-align: left; }
+h1#参考文献 + ul > li { padding-left: 5mm; text-indent: -5mm; margin-bottom: 0.6mm; }
+
+.notes { display: none; }

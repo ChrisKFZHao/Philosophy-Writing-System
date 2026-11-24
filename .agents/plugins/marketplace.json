@@ -1,0 +1,20 @@
+{
+  "name": "phil-local",
+  "interface": {
+    "displayName": "Philosophical Writing"
+  },
+  "plugins": [
+    {
+      "name": "phil",
+      "source": {
+        "source": "local",
+        "path": "./Framework/Plugin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

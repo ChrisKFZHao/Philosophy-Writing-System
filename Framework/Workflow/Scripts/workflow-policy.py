@@ -152,6 +152,25 @@ def zotero_plan(mcp: bool, local: bool, dry_run: bool = False) -> dict:
     }
 
 
+def refs_status(refs_path: Path, key: str) -> str:
+    """Return ``registered``, ``rejected``, or ``absent`` for a KEY in refs.md."""
+    if not refs_path.is_file():
+        return "absent"
+    statuses: list[str] = []
+    for line in refs_path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if "|" not in stripped:
+            continue
+        cells = [cell.strip() for cell in stripped.strip("|").split("|")]
+        # A table row has KEY, role, and status cells; prose does not.
+        if len(cells) >= 3 and cells[0] == key:
+            statuses.append(cells[2].lower())
+    if not statuses:
+        return "absent"
+    # Fail closed: a KEY marked rejected in any row, even with an annotation, stays rejected.
+    return "rejected" if any("rejected" in status for status in statuses) else "registered"
+
+
 def citation_gate(
     registered: bool,
     required_level: float,
@@ -159,6 +178,7 @@ def citation_gate(
     metadata: dict[str, object] | None = None,
     current_source_sha256: str | None = None,
     current_analysis_sha256: str | None = None,
+    cited_key: str | None = None,
 ) -> dict:
     """Apply both Citation Gate hops using verified analysis metadata.
 
@@ -175,6 +195,12 @@ def citation_gate(
         return {"decision": "block", "hop": 2, "reason": "analysis-level-insufficient"}
     if not isinstance(metadata, dict):
         return {"decision": "block", "hop": 2, "reason": "analysis-metadata-missing"}
+    if (
+        cited_key is not None
+        and isinstance(metadata.get("bib_key"), str)
+        and metadata["bib_key"] != cited_key
+    ):
+        return {"decision": "block", "hop": 2, "reason": "analysis-key-mismatch"}
 
     metadata_level = metadata.get("analysis_level")
     if not _has_required_level(metadata_level, required_level):
@@ -435,6 +461,10 @@ def evaluation_plan(
 
 
 def sha256_file(path: Path) -> str:
+    if path.suffix.lower() in {".txt", ".md", ".json", ".tex", ".bib"}:
+        # Normalize line endings so a CRLF checkout keeps a recorded text hash valid.
+        data = path.read_bytes().replace(b"\r\n", b"\n")
+        return hashlib.sha256(data).hexdigest()
     digest = hashlib.sha256()
     with path.open("rb") as handle:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
@@ -483,7 +513,10 @@ def philosopher_claim_gate(
             has_stale = True
         elif item.get("verification_status") != "verified":
             has_unverified = True
-        elif not item.get("source_hash_matches") or not item.get("analysis_hash_matches"):
+        elif (
+            item.get("source_hash_matches") is not True
+            or item.get("analysis_hash_matches") is not True
+        ):
             has_stale = True
         elif _has_required_level(item.get("analysis_level"), required_level):
             verified.append(key)
@@ -536,6 +569,8 @@ def main() -> int:
     zotero.add_argument("--dry-run", action="store_true")
     citation = subparsers.add_parser("citation-gate")
     citation.add_argument("--registered", action="store_true")
+    citation.add_argument("--key")
+    citation.add_argument("--refs", type=Path)
     citation.add_argument("--required-level", type=float, required=True)
     citation.add_argument("--available-level", type=float)
     citation.add_argument("--metadata", type=Path)
@@ -564,6 +599,8 @@ def main() -> int:
     removed = subparsers.add_parser("removed-entrypoint")
     removed.add_argument("name")
     args = parser.parse_args()
+    if args.command == "citation-gate" and args.refs is not None and args.key is None:
+        parser.error("--refs requires --key")
     try:
         if args.command == "removed-entrypoint":
             result = removed_entrypoint(args.name)
@@ -578,14 +615,22 @@ def main() -> int:
                     metadata = json.load(handle)
             source_hash = sha256_file(args.source_path) if args.source_path else None
             analysis_hash = sha256_file(args.analysis_path) if args.analysis_path else None
-            result = citation_gate(
-                args.registered,
-                args.required_level,
-                args.available_level,
-                metadata,
-                source_hash,
-                analysis_hash,
-            )
+            refs_result = refs_status(args.refs, args.key) if args.refs is not None else None
+            if refs_result == "absent":
+                result = {"decision": "block", "hop": 1, "reason": "key-not-in-refs"}
+            elif refs_result == "rejected":
+                result = {"decision": "block", "hop": 1, "reason": "key-rejected"}
+            else:
+                registered = args.registered if refs_result is None else True
+                result = citation_gate(
+                    registered,
+                    args.required_level,
+                    args.available_level,
+                    metadata,
+                    source_hash,
+                    analysis_hash,
+                    cited_key=args.key,
+                )
         else:
             artifacts = None
             if args.artifacts is not None:
@@ -618,6 +663,8 @@ def main() -> int:
     except ValueError as exc:
         parser.error(str(exc))
     print(json.dumps(result, ensure_ascii=False))
+    if args.command == "citation-gate" and result.get("decision") != "pass":
+        return 1
     return 0
 
 

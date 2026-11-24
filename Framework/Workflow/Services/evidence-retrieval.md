@@ -3,7 +3,7 @@ id: service.evidence-retrieval
 kind: service
 authority: read — deterministic local extraction and cache reads; never mutates sources
 consumers: [phil-research/reconstruct, phil-research/evaluate, phil-tutor, phil-write, phil-review]
-scripts: [pdf skill extraction, hash-verified reuse]
+scripts: [Scripts/pdf-extract.py, hash-verified reuse]
 contract: Contracts/evidence-unit.schema.json
 scope: "0.7.0: local deterministic extraction + cache/index contract; vector embeddings and external RAG deferred to 0.7.1 pending recall/precision fixtures"
 ---
@@ -26,4 +26,4 @@ Every quoted or analyzed passage is exchanged as an **evidence unit** (`Contract
 
 ## 0.7.0 scope
 
-Local deterministic extraction (via the `pdf` skill) plus the cache/index contract above. A SQLite FTS5 or hybrid RAG implementation is a 0.7.1 follow-up, to be adopted only after recall/precision fixtures exist; until then no vector database or external embedding service is introduced.
+Local deterministic extraction with `Scripts/pdf-extract.py` (`blocks` writes evidence units with `source_sha256` and `extraction_version` to `Private/Bibliography/Extract/{stem}/`; `find` locates a phrase by page) plus the cache/index contract above. A SQLite FTS5 or hybrid RAG implementation is a 0.7.1 follow-up, to be adopted only after recall/precision fixtures exist; until then no vector database or external embedding service is introduced.

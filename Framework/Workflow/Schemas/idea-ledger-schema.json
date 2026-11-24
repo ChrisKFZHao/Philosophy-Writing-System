@@ -30,7 +30,8 @@
         "created_at": {"$ref": "#/$defs/timestamp"},
         "updated_at": {"$ref": "#/$defs/timestamp"},
         "last_surfaced_at": {"anyOf": [{"$ref": "#/$defs/timestamp"}, {"type": "null"}]},
-        "last_surfaced_reason": {"type": ["string", "null"]}
+        "last_surfaced_reason": {"type": ["string", "null"]},
+        "status_history": {"type": "array", "items": {"$ref": "#/$defs/status_history_entry"}}
       },
       "allOf": [
         {
@@ -39,6 +40,18 @@
           "else": {"properties": {"superseded_by": {"type": "null"}}}
         }
       ]
+    },
+    "status_history_entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from_status", "to_status", "from_reason", "superseded_by", "at"],
+      "properties": {
+        "from_status": {"enum": ["active", "parked", "rejected", "superseded"]},
+        "to_status": {"enum": ["active", "parked", "rejected", "superseded"]},
+        "from_reason": {"type": "string"},
+        "superseded_by": {"type": ["string", "null"]},
+        "at": {"$ref": "#/$defs/timestamp"}
+      }
     }
   }
 }

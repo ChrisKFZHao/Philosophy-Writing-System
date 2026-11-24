@@ -19,9 +19,11 @@ Detect unprocessed PDFs programmatically. **Never read the directory listing or 
 python "Framework/Workflow/Scripts/bibliography-scan.py" --json
 ```
 
-A PDF is **unprocessed** if ANY of: (1) filename does not match `^[^_]+_(\d{4}|nd)_.+\.pdf$`; (2) no INDEX inventory row references it; (3) `Private/Bibliography/Summaries/{stem}.summary.txt` does not exist. The model consumes only the difference set. A clean library yields "0 unprocessed" — the scan is idempotent and doubles as a consistency checker.
+A PDF is **unprocessed** if ANY of: (1) filename does not match `^[^_]+_(\d{4}|nd)_.+\.pdf$`; (2) no INDEX inventory row references it; (3) `Private/Bibliography/Summaries/{stem}.summary.md` (or a legacy `.summary.txt`) does not exist. The model consumes only the difference set. A clean library yields "0 unprocessed" — the scan is idempotent and doubles as a consistency checker.
 
-## Step 2: Extract (pdf skill — never `pdftotext` CLI)
+## Step 2: Extract (`Scripts/pdf-extract.py`)
+
+Run `pdf-extract.py meta <pdf>` for the title page, `toc` for books, and `ocr-needed` to detect scans; run `blocks --key <KEY>` to cache the full text as evidence units in `Private/Bibliography/Extract/{stem}/`. Never read a whole PDF into the model when the script can answer. A scan (`needs_ocr: true`) stops here and is reported to the user, because OCR is installed only on demand.
 
 Extract full text plus title-page metadata: author(s), year, complete title, venue. **Rule 2: metadata must be read from the PDF itself — never recalled from model memory.** If the year is absent, ask the user once for that item (other PDFs proceed); unresolvable → `nd` + `[year unverified]` in INDEX.
 
@@ -38,7 +40,7 @@ Match extracted metadata (author surname + title keywords) against existing INDE
 
 ## Step 4: Rename
 
-Canonical stem `{Author}_{Year}_{Title}`: segments joined by underscores, words within a segment hyphen-joined; Author = first author's surname (first **editor's** surname for a collection); Year = 4 digits or `nd`; Title = complete title-page title, punctuation stripped, TitleCase. Stems over 100 characters truncate at the subtitle boundary (INDEX keeps the full title). **One physical file per volume** — never split or copy. Rename with plain `mv` (PDFs are in no git; quote paths — the repo root contains a space). A paired analysis file under an old stem moves with `git mv` inside `Private/` and gets its header updated.
+Canonical stem `{Author}_{Year}_{Title}`: segments joined by underscores, words within a segment hyphen-joined; Author = first author's surname (first **editor's** surname for a collection); Year = 4 digits or `nd`; Title = complete title-page title, punctuation stripped, TitleCase. Stems over 100 characters truncate at the subtitle boundary (INDEX keeps the full title). **One physical file per volume** — never split or copy. Rename inside `Private/` with `git mv` once the PDF is tracked, or plain `mv` for a new, untracked file (quote paths — the repo root contains a space). New PDFs are committed to the private repository together with their INDEX rows. A paired analysis file under an old stem moves with `git mv` inside `Private/` and gets its header updated.
 
 ## Step 5: Register
 
@@ -46,7 +48,7 @@ Insert or update (never duplicate) the INDEX inventory row: KEY (`AUTHOR-TITLE`,
 
 ## Step 6: Summarize (`method.dialectic.summarize`)
 
-Invoke the summarize method with extracted text + verified metadata + document type; write to `Private/Bibliography/Summaries/`: paper → one file; monograph → one file with volume summary + per-chapter segments (~150–300 chars each); collection → volume summary + one independent file per member paper (`{chapter-author}_{volume-year}_{chapter-title}.summary.txt`, own topics, `container` field). Levels are append-only: set 0.5 only if the row was below it.
+Invoke the summarize method with extracted text + verified metadata + document type; write to `Private/Bibliography/Summaries/`: paper → one file; monograph → one file with volume summary + per-chapter segments (~150–300 chars each); collection → volume summary + one independent file per member paper (`{chapter-author}_{volume-year}_{chapter-title}.summary.md`, own topics, `container` field). Levels are append-only: set 0.5 only if the row was below it.
 
 ## Step 6B: Philosopher observations (one deterministic batch)
 

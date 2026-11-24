@@ -29,8 +29,8 @@ The removal is intentionally breaking with no deprecation period. The determinis
 
 ## 2. Design Principles
 
-1. **Single source of truth**: `Framework/Workflow/manifest.json` (schema v2) is the authoritative resolver. Generated runtime adapters (`.claude/`, `.agents/skills/`) never become sources of truth.
-2. **Minimal public surface**: only `skill` items are exposed as runtime skills — exactly four, symmetric across runtimes. Methods, packages, and services are internal and loaded on demand through the manifest.
+1. **Single source of truth**: `Framework/Workflow/manifest.json` (schema v2) is the authoritative resolver; the plugin's hand-maintained skills live in `Framework/Plugin/skills/`. Generated manifests, marketplace files, and project pointers never become sources of truth.
+2. **Minimal public surface**: four public skills plus the `full` pipeline entrypoint (a thin plugin skill), symmetric across runtimes. Methods, packages, and services are internal and loaded on demand through the manifest.
 3. **Deterministic before model-executed**: scans, plans, gates, state transitions, and migration are script-enforced; the model executes semantics (feature classification, claim-to-source judgment, dialogue).
 4. **Staged artifacts with resumable state**: every pipeline stage produces a hashed artifact recorded in v2 workflow state; `resume` validates hashes and rewinds to the earliest affected stage.
 5. **Charity gates, not hard blocks**: a nameable defect triggers a challenge; a gap short of a defect is completed charitably with `[AI 补全]` disclosure; overrides are recorded, never silent (Rule 1 §Workflow Gates).
@@ -40,15 +40,15 @@ The removal is intentionally breaking with no deprecation period. The determinis
 ## 3. Directory Tree
 
 ```
+Framework/Plugin/            the phil plugin — single public skill tree for both hosts
+├── plugin.json              Codex portable manifest (generated)
+├── .claude-plugin/plugin.json   Claude Code manifest (generated)
+└── skills/                  research/ (+ references/modes/), tutor/, write/, review/, full/
+
 Framework/Workflow/
 ├── manifest.json            v2 registry: 4 skills, 5 method packages, 30 methods,
 │                            5 services, 1 command — with modes, consumers, selectors,
 │                            legacy IDs, and side-effect policy per item
-├── Skills/                  4 canonical SKILL.md entrypoints
-│   ├── phil-research/       + references/modes/{ingest,reconstruct,evaluate,comment,philosophers}.md
-│   ├── phil-tutor/
-│   ├── phil-write/
-│   └── phil-review/
 ├── Methods/                 Internal method packages (never registered as skills)
 │   │                        (+ references/ per package: v0.6 examples/checklists as
 │   │                        conditional references, loaded only on live ambiguity
@@ -77,24 +77,24 @@ Framework/Workflow/
 ├── Migration/               migration-v0.7.json (committed ID map), migrate-v07.py, generate-manifest.py
 ├── Rules/                   socratic-engagement, citation-integrity, version-management, runtime-compatibility
 ├── References/              glossaries, 26 argument forms, distinctions, fallacy catalog, templates
-├── Schemas/                 18 method-output data contracts + report-id registry
-├── Templates/               report templates, root-guidance template, project templates
+├── Schemas/                 17 method-output data contracts + report-id registry
+├── Templates/               report templates, project templates
 ├── Tests/                   structure/routing, policy planning + v0.6 regression baseline, state v2, citation gate, content doctor
 └── Scripts/                 build-adapters, workflow-doctor, content-doctor, workflow-policy,
                              project-state, idea-ledger, philosopher-db, bibliography-scan, zotero-attach-linked
 ```
 
-Generated adapters (committed, never hand-edited): `.claude/` (4 skills + 5 thin command wrappers + rules) and `.agents/skills/` (4 skills). Nested `Private/` bridges are generated per project.
+Generated files (committed, never hand-edited): the two plugin manifests (`Framework/Plugin/plugin.json`, `Framework/Plugin/.claude-plugin/plugin.json`), the two marketplace files (`.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`), and each `Private/` project's `AGENTS.md` pointer.
 
 ## 4. Public Interfaces
 
 | Command | Canonical artifact | Modes |
 |---|---|---|
-| `phil:research` | `Skills/phil-research/SKILL.md` | `ingest`, `reconstruct`, `evaluate`, `comment`, `philosophers` |
-| `phil:tutor` | `Skills/phil-tutor/SKILL.md` | `reading`, `incubating` |
-| `phil:write` | `Skills/phil-write/SKILL.md` | `outline`, `draft`, `revision` |
-| `phil:review` | `Skills/phil-review/SKILL.md` | `full`, `targeted`, `re-review` |
-| `phil:full` | `Commands/phil-full.md` | `start`, `status`, `resume` |
+| `phil:research` | `Framework/Plugin/skills/research/SKILL.md` | `ingest`, `reconstruct`, `evaluate`, `comment`, `philosophers` |
+| `phil:tutor` | `Framework/Plugin/skills/tutor/SKILL.md` | `reading`, `incubating` |
+| `phil:write` | `Framework/Plugin/skills/write/SKILL.md` | `outline`, `draft`, `revision` |
+| `phil:review` | `Framework/Plugin/skills/review/SKILL.md` | `full`, `targeted`, `re-review` |
+| `phil:full` | `Framework/Plugin/skills/full/SKILL.md` (spec: `Commands/phil-full.md`) | `start`, `status`, `resume` |
 
 Routing rules: an explicit mode always wins; clean natural-language intent routes automatically; a material ambiguity gets one focused question — never a speculative multi-mode sweep. Legacy command names are translated with an explicit notice via the migration map.
 
@@ -108,7 +108,7 @@ Deterministic, five steps: (1) resolve skill + mode; (2) read only that mode's c
 
 ## 5. Writing Skill Protocol
 
-One authoritative sequence (see `Skills/phil-write/SKILL.md`):
+One authoritative sequence (see `Framework/Plugin/skills/write/SKILL.md`):
 
 `intake -> outline -> outline approval -> section brief -> draft -> section audit -> revision -> citation closure`
 
@@ -142,17 +142,17 @@ The v0.6 planner outputs were captured on a fixture corpus **before** the old ad
 
 ## 9. Generation, Doctor, and Migration
 
-- **`build-adapters.py`**: renders both runtimes from the manifest; inventory is derived, never hard-coded; `--check` verifies freshness including absence of unexpected files; second generation is byte-identical (no diff).
-- **`workflow-doctor.py`**: JSON validity (manifest, schemas, contracts, migration map, philosopher DB), skill frontmatter, manifest-derived inventory (core = claude = codex = manifest; wrappers = exposure; no `.claude/agents`; no `source-command-*`; Methods/ tree = manifest methods), stale-phrase scan (`30 skills`, `9 workflows`, `7 roles`, `39 skills`, `28 skills`, `source-command-`) over living definitions (changelog, Lessons, and Plans are historical records and exempt), forbidden-content checks, markdown-link check, adapter check, nested bridge check.
+- **`build-adapters.py`**: derives the two plugin manifests, the two marketplace files, and the `Private/**/AGENTS.md` pointers from the manifest; inventory is derived, never hard-coded; `--check` verifies freshness and fails if any legacy adapter path exists (a root `CLAUDE` guide, generated skill/command/rule directories under the host dot-directories, or the old Codex skills tree); second generation is byte-identical (no diff).
+- **`workflow-doctor.py`**: JSON validity (manifest, schemas, contracts, migration map, philosopher DB), plugin skill frontmatter, manifest-derived inventory (plugin skill dirs = entrypoints; exposure.skills = skill items; Methods/ tree = manifest methods; services present), stale-phrase scan (`30 skills`, `9 workflows`, `7 roles`, `39 skills`, `28 skills`, `source-command-`, `28 phil-*`) over living definitions (changelog, Lessons, and Plans are historical records and exempt), method-ID reference checks, forbidden-content checks, markdown-link check, philosopher-database validation, and the adapter check.
 - **`migrate-v07.py`**: deterministic 0.6→0.7 migration — analysis metadata (`workflow_id`, coverage → canonical method IDs), v1→v2 workflow state, project guidance command references. Defaults to dry-run; `--apply` writes; fails on unknown IDs; writes restricted to a whitelist; `Private/Projects/*/working-notes.md` never read or written.
 
 ## 10. Naming Conventions
 
-Unchanged from 0.6 (see root guidance): uppercase framework/content directories; lowercase kebab-case content-item directories; canonical bibliography stems `{Author}_{Year}_{Title}` with underscore segment boundaries; KEYs `AUTHOR-TITLE` without year. New in 0.7: method files `Methods/<package>/<slug>.md` with ID `method.<package>.<slug>`; services `Services/<slug>.md` with ID `service.<slug>`; contracts in `Contracts/*.schema.json`; internal framework scripts keep kebab-case filenames.
+Unchanged from 0.6 (see `Framework/Workflow/References/project-conventions.md`): uppercase framework/content directories; lowercase kebab-case content-item directories; canonical bibliography stems `{Author}_{Year}_{Title}` with underscore segment boundaries; KEYs `AUTHOR-TITLE` without year. New in 0.7: method files `Methods/<package>/<slug>.md` with ID `method.<package>.<slug>`; services `Services/<slug>.md` with ID `service.<slug>`; contracts in `Contracts/*.schema.json`; internal framework scripts keep kebab-case filenames.
 
 ## 11. Extensibility
 
 - **Adding a method**: add `Methods/<package>/<slug>.md` (header: id, package, legacy_ids, label, consumers, selector, side_effects) and regenerate the manifest (`Migration/generate-manifest.py`). It becomes loadable by its consumers; nothing is re-registered publicly.
-- **Adding a mode**: add a contract under the skill's `references/modes/`, list its method/service selection, and regenerate adapters. The SKILL.md routing table gains one row.
+- **Adding a mode**: add a contract under the skill's `references/modes/`, list its method/service selection, and regenerate the manifests and marketplace files (`build-adapters.py`). The SKILL.md routing table gains one row.
 - **Adding a service**: add `Services/<slug>.md` with an explicit authority boundary; register in the manifest; reference from mode contracts.
-- **Splitting a public skill**: only by plan (this consolidation's inverse is not a routine operation); the manifest, adapters, doctor, tests, and migration map all key off the four-skill exposure.
+- **Splitting a public skill**: only by plan (this consolidation's inverse is not a routine operation); the manifest, generated plugin manifests and marketplace files, doctor, tests, and migration map all key off the four-skill exposure.

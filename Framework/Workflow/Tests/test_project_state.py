@@ -119,6 +119,61 @@ class IdeaLedgerTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.ledger.save(project, data)
 
+    def test_save_is_atomic_and_removes_temp_on_failure(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp) / "topic"
+            data = self.ledger.empty_ledger(project)
+            self.ledger.save(project, data)
+            target = self.ledger.ledger_path(project)
+            before = target.read_bytes()
+            data["next_id"] = 2
+            with mock.patch.object(self.ledger.os, "replace", side_effect=OSError("disk full")):
+                with self.assertRaises(OSError):
+                    self.ledger.save(project, data)
+            self.assertEqual(target.read_bytes(), before)
+            self.assertEqual(list(project.glob("*.tmp")), [])
+
+    def test_transition_appends_status_history(self):
+        with tempfile.TemporaryDirectory() as temp:
+            data = self.ledger.empty_ledger(Path(temp) / "topic")
+            idea, _ = self.ledger.record(data, "A thesis", "user", "parked", "too broad", [], [], [])
+            self.ledger.transition(data, idea["id"], "rejected", "counterexample", False, None)
+            self.assertEqual(len(idea["status_history"]), 1)
+            entry = idea["status_history"][0]
+            self.assertEqual(set(entry), {"from_status", "to_status", "from_reason", "superseded_by", "at"})
+            self.assertEqual(entry["from_status"], "parked")
+            self.assertEqual(entry["to_status"], "rejected")
+            self.assertEqual(entry["from_reason"], "too broad")
+            self.assertIsNone(entry["superseded_by"])
+            self.assertEqual(self.ledger.validate(data), [])
+
+    def test_status_history_records_previous_supersession_value(self):
+        with tempfile.TemporaryDirectory() as temp:
+            data = self.ledger.empty_ledger(Path(temp) / "topic")
+            old, _ = self.ledger.record(data, "Old", "user", "parked", "", [], [], [])
+            new, _ = self.ledger.record(data, "New", "user", "parked", "", [], [], [])
+            self.ledger.transition(data, old["id"], "superseded", "replaced", False, new["id"])
+            self.ledger.transition(data, old["id"], "parked", "revived", False, None)
+            self.assertEqual(old["status_history"][1]["from_status"], "superseded")
+            self.assertEqual(old["status_history"][1]["superseded_by"], new["id"])
+            self.assertEqual(self.ledger.validate(data), [])
+
+    def test_corrupt_ledger_reports_error_without_traceback(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = Path(temp) / "topic"
+            project.mkdir()
+            self.ledger.ledger_path(project).write_text("{not json", encoding="utf-8")
+            result = subprocess.run(
+                [sys.executable, str(ROOT / "Scripts/idea-ledger.py"), "--project-dir", str(project), "status"],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+            )
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('"error"', result.stdout)
+            self.assertNotIn("Traceback", result.stderr)
+
 
 class WorkflowStateV2Tests(unittest.TestCase):
     def setUp(self): self.state = load("project-state.py")
@@ -268,6 +323,158 @@ class WorkflowStateV2Tests(unittest.TestCase):
             status = self.state.cmd_status(project, self.args("status"))
             self.assertEqual(status["outline_decision"], "pending")
             self.assertTrue(status["next_action"])
+
+    def test_sha256_is_line_ending_stable_for_text_only(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            lf_txt = project / "lf.txt"; lf_txt.write_bytes(b"a\nb\n")
+            crlf_txt = project / "crlf.txt"; crlf_txt.write_bytes(b"a\r\nb\r\n")
+            self.assertEqual(self.state.sha256(lf_txt), self.state.sha256(crlf_txt))
+            lf_pdf = project / "lf.pdf"; lf_pdf.write_bytes(b"a\nb\n")
+            crlf_pdf = project / "crlf.pdf"; crlf_pdf.write_bytes(b"a\r\nb\r\n")
+            self.assertNotEqual(self.state.sha256(lf_pdf), self.state.sha256(crlf_pdf))
+
+    def test_save_is_atomic_and_removes_temp_on_failure(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            self.state.cmd_init(project, self.args("init"))
+            target = self.state.state_path(project)
+            before = target.read_bytes()
+            state = self.state.load(project)
+            state["next_action"] = "changed"
+            with mock.patch.object(self.state.os, "replace", side_effect=OSError("disk full")):
+                with self.assertRaises(OSError):
+                    self.state.save(project, state)
+            self.assertEqual(target.read_bytes(), before)
+            self.assertEqual(list(project.glob("*.tmp")), [])
+
+    def test_path_guard_rejects_absolute_and_drive_prefixed_forms(self):
+        for value in ("/Windows/win.ini", "C:/x.txt", "C:x.txt", "//server/share/x.txt"):
+            self.assertFalse(self.state.is_safe_relative_path(value), value)
+        self.assertTrue(self.state.is_safe_relative_path("sub/a.txt"))
+
+    def test_approve_records_path_and_stale_is_detected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            (project / "outline.txt").write_text("outline", encoding="utf-8")
+            self.state.cmd_init(project, self.args("init"))
+            self.state.cmd_approve(project, self.args(
+                "approve", gate="outline", decision="approved", artifact_path="outline.txt"))
+            state = self.state.load(project)
+            self.assertEqual(state["approvals"]["outline"]["artifact_path"], "outline.txt")
+            self.assertEqual(self.state.stale_approvals(project, state), [])
+            (project / "outline.txt").write_text("changed", encoding="utf-8")
+            self.assertEqual(self.state.stale_approvals(project, state), ["outline"])
+
+            before = self.state.state_path(project).read_bytes()
+            status = self.state.cmd_status(project, self.args("status"))
+            self.assertEqual(self.state.state_path(project).read_bytes(), before)
+            self.assertEqual(status["stale_approvals"], ["outline"])
+            self.assertTrue(status["next_action"].startswith(
+                "approval stale: outline; renewed confirmation required"))
+
+            refused = self.state.cmd_advance(project, self.args("advance", stage="complete"))
+            self.assertEqual(refused["action"], "refused")
+            self.assertIn("stale approval: outline", refused["reason"])
+
+            self.state.cmd_approve(project, self.args(
+                "approve", gate="outline", decision="approved", artifact_path="outline.txt"))
+            self.assertEqual(self.state.stale_approvals(project, self.state.load(project)), [])
+
+    def test_undecided_approval_is_not_stale_and_completed_run_stays_completed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            (project / "outline.txt").write_text("outline", encoding="utf-8")
+            self.state.cmd_init(project, self.args("init"))
+            self.state.cmd_approve(project, self.args(
+                "approve", gate="outline", decision="rejected", artifact_path="outline.txt"))
+            (project / "outline.txt").write_text("changed", encoding="utf-8")
+            self.assertEqual(self.state.stale_approvals(project, self.state.load(project)), [])
+
+            self.state.cmd_approve(project, self.args(
+                "approve", gate="outline", decision="approved", artifact_path="outline.txt"))
+            state = self.state.load(project)
+            state["stage"], state["status"] = "complete", "completed"
+            self.state.save(project, state)
+            (project / "outline.txt").write_text("changed again", encoding="utf-8")
+            resumed = self.state.cmd_resume(project, self.args("resume"))
+            self.assertNotEqual(resumed.get("action"), "stale")
+            self.assertEqual(self.state.load(project)["status"], "completed")
+
+    def test_stale_approvals_flags_missing_files_and_skips_unrecorded_paths(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            (project / "review.txt").write_text("review", encoding="utf-8")
+            self.state.cmd_init(project, self.args("init"))
+            self.state.cmd_approve(project, self.args("approve", gate="outline", decision="approved"))
+            self.state.cmd_approve(project, self.args(
+                "approve", gate="review", decision="accept", artifact_path="review.txt"))
+            (project / "review.txt").unlink()
+            self.assertEqual(self.state.stale_approvals(project, self.state.load(project)), ["review"])
+
+    def test_resume_marks_stale_when_approval_artifact_changed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            (project / "outline.txt").write_text("outline", encoding="utf-8")
+            self.state.cmd_init(project, self.args("init"))
+            self.state.cmd_approve(project, self.args(
+                "approve", gate="outline", decision="approved", artifact_path="outline.txt"))
+            (project / "outline.txt").write_text("changed", encoding="utf-8")
+            resumed = self.state.cmd_resume(project, self.args("resume"))
+            self.assertEqual(resumed["action"], "stale")
+            self.assertEqual(resumed["stale_approvals"], ["outline"])
+            state = self.state.load(project)
+            self.assertEqual(state["status"], "stale")
+            self.assertIn("approval stale: outline", state["next_action"])
+
+    def test_approval_path_fields_are_optional_but_must_be_safe(self):
+        project = Path(tempfile.gettempdir()) / "topic"
+        state = self.state.empty_state(project)
+        self.assertEqual(self.state.validate(state, "topic"), [])
+        state["approvals"]["outline"]["artifact_path"] = "../escape.txt"
+        self.assertIn("outline artifact_path must be a safe relative path",
+                      self.state.validate(state, "topic"))
+
+    def test_citation_pass_requires_artifact_path(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            self.state.cmd_init(project, self.args("init"))
+            with self.assertRaises(ValueError):
+                self.state.cmd_approve(project, self.args(
+                    "approve", gate="citation_closure", decision="pass"))
+
+    def test_neutralizing_high_finding_requires_note(self):
+        with tempfile.TemporaryDirectory() as temp:
+            project = self.project(temp)
+            self.state.cmd_init(project, self.args("init"))
+            self.state.cmd_finding(project, self.args(
+                "finding", id="F1", severity="high", target="s1", status="open",
+                review_sha256="0" * 64))
+            with self.assertRaises(ValueError):
+                self.state.cmd_finding(project, self.args(
+                    "finding", id="F1", severity="medium", target="s1", status="open"))
+            with self.assertRaises(ValueError):
+                self.state.cmd_finding(project, self.args(
+                    "finding", id="F1", severity="high", target="s1", status="rejected"))
+            self.state.cmd_finding(project, self.args(
+                "finding", id="F1", severity="medium", target="s1", status="open", note="downgraded"))
+            self.state.cmd_finding(project, self.args(
+                "finding", id="F1", severity="low", target="s1", status="open"))
+
+    def test_validation_requires_finding_target(self):
+        project = Path(tempfile.gettempdir()) / "topic"
+        state = self.state.empty_state(project)
+        state["review_findings"] = [{
+            "id": "F1", "severity": "high", "status": "open", "source_review_sha256": "0" * 64,
+        }]
+        self.assertIn("finding target required", self.state.validate(state, "topic"))
+
+    def test_schema_requires_section_audit_and_allows_empty_outline_reason(self):
+        schema = json.loads(
+            (ROOT / "Contracts" / "workflow-state.schema.json").read_text(encoding="utf-8"))
+        self.assertIn("section_audit", schema["required"])
+        self.assertNotIn("minLength", schema["$defs"]["outline_approval"]["properties"]["reason"])
 
 
 if __name__ == "__main__": unittest.main()

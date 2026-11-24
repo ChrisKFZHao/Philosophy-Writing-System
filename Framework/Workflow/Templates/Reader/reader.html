@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>阅读页</title>
+<!-- Template for reader-build.py. The build replaces the JSON placeholder below; everything else is static. -->
+<style>
+:root {
+  --bg: #fcfbf8; --ink: #1e1d1b; --soft: #6e6961; --faint: #a49e95; --hair: #e6e2da; --wash: #f3efe8;
+  --accent: #8c5a43; --mine: #4b5f78; --mine-wash: rgba(75, 95, 120, .10);
+  --serif: "Noto Serif SC", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+  --latin: Georgia, "Noto Serif", "Times New Roman", serif;
+  --size: 18px; --measure: 33em; --left: 5rem; --right: 15.5rem; --gap: 3rem;
+}
+body.night { --bg: #161514; --ink: #dcd7cf; --soft: #9a948a; --faint: #6c665e; --hair: #2c2a27; --wash: #201e1c; --accent: #c49a80; --mine: #9db3cf; --mine-wash: rgba(157, 179, 207, .12); }
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--size)/1.95 var(--serif);
+  font-variant-numeric: oldstyle-nums proportional-nums; text-autospace: normal; text-spacing-trim: trim-start;
+  -webkit-font-smoothing: antialiased; transition: background-color .3s, color .3s; }
+::selection { background: var(--mine-wash); }
+
+/* Toolbar: a quiet line of text links */
+.bar { position: sticky; top: 0; z-index: 20; display: flex; justify-content: flex-end; gap: 1.3rem; padding: .9rem 2rem;
+  font: 13px/1 var(--serif); letter-spacing: .12em; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(4px); }
+.bar .sep { display: none; }
+.bar button { font: inherit; letter-spacing: inherit; color: var(--faint); background: none; border: 0; padding: 0 0 .25rem; cursor: pointer; border-bottom: 1px solid transparent; transition: color .2s; }
+.bar button:hover { color: var(--ink); }
+.bar button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* Grid: page numbers | text | sidenotes */
+.page { display: grid; grid-template-columns: var(--left) minmax(0, var(--measure)) var(--right); column-gap: var(--gap); justify-content: center; padding: 0 2rem 8rem; }
+.page > * { grid-column: 2; }
+
+/* Title block */
+header.mast { grid-column: 1 / -1; display: grid; grid-template-columns: var(--left) minmax(0, var(--measure)) var(--right); column-gap: var(--gap); justify-content: center; padding: 6.5rem 0 3.2rem; }
+.mast .inner { grid-column: 2; }
+.mast .kicker { font: 12px/1.6 var(--latin); letter-spacing: .22em; text-transform: uppercase; color: var(--faint); }
+.mast h1 { margin: 1.1rem 0 .3rem; font-size: 2.3rem; line-height: 1.3; font-weight: 500; letter-spacing: .06em; }
+.mast .en-title { font: italic 1.12rem/1.5 var(--latin); color: var(--soft); }
+.mast .byline { margin-top: 1.6rem; font-size: .92rem; color: var(--soft); letter-spacing: .04em; }
+.mast .byline b { font-weight: 500; color: var(--ink); }
+.mast .colophon { margin-top: 2.2rem; font-size: 12.5px; line-height: 1.8; color: var(--faint); letter-spacing: .03em; }
+.mast .colophon::before { content: ""; display: block; width: 2.5rem; height: 1px; background: var(--ink); opacity: .35; margin-bottom: 1rem; }
+
+.section-open { margin: 0 0 2.6rem; text-align: center; font-size: 13px; letter-spacing: .6em; color: var(--faint); }
+
+/* Paragraphs */
+.unit { position: relative; margin: 0 0 1.05em; }
+.unit .zh { text-align: justify; cursor: pointer; transition: color .2s; }
+.unit .zh:hover { color: color-mix(in srgb, var(--ink) 88%, var(--accent)); }
+.unit.kind-blockquote .zh, .unit.kind-blockquote .en { margin-left: 2em; font-size: .92em; color: var(--soft); }
+.unit.kind-heading .zh { font-weight: 600; text-align: center; letter-spacing: .15em; }
+.unit.epigraph .zh { text-align: right; font-size: .92em; color: var(--soft); letter-spacing: .05em; }
+.unit.epigraph + .unit.epigraph { margin-bottom: 2.4em; }
+.unit .en { display: none; margin: .55em 0 .5em; padding-left: 1.1em; border-left: 1px solid var(--hair); font: .84em/1.75 var(--latin); color: var(--soft); text-align: left; hyphens: auto; }
+.unit.open .en { display: block; animation: fade .3s ease-out; }
+@keyframes fade { from { opacity: 0; } }
+body.parallel .page { --measure: 60em; }
+body.parallel .unit { display: grid; grid-template-columns: 1fr 1fr; column-gap: 2.2rem; }
+body.parallel .unit .en { display: block; margin: 0; animation: none; }
+body.parallel .unit .zh { cursor: text; }
+
+/* Page numbers: old-style figures in the left margin; a faint hairline where a page turns mid-paragraph */
+.pb { display: inline-block; width: .6em; height: .9em; vertical-align: -.08em; }
+.pb::before { content: ""; display: inline-block; width: 1px; height: .9em; margin-left: .28em; background: var(--faint); opacity: .6; }
+.pb::after { content: attr(data-page); position: absolute; left: calc(-1 * var(--gap) - var(--left)); width: var(--left); text-align: right;
+  font: 13px var(--latin); line-height: calc(var(--size) * 1.95); color: var(--faint); letter-spacing: .04em; }
+.pb.start { width: 0; }
+.pb.start::before { display: none; }
+.unit .en .pb::after { display: none; }
+sup.fn { font: .6em/0 var(--latin); color: var(--accent); cursor: pointer; padding: 0 .08em; }
+
+/* Anchors */
+.anchor { text-decoration: underline 1px color-mix(in srgb, var(--accent) 45%, transparent); text-underline-offset: .32em; cursor: help; transition: background-color .2s; }
+.anchor.hot { background: var(--wash); }
+.uh { background: var(--mine-wash); text-decoration: underline 1px var(--mine); text-underline-offset: .32em; cursor: pointer; }
+.uh.hot { background: color-mix(in srgb, var(--mine) 18%, transparent); }
+body.no-notes .anchor { text-decoration-color: transparent; }
+
+/* Sidenotes */
+.notes-layer { position: absolute; top: 0; left: 0; width: 0; height: 0; }
+.note { position: absolute; width: var(--right); font: 13.5px/1.7 var(--serif); color: var(--soft); transition: top .25s ease, opacity .2s; }
+.note .t { color: var(--ink); font-weight: 500; }
+.note .t .k { display: block; font-size: 10.5px; font-weight: 400; letter-spacing: .3em; color: var(--accent); margin-bottom: .1rem; }
+.note .b { margin-top: .15rem; }
+.note .src { margin-top: .25rem; font: 11px/1.5 var(--latin); color: var(--faint); }
+.note.argument .b, .note.argument .src { display: none; }
+.note.argument.expanded .b, .note.argument.expanded .src { display: block; }
+.note.argument .t { cursor: pointer; }
+.note.argument .t::after { content: " +"; color: var(--faint); font-weight: 400; }
+.note.argument.expanded .t::after { content: " −"; }
+.note.hot .t { color: var(--accent); }
+.note.user .t, .note.user .t .k, .note.user .b { color: var(--mine); }
+.note.user .b { white-space: pre-wrap; }
+.note.user textarea { width: 100%; min-height: 4.5em; font: 13.5px/1.7 var(--serif); color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--hair); padding: .2rem 0; resize: vertical; outline: none; }
+.note.user .acts { font-size: 11px; letter-spacing: .1em; margin-top: .25rem; }
+.note.user .acts button { font: inherit; color: var(--faint); background: none; border: 0; padding: 0 .8rem 0 0; cursor: pointer; }
+.note.user .acts button:hover { color: var(--ink); }
+body.no-notes .note:not(.user) { opacity: 0; pointer-events: none; }
+
+/* Selection popover */
+.pop { position: absolute; z-index: 30; display: none; padding: .2rem .3rem; background: var(--bg); border: 1px solid var(--hair); border-radius: 2px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+.pop.show { display: flex; }
+.pop button { font: 12.5px/1 var(--serif); letter-spacing: .1em; color: var(--soft); background: none; border: 0; padding: .55rem .65rem; cursor: pointer; }
+.pop button:hover { color: var(--ink); }
+
+/* Source notes */
+.fns { margin-top: 4.5rem; padding-top: 1.6rem; border-top: 1px solid var(--hair); font-size: .8em; line-height: 1.85; color: var(--soft); }
+.fns h2 { font-size: 12px; font-weight: 400; letter-spacing: .5em; color: var(--faint); margin: 0 0 1.4rem; }
+.fns .unit { margin-bottom: .75em; }
+.fns .zh:hover { color: var(--ink); }
+.fns .pg { font: 11px var(--latin); color: var(--faint); margin-right: .8em; }
+
+footer.end { margin-top: 4rem; text-align: center; font-size: 12px; line-height: 1.8; color: var(--faint); letter-spacing: .05em; }
+footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.2rem; background: var(--faint); }
+
+@media (max-width: 1180px) {
+  :root { --left: 2.6rem; --right: 0px; --gap: 1.2rem; }
+  .note { position: static; width: auto; margin: .2rem 0 1rem 1.5em; }
+  .notes-layer { position: static; width: auto; height: auto; }
+}
+@media print { .bar, .pop { display: none; } }
+</style>
+</head>
+<body>
+<div class="bar" role="toolbar">
+  <button id="b-mode" aria-pressed="false" title="译文与原文左右对照">对照</button>
+  <button id="b-notes" aria-pressed="true" title="显示或隐藏页边注">旁注</button>
+  <button id="b-night" aria-pressed="false" title="夜读">夜读</button>
+  <span class="sep"></span>
+  <button id="b-smaller" title="缩小字号">A−</button>
+  <button id="b-larger" title="放大字号">A+</button>
+  <span class="sep"></span>
+  <button id="b-export" title="导出我的批注（W3C Web Annotation JSON）">导出批注</button>
+</div>
+<main class="page" id="page">
+  <header class="mast" id="mast"></header>
+</main>
+<div class="pop" id="pop">
+  <button data-act="highlight">高亮</button><button data-act="comment">批注</button><button data-act="idea">想法</button><button data-act="cite">引用候选</button>
+</div>
+<script id="reader-data" type="application/json">__READER_DATA__</script>
+<script>
+(() => {
+  "use strict";
+  const data = JSON.parse(document.getElementById("reader-data").textContent);
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const page = $("#page"), pop = $("#pop");
+  const storeKey = "reader-notes:" + data.meta.key;
+  const prefsKey = "reader-prefs";
+  const esc = s => s.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const PB = /⟦p([^⟧]+)⟧/g, FN = /\[(\d{1,3})\]/g;
+
+  // ---- text rendering: page markers, note markers, agent-note anchors ----
+  function inline(raw, lang) {
+    let html = esc(raw).replace(PB, (_, p) => `<span class="pb" data-page="${esc(p)}"></span>`);
+    if (lang === "zh") html = html.replace(FN, (_, n) => `<sup class="fn" data-n="${n}">${n}</sup>`);
+    return html;
+  }
+  function renderZh(raw, anchors) {
+    const spans = [];
+    for (const note of anchors) {
+      if (!note.anchor_zh) continue;
+      const at = raw.indexOf(note.anchor_zh);
+      if (at < 0 || spans.some(s => at < s.end && at + note.anchor_zh.length > s.start)) continue;
+      spans.push({ start: at, end: at + note.anchor_zh.length, id: note.id });
+      note.placed = true;
+    }
+    spans.sort((a, b) => a.start - b.start);
+    let out = "", pos = 0;
+    for (const s of spans) {
+      out += inline(raw.slice(pos, s.start), "zh") + `<span class="anchor" data-note="${s.id}">` + inline(raw.slice(s.start, s.end), "zh") + "</span>";
+      pos = s.end;
+    }
+    return out + inline(raw.slice(pos), "zh");
+  }
+
+  // ---- masthead ----
+  const m = data.meta;
+  $("#mast").innerHTML = `<div class="inner">
+      <div class="kicker">${esc(m.venue || "")}${m.year ? " · " + esc(String(m.year)) : ""}</div>
+      <h1>${esc(m.title_zh || m.title)}</h1>
+      <div class="en-title">${esc(m.title)}</div>
+      <div class="byline"><b>${esc(m.author_zh || m.author)}</b>${m.author_zh ? "（" + esc(m.author) + "）" : ""}</div>
+      <div class="colophon">${esc(m.colophon || "")}</div>
+    </div>`;
+  document.title = (m.title_zh || m.title) + " · 阅读页";
+
+  // ---- units ----
+  const notesByUnit = {};
+  for (const n of data.notes || []) (notesByUnit[n.unit_id] ||= []).push(n);
+  if (m.section_label) page.insertAdjacentHTML("beforeend", `<div class="section-open">${esc(m.section_label)}</div>`);
+  let lastPage = null;
+  for (const u of data.units) {
+    const el = document.createElement("section");
+    el.className = "unit kind-" + u.kind + (u.epigraph ? " epigraph" : "");
+    el.id = u.id;
+    let zh = renderZh(u.zh, notesByUnit[u.id] || []);
+    const [startPage, ...rest] = String(u.page).split("-");
+    if (startPage !== lastPage) zh = `<span class="pb start" data-page="${esc(startPage)}"></span>` + zh;
+    lastPage = rest.length ? rest[rest.length - 1] : startPage;
+    el.innerHTML = `<div class="zh" lang="zh-CN">${zh}</div><div class="en" lang="en">${inline(u.en, "en")}</div>`;
+    page.appendChild(el);
+  }
+  if ((data.footnotes || []).length) {
+    const box = document.createElement("section");
+    box.className = "fns"; box.id = "fns";
+    box.innerHTML = "<h2>原注</h2>" + data.footnotes.map(f =>
+      `<div class="unit kind-footnote" id="${esc(f.id)}"><div class="zh"><span class="pg">p. ${esc(f.page)}</span>${inline(f.zh, "zh")}</div><div class="en" lang="en">${inline(f.en, "en")}</div></div>`).join("");
+    page.appendChild(box);
+  }
+  page.insertAdjacentHTML("beforeend", `<footer class="end"><span class="mark"></span>${esc(m.footer || "")}</footer>`);
+  const layer = document.createElement("div");
+  layer.className = "notes-layer";
+  page.appendChild(layer);
+
+  // ---- agent notes (朱批) ----
+  const KIND = { term: "术语", argument: "论证", context: "背景" }; // labels
+  for (const n of data.notes || []) {
+    const card = document.createElement("aside");
+    card.className = "note " + n.kind;
+    card.dataset.note = n.id; card.dataset.unit = n.unit_id;
+    card.innerHTML = `<div class="t"><span class="k">${KIND[n.kind] || n.kind}</span>${esc(n.title)}</div><div class="b">${esc(n.body)}</div>` +
+      (n.source ? `<div class="src">${esc(n.source)}</div>` : "");
+    if (n.kind === "argument") $(".t", card).addEventListener("click", () => { card.classList.toggle("expanded"); layout(); });
+    layer.appendChild(card);
+  }
+
+  // ---- user annotations (靛批), stored as W3C Web Annotations ----
+  let userNotes = [];
+  try { userNotes = JSON.parse(localStorage.getItem(storeKey) || "null") || data.user_notes || []; } catch { userNotes = data.user_notes || []; }
+  const save = () => localStorage.setItem(storeKey, JSON.stringify(userNotes));
+  const quoteOf = a => a.target.selector.find(s => s.type === "TextQuoteSelector");
+  const posOf = a => a.target.selector.find(s => s.type === "TextPositionSelector");
+
+  function textNodes(root) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = []; let n; while ((n = walker.nextNode())) nodes.push(n); return nodes;
+  }
+  function offsetsOf(root, range) {
+    let pos = 0, start = -1, end = -1;
+    for (const node of textNodes(root)) {
+      if (node === range.startContainer) start = pos + range.startOffset;
+      if (node === range.endContainer) end = pos + range.endOffset;
+      pos += node.data.length;
+    }
+    return start >= 0 && end > start ? [start, end] : null;
+  }
+  function wrap(root, start, end, id) {
+    let pos = 0;
+    for (const node of textNodes(root)) {
+      const a = Math.max(start, pos), b = Math.min(end, pos + node.data.length);
+      if (a < b) {
+        const r = document.createRange();
+        r.setStart(node, a - pos); r.setEnd(node, b - pos);
+        const mark = document.createElement("span");
+        mark.className = "uh"; mark.dataset.note = id;
+        r.surroundContents(mark);
+        return wrap(root, b, end, id);
+      }
+      pos += node.data.length;
+    }
+  }
+  function locate(root, a) {
+    const text = root.textContent, q = quoteOf(a), p = posOf(a);
+    if (p && text.slice(p.start, p.end) === q.exact) return [p.start, p.end];
+    let at = text.indexOf((q.prefix || "") + q.exact);
+    if (at >= 0) return [at + (q.prefix || "").length, at + (q.prefix || "").length + q.exact.length];
+    at = text.indexOf(q.exact);
+    return at >= 0 ? [at, at + q.exact.length] : null;
+  }
+  const TAG = { idea: "想法", cite: "引用候选" };
+  function userCard(a) {
+    const card = document.createElement("aside");
+    card.className = "note user"; card.dataset.note = a.id; card.dataset.unit = a.target.source;
+    const comment = (a.body || []).find(b => b.purpose === "commenting");
+    const tag = (a.body || []).find(b => b.purpose === "tagging");
+    const label = tag ? TAG[tag.value] || tag.value : comment ? "我的批注" : "我的高亮";
+    card.innerHTML = `<div class="t"><span class="k">${label}</span>“${esc(quoteOf(a).exact.slice(0, 18))}${quoteOf(a).exact.length > 18 ? "…" : ""}”</div>` +
+      (comment ? `<div class="b">${esc(comment.value)}</div>` : "") +
+      `<div class="acts"><button data-do="edit">${comment ? "修改" : "写批注"}</button><button data-do="del">删除</button></div>`;
+    card.addEventListener("click", e => {
+      const act = e.target.dataset && e.target.dataset.do;
+      if (act === "del") { userNotes = userNotes.filter(x => x.id !== a.id); save(); rebuildUser(); }
+      if (act === "edit") editCard(card, a);
+    });
+    return card;
+  }
+  function editCard(card, a) {
+    const body = (a.body ||= []);
+    let comment = body.find(b => b.purpose === "commenting");
+    card.innerHTML = `<div class="t"><span class="k">批注</span></div><textarea placeholder="写下你的想法……"></textarea><div class="acts"><button data-do="ok">保存</button><button data-do="cancel">取消</button></div>`;
+    const ta = $("textarea", card); ta.value = comment ? comment.value : ""; ta.focus();
+    card.onclick = e => {
+      const act = e.target.dataset && e.target.dataset.do;
+      if (act === "ok") {
+        const v = ta.value.trim();
+        if (v) { if (!comment) body.push(comment = { type: "TextualBody", purpose: "commenting", format: "text/plain", value: v }); else comment.value = v; a.motivation = "commenting"; }
+        a.modified = new Date().toISOString(); save(); rebuildUser();
+      }
+      if (act === "cancel") rebuildUser();
+    };
+    layout();
+  }
+  function rebuildUser() {
+    document.querySelectorAll(".uh").forEach(s => s.replaceWith(...s.childNodes));
+    document.querySelectorAll(".zh").forEach(z => z.normalize());
+    layer.querySelectorAll(".note.user").forEach(c => c.remove());
+    for (const a of userNotes) {
+      const root = document.querySelector(`[id="${CSS.escape(a.target.source)}"] > .zh`);
+      const span = root && locate(root, a);
+      if (!span) continue;
+      wrap(root, span[0], span[1], a.id);
+      layer.appendChild(userCard(a));
+    }
+    bindHover(); layout();
+  }
+
+  // ---- selection popover ----
+  let pending = null;
+  document.addEventListener("mouseup", e => {
+    if (pop.contains(e.target)) return;
+    const sel = getSelection();
+    if (!sel.rangeCount || sel.isCollapsed) { pop.classList.remove("show"); return; }
+    const range = sel.getRangeAt(0);
+    const root = range.commonAncestorContainer.nodeType === 1 ? range.commonAncestorContainer.closest(".zh") : range.commonAncestorContainer.parentElement.closest(".zh");
+    if (!root || !root.parentElement.id) { pop.classList.remove("show"); return; }
+    const span = offsetsOf(root, range);
+    if (!span) return;
+    const text = root.textContent;
+    pending = { unit: root.parentElement.id, start: span[0], end: span[1], exact: text.slice(span[0], span[1]),
+      prefix: text.slice(Math.max(0, span[0] - 16), span[0]), suffix: text.slice(span[1], span[1] + 16) };
+    const r = range.getBoundingClientRect();
+    pop.style.left = (r.left + r.width / 2 + scrollX - 120) + "px";
+    pop.style.top = (r.top + scrollY - 44) + "px";
+    pop.classList.add("show");
+  });
+  pop.addEventListener("click", e => {
+    const act = e.target.dataset.act;
+    if (!act || !pending) return;
+    const a = {
+      "@context": "http://www.w3.org/ns/anno.jsonld", type: "Annotation",
+      id: "urn:uuid:" + (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)),
+      created: new Date().toISOString(), motivation: act === "highlight" || act === "comment" ? "highlighting" : "tagging",
+      body: act === "idea" || act === "cite" ? [{ type: "TextualBody", purpose: "tagging", value: act }] : [],
+      target: { source: pending.unit, layer: "zh", selector: [
+        { type: "TextQuoteSelector", exact: pending.exact, prefix: pending.prefix, suffix: pending.suffix },
+        { type: "TextPositionSelector", start: pending.start, end: pending.end }] }
+    };
+    userNotes.push(a); save(); getSelection().removeAllRanges(); pop.classList.remove("show"); rebuildUser();
+    if (act === "comment") { const card = layer.querySelector(`.note.user[data-note="${a.id}"]`); if (card) editCard(card, a); }
+  });
+
+  // ---- open original on click ----
+  page.addEventListener("click", e => {
+    const zh = e.target.closest(".zh");
+    if (!zh || document.body.classList.contains("parallel")) return;
+    if (e.target.closest(".uh, sup.fn")) return;
+    if (!getSelection().isCollapsed) return;
+    zh.parentElement.classList.toggle("open"); layout();
+  });
+  page.addEventListener("click", e => {
+    const fn = e.target.closest("sup.fn");
+    if (fn && $("#fns")) $("#fns").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  // ---- margin layout: each note beside its anchor, never overlapping ----
+  function layout() {
+    if (matchMedia("(max-width: 1180px)").matches) {
+      layer.querySelectorAll(".note").forEach(card => {
+        const unit = document.getElementById(card.dataset.unit);
+        if (unit && card.parentElement !== unit) unit.appendChild(card);
+      });
+      return;
+    }
+    layer.querySelectorAll(".note").length || page.querySelectorAll(".unit > .note").forEach(c => layer.appendChild(c));
+    page.querySelectorAll(".unit > .note").forEach(c => layer.appendChild(c));
+    const base = page.getBoundingClientRect();
+    const textCol = page.querySelector(".unit .zh");
+    const left = textCol ? textCol.parentElement.getBoundingClientRect().right - base.left + 34 : 0;
+    const cards = [...layer.querySelectorAll(".note")].map(card => {
+      const anchor = document.querySelector(`[data-note="${card.dataset.note}"]:not(.note)`) || document.getElementById(card.dataset.unit);
+      return { card, top: anchor ? anchor.getBoundingClientRect().top - base.top : 0 };
+    }).sort((a, b) => a.top - b.top);
+    let floor = 0;
+    for (const { card, top } of cards) {
+      const y = Math.max(top - 4, floor);
+      card.style.top = y + "px"; card.style.left = left + "px";
+      floor = y + card.offsetHeight + 14;
+    }
+  }
+  function bindHover() {
+    document.querySelectorAll("[data-note]").forEach(el => {
+      el.onmouseenter = () => document.querySelectorAll(`[data-note="${el.dataset.note}"]`).forEach(x => x.classList.add("hot"));
+      el.onmouseleave = () => document.querySelectorAll(`[data-note="${el.dataset.note}"]`).forEach(x => x.classList.remove("hot"));
+    });
+  }
+
+  // ---- toolbar and preferences ----
+  const prefs = Object.assign({ night: false, notes: true, parallel: false, size: 18 }, JSON.parse(localStorage.getItem(prefsKey) || "{}"));
+  // A URL hash such as #night or #parallel,open opens that view (useful for links and previews).
+  const wanted = new Set(location.hash.slice(1).split(","));
+  if (wanted.has("night")) prefs.night = true;
+  if (wanted.has("day")) prefs.night = false;
+  if (wanted.has("parallel")) prefs.parallel = true;
+  if (wanted.has("open")) document.querySelectorAll(".unit").forEach(u => u.classList.add("open"));
+  function apply() {
+    document.body.classList.toggle("night", prefs.night);
+    document.body.classList.toggle("no-notes", !prefs.notes);
+    document.body.classList.toggle("parallel", prefs.parallel);
+    document.documentElement.style.setProperty("--size", prefs.size + "px");
+    $("#b-night").setAttribute("aria-pressed", prefs.night);
+    $("#b-notes").setAttribute("aria-pressed", prefs.notes);
+    $("#b-mode").setAttribute("aria-pressed", prefs.parallel);
+    localStorage.setItem(prefsKey, JSON.stringify(prefs));
+    requestAnimationFrame(layout);
+  }
+  $("#b-night").onclick = () => { prefs.night = !prefs.night; apply(); };
+  $("#b-notes").onclick = () => { prefs.notes = !prefs.notes; apply(); };
+  $("#b-mode").onclick = () => { prefs.parallel = !prefs.parallel; apply(); };
+  $("#b-smaller").onclick = () => { prefs.size = Math.max(14, prefs.size - 1); apply(); };
+  $("#b-larger").onclick = () => { prefs.size = Math.min(24, prefs.size + 1); apply(); };
+  $("#b-export").onclick = () => {
+    const blob = new Blob([JSON.stringify({ "@context": "http://www.w3.org/ns/anno.jsonld", type: "AnnotationCollection", source: m.key, items: userNotes }, null, 2)], { type: "application/json" });
+    const link = Object.assign(document.createElement("a"), { href: URL.createObjectURL(blob), download: "user-notes.json" });
+    link.click(); URL.revokeObjectURL(link.href);
+  };
+  addEventListener("resize", () => requestAnimationFrame(layout));
+  document.fonts && document.fonts.ready.then(layout);
+  apply(); rebuildUser();
+})();
+</script>
+</body>
+</html>

@@ -508,6 +508,11 @@ def normalize_observed_person(item: dict[str, Any]) -> dict[str, Any]:
 
 def build_observation(data: dict[str, Any], input_path: Path, analysis_level: float | None = None) -> dict[str, Any]:
     if data.get("record_type") == "observation-batch":
+        level = data.get("analysis_level")
+        if isinstance(level, bool) or level not in (0.5, 1, 2, 3):
+            raise PhilosopherDBError(
+                f"observation batch has invalid analysis_level: {data.get('analysis_level')}"
+            )
         return data
     artifact_type = "summary" if "summary_id" in data else "analysis"
     artifact_id = data.get("summary_id") or data.get("report_id") or input_path.stem
@@ -771,6 +776,11 @@ def synchronize_domains(
                 profile["domains"].append({"domain_id": domain_id, "support_status": "source-backed", "evidence": evidence})
             profile["domains"].sort(key=lambda item: item["domain_id"])
             profile["updated_at"] = now_iso()
+            failures = validate_profile(profile)
+            if failures:
+                raise PhilosopherDBError(
+                    "domain synchronization would create an invalid profile:\n- " + "\n- ".join(failures)
+                )
             updated += 1
         write_json(paths["profiles"] / f"{person_id}.json", profile)
     return updated
@@ -819,6 +829,19 @@ def next_claim_id(profile: dict[str, Any]) -> str:
     return f"{prefix}{max(numbers, default=0) + 1:04d}"
 
 
+def require_indexed_key(paths: dict[str, Path], bib_key: str, index_path: Path | None) -> None:
+    index_path = index_path or (paths["repo"] / "Private/Bibliography/INDEX.md")
+    if not index_path.is_file():
+        raise PhilosopherDBError(f"bibliography index not found: {index_path}")
+    for line in index_path.read_text(encoding="utf-8").splitlines():
+        if not line.lstrip().startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if cells and cells[0] == bib_key:
+            return
+    raise PhilosopherDBError(f"evidence KEY is not registered in the bibliography index: {bib_key}")
+
+
 def approve_candidate(
     paths: dict[str, Path],
     cid: str,
@@ -826,7 +849,10 @@ def approve_candidate(
     statement_override: str | None = None,
     category_override: str | None = None,
     merge_claim_id: str | None = None,
+    bibliography_index: Path | None = None,
 ) -> dict[str, Any]:
+    if person_id_override is not None and not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", person_id_override):
+        raise PhilosopherDBError(f"invalid person_id: {person_id_override}")
     state = load_state(paths["state"])
     candidate = state["candidates"].get(cid)
     if not candidate:
@@ -866,6 +892,7 @@ def approve_candidate(
             raise PhilosopherDBError("claim candidate has no evidence")
         evidence = {key: value for key, value in observed_evidence.items() if key != "observed_at"}
         evidence["approved_at"] = now_iso()
+        require_indexed_key(paths, evidence["bib_key"], bibliography_index)
         statement = statement_override or candidate.get("claim", {}).get("statement")
         category = category_override or candidate.get("claim", {}).get("category", "other")
         if not statement or category not in CLAIM_CATEGORIES:
@@ -883,15 +910,24 @@ def approve_candidate(
             if candidate["candidate_type"] == "conflict":
                 target["dispute_status"] = "contested"
         else:
-            profile["claims"].append({
-                "claim_id": next_claim_id(profile),
-                "category": category,
-                "statement": statement,
-                "support_status": "source-backed",
-                "dispute_status": "contested" if candidate["candidate_type"] == "conflict" else "unmarked",
-                "status": "active",
-                "evidence": [evidence],
-            })
+            duplicate = any(
+                claim.get("statement") == statement
+                and any(
+                    item["bib_key"] == evidence["bib_key"] and item["locator"] == evidence["locator"]
+                    for item in claim.get("evidence", [])
+                )
+                for claim in profile["claims"]
+            )
+            if not duplicate:
+                profile["claims"].append({
+                    "claim_id": next_claim_id(profile),
+                    "category": category,
+                    "statement": statement,
+                    "support_status": "source-backed",
+                    "dispute_status": "contested" if candidate["candidate_type"] == "conflict" else "unmarked",
+                    "status": "active",
+                    "evidence": [evidence],
+                })
         profile["updated_at"] = now_iso()
         failures = validate_profile(profile)
         if failures:
@@ -973,6 +1009,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     approve.add_argument("--statement")
     approve.add_argument("--category", choices=sorted(CLAIM_CATEGORIES))
     approve.add_argument("--merge-claim-id")
+    approve.add_argument("--bibliography-index", type=Path)
     reject = sub.add_parser("reject", help="reject a pending candidate")
     reject.add_argument("candidate_id")
     reopen = sub.add_parser("reopen", help="reopen a rejected/superseded candidate")
@@ -999,7 +1036,7 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "approve":
             result = approve_candidate(
                 paths, args.candidate_id, args.person_id, args.statement,
-                args.category, args.merge_claim_id,
+                args.category, args.merge_claim_id, args.bibliography_index,
             )
         elif args.command in {"reject", "reopen"}:
             result = change_candidate_status(paths, args.candidate_id, args.command)
