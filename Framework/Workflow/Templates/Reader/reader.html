@@ -117,6 +117,15 @@ body.no-notes .note:not(.user) { opacity: 0; pointer-events: none; }
 .addnote:hover { color: var(--mine); border-color: var(--mine); }
 .mast .howto { margin-top: .5rem; font-size: 12.5px; line-height: 1.8; color: var(--faint); letter-spacing: .03em; }
 
+/* Footnote preview on hover */
+.fntip { position: absolute; z-index: 40; display: none; width: max-content; max-width: 24rem; padding: .7rem .95rem .8rem; background: var(--bg);
+  border: 1px solid var(--hair); box-shadow: 0 10px 28px rgba(0,0,0,.09); font: 13.5px/1.75 var(--serif); color: var(--ink); pointer-events: none; text-align: left; }
+.fntip.show { display: block; }
+.fntip .h { font-size: 10.5px; letter-spacing: .25em; color: var(--accent); margin-bottom: .25rem; }
+.fntip .h span { float: right; margin-left: 1.5rem; letter-spacing: .04em; color: var(--faint); font-family: var(--latin); }
+.fntip .e { margin-top: .45rem; padding-top: .45rem; border-top: 1px solid var(--hair); font: 12.5px/1.65 var(--latin); color: var(--soft); }
+.fntip .miss { color: var(--faint); }
+
 /* Selection popover */
 .pop { position: absolute; z-index: 30; display: none; padding: .2rem .3rem; background: var(--bg); border: 1px solid var(--hair); border-radius: 2px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
 .pop.show { display: flex; }
@@ -202,7 +211,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
       <div class="en-title">${esc(m.title)}</div>
       <div class="byline"><b>${esc(m.author_zh || m.author)}</b>${m.author_zh ? "（" + esc(m.author) + "）" : ""}</div>
       <div class="colophon">${esc(m.colophon || "")}</div>
-      <div class="howto">点一段，展开原文；点下划线，看对应的旁注。选中文字可以高亮、批注或标为想法；鼠标移到段落上，点右侧的 ＋ 可给整段写批注。批注存在本机浏览器里，用“导出批注”存成 user-notes.json。</div>
+      <div class="howto">点一段，展开原文；点下划线，看对应的旁注；鼠标停在注号上，可读原注。选中文字可以高亮、批注或标为想法；鼠标移到段落上，点右侧的 ＋ 可给整段写批注。批注存在本机浏览器里，用“导出批注”存成 user-notes.json。</div>
     </div>`;
   document.title = (m.title_zh || m.title) + " · 阅读页";
 
@@ -374,6 +383,40 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
     userNotes.push(a); save(); getSelection().removeAllRanges(); pop.classList.remove("show"); rebuildUser();
     if (act === "comment") { const card = layer.querySelector(`.note.user[data-note="${a.id}"]`); if (card) editCard(card, a); }
   });
+
+  // ---- footnotes: hover a marker to read its note ----
+  // A footnote unit may hold several notes ("5Cassian 1894. 6Pettigrove 2012."). Note numbers are found
+  // only where they continue the running sequence (n+1 to n+3), so years and page numbers are never taken.
+  const NOTE_AT = /(^|[\s。．.;；])\[?(\d{1,3})\]?(?=[\s\u4e00-\u9fffA-Za-z‘“"(*])/g;
+  function splitNotes(units, lang) {
+    const found = {}; let last = 0;
+    for (const f of units) {
+      const text = f[lang] || "", hits = [];
+      for (const m of text.matchAll(NOTE_AT)) {
+        const n = Number(m[2]);
+        if (n > last && n <= last + 3) { hits.push({ n, start: m.index + m[1].length, body: m.index + m[0].length }); last = n; }
+      }
+      hits.forEach((h, i) => { found[h.n] = { page: f.page, text: text.slice(h.body, i + 1 < hits.length ? hits[i + 1].start : text.length).trim() }; });
+    }
+    return found;
+  }
+  const notesZh = splitNotes(data.footnotes || [], "zh"), notesEn = splitNotes(data.footnotes || [], "en");
+  const tip = document.createElement("div");
+  tip.className = "fntip"; tip.setAttribute("role", "tooltip");
+  document.body.appendChild(tip);
+  function showTip(sup) {
+    const n = sup.dataset.n, z = notesZh[n], e = notesEn[n], at = z || e;
+    tip.innerHTML = `<div class="h">注 ${esc(n)}${at ? `<span>p. ${esc(at.page)}</span>` : ""}</div>` +
+      (at ? (z ? `<div class="z">${inline(z.text, "zh")}</div>` : "") + (e ? `<div class="e">${inline(e.text, "en")}</div>` : "")
+          : `<div class="z miss">此注不在本次摘录的页面内。</div>`);
+    tip.classList.add("show");
+    const r = sup.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    const left = Math.min(Math.max(12, r.left + r.width / 2 - w / 2), innerWidth - w - 12);
+    const top = r.top - h - 10 < 56 ? r.bottom + 10 : r.top - h - 10;
+    tip.style.left = left + scrollX + "px"; tip.style.top = top + scrollY + "px";
+  }
+  document.addEventListener("mouseover", e => { const sup = e.target.closest && e.target.closest("sup.fn"); if (sup) showTip(sup); });
+  document.addEventListener("mouseout", e => { if (e.target.closest && e.target.closest("sup.fn")) tip.classList.remove("show"); });
 
   // ---- clicks: an underline or a note selects that note; a paragraph opens its original ----
   function activate(id, reveal) {
