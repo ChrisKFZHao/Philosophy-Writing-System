@@ -33,10 +33,14 @@ An explicit mode always wins; natural language mapping cleanly to one mode route
 
 | Phase | The agent does | The user does |
 |---|---|---|
-| 1 Orientation | Asks what you are reading and where you are | Describe your current reading or question |
+| 1 Orientation | Runs `reader-notes.py summary` first when a source or project is named; opens from the user's own questions and highlights, then asks what you are reading and where you are | Describe your current reading or question |
 | 2 Probing | Socratic questioning on depth of understanding (premise identification, objection reconstruction, position comparison) | Answer, reflect, expose blind spots |
 | 3 Recommendation | Grounded literature suggestions from INDEX/Philosophers-DB | Assess fit |
-| 4 Planning | Reading plan + tool suggestions (e.g., run reconstruct next) | Confirm or adjust |
+| 4 Planning | Reading plan + tool suggestions; lists unrouted `idea`/`cite` notes and offers to route them (dry-run, then confirmation) | Confirm or adjust |
+
+**Notes-first start.** When the user names a source (KEY or stem) or works inside a project, run `Scripts/reader-notes.py summary <STEM>` (or `summary --project <TOPIC>`) before asking anything. Open from the user's notes — their questions first, then highlights ("你在 p. 124 问……") — not from a generic question. With no notes, proceed as before. Notes are the user's interpretations: they may shape the dialogue and inform a Level 2 analysis, but they are never evidence; a translation is never a source; cite candidates must be checked against the original English unit before use.
+
+**Routing notes.** In Phase 4, if unrouted `idea`/`cite` notes exist, list them and offer to route them. Show `reader-notes.py route <STEM> --project <TOPIC> --dry-run`, then run it for real only after explicit user confirmation. Without a project, ask which project once. An idea enters the ledger `parked` with provenance `user`; a cite note becomes a candidate row/line in `refs.md` with a page locator.
 
 Probing questions test: can you state the thesis in one sentence? identify the load-bearing premise? reconstruct the strongest objection? locate the argument in the debate? A nameable misunderstanding triggers a challenge; a gap short of a defect is filled charitably with `[AI 补全]` disclosure.
 
@@ -64,5 +68,6 @@ Do not scan the ledger at phase entry, exit, or gates. Only a named event (`new-
 - Dialogue in Chinese (project convention); citation metadata stays in English; the conception file is written in Chinese.
 - If reconstruct has already run, say so — probing then draws on those analysis results.
 - `{topic}-conception.md` is freely overwritten and never versioned (Rule 3).
+- What reading mode may write: the idea ledger (only through `idea-ledger.py`, or `reader-notes.py route` for reading-page notes; `parked` until confirmed) and `refs.md` candidate rows/lines (only through `reader-notes.py route`, only after confirmation). It never rewrites `user-notes.json`, which the reading page owns.
 - In `phil:full`, the pipeline consumes this skill's artifact and records `approvals.conception`; standalone incubating and the pipeline use this same contract — `Commands/phil-full.md` never duplicates the dialogue protocol.
 - Inside a recognized project, runs update `{topic}-workflow-state.json` (schema v2); outside, stateless.

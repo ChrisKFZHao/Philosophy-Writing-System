@@ -237,6 +237,37 @@ class GlossaryTests(TranslateTestCase):
         self.assertEqual(len(TRANSLATE.term_occurrences("Anger here.", entries)), 1)
         self.assertEqual(len(TRANSLATE.term_occurrences("angry men.", entries)), 0)
 
+    def test_avoid_variants_are_parsed_from_note(self):
+        path = self.root / "glossary.md"
+        path.write_text(
+            "| English | 中文 | 备注 |\n| --- | --- | --- |\n"
+            "| anger | 愤怒 | noun only; 避免：怒气、火气 |\n"
+            "| apt | 合适的 | 避免: 恰当,贴切 |\n"
+            "| fitting | 合适的 | avoid nothing here |\n",
+            encoding="utf-8")
+        entries = {entry["en"]: entry for entry in TRANSLATE.parse_glossary_file(path)}
+        self.assertEqual(entries["anger"]["avoid"], ["怒气", "火气"])
+        self.assertEqual(entries["apt"]["avoid"], ["恰当", "贴切"])
+        self.assertEqual(entries["fitting"]["avoid"], [])
+
+    def test_avoid_survives_load_glossary(self):
+        self.write_glossary_note(self.root / TRANSLATE.PROJECTS_REL / "topic" / "glossary.md",
+                                 [("anger", "愤怒", "避免：怒气")])
+        entries, _ = TRANSLATE.load_glossary(self.root, STEM, "topic", self.reader_dir)
+        self.assertEqual(entries[0]["avoid"], ["怒气"])
+
+    def test_glossary_digest_ignores_the_avoid_field(self):
+        plain = [{"en": "anger", "zh": "愤怒", "note": ""}]
+        with_avoid = [{"en": "anger", "zh": "愤怒", "note": "", "avoid": ["怒气"]}]
+        self.assertEqual(TRANSLATE.glossary_digest(with_avoid),
+                         TRANSLATE.glossary_digest(plain))
+
+    def write_glossary_note(self, path, rows):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        body = "| English | 中文 | 备注 |\n| --- | --- | --- |\n"
+        body += "".join(f"| {en} | {zh} | {note} |\n" for en, zh, note in rows)
+        path.write_text(body, encoding="utf-8")
+
 
 class QATests(TranslateTestCase):
     def flags(self, source, zh, entries=None, kind="body", breaks=None):
@@ -253,6 +284,21 @@ class QATests(TranslateTestCase):
         codes = self.flags("anger is wrong", "怒气是错的",
                            [{"en": "anger", "zh": "愤怒"}])
         self.assertIn("glossary", codes)
+
+    def test_glossary_avoid_warns_only_when_source_has_term(self):
+        entries = [{"en": "anger", "zh": "愤怒", "avoid": ["怒气"]}]
+        item = block("u1", "anger is wrong", page="10")
+        flags = TRANSLATE.qa_unit(item, "怒气是错的", entries)
+        avoid = [flag for flag in flags if flag["code"] == "glossary-avoid"]
+        self.assertEqual(len(avoid), 1)
+        self.assertEqual(avoid[0]["level"], "warning")
+        self.assertIn("怒气", avoid[0]["detail"])
+        # The source must contain the term for the avoid warning to fire.
+        codes = self.flags("sadness is wrong", "怒气是错的", entries)
+        self.assertNotIn("glossary-avoid", codes)
+        # The fixed rendering is not an avoided variant.
+        codes = self.flags("anger is wrong", "愤怒是错的", entries)
+        self.assertNotIn("glossary-avoid", codes)
 
     def test_note_markers(self):
         codes = self.flags("as the crow flies’2 and anger.4", "像乌鸦直线飞行。")

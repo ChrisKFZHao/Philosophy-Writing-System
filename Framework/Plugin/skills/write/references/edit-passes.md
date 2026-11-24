@@ -36,6 +36,7 @@ Vary sentence length. A run of uniformly long sentences is a defect even when ea
 
 - The same concept uses the same word throughout the section.
 - Each term is defined before or at its first use, and English is glossed once.
+- When the project has `Private/Projects/{topic}/glossary.md`, its renderings are fixed for the terms this section uses. Run `prose-lint.py <file> --glossary Private/Projects/{topic}/glossary.md`; a deviation needs a stated reason in the change log, for example the author defines the term differently. Propose new recurring terms to the user for the glossary instead of adding them silently.
 - Citations read `（作者，年份）` and match the sheet. No KEY placeholder and no new source remains.
 - Every sheet line is still present, at its original strength.
 

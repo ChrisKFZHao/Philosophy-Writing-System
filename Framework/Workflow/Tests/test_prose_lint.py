@@ -241,5 +241,79 @@ class CliTests(unittest.TestCase):
             self.assertTrue(missing.stderr.startswith("ERROR "))
 
 
+class GlossaryTests(unittest.TestCase):
+    GLOSSARY = (
+        "| English | 中文 | 备注 |\n"
+        "| --- | --- | --- |\n"
+        "| aptness / fitting | 合适性 | 避免：恰当、贴切 |\n"
+        "| anger | 愤怒 | 避免：怒气 |\n"
+    )
+
+    def setUp(self):
+        self._temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._temp.cleanup)
+        self.glossary_path = Path(self._temp.name) / "glossary.md"
+        self.glossary_path.write_text(self.GLOSSARY, encoding="utf-8")
+        self.entries = LINT.load_glossary_entries([self.glossary_path])
+
+    def count(self, check_id: str, text: str) -> int:
+        return LINT.analyze(text, glossary=self.entries)["checks"][check_id]["count"]
+
+    def test_correct_rendering_passes(self):
+        self.assertEqual(self.count("glossary-gloss", "合适性（aptness）"), 0)
+        self.assertEqual(self.count("glossary-gloss", "合适性(aptness)"), 0)
+
+    def test_wrong_rendering_is_flagged_with_expected_term(self):
+        result = LINT.analyze("恰当（aptness）", glossary=self.entries)
+        item = result["checks"]["glossary-gloss"]
+        self.assertEqual(item["count"], 1)
+        excerpt = item["matches"][0]["excerpt"]
+        self.assertIn("合适性", excerpt)
+        self.assertIn("恰当", excerpt)
+
+    def test_quoted_rendering_before_gloss_passes(self):
+        self.assertEqual(self.count("glossary-gloss", "“合适性”（aptness）"), 0)
+        self.assertEqual(self.count("glossary-gloss", "\"合适性\"（aptness）"), 0)
+
+    def test_gloss_match_ignores_case_and_ligatures(self):
+        self.assertEqual(self.count("glossary-gloss", "合适性（APTNESS）"), 0)
+        self.assertEqual(self.count("glossary-gloss", "合适性（ﬁtting）"), 0)
+
+    def test_avoid_variant_is_reported(self):
+        result = LINT.analyze("他满怀怒气。", glossary=self.entries)
+        item = result["checks"]["glossary-avoid"]
+        self.assertEqual(item["count"], 1)
+        self.assertIn("怒气", item["matches"][0]["excerpt"])
+
+    def test_avoid_skips_quoted_text(self):
+        self.assertEqual(self.count("glossary-avoid", "他说「怒气」。"), 0)
+
+    def test_repeated_gloss_is_flagged_once(self):
+        self.assertEqual(
+            self.count("glossary-gloss-repeat", "愤怒（anger）与愤怒（anger）"), 1)
+
+    def test_checks_appear_only_with_a_glossary(self):
+        text = "恰当（aptness）"
+        without = LINT.analyze(text)["checks"]
+        self.assertEqual(list(without), [check_id for check_id, _ in LINT.CHECKS])
+        with_glossary = LINT.analyze(text, glossary=self.entries)["checks"]
+        self.assertEqual(
+            list(with_glossary),
+            [check_id for check_id, _ in LINT.CHECKS]
+            + [check_id for check_id, _ in LINT.GLOSSARY_CHECKS])
+
+    def test_cli_glossary_flag(self):
+        path = Path(self._temp.name) / "sample.txt"
+        path.write_text("恰当（aptness）与愤怒（anger）。", encoding="utf-8")
+        completed = run_cli(path, "--glossary", self.glossary_path, "--json")
+        self.assertEqual(completed.returncode, 0)
+        data = json.loads(completed.stdout)
+        self.assertIn("glossary-gloss", data["checks"])
+        self.assertEqual(data["checks"]["glossary-gloss"]["count"], 1)
+
+        plain = json.loads(run_cli(path, "--json").stdout)
+        self.assertNotIn("glossary-gloss", plain["checks"])
+
+
 if __name__ == "__main__":
     unittest.main()

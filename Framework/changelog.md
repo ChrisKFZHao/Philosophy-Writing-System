@@ -29,6 +29,15 @@
 - Trial on five units of Srinivasan 2018 section II: the first version over-applied English parentheses and added a word the source lacks. After fixing the prompt and adding a clause-by-clause self-check, the second run had no errors, consistent terms, and one warning. Cost was about 4,300 output tokens per unit including thinking.
 - Without gateway credentials, or on Codex, a subagent follows the same prompt file and `translate.py check` validates the result.
 
+**Reading notes flow back; one glossary for reading and writing**
+
+- New `reader-notes.py`.
+  - `summary`: lists a source's or a project's reading-page notes with printed pages, questions first.
+  - `route`: sends notes tagged 想法 to the project's idea ledger, as `parked` with provenance `user`. Notes tagged 引用候选 become candidate lines in `refs.md` under 阅读页引用候选, with the unit and page; a candidate row is added only when the KEY is missing. Each line warns that the Chinese locates the passage only and the English sentence must be checked before citing. Routing is recorded in `notes-routed.json` and runs once per note.
+- `phil:tutor reading` opens from the user's own notes (their questions first) and, in planning, offers to route unrouted notes: dry run first, then only after explicit confirmation. Notes are the user's interpretations and never evidence.
+- The project `glossary.md` now also drives `phil:write` pass 3. `prose-lint.py --glossary` flags three things: a parenthetical English gloss whose Chinese differs from the glossary; an avoided variant (`避免：` in 备注, ignored inside quotation marks); and a term glossed more than once. `translate.py` warns on avoided variants as well. Without `--glossary`, the lint output is unchanged.
+- `prose-lint.py` now writes UTF-8. Before, a GBK console or pipe on Windows made it crash on ¶ and ⇢.
+
 **Reading page (bilingual reader)**
 
 - New `reader-build.py` builds a self-contained `reader.html` from a source's evidence units, translations, agent notes, and user notes in `Private/Bibliography/Reader/{stem}/`. It reports stale translations, page-marker mismatches between original and translation, note anchors that do not match the text, and unmapped PDF glyphs.

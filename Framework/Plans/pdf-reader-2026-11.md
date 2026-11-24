@@ -221,9 +221,9 @@ PDF ──pdf-extract.py──> Extract/{stem}/blocks.jsonl ──┬─> ingest
 **第四步：接入流程**
 
 - 新增 `phil:research translate` 模式（已完成，2026-11-24）。
-- `phil:tutor reading` 先读用户批注。
-- 用户批注回流到想法台账和 `refs.md` 候选行。
-- 术语表与 `phil:write` 的术语检查共用。
+- `phil:tutor reading` 先读用户批注（已完成，2026-11-24）。
+- 用户批注回流到想法台账和 `refs.md` 候选行（已完成，`reader-notes.py`）。
+- 术语表与 `phil:write` 的术语检查共用（已完成，`prose-lint.py --glossary`）。
 - 交互批注层：W3C Web Annotation、Hypothesis、Recogito、本地持久化与重新锚定
 - 翻译质量与成本：多轮翻译的实证、哲学术语资源、价格测算、自动质检
 - 轻量 PDF 库：取代 pdf skill 的脚本选型、OCR、模型直读 PDF 的 token 成本

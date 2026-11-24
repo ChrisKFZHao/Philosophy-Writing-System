@@ -14,6 +14,7 @@ Flags are prompts for judgment, not errors; the script never rewrites text.
 from __future__ import annotations
 
 import argparse
+import importlib.util
 import json
 import re
 import sys
@@ -51,6 +52,49 @@ CHECKS: tuple[tuple[str, str], ...] = (
     ("signpost", "章节路标套话"),
     ("disclaimer", "否定式澄清"),
 )
+
+# Added only when --glossary is given, so the default report stays unchanged.
+GLOSSARY_CHECKS: tuple[tuple[str, str], ...] = (
+    ("glossary-gloss", "术语括注与术语表不符"),
+    ("glossary-avoid", "出现术语表禁用译名"),
+    ("glossary-gloss-repeat", "同一英文术语重复括注"),
+)
+
+GLOSS_PAREN = re.compile(
+    r"[（(][ \t]*([A-Za-zﬀ-ﬆ][A-Za-zﬀ-ﬆ \t’'\-]*?)[ \t]*[）)]")
+HAN_TAIL = re.compile(r"[一-鿿]+$")
+# A rendering may be quoted, so a closing quote sits between it and the gloss.
+GLOSS_CLOSERS = "”」』）)]】’" + "\"'"
+
+_TRANSLATE = None
+
+
+def translate_module():
+    """Load translate.py so its glossary parser stays the only one."""
+    global _TRANSLATE
+    if _TRANSLATE is None:
+        path = Path(__file__).resolve().parent / "translate.py"
+        spec = importlib.util.spec_from_file_location("prose_lint_translate", path)
+        if spec is None or spec.loader is None:
+            raise OSError(f"cannot load {path}")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _TRANSLATE = module
+    return _TRANSLATE
+
+
+def load_glossary_entries(paths: list[Path]) -> list[dict]:
+    """Parse one or more glossary files, keeping the first rendering per term."""
+    module = translate_module()
+    entries: list[dict] = []
+    seen: set[str] = set()
+    for path in paths:
+        for entry in module.parse_glossary_file(path):
+            key = entry["en"].strip().lower()
+            if key not in seen:
+                seen.add(key)
+                entries.append(entry)
+    return entries
 
 META_PHRASES = (
     "值得注意的是",
@@ -138,6 +182,13 @@ def split_paragraphs(text: str) -> list[str]:
     return paragraphs
 
 
+def split_all_paragraphs(text: str) -> list[str]:
+    """Every non-empty paragraph; glossary checks are not length-filtered."""
+    text = normalize_newlines(text)
+    chunks = BLANK_LINE.split(text) if BLANK_LINE.search(text) else text.split("\n")
+    return [chunk.strip() for chunk in chunks if chunk.strip()]
+
+
 def split_sentences(paragraph: str) -> list[tuple[str, int]]:
     return split_parts(paragraph, SENTENCE_PART, minimum_han=4)
 
@@ -180,6 +231,79 @@ def density(count: int, chars: int) -> float:
     return round(count * 1000 / chars, 1) if chars else 0.0
 
 
+def glossary_excerpt(paragraph: str, start: int, end: int, note: str,
+                     limit: int = EXCERPT_LIMIT) -> str:
+    return f"{excerpt(paragraph, start, end, limit)} ⇢ {note}"
+
+
+def inside_quotes(text: str, offset: int) -> bool:
+    prefix = text[:offset]
+    return (prefix.count("「") > prefix.count("」")
+            or prefix.count("“") > prefix.count("”"))
+
+
+def run_glossary_checks(found: dict[str, list[dict]], paragraphs: list[str],
+                        entries: list[dict]) -> None:
+    normalize = translate_module().normalize_ligatures
+    by_en: dict[str, dict] = {}
+    for entry in entries:
+        by_en.setdefault(entry["en"].strip().lower(), entry)
+
+    avoids: list[tuple[dict, str]] = []
+    seen_avoids: set[tuple[str, str]] = set()
+    for entry in entries:
+        for variant in entry.get("avoid") or []:
+            key = (variant, entry["zh"])
+            if variant and key not in seen_avoids:
+                seen_avoids.add(key)
+                avoids.append((entry, variant))
+
+    occurrences: dict[str, list[tuple[int, int, int, str]]] = {}
+    for paragraph_number, paragraph in enumerate(paragraphs, start=1):
+        for match in GLOSS_PAREN.finditer(paragraph):
+            english = normalize(match.group(1)).strip().lower()
+            entry = by_en.get(english)
+            if entry is None:
+                continue
+            occurrences.setdefault(english, []).append(
+                (paragraph_number, match.start(), match.end(), paragraph))
+            before = paragraph[:match.start()].rstrip().rstrip(GLOSS_CLOSERS)
+            tail = HAN_TAIL.search(before)
+            chinese = tail.group(0) if tail else ""
+            if not chinese.endswith(entry["zh"]):
+                found["glossary-gloss"].append({
+                    "paragraph": paragraph_number,
+                    "excerpt": glossary_excerpt(
+                        paragraph, match.start(), match.end(),
+                        f"见「{chinese or '（无中文）'}」，应为「{entry['zh']}」"),
+                })
+
+    for english, items in occurrences.items():
+        if len(items) < 2:
+            continue
+        entry = by_en[english]
+        for paragraph_number, start, end, paragraph in items[1:]:
+            found["glossary-gloss-repeat"].append({
+                "paragraph": paragraph_number,
+                "excerpt": glossary_excerpt(
+                    paragraph, start, end,
+                    f"「{entry['en']}」重复括注（首次在 ¶{items[0][0]}）"),
+            })
+
+    for entry, variant in avoids:
+        pattern = re.compile(re.escape(variant))
+        for paragraph_number, paragraph in enumerate(paragraphs, start=1):
+            for match in pattern.finditer(paragraph):
+                if inside_quotes(paragraph, match.start()):
+                    continue
+                found["glossary-avoid"].append({
+                    "paragraph": paragraph_number,
+                    "excerpt": glossary_excerpt(
+                        paragraph, match.start(), match.end(),
+                        f"禁用「{variant}」，应用「{entry['zh']}」"),
+                })
+
+
 def compare_metrics(old: dict, new: dict) -> dict:
     return {
         "old_chars": old["chars"],
@@ -192,7 +316,8 @@ def compare_metrics(old: dict, new: dict) -> dict:
     }
 
 
-def analyze(text: str, max_sentence: int = 60, max_paragraph: int = 500) -> dict:
+def analyze(text: str, max_sentence: int = 60, max_paragraph: int = 500,
+            glossary: list[dict] | None = None) -> dict:
     text = normalize_newlines(text)
     paragraphs = split_paragraphs(text)
     sentences: list[tuple[int, str, str, int]] = []
@@ -200,7 +325,10 @@ def analyze(text: str, max_sentence: int = 60, max_paragraph: int = 500) -> dict
         for sentence, offset in split_sentences(paragraph):
             sentences.append((paragraph_number, paragraph, sentence, offset))
 
-    found: dict[str, list[dict]] = {check_id: [] for check_id, _ in CHECKS}
+    active_checks = list(CHECKS)
+    if glossary is not None:
+        active_checks.extend(GLOSSARY_CHECKS)
+    found: dict[str, list[dict]] = {check_id: [] for check_id, _ in active_checks}
 
     for paragraph_number, paragraph in enumerate(paragraphs, start=1):
         if han_count(paragraph) > max_paragraph:
@@ -276,6 +404,9 @@ def analyze(text: str, max_sentence: int = 60, max_paragraph: int = 500) -> dict
             record(found, "disclaimer", paragraph_number, paragraph, offset + match.start(), offset + match.end())
             disclaimer_count += 1
 
+    if glossary is not None:
+        run_glossary_checks(found, split_all_paragraphs(text), glossary)
+
     lengths = [han_count(sentence) for _, _, sentence, _ in sentences]
     sentence_count = len(lengths)
     chars = sum(han_count(paragraph) for paragraph in paragraphs)
@@ -300,7 +431,7 @@ def analyze(text: str, max_sentence: int = 60, max_paragraph: int = 500) -> dict
             "count": len(found[check_id]),
             "matches": found[check_id],
         }
-        for check_id, label in CHECKS
+        for check_id, label in active_checks
     }
     return {"metrics": metrics, "checks": checks}
 
@@ -332,12 +463,11 @@ def format_text(result: dict, examples: int) -> str:
             f"平均句长 {compare['old_sentence_mean']:.1f} → {compare['new_sentence_mean']:.1f}；"
             f"超限句占比 {compare['old_over_limit_pct']:.1f}% → {compare['new_over_limit_pct']:.1f}%"
         )
-    for check_id, label in CHECKS:
-        item = result["checks"][check_id]
+    for check_id, item in result["checks"].items():
         if not item["count"]:
             continue
         lines.append("")
-        lines.append(f"{check_id} {label}: {item['count']}")
+        lines.append(f"{check_id} {item['label']}: {item['count']}")
         for match in item["matches"][:max(examples, 0)]:
             lines.append(f"  ¶{match['paragraph']} {match['excerpt']}")
     lines.append("")
@@ -355,16 +485,19 @@ def main() -> int:
     parser.add_argument("--max-sentence", type=int, default=60)
     parser.add_argument("--max-paragraph", type=int, default=500)
     parser.add_argument("--examples", type=int, default=5)
+    parser.add_argument("--glossary", type=Path, action="append",
+                        help="project glossary Markdown; repeatable")
     args = parser.parse_args()
 
     try:
         text = read_text(args.file)
         old_text = read_text(args.compare) if args.compare is not None else None
+        glossary = load_glossary_entries(args.glossary) if args.glossary else None
     except (OSError, UnicodeError) as error:
         print(f"ERROR {error}", file=sys.stderr)
         return 2
 
-    analysis = analyze(text, args.max_sentence, args.max_paragraph)
+    analysis = analyze(text, args.max_sentence, args.max_paragraph, glossary)
     result: dict = {
         "file": str(args.file),
         "metrics": analysis["metrics"],
@@ -382,4 +515,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    # Output carries ¶, ⇢ and CJK text; a GBK console or pipe on Windows cannot encode the first two.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8")
     raise SystemExit(main())

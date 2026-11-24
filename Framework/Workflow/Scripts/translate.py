@@ -243,6 +243,21 @@ def select_units(blocks: list[dict], *, pages: tuple[str, str] | None = None,
 # Glossary
 # ---------------------------------------------------------------------------
 
+# The 备注 cell may carry ``避免：A、B``. Accept both colons and the common
+# Chinese and ASCII separators.
+AVOID_MARKER = re.compile(r"避免\s*[：:]\s*(.+)$")
+AVOID_SPLIT = re.compile(r"[、，,]")
+
+
+def parse_avoid(note: str) -> list[str]:
+    """Return the ``避免：`` variants named in a glossary note cell."""
+    match = AVOID_MARKER.search(note or "")
+    if not match:
+        return []
+    variants = [part.strip() for part in AVOID_SPLIT.split(match.group(1))]
+    return [variant for variant in variants if variant]
+
+
 def parse_glossary_file(path: Path) -> list[dict]:
     entries = []
     for line in path.read_text(encoding="utf-8").splitlines():
@@ -260,11 +275,12 @@ def parse_glossary_file(path: Path) -> list[dict]:
             continue
         if set(english) <= set("-: "):
             continue
+        avoid = parse_avoid(note)
         for variant in re.split(r"\s+/\s+", english):
             variant = normalize_ligatures(variant.strip())
             if variant:
                 entries.append({"en": variant, "zh": chinese, "note": note,
-                                "source": path.name})
+                                "avoid": avoid, "source": path.name})
     return entries
 
 
@@ -640,6 +656,15 @@ def qa_unit(block: dict, zh: str, entries: list[dict]) -> list[dict]:
     if missing:
         flags.append({"code": "glossary", "level": "error",
                       "detail": "missing: " + ", ".join(missing)})
+
+    avoided = []
+    for entry in term_occurrences(source, entries):
+        for variant in entry.get("avoid") or []:
+            if variant in zh:
+                avoided.append(f"{entry['en']} → {variant}")
+    if avoided:
+        flags.append({"code": "glossary-avoid", "level": "warning",
+                      "detail": "avoided: " + ", ".join(sorted(set(avoided)))})
 
     source_notes = len(GLUED_NOTE.findall(source))
     zh_notes = len(re.findall(r"\[\d{1,3}\]", zh))

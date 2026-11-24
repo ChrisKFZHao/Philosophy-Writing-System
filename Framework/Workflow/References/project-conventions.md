@@ -45,6 +45,7 @@ No aliases are retained (0.7.0-alpha).
 **Per-project files:**
 - `PROJECT.md` — platform-neutral project conventions + topic keywords (new-project standard)
 - `AGENTS.md` — generated pointer to the root guide
+- `glossary.md` (optional) — fixed English → Chinese renderings, a table `| English | 中文 | 备注 |`; `避免：A、B` in 备注 lists variants to avoid. One file serves `translate.py --project` and `prose-lint.py --glossary` in `phil:write` pass 3, so the manuscript and the reading page use the same terms
 - `refs.md` — project-level reference list: `KEY | role (core-target/support/background) | status (cited/candidate/rejected) | notes`; each KEY points to the master library INDEX — zero file duplication
 - `{topic}-conception.md` — Conception notes from ideation (Stage 3, `phil:tutor` incubating mode). Freely overwritten. Never versioned. Consumed by `phil:write outline`.
 - `{topic}-outline.md` — Human-readable outline produced by `phil:write outline` and consumed by draft mode; the approval gate hashes this artifact.
@@ -68,7 +69,8 @@ Private/Bibliography/
 ├── Extract/{stem}/                   Evidence units from pdf-extract.py (derived, not tracked)
 ├── Reader/{stem}/                    Reading page: translation*.jsonl, agent-notes.json, user-notes.json, reader.json (tracked);
 │                                     reader.html built by reader-build.py (derived, not tracked);
-│                                     reader-serve.py serves it locally and saves annotations to user-notes.json
+│                                     reader-serve.py serves it locally and saves annotations to user-notes.json;
+│                                     notes-routed.json records which notes reader-notes.py routed to a project
 ├── Philosopher-Queue/                 Private observations, counters, and review candidates
 └── INDEX.md                          Master inventory (KEY, analysis level, topics tags)
 ```
