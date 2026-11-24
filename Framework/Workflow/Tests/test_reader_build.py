@@ -98,6 +98,95 @@ class ReaderBuildTests(unittest.TestCase):
         self.assertEqual([note["id"] for note in data["footnotes"]], ["u2"])
         self.assertEqual(report["footnotes"], 1)
 
+    def test_footnote_notes_split_and_pair(self):
+        self.write_blocks(make_unit("u1", "body"),
+                          make_unit("f1", "1One note. 2Second note.", kind="footnote"))
+        self.write_translations(make_translation("u1", "正文"),
+                                make_translation("f1", "1 第一注。2 第二注。"))
+        code, report = self.run_build()
+        self.assertEqual(code, 0)
+        notes = self.data()["footnote_notes"]
+        self.assertEqual([note["n"] for note in notes], ["1", "2"])
+        self.assertEqual([note["en"] for note in notes], ["One note.", "Second note."])
+        self.assertEqual([note["zh"] for note in notes], ["第一注。", "第二注。"])
+        self.assertEqual([note["page"] for note in notes], ["10", "10"])
+        self.assertEqual([note["unit"] for note in notes], ["f1", "f1"])
+        self.assertEqual(report["footnote_notes"], 2)
+
+    def test_footnote_notes_number_sequence_across_units(self):
+        self.write_blocks(
+            make_unit("f1", "1First note 2001. 2Second note.", kind="footnote", page="1"),
+            make_unit("f2", "3Third note. 2005 is a year, not a note.",
+                      kind="footnote", page="2"))
+        self.write_translations(make_translation("f1", "一"), make_translation("f2", "二"))
+        code, _ = self.run_build()
+        self.assertEqual(code, 0)
+        notes = self.data()["footnote_notes"]
+        self.assertEqual([note["n"] for note in notes], ["1", "2", "3"])
+        self.assertEqual(notes[0]["en"], "First note 2001.")
+        self.assertEqual(notes[2]["en"], "Third note. 2005 is a year, not a note.")
+
+    def test_footnote_notes_null_entries(self):
+        self.write_blocks(
+            make_unit("f1", "*For invaluable discussion, my thanks to Jane.", kind="footnote"),
+            make_unit("f2", "VC 2017 John Wiley & Sons Ltd", kind="footnote", page="11"))
+        self.write_translations(make_translation("f1", "*感谢宝贵讨论。"),
+                                make_translation("f2", "版权信息"))
+        code, _ = self.run_build()
+        self.assertEqual(code, 0)
+        notes = self.data()["footnote_notes"]
+        self.assertIsNone(notes[0]["n"])
+        self.assertEqual(notes[0]["kind"], "acknowledgement")
+        self.assertEqual(notes[0]["en"], "*For invaluable discussion, my thanks to Jane.")
+        self.assertEqual(notes[0]["zh"], "*感谢宝贵讨论。")
+        self.assertIsNone(notes[1]["n"])
+        self.assertEqual(notes[1]["kind"], "other")
+
+    def test_footnote_notes_pair_missing_translation_side(self):
+        self.write_blocks(make_unit("f1", "1Only English. 2Also English.", kind="footnote"))
+        self.write_translations(make_translation("f1", "1 只有第一条。"))
+        code, _ = self.run_build()
+        self.assertEqual(code, 0)
+        notes = self.data()["footnote_notes"]
+        self.assertEqual([note["n"] for note in notes], ["1", "2"])
+        self.assertEqual(notes[0]["zh"], "只有第一条。")
+        self.assertEqual(notes[1]["zh"], "")
+
+    def test_classify_note_kinds(self):
+        cases = [
+            ("All quotations from The Riverbends Channel 2012.", "citation"),
+            ("A phrase Buckley borrows from Oakeshott.", "substantive"),
+            ("Seneca 1928, I.1, emphasis added.", "citation"),
+            ("Pettigrove 2012; Nussbaum 2016.", "citation"),
+            ("King 1998, ch. 25.", "citation"),
+            ("Bell 2009; Callard forthcoming.", "citation"),
+            ("While the ancient Greeks disagreed about whether (free) men should get angry, "
+             "there was consensus that anger was impermissible in women (and slaves). "
+             "For discussion see Harris 2002 and Burkert 1985.", "substantive"),
+            ("For further discussion of this point, see Jones 2001.", "citation"),
+            ("See also Smith 2000.", "citation"),
+        ]
+        for text, expected in cases:
+            kind, applied = BUILD.classify_note(text, 1, {})
+            self.assertEqual(kind, expected, text)
+            self.assertFalse(applied)
+        kind, applied = BUILD.classify_note(
+            "*For invaluable discussion of these issues, my thanks to Stephen Darwall.",
+            None, {})
+        self.assertEqual(kind, "acknowledgement")
+        self.assertFalse(applied)
+
+    def test_footnote_notes_override(self):
+        self.write_blocks(make_unit("f1", "1Seneca 1928, I.1, emphasis added.",
+                                    kind="footnote"))
+        self.write_translations(make_translation("f1", "1 Seneca 1928, I.1，着重号。"))
+        self.write_json("reader.json", {"footnote_kinds": {"1": "substantive"}})
+        code, _ = self.run_build()
+        self.assertEqual(code, 0)
+        note = self.data()["footnote_notes"][0]
+        self.assertEqual(note["kind"], "substantive")
+        self.assertTrue(note["override"])
+
     def test_page_markers_inserted_at_offsets(self):
         breaks = [{"offset": 2, "page_label": "12"}, {"offset": 4, "page_label": "13"}]
         self.write_blocks(make_unit("u1", "abcdef", breaks=breaks))

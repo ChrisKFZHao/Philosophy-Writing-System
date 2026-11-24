@@ -18,6 +18,8 @@
 
 - New `reader-build.py` builds a self-contained `reader.html` from a source's evidence units, translations, agent notes, and user notes in `Private/Bibliography/Reader/{stem}/`. It reports stale translations, page-marker mismatches between original and translation, note anchors that do not match the text, and unmapped PDF glyphs.
 - Template `Framework/Workflow/Templates/Reader/reader.html`: translation first with the original one click away or side by side; printed page numbers in the margin; margin notes beside their anchors (term notes, collapsed argument notes, context notes); a night mode; and user highlights, comments, and `idea` / `cite` tags stored as W3C Web Annotations, exportable as `user-notes.json`. Minimalist serif design.
+- Footnotes: `reader-build.py` splits footnote units into single notes by their running numbers and classifies each as substantive, citation-only, acknowledgement, or other (author–year references, `see`/`cf.` pointers, and stock phrases do not count as content; `reader.json` can override). The page shows only substantive note markers and previews a note on hover; a 引注 switch reveals the rest.
+- `pdf-extract.py` (version 4): a small-type box at the foot of a page that follows a body line ending in a colon (or an introducing “as”) and is at least two lines or 80 characters long is a block quotation, not a footnote.
 - Piloted on section I of Srinivasan 2018 (pp. 123–127): 26 units translated by deepseek-flash with the project glossary, 13 notes drawn from the existing analysis. Two translators rendered *anger* differently, so a cross-unit term check is needed before `translate.py` ships.
 
 **Export: talk handouts and slides**

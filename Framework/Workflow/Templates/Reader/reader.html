@@ -117,6 +117,12 @@ body.no-notes .note:not(.user) { opacity: 0; pointer-events: none; }
 .addnote:hover { color: var(--mine); border-color: var(--mine); }
 .mast .howto { margin-top: .5rem; font-size: 12.5px; line-height: 1.8; color: var(--faint); letter-spacing: .03em; }
 
+/* Footnote kinds: citation-only notes stay hidden unless 引注 is on */
+body:not(.show-cites) sup.fn.fn-cite, body:not(.show-cites) .fns .fn-minor { display: none; }
+.fns .lead { margin: -.6rem 0 1.4rem; font-size: 12px; color: var(--faint); letter-spacing: .03em; }
+.fns .no { font: 11px var(--latin); color: var(--accent); margin-right: .7em; }
+.fns .kind { font-size: 10.5px; letter-spacing: .2em; color: var(--faint); margin-left: .6em; }
+
 /* Footnote preview on hover */
 .fntip { position: absolute; z-index: 40; display: none; width: max-content; max-width: 24rem; padding: .7rem .95rem .8rem; background: var(--bg);
   border: 1px solid var(--hair); box-shadow: 0 10px 28px rgba(0,0,0,.09); font: 13.5px/1.75 var(--serif); color: var(--ink); pointer-events: none; text-align: left; }
@@ -154,6 +160,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
 <div class="bar" role="toolbar">
   <button id="b-mode" aria-pressed="false" title="译文与原文左右对照">对照</button>
   <button id="b-notes" aria-pressed="true" title="显示或隐藏页边注">旁注</button>
+  <button id="b-cites" aria-pressed="false" title="显示只有出处的引用性注释">引注</button>
   <button id="b-night" aria-pressed="false" title="夜读">夜读</button>
   <span class="sep"></span>
   <button id="b-smaller" title="缩小字号">A−</button>
@@ -211,7 +218,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
       <div class="en-title">${esc(m.title)}</div>
       <div class="byline"><b>${esc(m.author_zh || m.author)}</b>${m.author_zh ? "（" + esc(m.author) + "）" : ""}</div>
       <div class="colophon">${esc(m.colophon || "")}</div>
-      <div class="howto">点一段，展开原文；点下划线，看对应的旁注；鼠标停在注号上，可读原注。选中文字可以高亮、批注或标为想法；鼠标移到段落上，点右侧的 ＋ 可给整段写批注。批注存在本机浏览器里，用“导出批注”存成 user-notes.json。</div>
+      <div class="howto">点一段，展开原文；点下划线，看对应的旁注；鼠标停在注号上，可读原注（只注出处的注号默认隐藏，点“引注”显示）。选中文字可以高亮、批注或标为想法；鼠标移到段落上，点右侧的 ＋ 可给整段写批注。批注存在本机浏览器里，用“导出批注”存成 user-notes.json。</div>
     </div>`;
   document.title = (m.title_zh || m.title) + " · 阅读页";
 
@@ -231,7 +238,23 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
     el.innerHTML = `<div class="zh" lang="zh-CN">${zh}</div><div class="en" lang="en">${inline(u.en, "en")}</div>`;
     page.appendChild(el);
   }
-  if ((data.footnotes || []).length) {
+  const KIND_FN = { citation: "引用", acknowledgement: "致谢", other: "其他", substantive: "" };
+  const fnList = data.footnote_notes || null;
+  if (fnList && fnList.length) {
+    const minor = fnList.filter(f => f.kind !== "substantive").length;
+    const LONG = { citation: "条只注出处", acknowledgement: "条致谢", other: "条其他" };
+    const counts = {};
+    fnList.forEach(f => { if (f.kind !== "substantive") counts[f.kind] = (counts[f.kind] || 0) + 1; });
+    const minorText = Object.keys(LONG).filter(k => counts[k]).map(k => `${counts[k]} ${LONG[k]}`).join("、");
+    const box = document.createElement("section");
+    box.className = "fns"; box.id = "fns";
+    box.innerHTML = "<h2>原注</h2>" +
+      (minor ? `<div class="lead">只列有实质内容的注释；另有 ${minorText}，点右上角“引注”可显示。</div>` : "") +
+      fnList.map((f, i) => `<div class="unit kind-footnote${f.kind === "substantive" ? "" : " fn-minor"}" id="${esc(f.unit)}:n${esc(f.n || "x" + i)}">` +
+        `<div class="zh"><span class="no">${f.n ? esc(f.n) : "*"}</span><span class="pg">p. ${esc(f.page)}</span>${inline(f.zh || f.en, "zh")}` +
+        (KIND_FN[f.kind] ? `<span class="kind">${KIND_FN[f.kind]}</span>` : "") + `</div><div class="en" lang="en">${inline(f.en, "en")}</div></div>`).join("");
+    page.appendChild(box);
+  } else if ((data.footnotes || []).length) {
     const box = document.createElement("section");
     box.className = "fns"; box.id = "fns";
     box.innerHTML = "<h2>原注</h2>" + data.footnotes.map(f =>
@@ -400,13 +423,29 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
     }
     return found;
   }
-  const notesZh = splitNotes(data.footnotes || [], "zh"), notesEn = splitNotes(data.footnotes || [], "en");
+  let notesZh, notesEn;
+  const kindOf = {};
+  if (fnList) {
+    notesZh = {}; notesEn = {};
+    for (const f of fnList) {
+      if (!f.n) continue;
+      kindOf[f.n] = f.kind;
+      if (f.zh) notesZh[f.n] = { page: f.page, text: f.zh };
+      if (f.en) notesEn[f.n] = { page: f.page, text: f.en };
+    }
+  } else {
+    notesZh = splitNotes(data.footnotes || [], "zh"); notesEn = splitNotes(data.footnotes || [], "en");
+  }
+  document.querySelectorAll(".page > .unit sup.fn").forEach(sup => {
+    if (kindOf[sup.dataset.n] && kindOf[sup.dataset.n] !== "substantive") sup.classList.add("fn-cite");
+  });
   const tip = document.createElement("div");
   tip.className = "fntip"; tip.setAttribute("role", "tooltip");
   document.body.appendChild(tip);
   function showTip(sup) {
     const n = sup.dataset.n, z = notesZh[n], e = notesEn[n], at = z || e;
-    tip.innerHTML = `<div class="h">注 ${esc(n)}${at ? `<span>p. ${esc(at.page)}</span>` : ""}</div>` +
+    const kind = KIND_FN[kindOf[n]] ? " · " + KIND_FN[kindOf[n]] : "";
+    tip.innerHTML = `<div class="h">注 ${esc(n)}${kind}${at ? `<span>p. ${esc(at.page)}</span>` : ""}</div>` +
       (at ? (z ? `<div class="z">${inline(z.text, "zh")}</div>` : "") + (e ? `<div class="e">${inline(e.text, "en")}</div>` : "")
           : `<div class="z miss">此注不在本次摘录的页面内。</div>`);
     tip.classList.add("show");
@@ -511,7 +550,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
   }
 
   // ---- toolbar and preferences ----
-  const prefs = Object.assign({ night: false, notes: true, parallel: false, size: 18 }, JSON.parse(localStorage.getItem(prefsKey) || "{}"));
+  const prefs = Object.assign({ night: false, notes: true, parallel: false, cites: false, size: 18 }, JSON.parse(localStorage.getItem(prefsKey) || "{}"));
   // A URL hash such as #night or #parallel,open opens that view (useful for links and previews).
   const wanted = new Set(location.hash.slice(1).split(","));
   if (wanted.has("night")) prefs.night = true;
@@ -522,6 +561,8 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
     document.body.classList.toggle("night", prefs.night);
     document.body.classList.toggle("no-notes", !prefs.notes);
     document.body.classList.toggle("parallel", prefs.parallel);
+    document.body.classList.toggle("show-cites", prefs.cites);
+    $("#b-cites").setAttribute("aria-pressed", prefs.cites);
     document.documentElement.style.setProperty("--size", prefs.size + "px");
     $("#b-night").setAttribute("aria-pressed", prefs.night);
     $("#b-notes").setAttribute("aria-pressed", prefs.notes);
@@ -532,6 +573,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
   $("#b-night").onclick = () => { prefs.night = !prefs.night; apply(); };
   $("#b-notes").onclick = () => { prefs.notes = !prefs.notes; apply(); };
   $("#b-mode").onclick = () => { prefs.parallel = !prefs.parallel; apply(); };
+  $("#b-cites").onclick = () => { prefs.cites = !prefs.cites; apply(); };
   $("#b-smaller").onclick = () => { prefs.size = Math.max(14, prefs.size - 1); apply(); };
   $("#b-larger").onclick = () => { prefs.size = Math.min(24, prefs.size + 1); apply(); };
   $("#b-export").onclick = () => {

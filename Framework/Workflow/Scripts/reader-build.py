@@ -160,6 +160,136 @@ class MissingInput(Exception):
 
 
 # ---------------------------------------------------------------------------
+# Footnote notes: split each footnote unit into single notes, then classify
+# ---------------------------------------------------------------------------
+
+# A note number is accepted only where it continues the running sequence
+# (n+1 to n+3), so years and page numbers are never mistaken for note numbers.
+NOTE_AT = re.compile(
+    r"(^|[\s。．.;；])\[?(\d{1,3})\]?(?=[\s一-鿿A-Za-z‘“\"(*])")
+
+LEAD_IN = re.compile(r"^(see also|see|cf\.?|e\.g\.,?|compare)\b", re.IGNORECASE)
+FOR_LEAD_IN = re.compile(
+    r"^for (?:further|more|other|a|an|the)?\s*[^,.;]{0,60}?,?\s*see( also)?\b",
+    re.IGNORECASE)
+STOCK_PHRASE = re.compile(
+    r"emphasis (?:added|in original|mine)"
+    r"|translation modified"
+    r"|my translation"
+    r"|trans(?:lated)? by"
+    r"|quoted in"
+    r"|all quotations (?:are )?from"
+    r"|ibid\.?"
+    r"|op\. cit\.?"
+    r"|forthcoming"
+    r"|unpublished manuscript",
+    re.IGNORECASE)
+
+CAP_NAME = r"[A-Z][A-Za-z’'\-]*"
+NAME_SEQ = rf"{CAP_NAME}(?:(?:\s*,\s*|\s+)(?:and\s+|&\s+|et al\.?\s*)?{CAP_NAME})*"
+YEAR = r"(?:\d{4}[a-z]?(?:/\d{4}[a-z]?)?|n\.d\.)"
+CITATION_LOCATOR = (
+    r"(?:,\s*(?:pp?\.\s*\d+(?:\s*[–-]\s*\d+)?|ch\.\s*\d+|sec\.\s*\d+"
+    r"|§\s*\d+|[IVXL]+\.\d+|\d+:\d+|\d+(?:\s*,\s*\d+)*))?")
+AUTHOR_YEAR = re.compile(rf"{NAME_SEQ}\s+{YEAR}{CITATION_LOCATOR}")
+
+STOPWORDS = frozenset({"and", "also", "in", "the", "of", "for", "a", "an", "on"})
+ACK_WORDS = ("thank", "grateful", "acknowledg")
+
+
+def _note_hits(text: str, last: int) -> tuple[list[dict], int]:
+    """Return accepted note numbers in ``text`` and the updated running number."""
+    hits = []
+    for match in NOTE_AT.finditer(text):
+        number = int(match.group(2))
+        if last < number <= last + 3:
+            hits.append({"n": number,
+                         "start": match.start() + len(match.group(1)),
+                         "body": match.end()})
+            last = number
+    return hits, last
+
+
+def _texts_by_number(text: str, hits: list[dict]) -> dict[int, str]:
+    """Slice each note's text from its number to the next accepted number."""
+    notes = {}
+    for index, hit in enumerate(hits):
+        end = hits[index + 1]["start"] if index + 1 < len(hits) else len(text)
+        notes[hit["n"]] = text[hit["body"]:end].strip()
+    return notes
+
+
+def split_footnote_notes(footnotes: list[dict]) -> list[dict]:
+    """Split footnote units into single notes, pairing EN with ZH by number."""
+    last = {"en": 0, "zh": 0}
+    parsed = []
+    for unit in footnotes:
+        per_language = {}
+        for language in ("en", "zh"):
+            text = unit.get(language) or ""
+            hits, last[language] = _note_hits(text, last[language])
+            per_language[language] = (text, _texts_by_number(text, hits))
+        parsed.append((unit, per_language))
+
+    notes = []
+    for unit, per_language in parsed:
+        en_text, en_notes = per_language["en"]
+        zh_text, zh_notes = per_language["zh"]
+        numbers = sorted(set(en_notes) | set(zh_notes))
+        if not numbers:
+            notes.append({"n": None, "page": unit["page"], "unit": unit["id"],
+                          "en": en_text, "zh": zh_text})
+            continue
+        for number in numbers:
+            notes.append({"n": str(number), "page": unit["page"], "unit": unit["id"],
+                          "en": en_notes.get(number, ""), "zh": zh_notes.get(number, "")})
+    return notes
+
+
+def classify_note(text: str, number: int | None, overrides: dict) -> tuple[str, bool]:
+    """Return ``(kind, override_applied)`` for one note, judged on its EN text."""
+    if number is not None and str(number) in overrides:
+        return overrides[str(number)], True
+
+    text = (text or "").strip()
+    if number is None:
+        lowered = text.lower()
+        if text.startswith("*") or any(word in lowered for word in ACK_WORDS):
+            return "acknowledgement", False
+        return "other", False
+
+    # (a) reading-pointer lead-ins, repeatedly, then (b) stock phrases,
+    # then (c) author-year citations.
+    for _ in range(4):
+        stripped = LEAD_IN.sub("", text)
+        stripped = FOR_LEAD_IN.sub("", stripped)
+        if stripped == text:
+            break
+        text = stripped
+    text = STOCK_PHRASE.sub(" ", text)
+    text = AUTHOR_YEAR.sub(" ", text)
+
+    words = [word.lower() for word in re.findall(r"[A-Za-z]+", text)]
+    count = sum(1 for word in words if word not in STOPWORDS and len(word) >= 3)
+    return ("citation" if count <= 2 else "substantive"), False
+
+
+def build_footnote_notes(footnotes: list[dict], overrides: dict) -> list[dict]:
+    """Split, pair, and classify every note; ``overrides`` is keyed by number."""
+    overrides = overrides or {}
+    result = []
+    for note in split_footnote_notes(footnotes):
+        number = int(note["n"]) if note["n"] is not None else None
+        kind, applied = classify_note(note["en"], number, overrides)
+        record = {"n": note["n"], "page": note["page"], "unit": note["unit"],
+                  "en": note["en"], "zh": note["zh"], "kind": kind}
+        if applied:
+            record["override"] = True
+        result.append(record)
+    return result
+
+
+# ---------------------------------------------------------------------------
 # Build
 # ---------------------------------------------------------------------------
 
@@ -187,6 +317,7 @@ def build(root: Path, stem: str, out_path: Path) -> tuple[dict, str | None]:
     footnotes: list[dict] = []
     included_zh: dict[str, str] = {}
     included_pages: list[str] = []
+    footnote_kinds = overrides.get("footnote_kinds") or {}
 
     for block in blocks:
         unit_id = block["unit_id"]
@@ -258,7 +389,9 @@ def build(root: Path, stem: str, out_path: Path) -> tuple[dict, str | None]:
         "footer": overrides.get("footer") or "",
         "colophon": colophon,
     }
+    footnote_notes = build_footnote_notes(footnotes, footnote_kinds)
     data = {"meta": meta, "units": units, "footnotes": footnotes,
+            "footnote_notes": footnote_notes,
             "notes": notes, "user_notes": user_notes}
 
     html: str | None = None
@@ -277,6 +410,7 @@ def build(root: Path, stem: str, out_path: Path) -> tuple[dict, str | None]:
         "output": str(out_path) if html is not None else "",
         "units": len(units),
         "footnotes": len(footnotes),
+        "footnote_notes": len(footnote_notes),
         "notes": len(notes),
         "user_notes": len(user_notes),
         "errors": errors,

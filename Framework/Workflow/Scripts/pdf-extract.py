@@ -36,7 +36,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Iterable
 
-EXTRACTION_VERSION = "pdf-extract/3"
+EXTRACTION_VERSION = "pdf-extract/4"
 # Justified text with wide word gaps splits lines at pdfminer's default of 2.0
 # character widths; 3.0 keeps such lines whole without joining column gutters
 # or marginal Stephanus/Bekker numbers to the text.
@@ -87,6 +87,10 @@ ROMAN_PAGE_RE = re.compile(
 )
 MARGIN_REF_RE = re.compile(r"^(?:\d+[a-e]|\d+[ab]\d+)$")
 DIGITS_RE = re.compile(r"\d+")
+# A note begins with a number, a reference mark, or a bracketed number.
+NOTE_MARKER_RE = re.compile(r"^\s*(?:\d|[*†‡§]|\[\d)")
+OPENING_QUOTES = "‘“\""
+CLOSING_QUOTES = "\"'”’"
 
 TERMINAL_CHARS = set(".?!:;”\"')]")
 TERMINAL_CHARS |= set("。！？：；」』）】")
@@ -886,6 +890,42 @@ def order_boxes(boxes: list[BoxInfo], two_columns: bool) -> list[BoxInfo]:
     )
 
 
+def reclassify_small_type_quotations(boxes: list[BoxInfo]) -> None:
+    """Turn a small-type quotation at the foot of a page into a block quote.
+
+    A quotation set in smaller type below the last body paragraph is otherwise
+    read as a footnote and drops out of the body text. It is a quotation when
+    it is substantial (two lines or 80 characters), opens with a quote mark,
+    or is the first note-kind box on the page and the body box directly before
+    it ends with a colon (or a lead-in "as" whose colon the text layer
+    dropped).
+    """
+    first_note = next(
+        (index for index, box in enumerate(boxes) if box.kind == "footnote"),
+        None,
+    )
+    if first_note is None or first_note == 0:
+        return
+    box = boxes[first_note]
+    text = collapse_ws(box.text)
+    # A short line is a note or a bibliography continuation, not a quotation.
+    if box.line_count < 2 and len(text) < 80:
+        return
+    if NOTE_MARKER_RE.match(text):
+        return
+    if text.startswith(tuple(OPENING_QUOTES)):
+        box.kind = "blockquote"
+        return
+    previous = boxes[first_note - 1]
+    if previous.kind != "body":
+        return
+    intro = collapse_ws(previous.text).rstrip(CLOSING_QUOTES)
+    # Some text layers drop the colon after a lead-in such as "described
+    # anger as", so a trailing "as" also introduces the quotation.
+    if intro.endswith(":") or intro.lower().endswith(" as"):
+        box.kind = "blockquote"
+
+
 def build_page_blocks(page: PageInfo, body_size: float) -> list[Block]:
     """Classify, order, and convert one page's boxes into reading blocks."""
     boxes = [box for box in page.boxes if not box.dropped]
@@ -929,8 +969,11 @@ def build_page_blocks(page: PageInfo, body_size: float) -> list[Block]:
         else:
             unit_boxes.append(box)
 
+    ordered_boxes = order_boxes(unit_boxes, two_columns)
+    reclassify_small_type_quotations(ordered_boxes)
+
     blocks: list[Block] = []
-    for box in order_boxes(unit_boxes, two_columns):
+    for box in ordered_boxes:
         blocks.append(
             Block(
                 kind=box.kind,

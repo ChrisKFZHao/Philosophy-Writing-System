@@ -441,6 +441,97 @@ class PdfExtractTests(unittest.TestCase):
         self.assertEqual(kinds["A quo"], "blockquote")
         self.assertEqual(kinds["1 A r"], "footnote")
 
+    def test_small_type_quotation_after_colon_is_not_a_footnote(self) -> None:
+        pdf = self.fixture(pages=[[
+            text_box(
+                "This body paragraph is deliberately long enough to fix "
+                "the body size for the page, since the most frequent "
+                "character size decides which boxes count as body text, "
+                "and it introduces the quoted passage in this way:",
+                y=300,
+            ),
+            text_box(
+                "A quotation set in smaller type without a note number, "
+                "long enough to qualify as continuous quoted prose.",
+                y=200,
+                size=8,
+            ),
+            text_box("1 A real note.", y=100, size=8),
+        ]])
+        kinds = {
+            unit["text_span"][:5]: unit["layout"]["kind"]
+            for unit in self.write_blocks(pdf)
+        }
+        self.assertEqual(kinds["A quo"], "blockquote")
+        self.assertEqual(kinds["1 A r"], "footnote")
+
+    def test_small_type_quotation_after_as_lead_in_is_not_a_footnote(
+        self,
+    ) -> None:
+        pdf = self.fixture(pages=[[
+            text_box(
+                "This body paragraph is deliberately long enough to fix "
+                "the body size for the page, since the most frequent "
+                "character size decides which boxes count as body text, "
+                "and it describes the emotion as",
+                y=300,
+            ),
+            text_box(
+                "A quotation set in smaller type without a note number, "
+                "long enough to qualify as continuous quoted prose.",
+                y=200,
+                size=8,
+            ),
+        ]])
+        units = self.write_blocks(pdf)
+        quotation = next(
+            unit
+            for unit in units
+            if unit["text_span"].startswith("A quotation")
+        )
+        self.assertEqual(quotation["layout"]["kind"], "blockquote")
+
+    def test_short_small_type_box_after_colon_stays_a_footnote(self) -> None:
+        pdf = self.fixture(pages=[[
+            text_box(
+                "This body paragraph is long enough to fix the body size "
+                "for the page, and it ends with a bibliography place:",
+                y=300,
+            ),
+            text_box("Oxford University Press.", y=200, size=8),
+        ]])
+        units = self.write_blocks(pdf)
+        short = next(
+            unit
+            for unit in units
+            if unit["text_span"].startswith("Oxford")
+        )
+        self.assertEqual(short["layout"]["kind"], "footnote")
+
+    def test_small_type_quotation_without_colon_stays_a_footnote(self) -> None:
+        pdf = self.fixture(pages=[[
+            text_box(
+                "This body paragraph is deliberately long enough to fix "
+                "the body size for the page, since the most frequent "
+                "character size decides which boxes count as body text, "
+                "and it does not introduce any quotation.",
+                y=300,
+            ),
+            text_box(
+                "A quotation set in smaller type without a note number, "
+                "long enough to qualify as continuous quoted prose.",
+                y=200,
+                size=8,
+            ),
+        ]])
+        units = self.write_blocks(pdf)
+        quotation = next(
+            unit
+            for unit in units
+            if unit["text_span"].startswith("A quotation")
+        )
+        self.assertEqual(quotation["layout"]["kind"], "footnote")
+
     def test_footnote_kind_uses_smaller_type(self) -> None:
         pdf = self.fixture(
             pages=[
