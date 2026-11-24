@@ -100,6 +100,23 @@ body.no-notes .anchor { text-decoration-color: transparent; }
 .note.user .acts button:hover { color: var(--ink); }
 body.no-notes .note:not(.user) { opacity: 0; pointer-events: none; }
 
+/* Selecting a note: click an underline or a note; both light up */
+.anchor.active { background: var(--wash); text-decoration-color: var(--accent); }
+.uh.active { background: color-mix(in srgb, var(--mine) 22%, transparent); }
+.note.active::before { content: ""; position: absolute; left: -.9rem; top: .3rem; bottom: .3rem; width: 1px; background: var(--accent); }
+.note.user.active::before { background: var(--mine); }
+.note.active .t { color: var(--accent); }
+.note.user.active .t { color: var(--mine); }
+.note { cursor: pointer; }
+.note.user textarea, .note.user .acts button { cursor: auto; }
+
+/* Gutter button: write a note on the whole paragraph */
+.addnote { position: absolute; z-index: 5; display: none; width: 1.5rem; height: 1.5rem; padding: 0; border: 1px solid var(--hair); border-radius: 50%;
+  background: var(--bg); color: var(--faint); font: 15px/1.35rem var(--latin); text-align: center; cursor: pointer; transition: color .2s, border-color .2s; }
+.addnote.show { display: block; }
+.addnote:hover { color: var(--mine); border-color: var(--mine); }
+.mast .howto { margin-top: .5rem; font-size: 12.5px; line-height: 1.8; color: var(--faint); letter-spacing: .03em; }
+
 /* Selection popover */
 .pop { position: absolute; z-index: 30; display: none; padding: .2rem .3rem; background: var(--bg); border: 1px solid var(--hair); border-radius: 2px; box-shadow: 0 8px 24px rgba(0,0,0,.08); }
 .pop.show { display: flex; }
@@ -118,7 +135,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
 
 @media (max-width: 1180px) {
   :root { --left: 2.6rem; --right: 0px; --gap: 1.2rem; }
-  .note { position: static; width: auto; margin: .2rem 0 1rem 1.5em; }
+  .note { position: relative; width: auto; margin: .2rem 0 1rem 1.5em; }
   .notes-layer { position: static; width: auto; height: auto; }
 }
 @media print { .bar, .pop { display: none; } }
@@ -185,6 +202,7 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
       <div class="en-title">${esc(m.title)}</div>
       <div class="byline"><b>${esc(m.author_zh || m.author)}</b>${m.author_zh ? "（" + esc(m.author) + "）" : ""}</div>
       <div class="colophon">${esc(m.colophon || "")}</div>
+      <div class="howto">点一段，展开原文；点下划线，看对应的旁注。选中文字可以高亮、批注或标为想法；鼠标移到段落上，点右侧的 ＋ 可给整段写批注。批注存在本机浏览器里，用“导出批注”存成 user-notes.json。</div>
     </div>`;
   document.title = (m.title_zh || m.title) + " · 阅读页";
 
@@ -224,7 +242,6 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
     card.dataset.note = n.id; card.dataset.unit = n.unit_id;
     card.innerHTML = `<div class="t"><span class="k">${KIND[n.kind] || n.kind}</span>${esc(n.title)}</div><div class="b">${esc(n.body)}</div>` +
       (n.source ? `<div class="src">${esc(n.source)}</div>` : "");
-    if (n.kind === "argument") $(".t", card).addEventListener("click", () => { card.classList.toggle("expanded"); layout(); });
     layer.appendChild(card);
   }
 
@@ -232,8 +249,8 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
   let userNotes = [];
   try { userNotes = JSON.parse(localStorage.getItem(storeKey) || "null") || data.user_notes || []; } catch { userNotes = data.user_notes || []; }
   const save = () => localStorage.setItem(storeKey, JSON.stringify(userNotes));
-  const quoteOf = a => a.target.selector.find(s => s.type === "TextQuoteSelector");
-  const posOf = a => a.target.selector.find(s => s.type === "TextPositionSelector");
+  const quoteOf = a => (a.target.selector || []).find(s => s.type === "TextQuoteSelector");
+  const posOf = a => (a.target.selector || []).find(s => s.type === "TextPositionSelector");
 
   function textNodes(root) {
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -278,7 +295,9 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
     const comment = (a.body || []).find(b => b.purpose === "commenting");
     const tag = (a.body || []).find(b => b.purpose === "tagging");
     const label = tag ? TAG[tag.value] || tag.value : comment ? "我的批注" : "我的高亮";
-    card.innerHTML = `<div class="t"><span class="k">${label}</span>“${esc(quoteOf(a).exact.slice(0, 18))}${quoteOf(a).exact.length > 18 ? "…" : ""}”</div>` +
+    const q = quoteOf(a);
+    const head = q ? `“${esc(q.exact.slice(0, 18))}${q.exact.length > 18 ? "…" : ""}”` : "整段";
+    card.innerHTML = `<div class="t"><span class="k">${label}</span>${head}</div>` +
       (comment ? `<div class="b">${esc(comment.value)}</div>` : "") +
       `<div class="acts"><button data-do="edit">${comment ? "修改" : "写批注"}</button><button data-do="del">删除</button></div>`;
     card.addEventListener("click", e => {
@@ -310,9 +329,12 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
     layer.querySelectorAll(".note.user").forEach(c => c.remove());
     for (const a of userNotes) {
       const root = document.querySelector(`[id="${CSS.escape(a.target.source)}"] > .zh`);
-      const span = root && locate(root, a);
-      if (!span) continue;
-      wrap(root, span[0], span[1], a.id);
+      if (!root) continue;
+      if (quoteOf(a)) {
+        const span = locate(root, a);
+        if (!span) continue;
+        wrap(root, span[0], span[1], a.id);
+      }
       layer.appendChild(userCard(a));
     }
     bindHover(); layout();
@@ -353,17 +375,64 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
     if (act === "comment") { const card = layer.querySelector(`.note.user[data-note="${a.id}"]`); if (card) editCard(card, a); }
   });
 
-  // ---- open original on click ----
+  // ---- clicks: an underline or a note selects that note; a paragraph opens its original ----
+  function activate(id, reveal) {
+    document.querySelectorAll(".active").forEach(x => x.classList.remove("active"));
+    if (!id) return;
+    const sel = `[data-note="${CSS.escape(id)}"]`;
+    document.querySelectorAll(sel).forEach(x => x.classList.add("active"));
+    const card = document.querySelector(`.note${sel}`);
+    const anchor = document.querySelector(`${sel}:not(.note)`) || (card && document.getElementById(card.dataset.unit));
+    if (reveal === "card" && card && card.classList.contains("argument") && !card.classList.contains("expanded")) { card.classList.add("expanded"); layout(); }
+    const target = reveal === "card" ? card : reveal === "anchor" ? anchor : null;
+    if (target) {
+      const r = target.getBoundingClientRect();
+      if (r.top < 60 || r.bottom > innerHeight - 20) target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }
   page.addEventListener("click", e => {
+    if (e.target.closest("button, textarea")) return;
+    const mark = e.target.closest(".anchor, .uh");
+    if (mark) { activate(mark.dataset.note, "card"); return; }
+    const card = e.target.closest(".note");
+    if (card) {
+      if (card.classList.contains("argument") && e.target.closest(".t")) { card.classList.toggle("expanded"); layout(); }
+      activate(card.dataset.note, "anchor");
+      return;
+    }
+    const fn = e.target.closest("sup.fn");
+    if (fn) { if ($("#fns")) $("#fns").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    activate(null);
     const zh = e.target.closest(".zh");
     if (!zh || document.body.classList.contains("parallel")) return;
-    if (e.target.closest(".uh, sup.fn")) return;
     if (!getSelection().isCollapsed) return;
     zh.parentElement.classList.toggle("open"); layout();
   });
-  page.addEventListener("click", e => {
-    const fn = e.target.closest("sup.fn");
-    if (fn && $("#fns")) $("#fns").scrollIntoView({ behavior: "smooth", block: "start" });
+
+  // ---- gutter ＋: a note on the whole paragraph ----
+  const add = document.createElement("button");
+  add.className = "addnote"; add.type = "button"; add.textContent = "＋"; add.title = "给这一段写批注";
+  page.appendChild(add);
+  let hoverUnit = null;
+  page.addEventListener("mouseover", e => {
+    const unit = e.target.closest(".page > .unit");
+    if (!unit || unit === hoverUnit) return;
+    hoverUnit = unit;
+    const base = page.getBoundingClientRect(), r = unit.getBoundingClientRect();
+    add.style.left = (r.right - base.left + 10) + "px";
+    add.style.top = (r.top - base.top + 6) + "px";
+    add.classList.add("show");
+  });
+  page.addEventListener("mouseleave", () => { add.classList.remove("show"); hoverUnit = null; });
+  add.addEventListener("click", e => {
+    e.stopPropagation();
+    if (!hoverUnit) return;
+    const a = { "@context": "http://www.w3.org/ns/anno.jsonld", type: "Annotation",
+      id: "urn:uuid:" + (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)),
+      created: new Date().toISOString(), motivation: "commenting", body: [], target: { source: hoverUnit.id, layer: "zh" } };
+    userNotes.push(a); save(); rebuildUser();
+    const card = document.querySelector(`.note.user[data-note="${CSS.escape(a.id)}"]`);
+    if (card) editCard(card, a);
   });
 
   // ---- margin layout: each note beside its anchor, never overlapping ----
@@ -430,6 +499,8 @@ footer.end .mark { display: block; width: 2.5rem; height: 1px; margin: 0 auto 1.
   addEventListener("resize", () => requestAnimationFrame(layout));
   document.fonts && document.fonts.ready.then(layout);
   apply(); rebuildUser();
+  const linked = [...wanted].find(w => w.startsWith("note="));
+  if (linked) requestAnimationFrame(() => activate(linked.slice(5), "card"));
 })();
 </script>
 </body>
